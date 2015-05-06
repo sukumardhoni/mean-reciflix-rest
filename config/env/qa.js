@@ -2,13 +2,12 @@
 
 module.exports = {
 	db: {
-		uri: 'mongodb://meantest:meantest@ds059651.mongolab.com:59651/meantest',
+		uri: process.env.ML_QA_MEAN_CODESHIP,
 		options: {
 			user: '',
 			pass: ''
 		}
 	},
-	port: 3001,
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'dev',
@@ -19,7 +18,7 @@ module.exports = {
 		}
 	},
 	app: {
-		title: 'MEAN.JS - Test Environment'
+		title: 'MEAN.JS - QA Environment'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
