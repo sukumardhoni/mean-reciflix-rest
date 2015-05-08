@@ -58,20 +58,6 @@ describe('User Model Unit Tests:', function() {
 			});
 		});
 
-        it('after one save the users cannobe morethan one', function(done) {
-			User.find({}, function(err, users) {
-				users.should.have.length(1);
-				done();
-			});
-		});
-
-        it('after one save the user shall be morethan zero', function(done) {
-			User.find({}, function(err, users) {
-				users.should.have.length(1);
-				done();
-			});
-		});
-
 		it('should fail to save an existing user again', function(done) {
 			user.save(function() {
 				user2.save(function(err) {

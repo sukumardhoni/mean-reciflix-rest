@@ -54,3 +54,7 @@ exports.update = function(req, res) {
 exports.me = function(req, res) {
 	res.json(req.user || null);
 };
+
+exports.live = function(req, res) {
+	res.json({'message':'app is up and running'});
+};
