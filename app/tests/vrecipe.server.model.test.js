@@ -28,7 +28,7 @@ describe('Vrecipe api tests', function(){
   });
 
 
-  it('should returna 200 response', function(done){
+  it('should return a 200 response', function(done){
     api.get('/vrecipes')
     .set('Accept', 'application/json')
     .expect(200, done);
