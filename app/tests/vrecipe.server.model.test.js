@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var should = require('should'),
+    /*jshint -W079 */
     expect=require('chai').expect,
     supertest=require('supertest'),
 	mongoose = require('mongoose'),
@@ -17,10 +18,43 @@ var should = require('should'),
 /**
  * Globals
  */
-var vrecipe;
+var vrecipe, vrecipeID;
 
 
 describe('Vrecipe api tests', function(){
+
+  before(function(done) {
+      //define a sample vrecipe object
+      vrecipe = {
+        title: 'Test Video receipe 1',
+        videoId: 'VIDEOID1',
+        author: 'ytauthor',
+        published: '2012-11-01',
+        submitted: {
+            by: 'testuser',
+            date: new Date()
+        },
+        duration: 10000,
+        views: 1000,
+        likes: 100,
+        dislikes: 10,
+        description: 'test description 1',
+        notes: 'test notes 1',
+        state: 0,
+        active: 'N',
+        tags: ['nonveg', 'chicken'],
+        categories: ['nonveg'],
+        images: {
+            dft: 'test1.png',
+            mq: 'test2.png',
+            hq: 'test3.png',
+            sd: 'test4.png',
+        }
+      };
+      done();
+	});
+
+
   it('the api server is live', function(done){
     api.get('/isAlive')
     .set('Accept', 'application/json')
@@ -28,12 +62,44 @@ describe('Vrecipe api tests', function(){
   });
 
 
-  it('should return a 200 response', function(done){
+  it('should bring an empty array', function(done){
     api.get('/vrecipes')
     .set('Accept', 'application/json')
-    .expect(200, done);
-
+    .expect(200)
+    .end(function(err,res){
+      expect(res.body).to.be.a('Array');
+      expect(res.body.length).to.be.equal(0);
+      done();
+    });
   });
+
+  it('should be able to add a vrecipe', function(done){
+    api.post('/vrecipes')
+    .send(vrecipe)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .end(function(err,res){
+      expect(res.body).to.have.a.property('title');
+      expect(res.body).to.have.a.property('likes');
+      /*jshint -W030 */
+      //expect(res.body.title).to.be.empty;
+      vrecipeID = res.body._id;
+      done();
+    });
+  });
+
+    after(function(done) {
+    console.log('After function is called: deleting the recipe id: '+ vrecipeID);
+    api.delete('/vrecipes/'+vrecipeID)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .end(function(err,res){
+      expect(err).to.be.a('null');
+      done();
+    });
+  });
+
+
 });
 
 

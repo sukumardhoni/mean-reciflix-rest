@@ -9,51 +9,6 @@ var _ = require('lodash'),
 	passport = require('passport'),
 	Vrecipe = mongoose.model('Vrecipe');
 
-
-/*
-
-exports.create = function (req, res) {
-
-	var vrecipe = new VIdRecipe();
-	vrecipe.title = req.body.title;
-	vrecipe.videoId = req.body.videoId;
-	vrecipe.author = req.body.author;
-	vrecipe.published = req.body.published;
-	vrecipe.submitted.by = req.body.submitted.by;
-	vrecipe.duration = req.body.duration;
-	vrecipe.views = req.body.views;
-	vrecipe.likes = req.body.likes;
-	vrecipe.dislikes = req.body.dislikes;
-	vrecipe.description = req.body.description;
-	vrecipe.notes = req.body.notes;
-	vrecipe.state = req.body.state;
-	vrecipe.active = req.body.active;
-	vrecipe.tags = req.body.tags;
-	vrecipe.categories = req.body.categories;
-	vrecipe.images.dft = req.body.images.dft;
-	vrecipe.images.mq = req.body.images.mq;
-	vrecipe.images.hq = req.body.images.hq;
-	vrecipe.images.sd = req.body.images.sd;
-	vrecipe.save(function (err, cbRecipe) {
-		if (err) {
-			if (err.code == 11000) {
-				res.send({
-					ErrMessage: 'Recipe already exsists'
-				});
-			} else {
-				res.send(err);
-			}
-		} else {
-			res.jsonp(cbRecipe);
-		}
-	});
-}
-
-*/
-
-
-
-
 /**
  * Create a vrecipe
  */
@@ -99,7 +54,7 @@ exports.update = function(req, res) {
 };
 
 /**
- * Delete an article
+ * Delete an vrecipe
  */
 exports.delete = function(req, res) {
 	var vrecipe = req.vrecipe;
@@ -114,6 +69,25 @@ exports.delete = function(req, res) {
 		}
 	});
 };
+
+/**
+ * Delete all vrecipes
+ */
+exports.cleanAllVRecipes = function(req, res) {
+
+  	Vrecipe.remove(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json({'message':'successfully deleted all vrecipes'});
+		}
+	});
+};
+
+
+
 
 /**
  * List of Articles
