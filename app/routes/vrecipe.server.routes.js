@@ -23,7 +23,7 @@ module.exports = function(app) {
 		.delete(vrecipes.delete);
 
 
-	// Finish by binding the article middleware
+	// Finish by binding the vrecipe middleware
 	app.param('vrecipeId', vrecipes.vrecipeByID);
 
   app.route('/cleanAllvrecipes')

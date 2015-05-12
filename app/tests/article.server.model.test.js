@@ -21,7 +21,7 @@ describe('Article Model Unit Tests:', function() {
 		user = new User({
 			firstName: 'Full',
 			lastName: 'Name',
-			displayName: 'Full Name',
+			displayName: 'Full Name1',
 			email: 'test@test.com',
 			username: 'username',
 			password: 'password'
@@ -40,6 +40,10 @@ describe('Article Model Unit Tests:', function() {
 
 	describe('Method Save', function() {
 		it('should be able to save without problems', function(done) {
+          
+          console.log('article is: '+ article);
+          
+          
 			return article.save(function(err) {
 				should.not.exist(err);
 				done();
