@@ -26,7 +26,35 @@ module.exports = function(app) {
 	// Finish by binding the vrecipe middleware
 	app.param('vrecipeId', vrecipes.vrecipeByID);
 
+
   app.route('/cleanAllvrecipes')
   .delete(vrecipes.cleanAllVRecipes);
+
+
+	app.route('/VRecipesByTags/:tagName')
+	.get(vrecipes.getVIdRecipesByTags);
+
+	app.route('/Vrecipes/Categories/tags/:pageId')
+	.get(vrecipes.getAllTags);
+
+	app.route('/vRecipesAllCategories/:pageId')
+	.get(vrecipes.getAllCategories);
+
+	app.route('/VRecipesByCategories/:CategoryName/:pageId')
+	.get(vrecipes.getVIdRecipesByCategories);
+
+  app.route('/VRecipesByViews/:maxViews/:minViews')
+	.get(vrecipes.getVIdRecipesByViews);
+
+	app.route('/VRecipesByViewsAndTags/:maxViews/:minViews/:maxLikes/:minLikes/:tags')
+	.get(vrecipes.getVIdRecipesByViewsAndTags);
+
+	app.route('/myFavoritesVRecipes/:videoIds')
+	.get(vrecipes.getAllMyFavoriteVRecipes);
+
+	app.route('/initialize')
+  .post(vrecipes.postSampleJSONData);
+/*app.route('/VRecipesByViews/:maxViews/:minViews')
+	.get(vrecipes.getVIdRecipesByViews);*/
 
 };

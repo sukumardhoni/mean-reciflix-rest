@@ -5,7 +5,8 @@
 var init = require('./config/init')(),
 	config = require('./config/config'),
 	mongoose = require('mongoose'),
-	chalk = require('chalk');
+	chalk = require('chalk'),
+  bodyParser = require('body-parser');
 
 /**
  * Main application entry file.
@@ -33,6 +34,10 @@ require('./config/passport')();
 
 // Start the app by listening on <port>
 app.listen(config.port);
+
+
+// parse application/json
+app.use(bodyParser.json());
 
 // Expose app
 exports = module.exports = app;

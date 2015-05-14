@@ -7,7 +7,8 @@ var _ = require('lodash'),
 	errorHandler = require('./errors.server.controller'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	Vrecipe = mongoose.model('Vrecipe');
+	Vrecipe = mongoose.model('Vrecipe'),
+  sampleJSON = require('../assets/vidsample.json');
 
 /**
  * Create a vrecipe
@@ -27,12 +28,16 @@ exports.create = function(req, res) {
 	});
 };
 
+
 /**
  * Show the current vrecipe
  */
 exports.read = function(req, res) {
 	res.json(req.vrecipe);
 };
+
+
+
 
 /**
  * Update a vrecipe
@@ -73,7 +78,7 @@ exports.delete = function(req, res) {
 /**
  * Delete all vrecipes
  */
-exports.cleanAllVRecipes = function(req, res) {
+/*exports.cleanAllVRecipes = function(req, res) {
 
   	Vrecipe.remove(function(err) {
 		if (err) {
@@ -84,8 +89,18 @@ exports.cleanAllVRecipes = function(req, res) {
 			res.json({'message':'successfully deleted all vrecipes'});
 		}
 	});
-};
+};*/
 
+
+exports.cleanAllVRecipes = function (req, res) {
+	return Vrecipe.remove({}, function (err) {
+		if (!err) {
+			res.send('Cleaned all Recipes');
+		} else {
+			res.send(err);
+		}
+	});
+};
 
 
 
@@ -127,6 +142,10 @@ exports.vrecipeByID = function(req, res, next, id) {
 	});
 };
 
+
+
+
+
 /**
  * Vrecipe authorization middleware
  */
@@ -138,3 +157,218 @@ exports.hasAuthorization = function(req, res, next) {
 	}
 	next();
 };
+
+
+
+exports.getVIdRecipesByTags = function (req, res) {
+	Vrecipe.find({
+		tags: req.params.tagName
+	}, function (err, recipes) {
+		if (!err) {
+			if ((recipes.length === 0)) {
+				res.status(204).send({
+					'message': 'There are no recipe items available'
+				});
+			} else {
+				return res.send(recipes);
+			}
+		} else {
+			return console.log(err);
+		}
+	});
+};
+
+exports.getAllTags = function (req, res) {
+	Array.prototype.unique = function () {
+		var a = this.concat();
+		for (var i = 0; i < a.length; ++i) {
+			for (var j = i + 1; j < a.length; ++j) {
+				if (a[i] === a[j])
+					a.splice(j--, 1);
+			}
+		}
+		return a;
+	};
+	var foundTags = [];
+	return Vrecipe.find({}, function (err, recipes) {
+		if (!err) {
+			if (recipes.length === 0) {
+				res.status(204).send({
+					message: 'There are no items in the db'
+				});
+			} else {
+				for (var i = 0; i < recipes.length; i++) {
+					foundTags = foundTags.concat(recipes[i].tags);
+				}
+				res.jsonp(foundTags.unique());
+			}
+		} else {
+			return res.send({
+				message: 'No data found'
+			});
+		}
+	}).sort({
+		_id: 1
+	}).skip(req.params.pageId * 50).limit(50);
+};
+
+
+exports.getAllCategories = function (req, res) {
+	Array.prototype.unique = function () {
+		var a = this.concat();
+		for (var i = 0; i < a.length; ++i) {
+			for (var j = i + 1; j < a.length; ++j) {
+				if (a[i] === a[j])
+					a.splice(j--, 1);
+			}
+		}
+		return a;
+	};
+	var foundCategories = [];
+	return Vrecipe.find({}, function (err, recipes) {
+		if (!err) {
+			if (recipes.length === 0) {
+				res.status(204).send({
+					message: 'There are no items in the db'
+				});
+			} else {
+				for (var i = 0; i < recipes.length; i++) {
+					foundCategories = foundCategories.concat(recipes[i].categories);
+				}
+				res.jsonp(foundCategories.unique());
+			}
+		} else {
+			return res.send({
+				message: 'No data found'
+			});
+		}
+	}).sort({
+		_id: 1
+	}).skip(req.params.pageId * 50).limit(50);
+};
+
+
+exports.getVIdRecipesByCategories = function (req, res) {
+	Vrecipe.find({
+		categories: req.params.CategoryName
+	}, function (err, recipes) {
+		if (!err) {
+			if ((recipes.length === 0)) {
+				res.status(204).send({
+					'message': 'There are no recipe items available'
+				});
+			} else {
+				return res.send(recipes);
+			}
+		} else {
+			return console.log(err);
+		}
+	}).sort({
+		_id: 1
+	}).skip(req.params.pageId * 50).limit(50);
+};
+exports.getVIdRecipesByViews = function (req, res) {
+	Vrecipe.find({
+		'views': {
+			$gt: req.params.maxViews,
+			$lt: req.params.minViews
+		}
+	}, function (err, recipes) {
+		if (!err) {
+			if ((recipes.length === 0)) {
+				res.status(204).send({
+					'message': 'There are no recipe items available'
+				});
+			} else {
+				return res.send(recipes);
+			}
+		} else {
+			return console.log(err);
+		}
+	});
+};
+
+exports.getVIdRecipesByViewsAndTags = function (req, res) {
+	Vrecipe.find({
+		'views': {
+			$gt: req.params.minViews,
+			$lt: req.params.maxViews
+		},
+		'likes': {
+			$gt: req.params.minLikes,
+			$lt: req.params.maxLikes
+		},
+		'tags': req.params.tags
+	}, function (err, recipes) {
+		if (!err) {
+			if ((recipes.length === 0)) {
+				res.status(204).send({
+					'message': 'There are no recipe items available"'
+				});
+			} else {
+				return res.send(recipes);
+			}
+		} else {
+			return console.log(err);
+		}
+	});
+};
+
+exports.getAllMyFavoriteVRecipes = function (req, res) {
+	var videoIds = req.params.videoIds.split(',');
+	var foundRecipes = [];
+	for (var i = 0; i < videoIds.length; i++) {
+		Vrecipe.findOne({
+			videoId: videoIds[i]
+		},function (err, recipe) {
+			if (!err) {
+				foundRecipes.push(recipe);
+				if (foundRecipes.length === videoIds.length) {
+					res.jsonp(foundRecipes);
+				}
+			} else {
+				return res.send({
+					message: 'No data found'
+				});
+			}
+		});
+	}
+};
+
+
+exports.postSampleJSONData = function (req, res) {
+	var data = sampleJSON;
+	var finalVideosList = [];
+	for (var i = 0; i < data.length; i++) {
+		var recipe = new Vrecipe();
+		recipe.title = data[i].title;
+		recipe.videoId = data[i].videoId;
+		recipe.notes = data[i].notes;
+		recipe.tags = data[i].tags;
+		recipe.description = data[i].description;
+		recipe.dislikes = data[i].dislikes;
+		recipe.likes = data[i].likes;
+		recipe.views = data[i].views;
+		recipe.duration = data[i].duration;
+		recipe.author = data[i].author;
+		recipe.categories = data[i].categories;
+		recipe.submitted = data[i].submitted;
+		recipe.save(function (err, cbRecipe) {
+			if (err) {
+				console.log(err);
+			} else {
+				finalVideosList.push(cbRecipe);
+			}
+		});
+	}
+	res.send({
+		message: 'Recipe Items are added into db'
+	});
+};
+
+
+
+
+
+
+

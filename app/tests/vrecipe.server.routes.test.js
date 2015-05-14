@@ -112,8 +112,9 @@ describe('Vrecipe CRUD api tests', function(){
     });
   });
   
-  it('should be able to retrive a saved vrecipe by id: '+ vrecipeID, function(done){
+  it('should be able to retrive a saved vrecipe by id: ', function(done){
     api.get('/vrecipes/'+vrecipeID)
+
     .expect(200)
     .end(function(err, res){
       expect(err).to.equal(null);
@@ -126,8 +127,32 @@ describe('Vrecipe CRUD api tests', function(){
       done();
     });
   });
-  
-    it('should be able to Update an existing vrecipe' + vrecipeID,function(done){
+
+
+	it('should get the video related to Tag chicken', function (done) {
+		api.get('/VRecipesByTags/chicken')
+			.set('Accept', 'application/json')
+			.expect(200)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+			 expect(res.body).to.be.a('Array');
+       expect(res.body.length).to.be.equal(1);
+			 expect(res.body[0].videoId).to.equal('VIDEOID1');
+		   done();
+			});
+	});
+
+	it('should get the video related to Tag Curry', function (done) {
+		api.get('/VRecipesByTags/Curry')
+			.set('Accept', 'application/json')
+			.expect(204)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+		   done();
+			});
+	});
+
+    it('should be able to Update an existing vrecipe' ,function(done){
 			api.put('/vrecipes/'+vrecipeID)
 			.set('Accept', 'application/json')
 			.send({
@@ -141,30 +166,37 @@ describe('Vrecipe CRUD api tests', function(){
 			})
 			.expect(200)
 			.end(function (err, res) {
-	      res.body.should.have.property('title');
-	      var title = res.body.title.should.equal('Global Tech Minds');
-	      console.log('Updated Title' + JSON.stringify(title));
-	      res.body.videoId.should.equal('GTMVIDEOID1');
-	      var date = res.body.submitted.date.should.not.equal(null);
-	      console.log('Updated Recipe date' + JSON.stringify(date));
-				res.body.should.have.property('views');
-				var views = res.body.views.should.equal(10000);
-				console.log('Updated Recipe views' + JSON.stringify(views));
-				var likes = res.body.likes.should.equal(1000);
-				console.log('Updated Recipe likes' + JSON.stringify(likes));
-				var dislikes = res.body.dislikes.should.equal(13);
-				console.log('Updated Recipe dislikes' + JSON.stringify(dislikes));
-				var tags = expect(res.body.tags).to.include('Curry','Gravy','chicken','nonveg');
-			  console.log('Updated Tags' + JSON.stringify(tags));
-				 expect(res.body.tags.length).to.be.equal(4);
+	      expect(res.body).to.have.a.property('title');
+	      expect(res.body.title).to.equal('Global Tech Minds');
+	      expect(res.body.videoId).to.equal('GTMVIDEOID1');
+	      expect(res.body.submitted.date).to.not.equal(null);
+	      expect(res.body).to.have.property('views');
+				expect(res.body.views).to.equal(10000);
+				expect(res.body.likes).to.equal(1000);
+			  expect( res.body.dislikes).to.equal(13);
+				expect(res.body.tags).to.include('Curry','Gravy','chicken','nonveg');
+			  expect(res.body.tags.length).to.be.equal(4);
 	      done();
        });
 		});
 
+	it('should get all videos related to Tags Curry', function (done) {
+		api.get('/VRecipesByTags/Curry')
+			.set('Accept', 'application/json')
+			.expect(200)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+			 expect(res.body).to.be.a('Array');
+       expect(res.body.length).to.be.equal(1);
+			 expect(res.body[0].videoId).to.equal('GTMVIDEOID1');
+		   done();
+			});
+	});
 
 
 
-	it('should be able to Delete a vrecipe by id' + vrecipeID,function(done){
+
+	it('should be able to Delete a vrecipe by id',function(done){
 		  api.delete('/vrecipes/'+vrecipeID)
     .expect(200)
     .end(function(err, res){
@@ -174,25 +206,7 @@ describe('Vrecipe CRUD api tests', function(){
     });
 	});
 
-	  it('should bring an empty array after Delete vid', function(done){
-    api.get('/vrecipes')
-    .set('Accept', 'application/json')
-    .expect(200)
-    .end(function(err,res){
-      expect(res.body).to.be.a('Array');
-      expect(res.body.length).to.be.equal(0);
-      done();
-    });
-  });
-
-/* it('should be able to increase views of an existing vrecipe');
-  it('should be able to increase likes of an existing vrecipe');
-  it('should be able to increase displikes of an existing vrecipe');
-  it('should be able to append a tags of an existing vrecipe');
-  it('should be able to append a category of an existing vrecipe');
- */
-
-  after(function(done) {
+after(function(done) {
     // console.log('After function is called: cleaning All recipes ');
     api.delete('/cleanAllvrecipes')
     .set('Accept', 'application/json')
@@ -206,27 +220,147 @@ describe('Vrecipe CRUD api tests', function(){
 });
 
 
+
 describe('Vrecipe bulk api tests', function(){
   before(function(done){
-    //load a set of test recipe data  ( 10 vrecipes)
-    done();
+		//load a set of test recipe data  ( 100 vrecipes)
+			api.post('/initialize')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .end(function(err,res){
+      done();
+    });
+
+
+  });
+  it('should bring an all recipee vrecipes Count', function(done){
+    api.get('/vrecipes')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .end(function(err,res){
+      expect(res.body).to.be.a('Array');
+      expect(res.body.length).to.be.equal(125);
+      done();
+    });
   });
 
-  /*it('should get the couont of all videos');
-  it('should get vrecipes by a tagname and categoryname');
-  it('should get all tags');
-  it('should get categories by a pagenum');  
-  it('should get vrecipes by category by a pagenum');
-  it('should get favourite vrecipes by userid');
+
+	it('should get all tags', function(done){
+    api.get('/Vrecipes/Categories/tags/1')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .end(function(err,res){
+			expect(err).to.be.a('null');
+      expect(res.body).to.be.a('Array');
+     expect(res.body.length).to.be.equal(46);
+      done();
+    });
+  });
+
+	it('should get categories by a pagenum', function(done){
+    api.get('/vRecipesAllCategories/1')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .end(function(err,res){
+			expect(err).to.be.a('null');
+      expect(res.body).to.be.a('Array');
+			expect(res.body.length).to.be.equal(12);
+      done();
+    });
+  });
+
+	it('should get the video related to Tag chicken', function (done) {
+		api.get('/VRecipesByTags/Chicken')
+			.set('Accept', 'application/json')
+			.expect(200)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+			 expect(res.body).to.be.a('Array');
+       expect(res.body.length).to.be.equal(1);
+			 expect(res.body[0].tags).to.include('Chicken');
+			 expect(res.body[0].videoId).to.equal('LUKEX8qyTc0');
+		   done();
+			});
+	});
+
+	it('should get vrecipes videos by category by a pagenum', function (done) {
+		api.get('/VRecipesByCategories/Non-Veg/1')
+			.set('Accept', 'application/json')
+			.expect(200)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+			 expect(res.body).to.be.a('Array');
+       expect(res.body.length).to.be.equal(1);
+			 expect(res.body[0].tags).to.include('Chicken', 'Non-veg', 'Fry', 'Curry');
+			 expect(res.body[0].categories).to.include('Non-Veg');
+		   done();
+			});
+	});
+
+	it('should get vrecipes of a given maxviews and minviews', function (done) {
+		api.get('/VRecipesByViews/1/100000')
+			.set('Accept', 'application/json')
+			.expect(200)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+			 expect(res.body).to.be.a('Array');
+       expect(res.body.length).to.be.equal(90);
+			 expect(res.body[0].tags).to.include('Sweets', 'Snacks');
+			 expect(res.body[0].categories).to.include('Appetizers');
+			 expect(res.body[45].tags).to.include('Salads', 'Veg');
+			 expect(res.body[45].categories).to.include('Healthy Diet');
+			 expect(res.body[89].tags).to.include('Soup', 'Veg');
+			 expect(res.body[89].categories).to.include('Chutneys and Soups');
+		   done();
+			});
+		 });
+
+
+it('should get vrecipes of a give maxvies, minviews,maxlikes, minlikes and tags', function (done) {
+		api.get('/VRecipesByViewsAndTags/20000/100/500/100/Chicken')
+			.set('Accept', 'application/json')
+			.expect(200)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+			 expect(res.body).to.be.a('Array');
+       expect(res.body.length).to.be.equal(1);
+			 expect(res.body[0].tags).to.include('Chicken', 'Non-veg', 'Fry', 'Curry');
+			 expect(res.body[0].categories).to.include('Non-Veg');
+		   done();
+			});
+		 });
+
+	it('should get favourite vrecipes by vid', function (done) {
+	api.get('/myFavoritesVRecipes/LUKEX8qyTc0')
+			.set('Accept', 'application/json')
+			.expect(200)
+			.end(function (err, res) {
+       expect(err).to.equal(null);
+			 expect(res.body).to.be.a('Array');
+       expect(res.body.length).to.be.equal(1);
+			 expect(res.body[0].tags).to.include('Chicken', 'Non-veg', 'Fry', 'Curry');
+			 expect(res.body[0].categories).to.include('Non-Veg');
+		   done();
+			});
+		 });
+
+	it('should get favourite vrecipes by userid');
   it('should be able to add favourite vrecipes for a userid');
-  it('should bea able to see newly added vrecipe on the favourite vrecipes by userid');
   it('should be able to remove favourite vrecipes for a userid');
   it('should bea able to not see newly removed vrecipe on the favourite vrecipes by userid');
-  it('should get vrecipes of a give maxvies, minviews,maxlikes, minlikes and tags');
-  it('should get vrecipes of a given maxviews and minviews');*/
+
+
   after(function(done){
     //clean all loaded recipe data
-    done();
+		 api.delete('/cleanAllvrecipes')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .end(function(err,res){
+      expect(err).to.be.a('null');
+      console.log(res.body);
+      done();
+    });
+
   });
 
 
