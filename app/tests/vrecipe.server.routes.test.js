@@ -14,7 +14,6 @@ var supertest=require('supertest'),
  * Globals
  */
 var vrecipe, vrecipeID;
-
 describe('Vrecipe CRUD api tests', function(){
 
   before(function(done) {
@@ -122,7 +121,7 @@ describe('Vrecipe CRUD api tests', function(){
       expect(res.body.title).to.equal('Test Video receipe 1');
 			expect(res.body).to.have.a.property('videoId');
 			expect(res.body.videoId).to.equal('VIDEOID1');
-		var tags = expect(res.body.tags).to.include('chicken','nonveg');
+		var tags = expect(res.body.tags).to.contain('chicken','nonveg');
 			 console.log('Updated Tags' + JSON.stringify(tags));
       done();
     });
@@ -174,7 +173,7 @@ describe('Vrecipe CRUD api tests', function(){
 				expect(res.body.views).to.equal(10000);
 				expect(res.body.likes).to.equal(1000);
 			  expect( res.body.dislikes).to.equal(13);
-				expect(res.body.tags).to.include('Curry','Gravy','chicken','nonveg');
+				expect(res.body.tags).to.contain('Curry');
 			  expect(res.body.tags.length).to.be.equal(4);
 	      done();
        });
@@ -189,6 +188,7 @@ describe('Vrecipe CRUD api tests', function(){
 			 expect(res.body).to.be.a('Array');
        expect(res.body.length).to.be.equal(1);
 			 expect(res.body[0].videoId).to.equal('GTMVIDEOID1');
+			 expect(res.body[0].likes).to.equal(1000);
 		   done();
 			});
 	});
@@ -277,7 +277,7 @@ describe('Vrecipe bulk api tests', function(){
        expect(err).to.equal(null);
 			 expect(res.body).to.be.a('Array');
        expect(res.body.length).to.be.equal(1);
-			 expect(res.body[0].tags).to.include('Chicken');
+			 expect(res.body[0].tags).to.contain('Chicken');
 			 expect(res.body[0].videoId).to.equal('LUKEX8qyTc0');
 		   done();
 			});
@@ -291,8 +291,8 @@ describe('Vrecipe bulk api tests', function(){
        expect(err).to.equal(null);
 			 expect(res.body).to.be.a('Array');
        expect(res.body.length).to.be.equal(1);
-			 expect(res.body[0].tags).to.include('Chicken', 'Non-veg', 'Fry', 'Curry');
-			 expect(res.body[0].categories).to.include('Non-Veg');
+			 expect(res.body[0].tags).to.contain('Chicken', 'Non-veg', 'Fry', 'Curry').to.have.length.above(2);
+			 expect(res.body[0].categories).to.contain('Non-Veg');
 		   done();
 			});
 	});
@@ -305,15 +305,17 @@ describe('Vrecipe bulk api tests', function(){
        expect(err).to.equal(null);
 			 expect(res.body).to.be.a('Array');
        expect(res.body.length).to.be.equal(90);
-			 expect(res.body[0].tags).to.include('Sweets', 'Snacks');
-			 expect(res.body[0].categories).to.include('Appetizers');
-			 expect(res.body[45].tags).to.include('Salads', 'Veg');
-			 expect(res.body[45].categories).to.include('Healthy Diet');
-			 expect(res.body[89].tags).to.include('Soup', 'Veg');
-			 expect(res.body[89].categories).to.include('Chutneys and Soups');
+			 expect(res.body[0].tags).to.contain('Sweets', 'Snacks');
+			 expect(res.body[0].categories).to.match(/^App/);
+			 expect(res.body[45].tags).to.contain('Salads', 'Veg');
+			 expect(res.body[45].categories).to.contain('Healthy Diet');
+			 expect(res.body[89].tags).to.contain('Soup', 'Veg');
+			 expect(res.body[89].categories).to.contain('Chutneys and Soups');
 		   done();
 			});
 		 });
+
+
 
 
 it('should get vrecipes of a give maxvies, minviews,maxlikes, minlikes and tags', function (done) {
