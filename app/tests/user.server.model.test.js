@@ -24,20 +24,23 @@ describe('User Model Unit Tests:', function() {
 			email: 'test@test.com',
 			username: 'username',
 			password: 'password',
-			provider: 'local'
+			provider: 'local',
+			favorites:['vid1','vid2']
 		});
 		user2 = new User({
-			firstName: 'Full',
+			firstName: 'Full1',
 			lastName: 'Name',
 			displayName: 'Full Name',
 			email: 'test@test.com',
 			username: 'username',
 			password: 'password',
-			provider: 'local'
+			provider: 'local',
+			favorites: ['vid2222', 'vid333']
 		});
 
 		done();
 	});
+
 
 	describe('Method Save', function() {
 		it('should begin with no users', function(done) {
@@ -57,6 +60,17 @@ describe('User Model Unit Tests:', function() {
 				done();
 			});
 		});
+
+		it('after one save favourites tes', function(done) {
+			User.find({}, function(err, users) {
+				users.should.have.length(1);
+				users[0].should.have.property('firstName', 'Full');
+				users[0].should.have.property('favorites').with.lengthOf(2);
+				done();
+			});
+		});
+
+
 
 		it('should fail to save an existing user again', function(done) {
 			user.save(function() {
