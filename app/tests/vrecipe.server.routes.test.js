@@ -244,7 +244,6 @@ describe('Vrecipe bulk api tests', function(){
     });
   });
 
-
 	it('should get all tags', function(done){
     api.get('/Vrecipes/Categories/tags/1')
     .set('Accept', 'application/json')
@@ -297,6 +296,8 @@ describe('Vrecipe bulk api tests', function(){
 			});
 	});
 
+
+
 	it('should get vrecipes of a given maxviews and minviews', function (done) {
 		api.get('/VRecipesByViews/1/100000')
 			.set('Accept', 'application/json')
@@ -305,13 +306,12 @@ describe('Vrecipe bulk api tests', function(){
        expect(err).to.equal(null);
 			 expect(res.body).to.be.a('Array');
        expect(res.body.length).to.be.equal(90);
-			 expect(res.body[0].tags).to.contain('Sweets', 'Snacks');
+			 expect(res.body[0].tags).to.contain('Veg', 'Snacks');
 			 expect(res.body[0].categories).to.match(/^App/);
 			 expect(res.body[45].tags).to.contain('Salads', 'Veg');
 			 expect(res.body[45].categories).to.contain('Healthy Diet');
 			 expect(res.body[89].tags).to.contain('Soup', 'Veg');
-			 expect(res.body[89].categories).to.contain('Chutneys and Soups');
-		   done();
+			 done();
 			});
 		 });
 
