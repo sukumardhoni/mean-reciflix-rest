@@ -340,9 +340,9 @@ it('should get vrecipes of a give maxvies, minviews,maxlikes, minlikes and tags'
 		 });
 
 	it('should get favourite vrecipes by userid');
-  it('should be able to add favourite vrecipes for a userid');
-  it('should be able to remove favourite vrecipes for a userid');
-  it('should bea able to not see newly removed vrecipe on the favourite vrecipes by userid');
+    it('should be able to add favourite vrecipes for a userid');
+    it('should be able to remove favourite vrecipes for a userid');
+    it('should bea able to not see newly removed vrecipe on the favourite vrecipes by userid');
 
 
   after(function(done){
