@@ -8,7 +8,7 @@ var supertest=require('supertest'),
   expect=require('chai').expect,
 	mongoose = require('mongoose'),
 	Vrecipe = mongoose.model('Vrecipe'),
-  api=supertest('http://localhost:3000');
+  api=supertest('http://localhost:3001');
 
 /**
  * Globals
@@ -48,7 +48,7 @@ describe('Vrecipe CRUD api tests', function(){
 	});
 
 
-  it('the api server is live', function(done){
+  it('the api server is live ', function(done){
     api.get('/isAlive')
     .set('Accept', 'application/json')
     .expect(200, done);
