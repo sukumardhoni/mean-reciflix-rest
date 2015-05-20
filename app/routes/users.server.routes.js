@@ -56,6 +56,10 @@ module.exports = function(app) {
 	app.route('/auth/github').get(passport.authenticate('github'));
 	app.route('/auth/github/callback').get(users.oauthCallback('github'));
 
+	//My favorites by user
+	/*app.route('/userFavorites/:id').put(users.userFavorites);*/
+
+
 	// Finish by binding the user middleware
 	app.param('userId', users.userByID);
 };
