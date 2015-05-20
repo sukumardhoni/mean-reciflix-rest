@@ -1,3 +1,5 @@
+[ ![Codeship Status for gtm_heroku_3/mean-reciflix-rest](https://codeship.com/projects/abe34330-e0a7-0132-a9e5-4ed4ec0e3a6e/status?branch=master)](https://codeship.com/projects/80947)
+
 [![MEAN.JS Logo](http://meanjs.org/img/logo-small.png)](http://meanjs.org/)
 
 [![Build Status](https://travis-ci.org/meanjs/mean.svg?branch=master)](https://travis-ci.org/meanjs/mean)
