@@ -14,7 +14,7 @@ var CategorySchema = new Schema({
 		type: String,
 		default: '',
 		trim: true,
-		required: 'catid cannot be blank'
+		required: 'catId cannot be blank'
 	},
 	displayName: {
 		type: String,

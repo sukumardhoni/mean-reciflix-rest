@@ -33,7 +33,6 @@ describe('Category Model Unit Tests:', function() {
 			  displayName: 'Category 1',
               imageName: 'cat1.png',
               description: 'Description for cat1',
-              status: 'N',
 		      user: user
 			});
 			done();
@@ -67,10 +66,18 @@ describe('Category Model Unit Tests:', function() {
 			});
 		});
         it('should be able to save without imageName', function(done) {
-			category.imageNameName = '';
-
-			return category.save(function(err) {
+			category.imageName = '';
+			return category.save(function(err, category) {
+               console.log('category: ' + category);
 				should.not.exist(err);
+				done();
+			});
+		});
+
+      it('should be able to save default value N for status', function(done) {
+			return category.save(function(err, category) {
+				should.not.exist(err);
+                should(category.status).be.equal('N');
 				done();
 			});
 		});
