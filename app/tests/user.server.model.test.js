@@ -15,8 +15,8 @@ var user, user2, adminuser1;
 /**
  * Unit tests
  */
-describe('User Model Unit Tests:', function() {
-	before(function(done) {
+describe('User Model Unit Tests:', function () {
+	before(function (done) {
 		user = new User({
 			firstName: 'Full',
 			lastName: 'Name',
@@ -25,7 +25,7 @@ describe('User Model Unit Tests:', function() {
 			username: 'username',
 			password: 'password',
 			provider: 'local',
-			favorites:['vid1','vid2']
+			favorites: ['vid1', 'vid2']
 		});
 		user2 = new User({
 			firstName: 'Full1',
@@ -45,43 +45,43 @@ describe('User Model Unit Tests:', function() {
 			username: 'adminusername',
 			password: 'password',
 			provider: 'local',
-            roles: ['user', 'admin'],
+			roles: ['user', 'admin'],
 			favorites: ['vid2222', 'vid333']
 		});
 		done();
 	});
 
 
-	describe('Method Save', function() {
-		it('should begin with no users', function(done) {
-			User.find({}, function(err, users) {
+	describe('Method Save', function () {
+		it('should begin with no users', function (done) {
+			User.find({}, function (err, users) {
 				users.should.have.length(0);
 				done();
 			});
 		});
 
-		it('should be able to save without problems', function(done) {
+		it('should be able to save without problems', function (done) {
 			user.save(done);
 		});
 
-        it('after one save the user shall be one', function(done) {
-			User.find({}, function(err, users) {
+		it('after one save the user shall be one', function (done) {
+			User.find({}, function (err, users) {
 				users.should.have.length(1);
 				done();
 			});
 		});
 
-      it('after one save the user shall have a role of user', function(done) {
-			User.find({}, function(err, users) {
+		it('after one save the user shall have a role of user', function (done) {
+			User.find({}, function (err, users) {
 				users.should.have.length(1);
-                users[0].should.have.property('roles').with.lengthOf(1);
-                users[0].roles.should.have.property(0, 'user');
+				users[0].should.have.property('roles').with.lengthOf(1);
+				users[0].roles.should.have.property(0, 'user');
 				done();
 			});
 		});
 
-		it('after one save favourites test', function(done) {
-			User.find({}, function(err, users) {
+		it('after one save favourites test', function (done) {
+			User.find({}, function (err, users) {
 				users.should.have.length(1);
 				users[0].should.have.property('firstName', 'Full');
 				users[0].should.have.property('favorites').with.lengthOf(2);
@@ -91,34 +91,36 @@ describe('User Model Unit Tests:', function() {
 
 
 
-		it('should fail to save an existing user again', function(done) {
-			user.save(function() {
-				user2.save(function(err) {
+		it('should fail to save an existing user again', function (done) {
+			user.save(function () {
+				user2.save(function (err) {
 					should.exist(err);
 					done();
-				});	
+				});
 			});
 		});
 
-		it('should be able to show an error when try to save without first name', function(done) {
+		it('should be able to show an error when try to save without first name', function (done) {
 			user.firstName = '';
-			return user.save(function(err) {
+			return user.save(function (err) {
 				should.exist(err);
 				done();
 			});
 		});
 
 
-        it('should be able to save a admin user without problems', function(done) {
+		it('should be able to save a admin user without problems', function (done) {
 			adminuser1.save(done);
 		});
 
-         it('after one save the user shall have a role of user', function(done) {
-			User.find({username: 'adminusername'}, function(err, users) {
+		it('after admin user created the user shall have a role of user and admin', function (done) {
+			User.find({
+				username: 'adminusername'
+			}, function (err, users) {
 				users.should.have.length(1);
-                users[0].should.have.property('roles').with.lengthOf(2);
-                users[0].roles.should.have.property(0, 'user');
-                users[0].roles.should.have.property(1, 'admin');
+				users[0].should.have.property('roles').with.lengthOf(2);
+				users[0].roles.should.have.property(0, 'user');
+				users[0].roles.should.have.property(1, 'admin');
 				done();
 			});
 		});
@@ -126,7 +128,7 @@ describe('User Model Unit Tests:', function() {
 
 	});
 
-	after(function(done) {
+	after(function (done) {
 		User.remove().exec(done);
 	});
 });
