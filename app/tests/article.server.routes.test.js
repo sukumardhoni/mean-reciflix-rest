@@ -16,7 +16,7 @@ var credentials, user, article;
 /**
  * Article routes tests
  */
-describe('Article CRUD tests', function() {
+describe.skip('Article CRUD tests', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

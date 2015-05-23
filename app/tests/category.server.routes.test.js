@@ -11,7 +11,7 @@ var should = require('should'),
 /**
  * Globals
  */
-var credentials, user, category;
+var credentials, adminCredentials, user, adminUser, category;
 
 /**
  * Article routes tests
@@ -22,6 +22,10 @@ describe('Category CRUD tests', function() {
 		credentials = {
 			username: 'username',
 			password: 'password'
+		};
+        adminCredentials = {
+			username: 'adminusername',
+			password: 'adminpassword'
 		};
 
 		// Create a new user
@@ -35,14 +39,30 @@ describe('Category CRUD tests', function() {
 			provider: 'local'
 		});
 
-		// Save a user to the test db and create new article
+        adminUser = new User({
+			firstName: 'AdminFull',
+			lastName: 'AdminLastName',
+			displayName: 'AdminFull Name',
+			email: 'admin@test.com',
+			username: adminCredentials.username,
+			password: adminCredentials.password,
+			provider: 'local',
+            roles:['user', 'admin']
+		});
+
+		// Save a user to the test db and create new category
 		user.save(function() {
-			category = {
+
+        //creating the admin user
+         adminUser.save(function() {
+            category = {
 				catId: 'category1',
 				displayName: 'Category 1'
 			};
 
-			done();
+        	done();
+         });
+
 		});
 	});
 
@@ -125,7 +145,7 @@ describe('Category CRUD tests', function() {
 			});
 	});
 
-	it('should be able to update an category if signed in', function(done) {
+	it('should be able to NOT update a category if a basic user signed in', function(done) {
 		agent.post('/auth/signin')
 			.send(credentials)
 			.expect(200)
@@ -150,13 +170,47 @@ describe('Category CRUD tests', function() {
 						// Update an existing article
 						agent.put('/categories/' + categorySaveRes.body._id)
 							.send(category)
+							.expect(403)
+							.end(function(categoryUpdateErr, categoryUpdateRes) {
+                              done();
+							});
+					});
+			});
+	});
+
+
+  it('should be able to update a category if an admin user signed in', function(done) {
+		agent.post('/auth/signin')
+			.send(adminCredentials)
+			.expect(200)
+			.end(function(signinErr, signinRes) {
+                // Handle signin error
+				if (signinErr) done(signinErr);
+
+				// Get the userId
+				var userId = adminUser.id;
+
+				// Save a new article
+				agent.post('/categories')
+					.send(category)
+					.expect(200)
+					.end(function(categorySaveErr, categorySaveRes) {
+						// Handle category save error
+						if (categorySaveErr) done(categorySaveErr);
+
+						// Update Category title
+						category.catId = 'category2';
+
+						// Update an existing article
+						agent.put('/categories/' + categorySaveRes.body._id)
+							.send(category)
 							.expect(200)
 							.end(function(categoryUpdateErr, categoryUpdateRes) {
 								// Handle category update error
 								if (categoryUpdateErr) done(categoryUpdateErr);
 
 								// Set assertions
-								(categoryUpdateRes.body._id).should.equal(categorySaveRes.body._id);
+							(categoryUpdateRes.body._id).should.equal(categorySaveRes.body._id);
 								(categoryUpdateRes.body.catId).should.match('category2');
 
 								// Call the assertion callback
@@ -165,6 +219,7 @@ describe('Category CRUD tests', function() {
 					});
 			});
 	});
+
 
 	it('should be able to get a list of categories if not signed in', function(done) {
 		// Create new category model instance
@@ -185,17 +240,19 @@ describe('Category CRUD tests', function() {
 		});
 	});
 
-/*
-	it('should be able to get a single article if not signed in', function(done) {
-		// Create new article model instance
-		var articleObj = new Article(article);
 
-		// Save the article
-		articleObj.save(function() {
-			request(app).get('/articles/' + articleObj._id)
+	it('should be able to get a single category if not signed in', function(done) {
+
+		// Create new category model instance
+		var categoryObj = new Category(category);
+
+		// Save the category
+		categoryObj.save(function() {
+			request(app).get('/categories/' + categoryObj._id)
 				.end(function(req, res) {
 					// Set assertion
-					res.body.should.be.an.Object.with.property('title', article.title);
+					res.body.should.be.an.Object.with.property('catId', category.catId);
+                    res.body.should.be.an.Object.with.property('displayName', category.displayName);
 
 					// Call the assertion callback
 					done();
@@ -203,18 +260,18 @@ describe('Category CRUD tests', function() {
 		});
 	});
 
-	it('should return proper error for single article which doesnt exist, if not signed in', function(done) {
-		request(app).get('/articles/test')
+	it('should return proper error for single category which doesnt exist, if not signed in', function(done) {
+		request(app).get('/categories/test')
 			.end(function(req, res) {
 				// Set assertion
-				res.body.should.be.an.Object.with.property('message', 'Article is invalid');
+				res.body.should.be.an.Object.with.property('message', 'Category is invalid');
 
 				// Call the assertion callback
 				done();
 			});
 	});
 
-	it('should be able to delete an article if signed in', function(done) {
+	it('should NOT be able to delete a category if basic user signed in', function(done) {
 		agent.post('/auth/signin')
 			.send(credentials)
 			.expect(200)
@@ -226,23 +283,62 @@ describe('Category CRUD tests', function() {
 				var userId = user.id;
 
 				// Save a new article
-				agent.post('/articles')
-					.send(article)
+				agent.post('/categories')
+					.send(category)
 					.expect(200)
-					.end(function(articleSaveErr, articleSaveRes) {
-						// Handle article save error
-						if (articleSaveErr) done(articleSaveErr);
+					.end(function(categorySaveErr, categorySaveRes) {
+						// Handle category save error
+						if (categorySaveErr) done(categorySaveErr);
 
-						// Delete an existing article
-						agent.delete('/articles/' + articleSaveRes.body._id)
-							.send(article)
-							.expect(200)
-							.end(function(articleDeleteErr, articleDeleteRes) {
-								// Handle article error error
-								if (articleDeleteErr) done(articleDeleteErr);
+						// Delete an existing category
+						agent.delete('/categories/' + categorySaveRes.body._id)
+							.send(category)
+							.expect(403)
+							.end(function(categoryDeleteErr, categoryDeleteRes) {
+                            // console.log("categoryDeleteErr : " + categoryDeleteErr);
+                            // console.log("categoryDeleteRes.body : " + JSON.stringify(categoryDeleteRes.body));
+
+                            // Handle category error error
+							if (categoryDeleteErr) done(categoryDeleteErr);
 
 								// Set assertions
-								(articleDeleteRes.body._id).should.equal(articleSaveRes.body._id);
+								(categoryDeleteRes.body.message).should.equal('User does not have admin privelages');
+
+								// Call the assertion callback
+								done();
+							});
+					});
+			});
+	});
+    it('should be able to delete a category if admin user signed in', function(done) {
+		agent.post('/auth/signin')
+			.send(adminCredentials)
+			.expect(200)
+			.end(function(signinErr, signinRes) {
+				// Handle signin error
+				if (signinErr) done(signinErr);
+
+				// Get the userId
+				var userId = adminUser.id;
+
+				// Save a new article
+				agent.post('/categories')
+					.send(category)
+					.expect(200)
+					.end(function(categorySaveErr, categorySaveRes) {
+						// Handle category save error
+						if (categorySaveErr) done(categorySaveErr);
+
+						// Delete an existing category
+						agent.delete('/categories/' + categorySaveRes.body._id)
+							.send(category)
+							.expect(200)
+							.end(function(categoryDeleteErr, categoryDeleteRes) {
+								// Handle category error error
+								if (categoryDeleteErr) done(categoryDeleteErr);
+
+								// Set assertions
+								(categoryDeleteRes.body._id).should.equal(categorySaveRes.body._id);
 
 								// Call the assertion callback
 								done();
@@ -251,28 +347,28 @@ describe('Category CRUD tests', function() {
 			});
 	});
 
-	it('should not be able to delete an article if not signed in', function(done) {
-		// Set article user
-		article.user = user;
+	it('should not be able to delete a category if not signed in', function(done) {
+		// Set category user
+		category.user = user;
 
-		// Create new article model instance
-		var articleObj = new Article(article);
+		// Create new category model instance
+		var categoryObj = new Category(category);
 
-		// Save the article
-		articleObj.save(function() {
-			// Try deleting article
-			request(app).delete('/articles/' + articleObj._id)
+		// Save the category
+		categoryObj.save(function() {
+			// Try deleting category
+			request(app).delete('/categories/' + categoryObj._id)
 			.expect(401)
-			.end(function(articleDeleteErr, articleDeleteRes) {
+			.end(function(categoryDeleteErr, categoryDeleteRes) {
 				// Set message assertion
-				(articleDeleteRes.body.message).should.match('User is not logged in');
+				(categoryDeleteRes.body.message).should.match('User is not logged in');
 
 				// Handle article error error
-				done(articleDeleteErr);
+				done(categoryDeleteErr);
 			});
 
 		});
-	});*/
+	});
 
 	afterEach(function(done) {
 		User.remove().exec(function() {

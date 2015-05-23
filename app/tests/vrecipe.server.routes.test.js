@@ -121,7 +121,7 @@ describe('Vrecipe CRUD api tests', function(){
 			expect(res.body).to.have.a.property('videoId');
 			expect(res.body.videoId).to.equal('VIDEOID1');
 		var tags = expect(res.body.tags).to.contain('chicken','nonveg');
-			 console.log('Updated Tags' + JSON.stringify(tags));
+			// console.log('Updated Tags' + JSON.stringify(tags));
       done();
     });
   });
@@ -211,7 +211,7 @@ after(function(done) {
     .expect(200)
     .end(function(err,res){
       expect(err).to.be.a('null');
-      console.log(res.body);
+     // console.log(res.body);
       done();
     });
   });
@@ -383,7 +383,7 @@ it('should get vrecipes of a given maxvies,minviews, maxlikes,minlikes and tags'
     .expect(200)
     .end(function(err,res){
       expect(err).to.be.a('null');
-      console.log(res.body);
+     // console.log(res.body);
       done();
     });
 

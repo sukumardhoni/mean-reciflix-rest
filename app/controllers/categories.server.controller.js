@@ -6,7 +6,9 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Category = mongoose.model('Category'),
+    User = mongoose.model('User'),
 	_ = require('lodash');
+
 
 /**
  * Create a category
@@ -30,6 +32,7 @@ exports.create = function(req, res) {
  * Show the current category
  */
 exports.read = function(req, res) {
+  //  console.log('inside categories.read');
 	res.json(req.category);
 };
 
@@ -38,10 +41,8 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
 	var category = req.category;
-
-	category = _.extend(category, req.body);
-
-	category.save(function(err) {
+    category = _.extend(category, req.body);
+    category.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -88,14 +89,13 @@ exports.list = function(req, res) {
  * Category middleware
  */
 exports.categoryByID = function(req, res, next, id) {
-
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(400).send({
-			message: 'Cartegory is invalid'
+			message: 'Category is invalid'
 		});
 	}
 
-	Category.findById(id).populate('user', 'displayName').exec(function(err, category) {
+  Category.findById(id).exec(function(err, category) {
 		if (err) return next(err);
 		if (!category) {
 			return res.status(404).send({
@@ -111,10 +111,18 @@ exports.categoryByID = function(req, res, next, id) {
  * Category authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.category.user.id !== req.user.id) {
-		return res.status(403).send({
-			message: 'User is not authorized'
-		});
-	}
+  	User.findOne({
+		_id: req.user.id
+	}, function (err, user) {
+		if (user === null)
+			return res.status(403).send({
+				message: 'Not Authorized'
+        });
+
+		if (user.roles.indexOf('admin') === -1)
+			return res.status(403).send({
+				message: 'User does not have admin privelages'
+			});
 	next();
-};
+});
+                 };

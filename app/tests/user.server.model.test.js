@@ -10,7 +10,7 @@ var should = require('should'),
 /**
  * Globals
  */
-var user, user2;
+var user, user2, adminuser1;
 
 /**
  * Unit tests
@@ -37,7 +37,17 @@ describe('User Model Unit Tests:', function() {
 			provider: 'local',
 			favorites: ['vid2222', 'vid333']
 		});
-
+		adminuser1 = new User({
+			firstName: 'adminFull1',
+			lastName: 'adminLastName',
+			displayName: 'AdminFull Name',
+			email: 'test2@test2.com',
+			username: 'adminusername',
+			password: 'password',
+			provider: 'local',
+            roles: ['user', 'admin'],
+			favorites: ['vid2222', 'vid333']
+		});
 		done();
 	});
 
@@ -61,7 +71,16 @@ describe('User Model Unit Tests:', function() {
 			});
 		});
 
-		it('after one save favourites tes', function(done) {
+      it('after one save the user shall have a role of user', function(done) {
+			User.find({}, function(err, users) {
+				users.should.have.length(1);
+                users[0].should.have.property('roles').with.lengthOf(1);
+                users[0].roles.should.have.property(0, 'user');
+				done();
+			});
+		});
+
+		it('after one save favourites test', function(done) {
 			User.find({}, function(err, users) {
 				users.should.have.length(1);
 				users[0].should.have.property('firstName', 'Full');
@@ -88,6 +107,23 @@ describe('User Model Unit Tests:', function() {
 				done();
 			});
 		});
+
+
+        it('should be able to save a admin user without problems', function(done) {
+			adminuser1.save(done);
+		});
+
+         it('after one save the user shall have a role of user', function(done) {
+			User.find({username: 'adminusername'}, function(err, users) {
+				users.should.have.length(1);
+                users[0].should.have.property('roles').with.lengthOf(2);
+                users[0].roles.should.have.property(0, 'user');
+                users[0].roles.should.have.property(1, 'admin');
+				done();
+			});
+		});
+
+
 	});
 
 	after(function(done) {

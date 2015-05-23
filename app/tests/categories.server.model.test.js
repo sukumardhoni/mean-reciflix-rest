@@ -41,7 +41,7 @@ describe('Category Model Unit Tests:', function() {
 
 	describe('Method Save', function() {
 		it('should be able to save without problems', function(done) {
-          console.log('Category is: '+ category);
+         // console.log('Category is: '+ category);
 			return category.save(function(err) {
 				should.not.exist(err);
 				done();
@@ -68,7 +68,7 @@ describe('Category Model Unit Tests:', function() {
         it('should be able to save without imageName', function(done) {
 			category.imageName = '';
 			return category.save(function(err, category) {
-               console.log('category: ' + category);
+              // console.log('category: ' + category);
 				should.not.exist(err);
 				done();
 			});
