@@ -5,19 +5,20 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
-	crypto = require('crypto');
+	crypto = require('crypto'),
+	bcrypt = require('bcrypt-nodejs');
 
 /**
  * A Validation function for local strategy properties
  */
-var validateLocalStrategyProperty = function(property) {
+var validateLocalStrategyProperty = function (property) {
 	return ((this.provider !== 'local' && !this.updated) || property.length);
 };
 
 /**
  * A Validation function for local strategy password
  */
-var validateLocalStrategyPassword = function(password) {
+var validateLocalStrategyPassword = function (password) {
 	return (this.provider !== 'local' || (password && password.length > 6));
 };
 
@@ -95,18 +96,19 @@ var UserSchema = new Schema({
 /**
  * Hook a pre save method to hash the password
  */
-UserSchema.pre('save', function(next) {
+/*UserSchema.pre('save', function (next) {
 	if (this.password && this.password.length > 6) {
 		this.salt = crypto.randomBytes(16).toString('base64');
 		this.password = this.hashPassword(this.password);
 	}
 
 	next();
-});
+});*/
 
 /**
  * Create instance method for hashing a password
  */
+/*
 UserSchema.methods.hashPassword = function(password) {
 	if (this.salt && password) {
 		return crypto.pbkdf2Sync(password, new Buffer(this.salt, 'base64'), 10000, 64).toString('base64');
@@ -114,24 +116,50 @@ UserSchema.methods.hashPassword = function(password) {
 		return password;
 	}
 };
+*/
+
+
+// Execute before each user.save() call
+UserSchema.pre('save', function (callback) {
+	var user = this;
+	// Break out if the password hasn't changed
+	if (!user.isModified('password')) return callback();
+	// Password changed so we need to hash it
+	bcrypt.genSalt(5, function (err, salt) {
+		if (err) return callback(err);
+		bcrypt.hash(user.password, salt, null, function (err, hash) {
+			if (err) return callback(err);
+			user.password = hash;
+			callback();
+		});
+	});
+});
+
+
+UserSchema.methods.verifyPassword = function (password, cb) {
+	bcrypt.compare(password, this.password, function (err, isMatch) {
+		if (err) return cb(err);
+		cb(null, isMatch);
+	});
+};
 
 /**
  * Create instance method for authenticating user
  */
-UserSchema.methods.authenticate = function(password) {
+UserSchema.methods.authenticate = function (password) {
 	return this.password === this.hashPassword(password);
 };
 
 /**
  * Find possible not used username
  */
-UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
+UserSchema.statics.findUniqueUsername = function (username, suffix, callback) {
 	var _this = this;
 	var possibleUsername = username + (suffix || '');
 
 	_this.findOne({
 		username: possibleUsername
-	}, function(err, user) {
+	}, function (err, user) {
 		if (!err) {
 			if (!user) {
 				callback(possibleUsername);

@@ -5,15 +5,15 @@
  */
 var passport = require('passport');
 
-module.exports = function(app) {
+module.exports = function (app) {
 	// User Routes
 	var users = require('../../app/controllers/users.server.controller');
 
 
-    app.route('/isAlive').get(users.live);
+	app.route('/isAlive').get(users.live);
 
 
-  // Setting up the users profile api
+	// Setting up the users profile api
 	app.route('/users/me').get(users.me);
 	app.route('/users').put(users.update);
 	app.route('/users/accounts').delete(users.removeOAuthProvider);
@@ -62,4 +62,12 @@ module.exports = function(app) {
 
 	// Finish by binding the user middleware
 	app.param('userId', users.userByID);
+
+
+
+
+	/*JWT Routes*/
+
+	app.route('/api/signup').post(users.jwtSignup);
+	app.route('/api/signin').post(users.jwtSignin);
 };

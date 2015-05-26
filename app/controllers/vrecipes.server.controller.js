@@ -8,17 +8,17 @@ var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
 	Vrecipe = mongoose.model('Vrecipe'),
-  sampleJSON = require('../assets/vidsample.json');
+	sampleJSON = require('../assets/vidsample.json');
 
 
 /**
  * Create a vrecipe
  */
-exports.create = function(req, res) {
+exports.create = function (req, res) {
 	var vrecipe = new Vrecipe(req.body);
 	//vrecipe.user = req.user;
 
-	vrecipe.save(function(err) {
+	vrecipe.save(function (err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -33,7 +33,7 @@ exports.create = function(req, res) {
 /**
  * Show the current vrecipe
  */
-exports.read = function(req, res) {
+exports.read = function (req, res) {
 	res.json(req.vrecipe);
 };
 
@@ -43,12 +43,12 @@ exports.read = function(req, res) {
 /**
  * Update a vrecipe
  */
-exports.update = function(req, res) {
+exports.update = function (req, res) {
 	var vrecipe = req.vrecipe;
 
 	vrecipe = _.extend(vrecipe, req.body);
 
-	vrecipe.save(function(err) {
+	vrecipe.save(function (err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -62,10 +62,10 @@ exports.update = function(req, res) {
 /**
  * Delete an vrecipe
  */
-exports.delete = function(req, res) {
+exports.delete = function (req, res) {
 	var vrecipe = req.vrecipe;
 
-	vrecipe.remove(function(err) {
+	vrecipe.remove(function (err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -108,8 +108,8 @@ exports.cleanAllVRecipes = function (req, res) {
 /**
  * List of Articles
  */
-exports.list = function(req, res) {
-	Vrecipe.find().sort('-created').populate('user', 'displayName').exec(function(err, vrecipes) {
+exports.list = function (req, res) {
+	Vrecipe.find().sort('-created').populate('user', 'displayName').exec(function (err, vrecipes) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -123,7 +123,7 @@ exports.list = function(req, res) {
 /**
  * Vrecipe middleware
  */
-exports.vrecipeByID = function(req, res, next, id) {
+exports.vrecipeByID = function (req, res, next, id) {
 
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(400).send({
@@ -131,7 +131,7 @@ exports.vrecipeByID = function(req, res, next, id) {
 		});
 	}
 
-	Vrecipe.findById(id).populate('user', 'displayName').exec(function(err, vrecipe) {
+	Vrecipe.findById(id).populate('user', 'displayName').exec(function (err, vrecipe) {
 		if (err) return next(err);
 		if (!vrecipe) {
 			return res.status(404).send({
@@ -150,7 +150,7 @@ exports.vrecipeByID = function(req, res, next, id) {
 /**
  * Vrecipe authorization middleware
  */
-exports.hasAuthorization = function(req, res, next) {
+exports.hasAuthorization = function (req, res, next) {
 	if (req.vrecipe.user.id !== req.user.id) {
 		return res.status(403).send({
 			message: 'User is not authorized'
@@ -250,6 +250,7 @@ exports.getAllCategories = function (req, res) {
 
 
 exports.getVIdRecipesByCategories = function (req, res) {
+	console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
 	Vrecipe.find({
 		categories: req.params.CategoryName
 	}, function (err, recipes) {
@@ -266,7 +267,7 @@ exports.getVIdRecipesByCategories = function (req, res) {
 		}
 	}).sort({
 		_id: 1
-	}).skip(req.params.pageId * 50).limit(50);
+	}).skip(req.params.pageId * 10).limit(10);
 };
 exports.getVIdRecipesByViews = function (req, res) {
 	Vrecipe.find({
@@ -321,7 +322,7 @@ exports.getAllMyFavoriteVRecipes = function (req, res) {
 	for (var i = 0; i < videoIds.length; i++) {
 		Vrecipe.findOne({
 			videoId: videoIds[i]
-		},function (err, recipe) {
+		}, function (err, recipe) {
 			if (!err) {
 				foundRecipes.push(recipe);
 				if (foundRecipes.length === videoIds.length) {
@@ -366,10 +367,3 @@ exports.postSampleJSONData = function (req, res) {
 		message: 'Recipe Items are added into db'
 	});
 };
-
-
-
-
-
-
-

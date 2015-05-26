@@ -7,12 +7,117 @@ var _ = require('lodash'),
 	errorHandler = require('../errors.server.controller'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	User = mongoose.model('User');
+	User = mongoose.model('User'),
+	jwt = require('jwt-simple');
+
+/*JWT Signup*/
+
+exports.jwtSignup = function (req, res, next) {
+	console.log('@@@@@@ JWt server side signup@@@@@@@' + JSON.stringify(req.body));
+	User.findOne({
+		email: req.body.email
+	}, function (err, user) {
+		console.log('signup userrrrrrrrr' + JSON.stringify(user));
+		if (err) {
+			res.json({
+				type: false,
+				data: 'Error occured: ' + err
+			});
+		} else {
+			if (user) {
+				res.json({
+					type: false,
+					data: 'User already exists!',
+					user: user
+				});
+			} else {
+				//delete req.body.roles;
+				var userModel = new User(req.body);
+				userModel.provider = 'local';
+				userModel.displayName = userModel.firstName + ' ' + userModel.lastName;
+				var secret = 'www';
+				var payload = {
+					email: req.body.email
+				};
+				var jwtToken = jwt.encode(payload, secret);
+				userModel.token = jwtToken;
+				userModel.save(function (err, user) {
+					if (user) {
+						req.login(userModel, function (err) {
+							if (err) {
+								res.status(400).send(err);
+								console.log('ERROR at server signUP : ' + err);
+							} else {
+								res.jsonp(userModel);
+								console.log('server side data ' + JSON.stringify(user));
+							}
+						});
+					}
+				});
+			}
+		}
+	});
+};
+
+
+/* JWT Signin*/
+
+exports.jwtSignin = function (req, res, next) {
+	console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
+	User.findOne({
+		email: req.body.email
+	}, function (err, user) {
+		if (err) {
+			res.json({
+				type: false,
+				data: 'Error occured: ' + err
+			});
+		} else {
+			if (user) {
+				var password = req.body.password;
+				// Make sure the password is correct
+				user.verifyPassword(password, function (err, isMatch) {
+					if (isMatch) {
+						// Success
+						var usermodel = new User(user);
+						var secret = 'www';
+						var payload = {
+							email: req.body.email
+						};
+						var token = jwt.encode(payload, secret);
+						usermodel.token = token;
+						usermodel.password = req.body.password;
+						usermodel.save(function (err, user) {
+							req.login(usermodel, function (err) {
+								if (err) {
+									res.status(400).send(err);
+								} else {
+									res.jsonp(usermodel);
+								}
+							});
+						});
+					} else {
+						res.json({
+							type: false,
+							data: 'Incorrect password'
+						});
+					}
+				});
+			} else {
+				res.json({
+					type: false,
+					data: 'Incorrect user/password'
+				});
+			}
+		}
+	});
+};
+
 
 /**
  * Signup
  */
-exports.signup = function(req, res) {
+exports.signup = function (req, res) {
 	// For security measurement we remove the roles from the req.body object
 	delete req.body.roles;
 
@@ -25,7 +130,7 @@ exports.signup = function(req, res) {
 	user.displayName = user.firstName + ' ' + user.lastName;
 
 	// Then save the user
-	user.save(function(err) {
+	user.save(function (err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -35,7 +140,7 @@ exports.signup = function(req, res) {
 			user.password = undefined;
 			user.salt = undefined;
 
-			req.login(user, function(err) {
+			req.login(user, function (err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
@@ -49,8 +154,8 @@ exports.signup = function(req, res) {
 /**
  * Signin after passport authentication
  */
-exports.signin = function(req, res, next) {
-	passport.authenticate('local', function(err, user, info) {
+exports.signin = function (req, res, next) {
+	passport.authenticate('local', function (err, user, info) {
 		if (err || !user) {
 			res.status(400).send(info);
 		} else {
@@ -58,7 +163,7 @@ exports.signin = function(req, res, next) {
 			user.password = undefined;
 			user.salt = undefined;
 
-			req.login(user, function(err) {
+			req.login(user, function (err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
@@ -72,7 +177,7 @@ exports.signin = function(req, res, next) {
 /**
  * Signout
  */
-exports.signout = function(req, res) {
+exports.signout = function (req, res) {
 	req.logout();
 	res.redirect('/');
 };
@@ -80,13 +185,13 @@ exports.signout = function(req, res) {
 /**
  * OAuth callback
  */
-exports.oauthCallback = function(strategy) {
-	return function(req, res, next) {
-		passport.authenticate(strategy, function(err, user, redirectURL) {
+exports.oauthCallback = function (strategy) {
+	return function (req, res, next) {
+		passport.authenticate(strategy, function (err, user, redirectURL) {
 			if (err || !user) {
 				return res.redirect('/#!/signin');
 			}
-			req.login(user, function(err) {
+			req.login(user, function (err) {
 				if (err) {
 					return res.redirect('/#!/signin');
 				}
@@ -100,7 +205,7 @@ exports.oauthCallback = function(strategy) {
 /**
  * Helper function to save or update a OAuth user profile
  */
-exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
+exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
 	if (!req.user) {
 		// Define a search query fields
 		var searchMainProviderIdentifierField = 'providerData.' + providerUserProfile.providerIdentifierField;
@@ -120,14 +225,14 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 			$or: [mainProviderSearchQuery, additionalProviderSearchQuery]
 		};
 
-		User.findOne(searchQuery, function(err, user) {
+		User.findOne(searchQuery, function (err, user) {
 			if (err) {
 				return done(err);
 			} else {
 				if (!user) {
 					var possibleUsername = providerUserProfile.username || ((providerUserProfile.email) ? providerUserProfile.email.split('@')[0] : '');
 
-					User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
+					User.findUniqueUsername(possibleUsername, null, function (availableUsername) {
 						user = new User({
 							firstName: providerUserProfile.firstName,
 							lastName: providerUserProfile.lastName,
@@ -139,7 +244,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 						});
 
 						// And save the user
-						user.save(function(err) {
+						user.save(function (err) {
 							return done(err, user);
 						});
 					});
@@ -162,7 +267,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 			user.markModified('additionalProvidersData');
 
 			// And save the user
-			user.save(function(err) {
+			user.save(function (err) {
 				return done(err, user, '/#!/settings/accounts');
 			});
 		} else {
@@ -174,7 +279,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 /**
  * Remove OAuth provider
  */
-exports.removeOAuthProvider = function(req, res, next) {
+exports.removeOAuthProvider = function (req, res, next) {
 	var user = req.user;
 	var provider = req.param('provider');
 
@@ -187,13 +292,13 @@ exports.removeOAuthProvider = function(req, res, next) {
 			user.markModified('additionalProvidersData');
 		}
 
-		user.save(function(err) {
+		user.save(function (err) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				req.login(user, function(err) {
+				req.login(user, function (err) {
 					if (err) {
 						res.status(400).send(err);
 					} else {

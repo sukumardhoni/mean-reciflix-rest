@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var _ = require('lodash'),
-mongoose = require('mongoose'),
-  User = mongoose.model('User');
+	mongoose = require('mongoose'),
+	User = mongoose.model('User');
 
 
 exports.userFavorites = function (req, res) {
@@ -25,6 +25,39 @@ exports.userFavorites = function (req, res) {
 				res.jsonp(usercb);
 			}
 		});
+	});
+};
+
+
+exports.ensureAuthorized = function (req, res, next) {
+	var bearerToken;
+	var bearerHeader = req.headers.authorization;
+	if (typeof bearerHeader !== 'undefined') {
+		var bearer = bearerHeader.split(' ');
+		if (bearer[1] === 'undefined') {
+			res.send(403);
+		} else {
+			bearerToken = bearer[1];
+			req.token = bearerToken;
+			next();
+		}
+	} else {
+		res.send(403);
+	}
+};
+
+exports.checkingUser = function (req, res, next) {
+	User.findOne({
+		token: req.token
+	}, function (err, user) {
+		if (err) {
+			res.json({
+				type: false,
+				data: 'Error occured: ' + err
+			});
+		} else {
+			next();
+		}
 	});
 };
 
