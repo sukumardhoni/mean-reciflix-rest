@@ -19,7 +19,7 @@ var validateLocalStrategyProperty = function (property) {
  * A Validation function for local strategy password
  */
 var validateLocalStrategyPassword = function (password) {
-	return (this.provider !== 'local' || (password && password.length > 6));
+	return (this.provider !== 'local' || (password && password.length > 1));
 };
 
 /**
@@ -49,18 +49,19 @@ var UserSchema = new Schema({
 		validate: [validateLocalStrategyProperty, 'Please fill in your email'],
 		match: [/.+\@.+\..+/, 'Please fill a valid email address']
 	},
-	username: {
-		type: String,
-		unique: 'Username already exists',
-		required: 'Please fill in a username',
-		trim: true
-	},
+	/*	username: {
+			type: String,
+			unique: 'Username already exists',
+			required: 'Please fill in a username',
+			trim: true
+		},*/
 	password: {
 		type: String,
 		default: '',
 		validate: [validateLocalStrategyPassword, 'Password should be longer']
 	},
 	favorites: [],
+	likes: [],
 	salt: {
 		type: String
 	},
@@ -90,6 +91,9 @@ var UserSchema = new Schema({
 	},
 	resetPasswordExpires: {
 		type: Date
+	},
+	token: {
+		type: String
 	}
 });
 

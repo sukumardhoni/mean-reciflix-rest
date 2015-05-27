@@ -33,6 +33,7 @@ exports.jwtSignup = function (req, res, next) {
 			} else {
 				//delete req.body.roles;
 				var userModel = new User(req.body);
+
 				userModel.provider = 'local';
 				userModel.displayName = userModel.firstName + ' ' + userModel.lastName;
 				var secret = 'www';
@@ -41,15 +42,23 @@ exports.jwtSignup = function (req, res, next) {
 				};
 				var jwtToken = jwt.encode(payload, secret);
 				userModel.token = jwtToken;
-				userModel.save(function (err, user) {
-					if (user) {
+				userModel.save(function (err) {
+
+					if (err) {
+						console.log('Error msg while saving the user is : ' + err)
+
+						return res.status(400).send({
+							message: errorHandler.getErrorMessage(err)
+						});
+					} else {
+						console.log('After saving the user details is: ' + JSON.stringify(userModel));
 						req.login(userModel, function (err) {
 							if (err) {
 								res.status(400).send(err);
 								console.log('ERROR at server signUP : ' + err);
 							} else {
 								res.jsonp(userModel);
-								console.log('server side data ' + JSON.stringify(user));
+								console.log('server side data ' + JSON.stringify(userModel));
 							}
 						});
 					}

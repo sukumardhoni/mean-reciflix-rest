@@ -8,6 +8,7 @@ var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
 	Vrecipe = mongoose.model('Vrecipe'),
+	User = mongoose.model('User'),
 	sampleJSON = require('../assets/vidsample.json');
 
 
@@ -130,7 +131,7 @@ exports.vrecipeByID = function (req, res, next, id) {
 			message: 'Vrecipe is invalid'
 		});
 	}
-
+	console.log('Called the single recipe params function');
 	Vrecipe.findById(id).populate('user', 'displayName').exec(function (err, vrecipe) {
 		if (err) return next(err);
 		if (!vrecipe) {
@@ -251,24 +252,31 @@ exports.getAllCategories = function (req, res) {
 
 exports.getVIdRecipesByCategories = function (req, res) {
 	console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
+	console.log('Recipes under category is called , PageId is : ' + req.params.pageId);
 	Vrecipe.find({
-		categories: req.params.CategoryName
-	}, function (err, recipes) {
+		cats: {
+			$in: [req.params.CategoryName]
+		}
+	}).sort({
+		rank: -1
+	}).skip(req.params.pageId * 5).limit(5).exec(function (err, recipes) {
 		if (!err) {
-			if ((recipes.length === 0)) {
+			if ((recipes.length == 0)) {
 				res.status(204).send({
-					'message': 'There are no recipe items available'
+					"message": "There are no recipe items available"
 				});
 			} else {
-				return res.send(recipes);
+				console.log('Recipes length is : ' + recipes.length);
+				res.send(recipes);
 			}
 		} else {
 			return console.log(err);
 		}
-	}).sort({
-		_id: 1
-	}).skip(req.params.pageId * 10).limit(10);
+	});
 };
+
+
+
 exports.getVIdRecipesByViews = function (req, res) {
 	Vrecipe.find({
 		'views': {
@@ -316,16 +324,62 @@ exports.getVIdRecipesByViewsAndTags = function (req, res) {
 	});
 };
 
-exports.getAllMyFavoriteVRecipes = function (req, res) {
-	var videoIds = req.params.videoIds.split(',');
+exports.getAllMyFavorites = function (req, res) {
+
+	var pageid = req.params.pageId;
+	var pagelength = 5;
+	var allFavouriteVidoeids = [];
+	User.findOne({
+		_id: req.params.userId
+	}, function (err, user) {
+		if (!err) {
+			console.log(' User: ' + user.email + ', fav video ids length is : ' + user.favorites.length);
+			var currentFavVideoids = user.favorites.slice(pageid * pagelength, (pageid * pagelength) + pagelength);
+			var foundRecipes = [];
+			if (currentFavVideoids.length == 0) {
+				return res.status(204).send({
+					message: 'No data found'
+				});
+			} else {
+				for (var i = 0; i < currentFavVideoids.length; i++) {
+					Vrecipe.findOne({
+						videoId: currentFavVideoids[i]
+					}, function (err, recipe) {
+						if (!err) {
+							foundRecipes.push(recipe);
+							if (foundRecipes.length == currentFavVideoids.length) {
+								res.jsonp(foundRecipes);
+							}
+						} else {
+							return res.send({
+								message: 'No data found'
+							});
+						}
+					})
+				}
+			}
+		} else {
+			return res.send({
+				message: 'No data found'
+			});
+		}
+	})
+};
+
+exports.getAllSearchedVRecipes = function (req, res) {
+	var queries = req.params.query.split(' ');
 	var foundRecipes = [];
-	for (var i = 0; i < videoIds.length; i++) {
-		Vrecipe.findOne({
-			videoId: videoIds[i]
-		}, function (err, recipe) {
+	for (var i = 0; i < queries.length; i++) {
+		Vrecipe.find({
+			tags: {
+				$regex: new RegExp('^' + queries[i].toLowerCase(), 'i')
+			}
+		}).sort({
+			rank: -1
+		}).skip(req.params.pageId * 5).limit(5).exec(function (err, recipe) {
 			if (!err) {
 				foundRecipes.push(recipe);
-				if (foundRecipes.length === videoIds.length) {
+				if (foundRecipes.length == queries.length) {
 					res.jsonp(foundRecipes);
 				}
 			} else {
@@ -335,6 +389,32 @@ exports.getAllMyFavoriteVRecipes = function (req, res) {
 			}
 		});
 	}
+};
+
+
+
+exports.updateVRecipesFavCount = function (req, res) {
+	console.log('Console @ updateVRecipesFavCount');
+	Vrecipe.findOne({
+		_id: req.params.recipeId
+	}, function (err, vrecipe) {
+		if (vrecipe === null)
+			return res.status(204).send({
+				message: 'No recipe item is available with id: ' + _id
+			});
+		vrecipe.favoritesCount = req.body.favoritesCount;
+		vrecipe.applikes = req.body.applikes;
+		return vrecipe.save(function (err) {
+			if (!err) {
+				res.json(vrecipe);
+				console.log('Successfully increment the fav count : ' + JSON.stringify(vrecipe));
+			} else {
+				res.send({
+					message: 'No item were found with that id'
+				});
+			}
+		});
+	});
 };
 
 

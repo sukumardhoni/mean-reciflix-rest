@@ -68,6 +68,14 @@ module.exports = function (app) {
 
 	/*JWT Routes*/
 
-	app.route('/api/signup').post(users.jwtSignup);
-	app.route('/api/signin').post(users.jwtSignin);
+	app.route('/userFavorites/:uId').put(users.userFavorites);
+
+
+
+
+
+
+
+	app.route('/users/signup').post(users.jwtSignup);
+	app.route('/users/signin').post(users.jwtSignin);
 };
