@@ -45,7 +45,7 @@ exports.jwtSignup = function (req, res, next) {
 				userModel.save(function (err) {
 
 					if (err) {
-						console.log('Error msg while saving the user is : ' + err)
+						console.log('Error msg while saving the user is : ' + err);
 
 						return res.status(400).send({
 							message: errorHandler.getErrorMessage(err)

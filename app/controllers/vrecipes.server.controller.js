@@ -261,9 +261,9 @@ exports.getVIdRecipesByCategories = function (req, res) {
 		rank: -1
 	}).skip(req.params.pageId * 5).limit(5).exec(function (err, recipes) {
 		if (!err) {
-			if ((recipes.length == 0)) {
+			if ((recipes.length === 0)) {
 				res.status(204).send({
-					"message": "There are no recipe items available"
+					'message': 'There are no recipe items available'
 				});
 			} else {
 				console.log('Recipes length is : ' + recipes.length);
@@ -336,7 +336,7 @@ exports.getAllMyFavorites = function (req, res) {
 			console.log(' User: ' + user.email + ', fav video ids length is : ' + user.favorites.length);
 			var currentFavVideoids = user.favorites.slice(pageid * pagelength, (pageid * pagelength) + pagelength);
 			var foundRecipes = [];
-			if (currentFavVideoids.length == 0) {
+			if (currentFavVideoids.length === 0) {
 				return res.status(204).send({
 					message: 'No data found'
 				});
@@ -347,7 +347,7 @@ exports.getAllMyFavorites = function (req, res) {
 					}, function (err, recipe) {
 						if (!err) {
 							foundRecipes.push(recipe);
-							if (foundRecipes.length == currentFavVideoids.length) {
+							if (foundRecipes.length === currentFavVideoids.length) {
 								res.jsonp(foundRecipes);
 							}
 						} else {
@@ -355,7 +355,7 @@ exports.getAllMyFavorites = function (req, res) {
 								message: 'No data found'
 							});
 						}
-					})
+					});
 				}
 			}
 		} else {
@@ -363,7 +363,7 @@ exports.getAllMyFavorites = function (req, res) {
 				message: 'No data found'
 			});
 		}
-	})
+	});
 };
 
 exports.getAllSearchedVRecipes = function (req, res) {
@@ -379,7 +379,7 @@ exports.getAllSearchedVRecipes = function (req, res) {
 		}).skip(req.params.pageId * 5).limit(5).exec(function (err, recipe) {
 			if (!err) {
 				foundRecipes.push(recipe);
-				if (foundRecipes.length == queries.length) {
+				if (foundRecipes.length === queries.length) {
 					res.jsonp(foundRecipes);
 				}
 			} else {
@@ -400,7 +400,7 @@ exports.updateVRecipesFavCount = function (req, res) {
 	}, function (err, vrecipe) {
 		if (vrecipe === null)
 			return res.status(204).send({
-				message: 'No recipe item is available with id: ' + _id
+				message: 'No recipe item is available with id: ' + req.params.recipeId
 			});
 		vrecipe.favoritesCount = req.body.favoritesCount;
 		vrecipe.applikes = req.body.applikes;

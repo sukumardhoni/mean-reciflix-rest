@@ -43,7 +43,7 @@ exports.userFavorites = function (req, res) {
 			}
 		});
 	});
-}
+};
 
 
 
