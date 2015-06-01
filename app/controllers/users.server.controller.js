@@ -6,9 +6,9 @@
 var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	User = mongoose.model('User');
-
-
+/*
 exports.userFavorites = function (req, res) {
+	console.log('userFavorites is called');
 	User.findOne({
 		_id: req.params.id
 	}, function (err, user) {
@@ -26,40 +26,8 @@ exports.userFavorites = function (req, res) {
 			}
 		});
 	});
-};
+};*/
 
-
-exports.ensureAuthorized = function (req, res, next) {
-	var bearerToken;
-	var bearerHeader = req.headers.authorization;
-	if (typeof bearerHeader !== 'undefined') {
-		var bearer = bearerHeader.split(' ');
-		if (bearer[1] === 'undefined') {
-			res.send(403);
-		} else {
-			bearerToken = bearer[1];
-			req.token = bearerToken;
-			next();
-		}
-	} else {
-		res.send(403);
-	}
-};
-
-exports.checkingUser = function (req, res, next) {
-	User.findOne({
-		token: req.token
-	}, function (err, user) {
-		if (err) {
-			res.json({
-				type: false,
-				data: 'Error occured: ' + err
-			});
-		} else {
-			next();
-		}
-	});
-};
 
 
 /**

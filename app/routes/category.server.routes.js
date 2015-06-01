@@ -13,7 +13,7 @@ module.exports = function (app) {
 
 	// Category Routes
 	app.route('/categories/:pageId')
-		.get(categories.list)
+		.get(users.ensureAuthorized, users.checkingUser, categories.list)
 		.post(users.requiresLogin, categories.create);
 
 	app.route('/categories/:categoryId')

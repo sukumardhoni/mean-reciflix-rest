@@ -10,6 +10,46 @@ var _ = require('lodash'),
 	User = mongoose.model('User');
 
 
+
+
+exports.ensureAuthorized = function (req, res, next) {
+	console.log('ensureAuthorized is called');
+	var bearerToken;
+	var bearerHeader = req.headers.authorization;
+	if (typeof bearerHeader !== 'undefined') {
+		var bearer = bearerHeader.split(' ');
+		if (bearer[1] === 'undefined') {
+			res.send(403);
+		} else {
+			bearerToken = bearer[1];
+			req.token = bearerToken;
+			next();
+		}
+	} else {
+		res.send(403);
+	}
+};
+
+exports.checkingUser = function (req, res, next) {
+	console.log('checkingUser is called');
+	User.findOne({
+		token: req.token
+	}, function (err, user) {
+		if (err) {
+			res.json({
+				type: false,
+				data: 'Error occured: ' + err
+			});
+		} else {
+			next();
+		}
+	});
+};
+
+
+
+
+
 /* Update Favorities and Likes on User Profile */
 
 
