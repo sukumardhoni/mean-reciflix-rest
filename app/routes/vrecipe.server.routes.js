@@ -41,7 +41,7 @@ module.exports = function (app) {
     .get(vrecipes.getAllCategories);
 
   app.route('/VRecipesByCategories/:CategoryName/:pageId')
-    .get(users.ensureAuthorized, users.checkingUser, vrecipes.getVIdRecipesByCategories);
+    .get(vrecipes.getVIdRecipesByCategories);
 
   app.route('/VRecipesByViews/:maxViews/:minViews')
     .get(vrecipes.getVIdRecipesByViews);
