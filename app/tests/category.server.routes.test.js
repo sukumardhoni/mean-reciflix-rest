@@ -41,7 +41,7 @@ describe('Category CRUD tests', function () {
 
     adminUser = new User({
       firstName: 'AdminFull',
-      lastName: 'AdminLastName',
+      lastName: 'Name',
       displayName: 'AdminFull Name',
       email: adminCredentials.email,
       password: adminCredentials.password,
@@ -49,16 +49,21 @@ describe('Category CRUD tests', function () {
       roles: ['user', 'admin']
     });
 
-    // Save a user to the test db and create new category
-    user.save(function () {
 
+
+    // Save a user to the test db and create new category
+    user.save(function (err) {
+      if (err) throw err;
       //creating the admin user
-      adminUser.save(function () {
+      adminUser.save(function (err) {
+        if (err) {
+          console.log('Error at admin user save function' + err);
+          //throw err;
+        };
         category = {
           catId: 'category1',
           displayName: 'Category 1'
         };
-
         done();
       });
 
@@ -75,11 +80,12 @@ describe('Category CRUD tests', function () {
 
         // Get the userId
         var userId = user.id;
-        console.log("##############  signinRes is: " + JSON.stringify(signinRes.body));
+        var token = signinRes.body.token;
 
         // Save a new category
         agent.post('/categories/0')
           .set('Accept', 'application/json')
+          .set('Authorization', 'Basic ' + token)
           .send(category)
           .expect(200)
           .end(function (categorySaveErr, categorySaveRes) {
@@ -87,7 +93,8 @@ describe('Category CRUD tests', function () {
             if (categorySaveErr) done(categorySaveErr);
 
             // Get a list of categories
-            agent.get('/categories')
+            agent.get('/categories/0')
+              .set('Authorization', 'Basic ' + token)
               .end(function (categoriesGetErr, categoriesGetRes) {
                 // Handle categories save error
                 if (categoriesGetErr) done(categoriesGetErr);
@@ -108,9 +115,9 @@ describe('Category CRUD tests', function () {
 
 
   it('should not be able to save a category if not logged in', function (done) {
-    agent.post('/categories')
+    agent.post('/categories/0')
       .send(category)
-      .expect(401)
+      .expect(403)
       .end(function (categorySaveErr, categorySaveRes) {
         // Call the assertion callback
         done(categorySaveErr);
@@ -121,7 +128,7 @@ describe('Category CRUD tests', function () {
     // Invalidate title field
     category.catId = '';
 
-    agent.post('/auth/signin')
+    agent.post('/users/signin')
       .send(credentials)
       .expect(200)
       .end(function (signinErr, signinRes) {
@@ -130,9 +137,11 @@ describe('Category CRUD tests', function () {
 
         // Get the userId
         var userId = user.id;
+        var token = signinRes.body.token;
 
         // Save a new category
-        agent.post('/categories')
+        agent.post('/categories/0')
+          .set('Authorization', 'Basic ' + token)
           .send(category)
           .expect(400)
           .end(function (categorySaveErr, categorySaveRes) {
@@ -147,7 +156,7 @@ describe('Category CRUD tests', function () {
   });
 
   it('should be NOT able to update a category if a basic user signed in', function (done) {
-    agent.post('/auth/signin')
+    agent.post('/users/signin')
       .send(credentials)
       .expect(200)
       .end(function (signinErr, signinRes) {
@@ -156,9 +165,11 @@ describe('Category CRUD tests', function () {
 
         // Get the userId
         var userId = user.id;
+        var token = signinRes.body.token;
 
         // Save a new article
-        agent.post('/categories')
+        agent.post('/categories/0')
+          .set('Authorization', 'Basic ' + token)
           .send(category)
           .expect(200)
           .end(function (categorySaveErr, categorySaveRes) {
@@ -181,7 +192,7 @@ describe('Category CRUD tests', function () {
 
 
   it('should be able to update a category if an admin user signed in', function (done) {
-    agent.post('/auth/signin')
+    agent.post('/users/signin')
       .send(adminCredentials)
       .expect(200)
       .end(function (signinErr, signinRes) {
@@ -190,9 +201,13 @@ describe('Category CRUD tests', function () {
 
         // Get the userId
         var userId = adminUser.id;
+        var token = signinRes.body.token;
 
-        // Save a new article
-        agent.post('/categories')
+        console.log('Admin credentials is : ' + JSON.stringify(signinRes.body))
+        console.log('Admin credentials token is : ' + signinRes.body.token)
+          // Save a new article
+        agent.post('/categories/0')
+          .set('Authorization', 'Basic ' + token)
           .send(category)
           .expect(200)
           .end(function (categorySaveErr, categorySaveRes) {
@@ -204,6 +219,7 @@ describe('Category CRUD tests', function () {
 
             // Update an existing article
             agent.put('/categories/' + categorySaveRes.body._id)
+              .set('Authorization', 'Basic ' + token)
               .send(category)
               .expect(200)
               .end(function (categoryUpdateErr, categoryUpdateRes) {
@@ -229,7 +245,7 @@ describe('Category CRUD tests', function () {
     // Save the category
     categoryObj.save(function () {
       // Request categories
-      request(app).get('/categories')
+      request(app).get('/categories/0')
         .end(function (req, res) {
           // Set assertion
           res.body.should.be.an.Array.with.lengthOf(1);

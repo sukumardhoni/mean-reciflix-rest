@@ -8,7 +8,7 @@ var users = require('../../app/controllers/users.server.controller'),
 
 module.exports = function (app) {
 
-  /*userController.ensureAuthorized,userController.checkingUser,*/
+  /*users.ensureAuthorized,users.checkingUser,*/
 
 
   // Category Routes
@@ -19,8 +19,8 @@ module.exports = function (app) {
 
   app.route('/categories/:categoryId')
     .get(categories.read)
-    .put(users.requiresLogin, categories.hasAuthorization, categories.update)
-    .delete(users.requiresLogin, categories.hasAuthorization, categories.delete);
+    .put(users.ensureAuthorized, users.checkingUser, categories.hasAuthorization, categories.update)
+    .delete(users.ensureAuthorized, users.checkingUser, categories.hasAuthorization, categories.delete);
 
   /*	app.route('/categories/page/:pageId')
 			.get(categories.read);*/

@@ -19,7 +19,7 @@ exports.ensureAuthorized = function (req, res, next) {
   if (typeof bearerHeader !== 'undefined') {
     var bearer = bearerHeader.split(' ');
     if (bearer[1] === 'undefined') {
-      res.send(403);
+      res.sendStatus(403);
     } else {
       bearerToken = bearer[1];
       req.token = bearerToken;
@@ -27,7 +27,7 @@ exports.ensureAuthorized = function (req, res, next) {
       next();
     }
   } else {
-    res.send(403);
+    res.sendStatus(403);
   }
 };
 

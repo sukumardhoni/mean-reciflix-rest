@@ -84,6 +84,7 @@ exports.jwtSignin = function (req, res, next) {
       });
     } else {
       if (user) {
+        console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
         var password = req.body.password;
         // Make sure the password is correct
         user.verifyPassword(password, function (err, isMatch) {
