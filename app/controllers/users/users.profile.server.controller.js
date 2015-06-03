@@ -13,7 +13,7 @@ var _ = require('lodash'),
 
 
 exports.ensureAuthorized = function (req, res, next) {
-  console.log('ensureAuthorized is called');
+  console.log('### ensureAuthorized is called');
   var bearerToken;
   var bearerHeader = req.headers.authorization;
   if (typeof bearerHeader !== 'undefined') {

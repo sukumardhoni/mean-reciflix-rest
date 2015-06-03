@@ -10,7 +10,7 @@ var should = require('should'),
 /**
  * Globals
  */
-var credentials, adminCredentials, user, adminUser, category;
+var credentials, adminCredentials, user, adminUser;
 
 /**
  * Article routes tests
@@ -26,7 +26,6 @@ describe('User CRUD tests', function () {
       username: 'adminusername',
       password: 'adminpassword'
     };
-
     // Create a new user
     user = new User({
       firstName: 'Full',
@@ -49,19 +48,37 @@ describe('User CRUD tests', function () {
       roles: ['user', 'admin']
     });
 
-    /*		// Save a user to the test db and create new category
-    		user.save(function () {
-
-    		  //creating the admin user
-    		  adminUser.save(function () {
-    		    category = {
-    		      catId: 'category1',
-    		      displayName: 'Category 1'
-    		    };
-
-    		    done();
-    		  });
-
-    		});*/
+    done();
   });
+
+
+  it('should be able to signup a User successfully', function (done) {
+    agent.post('/users/signup')
+      .send(user)
+      .expect(200)
+      .end(function (signupErr, signupRes) {
+        // Handle signin error
+        if (signupErr) done(signupErr);
+        // Get the userId
+        var userId = user.id;
+        var userToken = signupRes.body.token;
+        agent.get('/users/me')
+          .send(credentials)
+          .expect(200)
+          .end(function (userGetErr, userRes) {
+            (userRes.body._id).should.equal(userId);
+            (userRes.body.email).should.equal(user.email);
+            (userRes.body.token).should.equal(userToken);
+            (userRes.body.roles).should.have.length(1);
+            (userRes.body.roles).should.have.property(0, 'user');
+            done();
+          });
+      });
+  });
+
+  afterEach(function (done) {
+    User.remove().exec(done);
+  });
+
+
 });
