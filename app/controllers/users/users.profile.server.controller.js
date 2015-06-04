@@ -12,27 +12,38 @@ var _ = require('lodash'),
 
 
 
-exports.ensureAuthorized = function (req, res, next) {
-  console.log('### ensureAuthorized is called');
+exports.ensureAuthenticated = function (req, res, next) {
+  console.log('### ensureAuthenticated is called');
   var bearerToken;
   var bearerHeader = req.headers.authorization;
   if (typeof bearerHeader !== 'undefined') {
     var bearer = bearerHeader.split(' ');
     if (bearer[1] === 'undefined') {
-      res.sendStatus(403);
+      res.sendStatus(401);
     } else {
       bearerToken = bearer[1];
-      req.token = bearerToken;
-      console.log('Token fetched from client users is : ' + bearerToken);
-      next();
+      //req.token = bearerToken;
+      //    console.log('Token fetched from client users is : ' + bearerToken);
+      User.findOne({
+        token: bearerToken
+      }, function (err, user) {
+        if (err) {
+          res.json({
+            type: false,
+            data: 'Error occured: ' + err
+          });
+        } else {
+          next();
+        }
+      });
     }
   } else {
-    res.sendStatus(403);
+    res.sendStatus(401);
   }
 };
 
 exports.checkingUser = function (req, res, next) {
-  console.log('checkingUser is called');
+  // console.log('checkingUser is called');
   User.findOne({
     token: req.token
   }, function (err, user) {
@@ -47,6 +58,43 @@ exports.checkingUser = function (req, res, next) {
   });
 };
 
+exports.checkAdmin = function (req, res, next) {
+  // console.log('checking if User is Admin');
+  var bearerToken;
+  var bearerHeader = req.headers.authorization;
+  if (typeof bearerHeader !== 'undefined') {
+    var bearer = bearerHeader.split(' ');
+    if (bearer[1] === 'undefined') {
+      res.sendStatus(401);
+    } else {
+      bearerToken = bearer[1];
+      //console.log('2222 Token fetched from header is : ' + bearerToken);
+      User.findOne({
+        token: bearerToken
+      }, function (err, user) {
+        if (err) {
+          res.json({
+            type: false,
+            data: 'Error occured: ' + err
+          });
+        } else {
+          // console.log('user is: ' + JSON.stringify(user));
+          if (user.roles.indexOf('admin') > -1) {
+            next();
+          } else {
+            res.status(401).send({
+              type: false,
+              data: 'User does not have Admin privelege'
+            });
+          }
+        }
+      });
+    }
+  } else {
+    res.sendStatus(403);
+  }
+
+};
 
 
 
@@ -55,7 +103,7 @@ exports.checkingUser = function (req, res, next) {
 
 
 exports.userFavorites = function (req, res) {
-  console.log('Update user fav video ids is called in server' + JSON.stringify(req.body));
+  //console.log('Update user fav video ids is called in server' + JSON.stringify(req.body));
   User.findOne({
     _id: req.params.uId
   }, function (err, user) {
@@ -78,7 +126,7 @@ exports.userFavorites = function (req, res) {
     return user.save(function (err, usercb) {
       if (err) {
         res.status(400).send(err);
-        console.log('Error on update fav vids into user : ' + err);
+        //  console.log('Error on update fav vids into user : ' + err);
       } else {
         res.jsonp(usercb);
       }
@@ -133,8 +181,46 @@ exports.update = function (req, res) {
  * Send User
  */
 exports.me = function (req, res) {
+
+  // console.log('call came into users.me, req.user is : ' + JSON.stringify(req.user));
+
   res.json(req.user || null);
 };
+
+
+//TODO yet to test this method, to be used for getting a full user after sign in
+exports.fetchUser = function (req, res, next) {
+  //  console.log('### ensureAuthenticated is called');
+  var bearerToken;
+  var bearerHeader = req.headers.authorization;
+  if (typeof bearerHeader !== 'undefined') {
+    var bearer = bearerHeader.split(' ');
+    if (bearer[1] === 'undefined') {
+      res.sendStatus(401);
+    } else {
+      bearerToken = bearer[1];
+      //req.token = bearerToken;
+      //    console.log('Token fetched from client users is : ' + bearerToken);
+      User.findOne({
+        token: bearerToken
+      }, function (err, user) {
+        if (err) {
+          res.json({
+            type: false,
+            data: 'Error occured: ' + err
+          });
+        } else {
+          res.json(user);
+        }
+      });
+    }
+  } else {
+    res.sendStatus(401);
+  }
+};
+
+
+
 
 exports.live = function (req, res) {
   res.json({

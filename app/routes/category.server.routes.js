@@ -11,16 +11,23 @@ module.exports = function (app) {
   /*users.ensureAuthorized,users.checkingUser,*/
 
 
+  //TODO is the method users.ensureAuthorized  can rename to users.ensureAuthenticated ?
+
   // Category Routes
-  app.route('/categories/:pageId')
+
+  app.route('/categories/page/:pageId')
     .get(categories.list)
-    //.post(users.requiresLogin, categories.create);
-    .post(users.ensureAuthorized, users.checkingUser, categories.create);
+
+
+
+  app.route('/categories')
+    .post(users.ensureAuthenticated, users.checkAdmin, categories.create);
+
 
   app.route('/categories/:categoryId')
     .get(categories.read)
-    .put(users.ensureAuthorized, users.checkingUser, categories.hasAuthorization, categories.update)
-    .delete(users.ensureAuthorized, users.checkingUser, categories.hasAuthorization, categories.delete);
+    .put(users.ensureAuthenticated, users.checkAdmin, categories.update)
+    .delete(users.ensureAuthenticated, users.checkAdmin, categories.delete);
 
   /*	app.route('/categories/page/:pageId')
 			.get(categories.read);*/

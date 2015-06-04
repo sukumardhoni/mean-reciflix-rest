@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
  * Create a category
  */
 exports.create = function (req, res) {
-  console.log("reached the create received: " + JSON.stringify(req.body));
+  // console.log("reached the create received: " + JSON.stringify(req.body));
   var category = new Category(req.body);
   category.user = req.user;
 
@@ -77,12 +77,12 @@ exports.delete = function (req, res) {
 exports.list = function (req, res) {
   Category.find().sort('-created').populate('user', 'displayName').skip(req.params.pageId * 4).limit(4).exec(function (err, categories) {
     if (err) {
-      console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
+      // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      console.log('@@@@@@@@@ categories list  successfully fetched ');
+      //  console.log('@@@@@@@@@ categories list  successfully fetched ');
       res.json(categories);
     }
   });

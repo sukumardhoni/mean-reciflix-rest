@@ -85,7 +85,9 @@ describe('Category Model Unit Tests:', function () {
 
   afterEach(function (done) {
     Category.remove().exec(function () {
-      User.remove().exec(done);
+      User.remove().exec(
+        done()
+      );
     });
   });
 });

@@ -19,11 +19,11 @@ describe('User CRUD tests', function () {
   beforeEach(function (done) {
     // Create user credentials
     credentials = {
-      username: 'username',
+      email: 'test@test.com',
       password: 'password'
     };
     adminCredentials = {
-      username: 'adminusername',
+      email: 'admin@test.com',
       password: 'adminpassword'
     };
     // Create a new user
@@ -31,8 +31,7 @@ describe('User CRUD tests', function () {
       firstName: 'Full',
       lastName: 'Name',
       displayName: 'Full Name',
-      email: 'test@test.com',
-      username: credentials.username,
+      email: credentials.email,
       password: credentials.password,
       provider: 'local'
     });
@@ -41,8 +40,7 @@ describe('User CRUD tests', function () {
       firstName: 'AdminFull',
       lastName: 'AdminLastName',
       displayName: 'AdminFull Name',
-      email: 'admin@test.com',
-      username: adminCredentials.username,
+      email: adminCredentials.email,
       password: adminCredentials.password,
       provider: 'local',
       roles: ['user', 'admin']
@@ -50,7 +48,6 @@ describe('User CRUD tests', function () {
 
     done();
   });
-
 
   it('should be able to signup a User successfully', function (done) {
     agent.post('/users/signup')
@@ -75,6 +72,31 @@ describe('User CRUD tests', function () {
           });
       });
   });
+
+  it('should be able to signup an Admin User successfully', function (done) {
+    agent.post('/users/signup')
+      .send(adminUser)
+      .expect(200)
+      .end(function (signupErr, signupRes) {
+        // Handle signin error
+        if (signupErr) done(signupErr);
+        // Get the userId
+        var userId = adminUser.id;
+        var userToken = signupRes.body.token;
+        agent.get('/users/me')
+          .send(adminCredentials)
+          .expect(200)
+          .end(function (userGetErr, userRes) {
+            (userRes.body._id).should.equal(userId);
+            (userRes.body.email).should.equal(adminUser.email);
+            (userRes.body.token).should.equal(userToken);
+            (userRes.body.roles).should.have.length(2);
+            (userRes.body.roles).should.have.property(1, 'admin');
+            done();
+          });
+      });
+  });
+
 
   afterEach(function (done) {
     User.remove().exec(done);

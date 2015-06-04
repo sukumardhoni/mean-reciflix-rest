@@ -12,9 +12,12 @@ module.exports = function (app) {
 
   app.route('/isAlive').get(users.live);
 
-
   // Setting up the users profile api
   app.route('/users/me').get(users.me);
+
+  //fetch the full user info of the signed in user
+  app.route('/users/fetchUser').get(users.fetchUser);
+
   app.route('/users').put(users.update);
   app.route('/users/accounts').delete(users.removeOAuthProvider);
 
@@ -28,7 +31,6 @@ module.exports = function (app) {
   app.route('/auth/signup').post(users.signup);
   app.route('/auth/signin').post(users.signin);
   app.route('/auth/signout').get(users.signout);
-
   // Setting the facebook oauth routes
   app.route('/auth/facebook').get(passport.authenticate('facebook', {
     scope: ['email']
@@ -70,4 +72,5 @@ module.exports = function (app) {
 
   app.route('/users/signup').post(users.jwtSignup);
   app.route('/users/signin').post(users.jwtSignin);
+  app.route('/users/signout').post(users.jwtSignout);
 };

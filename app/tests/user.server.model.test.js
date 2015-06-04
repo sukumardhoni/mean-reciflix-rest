@@ -22,7 +22,7 @@ describe('User Model Unit Tests:', function () {
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'test@test.com',
-      username: 'username',
+      username: 'test@test.com',
       password: 'password',
       provider: 'local',
       favorites: ['vid1', 'vid2']
@@ -32,7 +32,7 @@ describe('User Model Unit Tests:', function () {
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'test@test.com',
-      username: 'username',
+      username: 'test@test.com',
       password: 'password',
       provider: 'local',
       favorites: ['vid2222', 'vid333']
@@ -42,7 +42,7 @@ describe('User Model Unit Tests:', function () {
       lastName: 'adminLastName',
       displayName: 'AdminFull Name',
       email: 'test2@test2.com',
-      username: 'adminuser1',
+      username: 'test2@test2.com',
       password: 'password',
       provider: 'local',
       roles: ['user', 'admin'],

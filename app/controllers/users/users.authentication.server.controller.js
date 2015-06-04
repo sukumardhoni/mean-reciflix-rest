@@ -13,53 +13,65 @@ var _ = require('lodash'),
 /*JWT Signup*/
 
 exports.jwtSignup = function (req, res, next) {
-  console.log('@@@@@@ JWt server side signup@@@@@@@' + JSON.stringify(req.body));
+  // console.log('@@@@@@ JWt server side signup@@@@@@@' + JSON.stringify(req.body));
   User.findOne({
     email: req.body.email
   }, function (err, user) {
-    console.log('signup userrrrrrrrr' + JSON.stringify(user));
+
+
     if (err) {
+      //    console.log('err is :' + err);
       res.json({
         type: false,
         data: 'Error occured: ' + err
       });
     } else {
+
       if (user) {
+        //      console.log('signup userrrrrrrrr is already there : ' + JSON.stringify(user));
         res.json({
           type: false,
           data: 'User already exists!',
           user: user
         });
       } else {
+
+
+        //       console.log('signup user not found, trying to add the user: ' + JSON.stringify(req.body));
+
+
+
         //delete req.body.roles;
         var userModel = new User(req.body);
 
         userModel.provider = req.body.provider || 'local';
-        console.log('Provider name is : ' + userModel.provider);
+        //    console.log('Provider name is : ' + userModel.provider);
         userModel.displayName = userModel.firstName + ' ' + userModel.lastName;
-        var secret = 'www';
-        var payload = {
-          email: req.body.email
-        };
-        var jwtToken = jwt.encode(payload, secret);
-        userModel.token = jwtToken;
+        userModel.username = userModel.email;
+        /*  var secret = 'www';
+          var payload = {
+            email: req.body.email
+          };
+          var jwtToken = jwt.encode(payload, secret);
+          userModel.token = jwtToken;*/
         userModel.save(function (err) {
 
           if (err) {
-            console.log('Error msg while saving the user is : ' + err);
+            //      console.log('Error msg while saving the user is : ' + err);
 
             return res.status(400).send({
               message: errorHandler.getErrorMessage(err)
             });
           } else {
-            console.log('After saving the user details is: ' + JSON.stringify(userModel));
+            //      console.log('After saving the user details is: ' + JSON.stringify(userModel));
             req.login(userModel, function (err) {
               if (err) {
                 res.status(400).send(err);
-                console.log('ERROR at server signUP : ' + err);
+                //         console.log('ERROR at server signUP and trying to login: ' + err);
               } else {
+                //               console.log('server side data ' + JSON.stringify(userModel));
                 res.jsonp(userModel);
-                console.log('server side data ' + JSON.stringify(userModel));
+
               }
             });
           }
@@ -70,21 +82,28 @@ exports.jwtSignup = function (req, res, next) {
 };
 
 
+
+
+
+
+
+
 /* JWT Signin*/
 
 exports.jwtSignin = function (req, res, next) {
-  console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
+  //console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
   User.findOne({
     email: req.body.email
   }, function (err, user) {
     if (err) {
+      console.log('error :' + err);
       res.json({
         type: false,
         data: 'Error occured: ' + err
       });
     } else {
       if (user) {
-        console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
+        //  console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
         var password = req.body.password;
         // Make sure the password is correct
         user.verifyPassword(password, function (err, isMatch) {
@@ -115,6 +134,9 @@ exports.jwtSignin = function (req, res, next) {
           }
         });
       } else {
+
+        //        console.log('user not found , sending incorrect user or password');
+
         res.json({
           type: false,
           data: 'Incorrect user/password'
@@ -184,6 +206,57 @@ exports.signin = function (req, res, next) {
     }
   })(req, res, next);
 };
+
+
+
+exports.jwtSignout = function (req, res, next) {
+
+
+
+  var bearerToken;
+  var bearerHeader = req.headers.authorization;
+  if (typeof bearerHeader !== 'undefined') {
+    var bearer = bearerHeader.split(' ');
+    if (bearer[1] === 'undefined') {
+      res.sendStatus(401);
+    } else {
+      bearerToken = bearer[1];
+      //console.log('2222 Token fetched from header is : ' + bearerToken);
+      User.findOne({
+        token: bearerToken
+      }, function (err, user) {
+        if (err) {
+          res.json({
+            type: false,
+            data: 'Error occured: ' + err
+          });
+        } else {
+          user.token = '';
+          user.save(function (err, user) {
+            if (err) {
+              res.status(400).send(err);
+            } else {
+
+              res.status(200).send({
+                type: true,
+                data: 'User is susccessfully logged out'
+              });
+            }
+
+          });
+        }
+      });
+    }
+  } else {
+    res.sendStatus(401);
+  }
+
+};
+
+
+
+
+
 
 /**
  * Signout
