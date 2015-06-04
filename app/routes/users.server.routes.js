@@ -9,9 +9,6 @@ module.exports = function (app) {
   // User Routes
   var users = require('../../app/controllers/users.server.controller');
 
-
-  app.route('/isAlive').get(users.live);
-
   // Setting up the users profile api
   app.route('/users/me').get(users.me);
 
@@ -58,18 +55,12 @@ module.exports = function (app) {
   app.route('/auth/github').get(passport.authenticate('github'));
   app.route('/auth/github/callback').get(users.oauthCallback('github'));
 
-  //My favorites by user
-  /*app.route('/userFavorites/:id').put(users.userFavorites);*/
-
-
   // Finish by binding the user middleware
   app.param('userId', users.userByID);
 
 
   /*JWT Routes*/
-
   app.route('/userFavorites/:uId').put(users.userFavorites);
-
   app.route('/users/signup').post(users.jwtSignup);
   app.route('/users/signin').post(users.jwtSignin);
   app.route('/users/signout').post(users.jwtSignout);

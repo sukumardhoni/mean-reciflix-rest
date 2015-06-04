@@ -10,8 +10,6 @@ var _ = require('lodash'),
   User = mongoose.model('User');
 
 
-
-
 exports.ensureAuthenticated = function (req, res, next) {
   console.log('### ensureAuthenticated is called');
   var bearerToken;
@@ -217,13 +215,4 @@ exports.fetchUser = function (req, res, next) {
   } else {
     res.sendStatus(401);
   }
-};
-
-
-
-
-exports.live = function (req, res) {
-  res.json({
-    'message': 'app is up and running'
-  });
 };
