@@ -8,10 +8,13 @@ var ProspectiveEmail = require('../../app/controllers/ProspectiveEmails.server.c
 
 module.exports = function (app) {
 
- app.route('/ProspectiveEmails')
-      .post(ProspectiveEmail.create);
+  app.route('/ProspectiveEmails')
+    .post(ProspectiveEmail.create);
 
-  app.route('/ProspectiveEmails/:platform')
+  app.route('/ProspectiveEmails/list')
     .get(ProspectiveEmail.list)
+
+  app.route('/ProspectiveEmails/count/:platform')
+    .get(ProspectiveEmail.count)
 
 };

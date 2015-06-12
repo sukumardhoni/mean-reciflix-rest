@@ -34,6 +34,22 @@ exports.create = function (req, res) {
 exports.list = function (req, res) {
   console.log('ProspectiveEmail list')
 
+  ProspectiveEmail.find({}).exec(function (err, emails) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.send(emails);
+    }
+
+  });
+
+};
+
+exports.count = function (req, res) {
+  console.log('ProspectiveEmail count')
+
   ProspectiveEmail.find({
     'platform': req.params.platform
   }).exec(function (err, emails) {
@@ -41,14 +57,11 @@ exports.list = function (req, res) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
-    } else if (emails.length === 0) {
-      res.send({
-        message: 'There is no emails subscribed for this platform'
-      })
     } else {
-      res.json(emails);
+      res.send({
+        'count': emails.length
+      });
     }
-
   });
 
 };
