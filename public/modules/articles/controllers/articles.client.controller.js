@@ -2,67 +2,72 @@
 
 // Articles controller
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
-		$scope.authentication = Authentication;
+ function ($scope, $stateParams, $location, Authentication, Articles) {
+    console.log('articals page');
 
-		// Create new Article
-		$scope.create = function() {
-			// Create new Article object
-			var article = new Articles({
-				title: this.title,
-				content: this.content
-			});
+    $scope.authentication = Authentication;
 
-			// Redirect after save
-			article.$save(function(response) {
-				$location.path('articles/' + response._id);
+    console.log('type of user ------------' + JSON.stringify($scope.authentication));
 
-				// Clear form fields
-				$scope.title = '';
-				$scope.content = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
 
-		// Remove existing Article
-		$scope.remove = function(article) {
-			if (article) {
-				article.$remove();
+    // Create new Article
+    $scope.create = function () {
+      // Create new Article object
+      var article = new Articles({
+        title: this.title,
+        content: this.content
+      });
 
-				for (var i in $scope.articles) {
-					if ($scope.articles[i] === article) {
-						$scope.articles.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.article.$remove(function() {
-					$location.path('articles');
-				});
-			}
-		};
+      // Redirect after save
+      article.$save(function (response) {
+        $location.path('articles/' + response._id);
 
-		// Update existing Article
-		$scope.update = function() {
-			var article = $scope.article;
+        // Clear form fields
+        $scope.title = '';
+        $scope.content = '';
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
 
-			article.$update(function() {
-				$location.path('articles/' + article._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+    // Remove existing Article
+    $scope.remove = function (article) {
+      if (article) {
+        article.$remove();
 
-		// Find a list of Articles
-		$scope.find = function() {
-			$scope.articles = Articles.query();
-		};
+        for (var i in $scope.articles) {
+          if ($scope.articles[i] === article) {
+            $scope.articles.splice(i, 1);
+          }
+        }
+      } else {
+        $scope.article.$remove(function () {
+          $location.path('articles');
+        });
+      }
+    };
 
-		// Find existing Article
-		$scope.findOne = function() {
-			$scope.article = Articles.get({
-				articleId: $stateParams.articleId
-			});
-		};
-	}
+    // Update existing Article
+    $scope.update = function () {
+      var article = $scope.article;
+
+      article.$update(function () {
+        $location.path('articles/' + article._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+
+    // Find a list of Articles
+    $scope.find = function () {
+      $scope.articles = Articles.query();
+    };
+
+    // Find existing Article
+    $scope.findOne = function () {
+      $scope.article = Articles.get({
+        articleId: $stateParams.articleId
+      });
+    };
+ }
 ]);

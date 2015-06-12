@@ -91,7 +91,8 @@ exports.jwtSignup = function (req, res, next) {
 /* JWT Signin*/
 
 exports.jwtSignin = function (req, res, next) {
-  //console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
+  console.log('jwtSignin');
+  console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
   User.findOne({
     email: req.body.email
   }, function (err, user) {

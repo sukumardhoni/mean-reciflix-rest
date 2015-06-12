@@ -11,12 +11,11 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
       }),
 
 
-      emailGet: $resource('/ProspectiveEmails/:platform', {
+      emailGet: $resource('/ProspectiveEmails/count/:platform', {
         platform: '@platform'
       }, {
         'query': {
-          method: 'GET',
-          isArray: true
+          method: 'GET'
         }
       })
 
