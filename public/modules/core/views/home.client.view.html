@@ -57,14 +57,10 @@
     z-index: 2;
   }
 </style>
-
 <section data-ng-controller="HomeController">
   <div class="jumbotron bgcolor">
     <div class="row">
       <div class="col-md-6  col-sm-6  col-xs-12 backimg">
-
-
-
         <carousel interval="2000" style="width:305px;top:95px;left:114px;" class="carousel-fade carousel-inner">
           <slide ng-repeat="slide in slides" active="slide.active">
             <img ng-src="{{slide.image}}" style="margin:auto;width:88%;" class="img-responsive" />
@@ -72,15 +68,11 @@
             </div>
           </slide>
         </carousel>
-
-
       </div>
-
       <div class="col-md-6  col-sm-6  col-xs-12">
         <br>
         <br class="hidden-lg">
         <img src="/modules/core/img/brand/Reciflix555.png" height="150px">
-
         <div style="-webkit-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
 -moz-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
 box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);margin-top:50px">
@@ -88,32 +80,14 @@ box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);margin-top:50px">
             <h1 style="font-size:27px;line-height:32px;color: #06365f;font-weight: bold;">Browse and watch the best recipes online from any device</h1>
             <p class="p-side">ReciFlix is a <b>quick</b>, <b>convenient </b>and <b>easy</b> way to search a recipe online and watch it with a click of a button and add it to your favourites to be able to access the same recipe anytime from any device conveniently.</p>
             <p class="p-side">Browse the categories or set preferences to see a featured recipe. You will be able to like or add to your favourites or share with friends and family all from one app with quick and easy steps.</p>
-
             <p class="p-side">And.. did you hear us say it’s free? </p>
-
             <div class="col-sm-6" ng-click="iosShow()" style="cursor:pointer;">
-
               <img src="http://host.globaltechminds.com/reciflix/wp-content/uploads/2015/05/badge_ios_english-en.png" height="50" width="100%">
-
             </div>
-
             <br class="hidden-lg hidden-md">
-
             <div class="col-sm-6" ng-click="androidShow()" style="cursor:pointer;">
-
               <img src="http://host.globaltechminds.com/reciflix/wp-content/uploads/2015/05/english_get.png" height="50" width="100%">
-
             </div>
-
-
-
-
-
-
-
-
-
-
             </b>
             </b>
           </div><b><b>
@@ -122,121 +96,20 @@ box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);margin-top:50px">
         <br>
         <div class="hh" ng-show="showNotify">
           <hr style="color:#9E9E9E;border-bottom:1px solid #9E9E9E">
-
           <h4><b>{{showNotify.length}}&nbsp;&nbsp;&nbsp;{{showNotify[0].platform}} Users are already Subscribed.</b></h4>
           <h4><b>Notify me when this App is in Store:</b></h4>
-          <h4 style="color:green">{{sucessMsg}}</h4>
-          <h4 style="color:red">{{errMsg}}</h4>
-          <form class="form-horizontal">
-
-            <div class="form-group">
-              <div class="col-xs-7">
-                <input type="email" class="form-control" id="inputEmail" placeholder="Email" ng-model="userEmail">
-              </div>
-              <div class="col-xs-3">
-                <button type="submit" class="btn btn-primary" ng-click=notifyme(showNotify[0].platform)>Notify Me</button>
-              </div>
+          <h4 style="color:green" ng-hide="userEmail">{{sucessMsg}}</h4>
+          <h4 style="color:red" ng-hide="userEmail">{{errMsg}}</h4>
+          <form class="form-horizontal" name="notify_form" novalidate ng-submit=notifyme(showNotify[0].platform)>
+            <div class="col-xs-7">
+              <input type="email" class="form-control" id="Email" placeholder="Email" ng-model="userEmail" required>
             </div>
-
+            <div class="col-xs-3">
+              <button type="submit" class="btn btn-primary" ng-disabled="notify_form.$invalid">Notify Me</button>
+            </div>
           </form>
         </div>
-
-
-
-
       </div>
-
-
-
-
-      <br>
-      <!--<div class="row">
-			<p class="lead">
-				Open-Source Full-Stack Solution For MEAN Applications
-			</p>
-		</div>
-		<div class="row">
-			<p>
-				<a class="btn btn-primary btn-lg" href="http://meanjs.org" target="_blank">Learn more</a>
-			</p>
-		</div>-->
     </div>
-    <!--<div>
-		<h2>Congrats! GTM your changes are now updated into your production version. v001</h2>
-		<p>MEAN.JS is a web application boilerplate, which means you should start changing everything :-)</p>
-		<p>This sample application tracks users and articles.</p>
-		<ul>
-
-          <li>Build status:
-            <img src="https://codeship.com/projects/abe34330-e0a7-0132-a9e5-4ed4ec0e3a6e/status?branch=master"/>
-            </li>
-			<li>
-				Click
-				<em>Signup</em>
-				to get started.
-			</li>
-			<li>
-				Configure your app to work with your social accounts, by editing the
-				<em>/config/env/*.js</em>
-				files.
-			</li>
-			<li>
-				Edit your users module.
-			</li>
-			<li>
-				Add new CRUD modules.
-			</li>
-			<li>
-				Have fun...
-			</li>
-		</ul>
-	</div>-->
-    <!--<div class="row">
-		<div class="col-md-3">
-			<h2>
-				<strong>M</strong>ongoDB
-			</h2>
-			<p><a target="_blank" href="http://mongodb.org/">MongoDB</a> is a database. MongoDB's <a target="_blank" href="http://docs.mongodb.org/manual/">great manual</a> is the place to get started with NoSQL and MongoDB.</p>
-		</div>
-		<div class="col-md-3">
-			<h2>
-				<strong>E</strong>xpress
-			</h2>
-			<p><a target="_blank" href="http://expressjs.com/"> Express</a> is an app server. Check out <a target="_blank" href="http://expressjs.com/4x/api.html">The ExpressJS API reference for more information</a> or <a target="_blank" href="http://stackoverflow.com/questions/8144214/learning-express-for-node-js">StackOverflow</a> for more info.</p>
-		</div>
-		<div class="col-md-3">
-			<h2>
-				<strong>A</strong>ngularJS
-			</h2>
-			<p>AngularJS is web app framework. <a target="_blank" href="http://angularjs.org/">Angular's website</a> offers a lot. The <a target="_blank" href="http://www.thinkster.io/">Thinkster Popular Guide</a> and <a target="_blank" href="https://egghead.io/">Egghead Videos</a> are great resources.</p>
-		</div>
-		<div class="col-md-3">
-			<h2>
-				<strong>N</strong>ode.js
-			</h2>
-			<p><a target="_blank" href="http://nodejs.org/">Node.js</a> is a web server. Node's website and this <a target="_blank" href="http://stackoverflow.com/questions/2353818/how-do-i-get-started-with-node-js">stackOverflow thread</a> offer excellent starting points to get to grasps with node.</p>
-		</div>
-	</div>
-	<div class="well">
-		<h2>MEAN.JS Documentation</h2>
-		<p>
-			Once you're familiar with the foundation technology, check out the MEAN.JS Documentation:
-			<ul>
-				<li><a target="_blank" href="http://meanjs.org/docs.html">MEAN.JS Documentation</a>
-				</li>
-				<li><a target="_blank" href="http://meanjs.org/generator.html">Yeoman Generator</a>
-				</li>
-				<li><a target="_blank" href="http://meanjs.org/modules.html">Modules</a>
-				</li>
-				<li><a target="_blank" href="http://meanjs.org/changelog.html">Changelog</a>
-				</li>
-				<li><a target="_blank" href="http://meanjs.org/community.html">Community</a>
-				</li>
-				<li><a target="_blank" href="http://blog.meanjs.org">Blog</a>
-				</li>
-			</ul>
-		</p>
-	</div>
-	<br>Enjoy &amp; Keep Us Updated,
-	<br>The MEAN.JS Team.-->
+  </div>
 </section>

@@ -74,10 +74,13 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
         console.log('suceess nottify user saved ' + JSON.stringify(res))
         $scope.showNotify.push(res);
         $scope.userEmail = '';
+        $scope.errMsg = '';
         $scope.sucessMsg = 'Your Email id is sucessfully subscribed for ReciFlix App Release Notification';
       }, function (err) {
         console.log('failed to save nottify user' + JSON.stringify(err))
         $scope.errMsg = err.data.message;
+        $scope.userEmail = '';
+        $scope.sucessMsg = '';
       });
 
 
