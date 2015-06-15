@@ -63,7 +63,7 @@ var UserSchema = new Schema({
   },
   fb_id: {
     type: String
-  }
+  },
   favorites: [],
   likes: [],
   salt: {
