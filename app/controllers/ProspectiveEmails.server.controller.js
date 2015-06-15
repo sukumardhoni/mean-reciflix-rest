@@ -18,15 +18,15 @@ exports.create = function (req, res) {
 
   console.log('ProspectiveEmail create')
   console.log('ProspectiveEmail req.body' + JSON.stringify(req.body))
-  var ProspectiveEmails = new ProspectiveEmail(req.body);
+  var email = new ProspectiveEmail(req.body);
 
-  ProspectiveEmails.save(function (err) {
+  email.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(ProspectiveEmails);
+      res.json(email);
     }
   });
 };
@@ -59,6 +59,7 @@ exports.count = function (req, res) {
       });
     } else {
       res.send({
+        'platform': req.params.platform,
         'count': emails.length
       });
     }
