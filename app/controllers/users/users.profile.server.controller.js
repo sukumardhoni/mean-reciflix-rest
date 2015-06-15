@@ -118,13 +118,13 @@ exports.userFavorites = function (req, res) {
       if (user.likes.indexOf(req.body.likes) === -1)
         user.likes.push(req.body.likes);
     }
-    user.provider = 'local';
+    user.provider = req.body.provider || 'local';
     user.firstName = req.body.firstName;
     user.lastName = req.body.lastName;
     return user.save(function (err, usercb) {
       if (err) {
         res.status(400).send(err);
-        //  console.log('Error on update fav vids into user : ' + err);
+        //console.log('Error on update fav vids into user : ' + err);
       } else {
         res.jsonp(usercb);
       }
