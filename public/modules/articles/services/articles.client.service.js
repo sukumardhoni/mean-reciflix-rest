@@ -6,7 +6,7 @@ angular.module('articles').factory('Vrecipes', ['$resource',
 
     return {
 
-      getrecipes: $resource('/VRecipesByCategories/:CategoryName', {
+      getrecipes: $resource('/VRecipesByCategoriesForAdmin/:CategoryName', {
         CategoryName: '@CategoryName'
       }, {
         'query': {

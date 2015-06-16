@@ -39,16 +39,16 @@
             <option value="seafood">seafood</option>
             <option value="snacks">snacks</option>
             <option value="fastfood">fastfood</option>
-            <option value="healthconscious">healthconscious</option>
-            <option value="specialoccasions">specialoccasions</option>
-            <option value="kidsspecial">kidsspecial</option>
+            <option value="healthy">healthy</option>
+            <option value="specials">specials</option>
+            <option value="kids">kids</option>
             <option value="beverages">beverages</option>
-            <option value="regionalrecipes">regionalrecipes</option>
+            <option value="regional">regionalrecipes</option>
             <option value="desserts">desserts</option>
             <option value="dairy">dairy</option>
-            <option value="chuneysandsoups">chuneysandsoups</option>
+            <option value="chutneysoups">chuneysandsoups</option>
             <option value="appetizers">appetizers</option>
-            <option value="kitchentips">kitchentips</option>
+            <option value="kicthentips">kitchentips</option>
           </select>
         </div>
         <button type="button" class="btn btn-primary" ng-click="selected()">submit</button>
@@ -123,12 +123,13 @@
             </td>
 
         </tr>
-               </form>
+                           </form>
       </tbody>
     </table>
               <center>
 
-<button type="button" class="btn btn-primary" ng-click="updaterecipes(recipe)"><span class="glyphicon glyphicon-edit"></span></button>
+<button type="button" class="btn btn-primary" ng-click="updaterecipes(recipe)"><span class="glyphicon glyphicon-ok"></span></button>
+<button type="button" class="btn btn-danger" ng-click="removeRecipes(recipe)"><span class="glyphicon glyphicon-remove"></span></button>
 
 </center>
 

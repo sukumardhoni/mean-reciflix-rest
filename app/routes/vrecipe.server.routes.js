@@ -40,11 +40,11 @@ module.exports = function (app) {
   app.route('/vRecipesAllCategories/:pageId')
     .get(vrecipes.getAllCategories);
 
-  /*app.route('/VRecipesByCategories/:CategoryName/:pageId')
-    .get(vrecipes.getVIdRecipesByCategories);*/
-
-  app.route('/VRecipesByCategories/:CategoryName')
+  app.route('/VRecipesByCategories/:CategoryName/:pageId')
     .get(vrecipes.getVIdRecipesByCategories);
+
+  app.route('/VRecipesByCategoriesForAdmin/:CategoryName')
+    .get(vrecipes.getVIdRecipesByCategories_Admin);
 
   app.route('/VRecipesByViews/:maxViews/:minViews')
     .get(vrecipes.getVIdRecipesByViews);

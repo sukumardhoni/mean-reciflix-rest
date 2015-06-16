@@ -250,7 +250,6 @@ exports.getAllCategories = function (req, res) {
 };
 
 
-/*
 exports.getVIdRecipesByCategories = function (req, res) {
   console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
   console.log('Recipes under category is called , PageId is : ' + req.params.pageId);
@@ -275,9 +274,8 @@ exports.getVIdRecipesByCategories = function (req, res) {
     }
   });
 };
-*/
 
-exports.getVIdRecipesByCategories = function (req, res) {
+exports.getVIdRecipesByCategories_Admin = function (req, res) {
   console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
   //console.log('Recipes under category is called , PageId is : ' + req.params.pageId);
   Vrecipe.find({

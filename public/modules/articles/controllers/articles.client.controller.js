@@ -92,20 +92,36 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 */
 
       $scope.updaterecipes = function (recipe) {
-        console.log("update person function is called");
-        //console.log(" seleted in updaterecipes function: " + this.person._id);
-
+      var updatedRecipe = recipe;
+      updatedRecipe.submitted.by = 'reciflix_admin';
+      updatedRecipe.state = 123;
 
         Vrecipes.updaterecipes.update({
-          vrecipeId: recipe._id
-        }, recipe, function (result) {
-          console.log("recipe details Successfully   " + JSON.stringify(result));
+          vrecipeId: updatedRecipe._id
+        }, updatedRecipe, function (result) {
+          console.log("Update recipe details Successfully   ");
+
+        }, function (err) {
+          console.log("Update recipe error : " + JSON.stringify(err));
 
         });
       };
 
+   $scope.removeRecipes = function (recipe) {
+      var updatedRecipe = recipe;
+      updatedRecipe.submitted.by = 'reciflix_admin';
+      updatedRecipe.state = 333;
 
+        Vrecipes.updaterecipes.update({
+          vrecipeId: updatedRecipe._id
+        }, updatedRecipe, function (result) {
+          console.log("Remove Recipe details Successfully   " + JSON.stringify(result));
 
+        }, function (err) {
+          console.log("Update recipe error : " + JSON.stringify(err));
+
+        });
+      };
 
  }
 ]);
