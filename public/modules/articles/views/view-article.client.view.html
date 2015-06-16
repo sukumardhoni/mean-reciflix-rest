@@ -1,22 +1,147 @@
-<section data-ng-controller="ArticlesController" data-ng-init="findOne()">
-	<div class="page-header">
-		<h1 data-ng-bind="article.title"></h1>
-	</div>
-	<div class="pull-right" data-ng-show="authentication.user._id == article.user._id">
-		<a class="btn btn-primary" href="/#!/articles/{{article._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-	</div>
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="article.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="article.user.displayName"></span>
-		</em>
-	</small>
-	<p class="lead" data-ng-bind="article.content"></p>
+<style>
+  .td-width1 {
+    width: 20%;
+  }
+
+  .td-width2 {
+    width: 80%;
+  }
+
+  .section-border {
+    border-style: inset;
+    border-color: #830808;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
+
+  .hr-style {
+    border-bottom: 1px solid gray;
+  }
+</style>
+
+<br>
+<section data-ng-controller="ArticlesController">
+  <!--<h1>THIS PAGE CONTAIN Recipes</h1>-->
+  <div class="section-border">
+
+    <br>
+    <br>
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-xs-3">Select by category</label>
+        <div class="col-xs-3">
+          <select class="form-control" ng-model="categoriesname">
+            <option>select</option>
+            <option value="nonveg">nonveg</option>
+            <option value="vegetarian">vegetarian</option>
+            <option value="seafood">seafood</option>
+            <option value="snacks">snacks</option>
+            <option value="fastfood">fastfood</option>
+            <option value="healthconscious">healthconscious</option>
+            <option value="specialoccasions">specialoccasions</option>
+            <option value="kidsspecial">kidsspecial</option>
+            <option value="beverages">beverages</option>
+            <option value="regionalrecipes">regionalrecipes</option>
+            <option value="desserts">desserts</option>
+            <option value="dairy">dairy</option>
+            <option value="chuneysandsoups">chuneysandsoups</option>
+            <option value="appetizers">appetizers</option>
+            <option value="kitchentips">kitchentips</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary" ng-click="selected()">submit</button>
+      </div>
+
+
+    </form>
+
+
+    <div ng-repeat="recipe in filteredrecipe">
+
+
+      <blockquote class="blockquote-reverse">
+        <h3><center><b> <input type="text" class="form-control col-xs-8" ng-model="recipe.title"></b></center></h3>
+        <footer><b>By &#45;</b> {{recipe.author}}</cite>
+        </footer>
+      </blockquote>
+
+      <!-- <p>
+
+      <img ng-src="{{recipe.images.sd}}" class="img-responsive img-rounded thumbnail" alt="Responsive image" height="150" width="150">
+
+    </p>
+-->
+
+      <div class="row">
+        <div class="col-md-6">
+          <img ng-src="{{recipe.images.sd}}" class="img-responsive img-rounded thumbnail" alt="Responsive image" height="150" width="150">
+        </div>
+        <div class="col-md-6">
+          <span my-youtube code=recipe.videoId></span>
+        </div>
+      </div>
+
+      <br>
+
+
+
+      <table class="table table-hover">
+
+        <tbody>
+          <form class="form-horizontal size" role="form" name="itemForm">
+            <tr>
+              <td class="td-width1">
+                <h5><b>Description </b><h5>
+          </td>
+          <td class="td-width2">
+             <textarea rows="6" class="form-control" id="postalAddress" placeholder="Postal Address" ng-model="recipe.description"></textarea>
+
+
+                </td>
+
+        </tr>
+
+
+
+       <tr>
+          <td class="td-width1"> <h5><b>Categories </b><h5></td>
+          <td class="td-width2">
+
+           <tags-input data-ng-model="recipe.cats" id="tags" placeholder="Enter the tags"></tags-input>
+            </td>
+
+        </tr>
+             <tr class="hr-style">
+          <td class="td-width1"> <h5><b>Tags </b><h5></td>
+          <td class="td-width2">
+
+
+             <tags-input data-ng-model="recipe.tags" id="tags" placeholder="Enter the tags"></tags-input>
+
+            </td>
+
+        </tr>
+               </form>
+      </tbody>
+    </table>
+              <center>
+
+<button type="button" class="btn btn-primary" ng-click="updaterecipes(recipe)"><span class="glyphicon glyphicon-edit"></span></button>
+
+</center>
+
+  </div>
+
+
+
+  <center>
+    <pagination total-items="totalItems" items-per-page="itemsPerPage" ng-model="currentPage" max-size="maxSize" boundary-links="true" rotate="false" ng-change="pageChanged()" previous-text="&lsaquo;" next-text="&rsaquo;"></pagination>
+  </center>
+
+        </div>
+
+
+
 </section>

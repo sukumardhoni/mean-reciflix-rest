@@ -15,7 +15,8 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
         platform: '@platform'
       }, {
         'query': {
-          method: 'GET'
+          method: 'GET',
+          isArray: true
         }
       })
 
