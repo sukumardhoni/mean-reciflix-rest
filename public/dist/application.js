@@ -1,25 +1,25 @@
 'use strict';
 
 // Init the application configuration module for AngularJS application
-var ApplicationConfiguration = (function() {
-	// Init module configuration options
-	var applicationModuleName = 'mean';
-	var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils'];
+var ApplicationConfiguration = (function () {
+  // Init module configuration options
+  var applicationModuleName = 'mean';
+  var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngTagsInput'];
 
-	// Add a new vertical module
-	var registerModule = function(moduleName, dependencies) {
-		// Create angular module
-		angular.module(moduleName, dependencies || []);
+  // Add a new vertical module
+  var registerModule = function (moduleName, dependencies) {
+    // Create angular module
+    angular.module(moduleName, dependencies || []);
 
-		// Add the module to the AngularJS configuration file
-		angular.module(applicationModuleName).requires.push(moduleName);
-	};
+    // Add the module to the AngularJS configuration file
+    angular.module(applicationModuleName).requires.push(moduleName);
+  };
 
-	return {
-		applicationModuleName: applicationModuleName,
-		applicationModuleVendorDependencies: applicationModuleVendorDependencies,
-		registerModule: registerModule
-	};
+  return {
+    applicationModuleName: applicationModuleName,
+    applicationModuleVendorDependencies: applicationModuleVendorDependencies,
+    registerModule: registerModule
+  };
 })();
 
 'use strict';
@@ -78,17 +78,29 @@ angular.module('articles').config(['$stateProvider',
       url: '/articles',
       templateUrl: 'modules/articles/views/list-articles.client.view.html'
     }).
-    state('createArticle', {
-      url: '/articles/create',
-      templateUrl: 'modules/articles/views/create-article.client.view.html'
+    state('listArticles.users', {
+      url: '/users',
+      views: {
+        'user.detail': {
+          templateUrl: 'modules/articles/views/create-article.client.view.html'
+        }
+      }
     }).
-    state('viewArticle', {
-      url: '/articles/:articleId',
-      templateUrl: 'modules/articles/views/view-article.client.view.html'
+    state('listArticles.categories', {
+      url: '/categories',
+      views: {
+        'user.categories': {
+          templateUrl: 'modules/articles/views/edit-article.client.view.html'
+        }
+      }
     }).
-    state('editArticle', {
-      url: '/articles/:articleId/edit',
-      templateUrl: 'modules/articles/views/edit-article.client.view.html'
+    state('listArticles.recipes', {
+      url: '/recipes',
+      views: {
+        'user.recipes': {
+          templateUrl: 'modules/articles/views/view-article.client.view.html'
+        }
+      }
     });
  }
 ]);
@@ -96,91 +108,184 @@ angular.module('articles').config(['$stateProvider',
 'use strict';
 
 // Articles controller
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
- function ($scope, $stateParams, $location, Authentication, Articles) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes',
+ function ($scope, $stateParams, $location, Authentication, Vrecipes) {
     console.log('articals page');
 
     $scope.authentication = Authentication;
 
     console.log('type of user ------------' + JSON.stringify($scope.authentication));
 
+    $scope.categories = function () {
 
-    // Create new Article
-    $scope.create = function () {
-      // Create new Article object
-      var article = new Articles({
-        title: this.title,
-        content: this.content
-      });
+      console.log('categories -----------');
 
-      // Redirect after save
-      article.$save(function (response) {
-        $location.path('articles/' + response._id);
 
-        // Clear form fields
-        $scope.title = '';
-        $scope.content = '';
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
+
     };
 
-    // Remove existing Article
-    $scope.remove = function (article) {
-      if (article) {
-        article.$remove();
 
-        for (var i in $scope.articles) {
-          if ($scope.articles[i] === article) {
-            $scope.articles.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.article.$remove(function () {
-          $location.path('articles');
+
+    $scope.selected = function () {
+
+        console.log('selected item' + this.categoriesname);
+
+        Vrecipes.getrecipes.query({
+          CategoryName: this.categoriesname
+
+        }, function (res) {
+
+          console.log('particular recipeslist' + JSON.stringify(res));
+          $scope.recipes = res;
+          console.log('selected item' + JSON.stringify(res));
+
+          $scope.totalItems = $scope.recipes.length;
+          $scope.itemsPerPage = 1
+          $scope.currentPage = 1;
+          $scope.maxSize = 5;
+
+
+          $scope.pageCount = function () {
+            return Math.ceil($scope.recipes.length / $scope.itemsPerPage);
+          };
+
+          $scope.$watch('currentPage + itemsPerPage', function () {
+            var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+              end = begin + $scope.itemsPerPage;
+
+            $scope.filteredrecipe = $scope.recipes.slice(begin, end);
+          });
+
         });
-      }
-    };
 
-    // Update existing Article
-    $scope.update = function () {
-      var article = $scope.article;
+      },
 
-      article.$update(function () {
-        $location.path('articles/' + article._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
+      // Find existing Article
+      /*$scope.recipeslist = function () {
 
-    // Find a list of Articles
-    $scope.find = function () {
-      $scope.articles = Articles.query();
-    };
 
-    // Find existing Article
-    $scope.findOne = function () {
-      $scope.article = Articles.get({
-        articleId: $stateParams.articleId
-      });
-    };
+        console.log('recipeslist -----------');
+
+        Vrecipes.getrecipes.query({
+
+
+
+          },
+          function (data) {
+            console.log('particular recipeslist' + JSON.stringify(data));
+            $scope.recipes = data;
+
+
+            $scope.totalItems = $scope.recipes.length;
+            $scope.itemsPerPage = 1
+            $scope.currentPage = 1;
+            $scope.maxSize = 5;
+
+
+            $scope.pageCount = function () {
+              return Math.ceil($scope.recipes.length / $scope.itemsPerPage);
+            };
+
+            $scope.$watch('currentPage + itemsPerPage', function () {
+              var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+                end = begin + $scope.itemsPerPage;
+
+              $scope.filteredrecipe = $scope.recipes.slice(begin, end);
+            });
+
+          });
+
+      };
+*/
+
+      $scope.updaterecipes = function (recipe) {
+      var updatedRecipe = recipe;
+      updatedRecipe.submitted.by = 'reciflix_admin';
+      updatedRecipe.state = 123;
+
+        Vrecipes.updaterecipes.update({
+          vrecipeId: updatedRecipe._id
+        }, updatedRecipe, function (result) {
+          console.log("Update recipe details Successfully   ");
+
+        }, function (err) {
+          console.log("Update recipe error : " + JSON.stringify(err));
+
+        });
+      };
+
+   $scope.removeRecipes = function (recipe) {
+      var updatedRecipe = recipe;
+      updatedRecipe.submitted.by = 'reciflix_admin';
+      updatedRecipe.state = 333;
+
+        Vrecipes.updaterecipes.update({
+          vrecipeId: updatedRecipe._id
+        }, updatedRecipe, function (result) {
+          console.log("Remove Recipe details Successfully   " + JSON.stringify(result));
+
+        }, function (err) {
+          console.log("Update recipe error : " + JSON.stringify(err));
+
+        });
+      };
+
  }
 ]);
+
+
+angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
+  return {
+    restrict: 'EA',
+    scope: {
+      code: '='
+    },
+    replace: true,
+    template: '<div style="height:350px; width:100%"><iframe style="overflow:hidden;height:100%;width:70%" controls="0" src="{{url}}" frameborder="0" allowfullscreen></iframe></div>',
+    link: function (scope) {
+      console.log('here');
+      scope.$watch('code', function (newVal) {
+        if (newVal) {
+          scope.url = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + newVal);
+        }
+      });
+    }
+  };
+}]);
 
 'use strict';
 
 //Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', ['$resource',
-	function($resource) {
-		return $resource('articles/:articleId', {
-			articleId: '@_id'
-		}, {
-			update: {
-				method: 'PUT'
-			}
-		});
-	}
+angular.module('articles').factory('Vrecipes', ['$resource',
+ function ($resource) {
+
+    return {
+
+      getrecipes: $resource('/VRecipesByCategoriesForAdmin/:CategoryName', {
+        CategoryName: '@CategoryName'
+      }, {
+        'query': {
+          method: 'GET',
+          isArray: true
+        }
+      }),
+
+
+      updaterecipes: $resource('/vrecipes/:vrecipeId', {
+        vrecipeId: '@vrecipeId'
+      }, {
+        'update': {
+          method: 'PUT'
+        }
+      })
+
+
+    }
+
+
+ }
 ]);
+
 'use strict';
 
 // Setting up route
@@ -501,7 +606,8 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
         platform: '@platform'
       }, {
         'query': {
-          method: 'GET'
+          method: 'GET',
+          isArray: true
         }
       })
 
