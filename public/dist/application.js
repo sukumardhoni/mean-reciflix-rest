@@ -71,95 +71,102 @@ angular.module('articles').run(['Menus',
 
 // Setting up route
 angular.module('articles').config(['$stateProvider',
-	function($stateProvider) {
-		// Articles state routing
-		$stateProvider.
-		state('listArticles', {
-			url: '/articles',
-			templateUrl: 'modules/articles/views/list-articles.client.view.html'
-		}).
-		state('createArticle', {
-			url: '/articles/create',
-			templateUrl: 'modules/articles/views/create-article.client.view.html'
-		}).
-		state('viewArticle', {
-			url: '/articles/:articleId',
-			templateUrl: 'modules/articles/views/view-article.client.view.html'
-		}).
-		state('editArticle', {
-			url: '/articles/:articleId/edit',
-			templateUrl: 'modules/articles/views/edit-article.client.view.html'
-		});
-	}
+ function ($stateProvider) {
+    // Articles state routing
+    $stateProvider.
+    state('listArticles', {
+      url: '/articles',
+      templateUrl: 'modules/articles/views/list-articles.client.view.html'
+    }).
+    state('createArticle', {
+      url: '/articles/create',
+      templateUrl: 'modules/articles/views/create-article.client.view.html'
+    }).
+    state('viewArticle', {
+      url: '/articles/:articleId',
+      templateUrl: 'modules/articles/views/view-article.client.view.html'
+    }).
+    state('editArticle', {
+      url: '/articles/:articleId/edit',
+      templateUrl: 'modules/articles/views/edit-article.client.view.html'
+    });
+ }
 ]);
+
 'use strict';
 
 // Articles controller
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
-		$scope.authentication = Authentication;
+ function ($scope, $stateParams, $location, Authentication, Articles) {
+    console.log('articals page');
 
-		// Create new Article
-		$scope.create = function() {
-			// Create new Article object
-			var article = new Articles({
-				title: this.title,
-				content: this.content
-			});
+    $scope.authentication = Authentication;
 
-			// Redirect after save
-			article.$save(function(response) {
-				$location.path('articles/' + response._id);
+    console.log('type of user ------------' + JSON.stringify($scope.authentication));
 
-				// Clear form fields
-				$scope.title = '';
-				$scope.content = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
 
-		// Remove existing Article
-		$scope.remove = function(article) {
-			if (article) {
-				article.$remove();
+    // Create new Article
+    $scope.create = function () {
+      // Create new Article object
+      var article = new Articles({
+        title: this.title,
+        content: this.content
+      });
 
-				for (var i in $scope.articles) {
-					if ($scope.articles[i] === article) {
-						$scope.articles.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.article.$remove(function() {
-					$location.path('articles');
-				});
-			}
-		};
+      // Redirect after save
+      article.$save(function (response) {
+        $location.path('articles/' + response._id);
 
-		// Update existing Article
-		$scope.update = function() {
-			var article = $scope.article;
+        // Clear form fields
+        $scope.title = '';
+        $scope.content = '';
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
 
-			article.$update(function() {
-				$location.path('articles/' + article._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+    // Remove existing Article
+    $scope.remove = function (article) {
+      if (article) {
+        article.$remove();
 
-		// Find a list of Articles
-		$scope.find = function() {
-			$scope.articles = Articles.query();
-		};
+        for (var i in $scope.articles) {
+          if ($scope.articles[i] === article) {
+            $scope.articles.splice(i, 1);
+          }
+        }
+      } else {
+        $scope.article.$remove(function () {
+          $location.path('articles');
+        });
+      }
+    };
 
-		// Find existing Article
-		$scope.findOne = function() {
-			$scope.article = Articles.get({
-				articleId: $stateParams.articleId
-			});
-		};
-	}
+    // Update existing Article
+    $scope.update = function () {
+      var article = $scope.article;
+
+      article.$update(function () {
+        $location.path('articles/' + article._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+
+    // Find a list of Articles
+    $scope.find = function () {
+      $scope.articles = Articles.query();
+    };
+
+    // Find existing Article
+    $scope.findOne = function () {
+      $scope.article = Articles.get({
+        articleId: $stateParams.articleId
+      });
+    };
+ }
 ]);
+
 'use strict';
 
 //Articles service used for communicating with the articles REST endpoints
@@ -251,6 +258,8 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
 
     $scope.iosShow = function () {
+      $scope.errMsg = '';
+      $scope.sucessMsg = '';
       console.log('U click on iosShow:');
       ProspectiveEmail.emailGet.query({
         platform: 'ios'
@@ -261,6 +270,8 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     };
 
     $scope.androidShow = function () {
+      $scope.errMsg = '';
+      $scope.sucessMsg = '';
       console.log('U click on androidShow:');
       ProspectiveEmail.emailGet.query({
         platform: 'android'
@@ -280,14 +291,22 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       }
 
       ProspectiveEmail.emailPost.save(notifyUser, function (res) {
-        console.log('suceess nottify user saved ')
-        console.log('suceess nottify user saved ' + JSON.stringify(res))
-        $scope.showNotify.push(res);
-        $scope.userEmail = '';
-        $scope.sucessMsg = 'Your Email id is sucessfully subscribed for ReciFlix App Release Notification';
+        if (res.type === false) {
+          console.log('Error console that User already exixts');
+          $scope.errMsg = res.data;
+        } else {
+          console.log('suceess nottify user saved ')
+          console.log('suceess nottify user saved ' + JSON.stringify(res))
+          $scope.showNotify.count++;
+          $scope.userEmail = '';
+          $scope.errMsg = '';
+          $scope.sucessMsg = 'Your Email id is sucessfully subscribed for ReciFlix App Release Notification';
+        }
       }, function (err) {
         console.log('failed to save nottify user' + JSON.stringify(err))
         $scope.errMsg = err.data.message;
+        $scope.userEmail = '';
+        $scope.sucessMsg = '';
       });
 
 
@@ -478,12 +497,11 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
       }),
 
 
-      emailGet: $resource('/ProspectiveEmails/:platform', {
+      emailGet: $resource('/ProspectiveEmails/count/:platform', {
         platform: '@platform'
       }, {
         'query': {
-          method: 'GET',
-          isArray: true
+          method: 'GET'
         }
       })
 
@@ -589,18 +607,28 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
     };
 
     $scope.signin = function () {
+
+      console.log('signin');
+
       $http.post('/users/signin', $scope.credentials).success(function (response) {
         // If successful we assign the response to the global user model
+
         $scope.authentication.user = response;
 
+        console.log('type of user ------------' + $scope.authentication.user.roles);
+        console.log('user data ' + JSON.stringify(response));
+
+
+
+
         // And redirect to the index page
-        $location.path('/');
+        $location.path('/articles');
       }).error(function (response) {
         $scope.error = response.message;
       });
     };
- }
-]);
+        }
+        ]);
 
 'use strict';
 

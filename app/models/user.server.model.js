@@ -61,6 +61,9 @@ var UserSchema = new Schema({
     default: '',
     validate: [validateLocalStrategyPassword, 'Password should be longer']
   },
+  fb_id: {
+    type: String
+  },
   favorites: [],
   likes: [],
   salt: {

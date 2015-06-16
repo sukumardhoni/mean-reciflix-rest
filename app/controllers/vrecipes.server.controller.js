@@ -407,9 +407,15 @@ exports.getAllSearchedVRecipes = function (req, res) {
       rank: -1
     }).skip(req.params.pageId * 5).limit(5).exec(function (err, recipes) {
       if (!err) {
-        foundRecipes.push(recipes);
-        if (foundRecipes.length === queries.length) {
-          res.jsonp(foundRecipes);
+        if (recipes.length === 0) {
+          return res.status(204).send({
+            message: 'No data found'
+          });
+        } else {
+          foundRecipes.push(recipes);
+          if (foundRecipes.length === queries.length) {
+            res.jsonp(foundRecipes);
+          }
         }
       } else {
         return res.send({
