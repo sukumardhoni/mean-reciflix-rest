@@ -9,18 +9,18 @@ var users = require('../../app/controllers/users.server.controller'),
 module.exports = function (app) {
   // Article Routes
   app.route('/vrecipes')
-    .get(vrecipes.list)
+    .get(users.ensureAuthenticated, vrecipes.list)
     //		.post(users.requiresLogin, articles.create);
-    .post(vrecipes.create);
+    .post(users.ensureAuthenticated, vrecipes.create);
 
 
 
   app.route('/vRecipes/:vrecipeId')
-    .get(vrecipes.read)
+    .get(users.ensureAuthenticated, vrecipes.read)
     //		.put(users.requiresLogin, articles.hasAuthorization, articles.update)
     //		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete);
-    .put(vrecipes.update)
-    .delete(vrecipes.delete);
+    .put(users.ensureAuthenticated, vrecipes.update)
+    .delete(users.ensureAuthenticated, vrecipes.delete);
 
 
   // Finish by binding the vrecipe middleware
@@ -41,7 +41,7 @@ module.exports = function (app) {
     .get(vrecipes.getAllCategories);
 
   app.route('/VRecipesByCategories/:CategoryName/:pageId')
-    .get(vrecipes.getVIdRecipesByCategories);
+    .get(users.ensureAuthenticated, vrecipes.getVIdRecipesByCategories);
 
   app.route('/VRecipesByCategoriesForAdmin/:CategoryName')
     .get(vrecipes.getVIdRecipesByCategories_Admin);
@@ -53,13 +53,13 @@ module.exports = function (app) {
     .get(vrecipes.getVIdRecipesByViewsAndTags);
 
   app.route('/myFavorites/:userId/:pageId')
-    .get(vrecipes.getAllMyFavorites);
+    .get(users.ensureAuthenticated, vrecipes.getAllMyFavorites);
 
   app.route('/searchedVRecipes/:query/:pageId')
-    .get(vrecipes.getAllSearchedVRecipes);
+    .get(users.ensureAuthenticated, vrecipes.getAllSearchedVRecipes);
 
   app.route('/recipesFavCount/:recipeId')
-    .put(vrecipes.updateVRecipesFavCount);
+    .put(users.ensureAuthenticated, vrecipes.updateVRecipesFavCount);
 
 
   app.route('/initialize')

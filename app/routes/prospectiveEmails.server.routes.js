@@ -12,9 +12,9 @@ module.exports = function (app) {
     .post(ProspectiveEmail.create);
 
   app.route('/ProspectiveEmails/list')
-    .get(ProspectiveEmail.list)
+    .get(ProspectiveEmail.list);
 
   app.route('/ProspectiveEmails/count/:platform')
-    .get(ProspectiveEmail.count)
+    .get(ProspectiveEmail.count);
 
 };

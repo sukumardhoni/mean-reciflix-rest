@@ -48,12 +48,12 @@ exports.jwtSignup = function (req, res, next) {
         //    console.log('Provider name is : ' + userModel.provider);
         userModel.displayName = userModel.firstName + ' ' + userModel.lastName;
         userModel.username = userModel.email;
-        /*  var secret = 'www';
-          var payload = {
-            email: req.body.email
-          };
-          var jwtToken = jwt.encode(payload, secret);
-          userModel.token = jwtToken;*/
+        var secret = 'www';
+        var payload = {
+          email: req.body.email
+        };
+        var jwtToken = jwt.encode(payload, secret);
+        userModel.token = jwtToken;
         userModel.save(function (err) {
 
           if (err) {

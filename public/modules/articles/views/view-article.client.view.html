@@ -109,11 +109,18 @@
           <td class="td-width1"> <h5><b>Categories </b><h5></td>
           <td class="td-width2">
 
-           <tags-input data-ng-model="recipe.cats" id="tags" placeholder="Enter the tags"></tags-input>
+
+
+            <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="recipe.cats" theme="select2" sortable="true" ng-disabled="disabled" style="width: 600px;" title="Choose Recipe Category">
+	<ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
+									<ui-select-choices repeat="tag in availableTags  | filter:$select.search">
+										{{tag}}
+									</ui-select-choices>
+								</ui-select>
             </td>
 
         </tr>
-             <tr class="hr-style">
+            <!-- <tr class="hr-style">
           <td class="td-width1"> <h5><b>Tags </b><h5></td>
           <td class="td-width2">
 
@@ -122,7 +129,28 @@
 
             </td>
 
-        </tr>
+        </tr>-->
+
+            <tr class="hr-style">
+
+              <td class="td-width1"> <h5><b>tags</b><h5></td>
+          <td class="td-width2">
+
+
+             <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="recipe.tags" theme="select2" sortable="true" ng-disabled="disabled" style="width: 600px;" title="Choose Recipe Category">
+	<ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
+									<ui-select-choices repeat="tag in availableTags  | filter:$select.search">
+										{{tag}}
+									</ui-select-choices>
+								</ui-select>
+            </td>
+
+
+
+						</tr>
+
+
+
                            </form>
       </tbody>
     </table>

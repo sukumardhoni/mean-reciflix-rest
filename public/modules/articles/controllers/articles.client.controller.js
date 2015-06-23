@@ -33,7 +33,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
           console.log('selected item' + JSON.stringify(res));
 
           $scope.totalItems = $scope.recipes.length;
-          $scope.itemsPerPage = 1
+          $scope.itemsPerPage = 1;
           $scope.currentPage = 1;
           $scope.maxSize = 5;
 
@@ -92,36 +92,36 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 */
 
       $scope.updaterecipes = function (recipe) {
-      var updatedRecipe = recipe;
-      updatedRecipe.submitted.by = 'reciflix_admin';
-      updatedRecipe.state = 123;
+        var updatedRecipe = recipe;
+        updatedRecipe.submitted.by = 'reciflix_admin';
+        updatedRecipe.state = 123;
 
         Vrecipes.updaterecipes.update({
           vrecipeId: updatedRecipe._id
         }, updatedRecipe, function (result) {
-          console.log("Update recipe details Successfully   ");
+          console.log('Update recipe details Successfully   ');
 
         }, function (err) {
-          console.log("Update recipe error : " + JSON.stringify(err));
+          console.log('Update recipe error : ' + JSON.stringify(err));
 
         });
       };
 
-   $scope.removeRecipes = function (recipe) {
+    $scope.removeRecipes = function (recipe) {
       var updatedRecipe = recipe;
       updatedRecipe.submitted.by = 'reciflix_admin';
       updatedRecipe.state = 333;
 
-        Vrecipes.updaterecipes.update({
-          vrecipeId: updatedRecipe._id
-        }, updatedRecipe, function (result) {
-          console.log("Remove Recipe details Successfully   " + JSON.stringify(result));
+      Vrecipes.updaterecipes.update({
+        vrecipeId: updatedRecipe._id
+      }, updatedRecipe, function (result) {
+        console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
 
-        }, function (err) {
-          console.log("Update recipe error : " + JSON.stringify(err));
+      }, function (err) {
+        console.log('Update recipe error : ' + JSON.stringify(err));
 
-        });
-      };
+      });
+    };
 
  }
 ]);
@@ -139,7 +139,7 @@ angular.module('articles').directive('myYoutube', function ($sce) {
       console.log('here');
       scope.$watch('code', function (newVal) {
         if (newVal) {
-          scope.url = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + newVal);
+          scope.url = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + newVal);
         }
       });
     }

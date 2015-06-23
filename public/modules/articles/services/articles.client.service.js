@@ -25,7 +25,7 @@ angular.module('articles').factory('Vrecipes', ['$resource',
       })
 
 
-    }
+    };
 
 
  }

@@ -71,22 +71,22 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       var notifyUser = {
         'platform': platform,
         'email': this.userEmail
-      }
+      };
 
       ProspectiveEmail.emailPost.save(notifyUser, function (res) {
         if (res.type === false) {
           console.log('Error console that User already exixts');
           $scope.errMsg = res.data;
         } else {
-          console.log('suceess nottify user saved ')
-          console.log('suceess nottify user saved ' + JSON.stringify(res))
+          console.log('suceess nottify user saved ');
+          console.log('suceess nottify user saved ' + JSON.stringify(res));
           $scope.showNotify.count++;
           $scope.userEmail = '';
           $scope.errMsg = '';
           $scope.sucessMsg = 'Your Email id is sucessfully subscribed for ReciFlix App Release Notification';
         }
       }, function (err) {
-        console.log('failed to save nottify user' + JSON.stringify(err))
+        console.log('failed to save nottify user' + JSON.stringify(err));
         $scope.errMsg = err.data.message;
         $scope.userEmail = '';
         $scope.sucessMsg = '';

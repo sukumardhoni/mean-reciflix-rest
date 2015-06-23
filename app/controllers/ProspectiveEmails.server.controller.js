@@ -15,11 +15,7 @@ var _ = require('lodash'),
  * Create a ProspectiveEmail
  */
 exports.create = function (req, res) {
-
-  console.log('ProspectiveEmail create')
-  console.log('ProspectiveEmail req.body' + JSON.stringify(req.body))
   var email = new ProspectiveEmail(req.body);
-
   email.save(function (err) {
     if (err) {
       return res.status(400).send({
@@ -32,8 +28,6 @@ exports.create = function (req, res) {
 };
 
 exports.list = function (req, res) {
-  console.log('ProspectiveEmail list')
-
   ProspectiveEmail.find({}).exec(function (err, emails) {
     if (err) {
       return res.status(400).send({
@@ -48,8 +42,6 @@ exports.list = function (req, res) {
 };
 
 exports.count = function (req, res) {
-  console.log('ProspectiveEmail count')
-
   ProspectiveEmail.find({
     'platform': req.params.platform
   }).exec(function (err, emails) {

@@ -15,12 +15,11 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
         platform: '@platform'
       }, {
         'query': {
-          method: 'GET',
-          isArray: true
+          method: 'GET'
         }
       })
 
-    }
+    };
   }
 
 ]);

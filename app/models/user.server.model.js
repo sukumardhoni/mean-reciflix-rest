@@ -130,12 +130,13 @@ UserSchema.methods.hashPassword = function(password) {
 // Execute before each user.save() call
 UserSchema.pre('save', function (callback) {
   var user = this;
+/*
   var secret = 'www';
   var payload = {
     email: user.email
   };
   var jwtToken = jwt.encode(payload, secret);
-  user.token = jwtToken;
+  user.token = jwtToken;*/
 
   // Break out if the password hasn't changed
   if (!user.isModified('password')) return callback();
