@@ -10,12 +10,10 @@ var mongoose = require('mongoose'),
  * Grocery Schema
  */
 var GrocerySchema = new Schema({
-  grocery: {
     name: {
       type: String
     },
-    listOfGroceries: []
-  },
+    items: [],
   user: {
     type: Schema.ObjectId,
     ref: 'User'

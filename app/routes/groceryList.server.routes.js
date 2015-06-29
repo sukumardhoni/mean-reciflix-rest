@@ -9,7 +9,7 @@ var users = require('../../app/controllers/users.server.controller'),
 module.exports = function (app) {
   // Grocery Routes
   app.route('/groceries')
-    .get(users.ensureAuthenticated, groceries.list)
+    .get(users.ensureAuthenticated, groceries.listOfGroceries)
     .post(users.ensureAuthenticated, groceries.create);
 
   app.route('/groceries/:groceryId')

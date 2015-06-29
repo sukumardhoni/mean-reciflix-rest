@@ -72,17 +72,26 @@ exports.delete = function (req, res) {
 /**
  * List of Groceries
  */
-exports.list = function (req, res) {
-  Grocery.find().sort('-created').populate('user', 'displayName').exec(function (err, groceries) {
+
+exports.listOfGroceries = function (req, res) {
+  Grocery.find({user: req.user.id}).sort('-submitted.date').exec(function (err, groceries) {
+    var gLists = [];
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(groceries);
+      for (var i = 0; i < groceries.length; i++) {
+        gLists.push({_id: groceries[i]._id,name: groceries[i].name});
+        if (gLists.length === groceries.length) {
+          res.jsonp(gLists);
+        }
+      }
     }
   });
 };
+
+
 
 /**
  * Grocery middleware
@@ -91,7 +100,7 @@ exports.groceryByID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'Article is invalid'
+      message: 'Grocery is invalid'
     });
   }
 
@@ -99,7 +108,7 @@ exports.groceryByID = function (req, res, next, id) {
     if (err) return next(err);
     if (!grocery) {
       return res.status(404).send({
-        message: 'Article not found'
+        message: 'Grocery not found'
       });
     }
     req.grocery = grocery;

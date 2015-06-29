@@ -30,7 +30,13 @@ exports.ensureAuthenticated = function (req, res, next) {
             type: false,
             data: 'Error occured: ' + err
           });
+        } else if (user === null) {
+          res.json({
+            type: false,
+            data: 'Empty User Occured '
+          });
         } else {
+          req.user = user;
           next();
         }
       });
