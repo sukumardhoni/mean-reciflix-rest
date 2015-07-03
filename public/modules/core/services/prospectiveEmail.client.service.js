@@ -19,7 +19,7 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
         }
       })
 
-    };
+    }
   }
 
 ]);

@@ -33,22 +33,9 @@
         <label class="control-label col-xs-3">Select by category</label>
         <div class="col-xs-3">
           <select class="form-control" ng-model="categoriesname">
-            <option>select</option>
-            <option value="nonveg">nonveg</option>
-            <option value="vegetarian">vegetarian</option>
-            <option value="seafood">seafood</option>
-            <option value="snacks">snacks</option>
-            <option value="fastfood">fastfood</option>
-            <option value="healthy">healthy</option>
-            <option value="specials">specials</option>
-            <option value="kids">kids</option>
-            <option value="beverages">beverages</option>
-            <option value="regional">regionalrecipes</option>
-            <option value="desserts">desserts</option>
-            <option value="dairy">dairy</option>
-            <option value="chutneysoups">chuneysandsoups</option>
-            <option value="appetizers">appetizers</option>
-            <option value="kicthentips">kitchentips</option>
+            <option class="" value="">select</option>
+            <option data-ng-repeat="t in sample" >{{t.name}}</option>
+
           </select>
         </div>
         <button type="button" class="btn btn-primary" ng-click="selected()">submit</button>
@@ -75,10 +62,20 @@
 -->
 
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3" style="margin-left:20px">
           <img ng-src="{{recipe.images.sd}}" class="img-responsive img-rounded thumbnail" alt="Responsive image" height="150" width="150">
+          <p>
+
+            <ul class="list-inline">
+              <li style="font-size:17px;"><span class="glyphicon glyphicon-thumbs-up"></span> {{recipe.ytlikes}}</li>
+              <li style="font-size:17px;"><span class="glyphicon glyphicon-thumbs-down"></span> {{recipe.dislikes}}</li>
+              <li style="font-size:17px;"><span class="glyphicon glyphicon-eye-open"></span> {{recipe.views}}</li>
+
+            </ul>
+
+          </p>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           <span my-youtube code=recipe.videoId></span>
         </div>
       </div>
@@ -109,48 +106,40 @@
           <td class="td-width1"> <h5><b>Categories </b><h5></td>
           <td class="td-width2">
 
-
+          <!-- <tags-input data-ng-model="recipe.cats" id="tags" placeholder="Enter the tags"></tags-input>-->
 
             <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="recipe.cats" theme="select2" sortable="true" ng-disabled="disabled" style="width: 600px;" title="Choose Recipe Category">
-	<ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
-									<ui-select-choices repeat="tag in availableTags  | filter:$select.search">
-										{{tag}}
-									</ui-select-choices>
-								</ui-select>
+			<ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
+			<ui-select-choices repeat="cat in availableCats">
+				{{cat}}
+			</ui-select-choices>
+		</ui-select>
+
+
             </td>
 
         </tr>
-            <!-- <tr class="hr-style">
+             <tr class="hr-style">
           <td class="td-width1"> <h5><b>Tags </b><h5></td>
           <td class="td-width2">
 
 
-             <tags-input data-ng-model="recipe.tags" id="tags" placeholder="Enter the tags"></tags-input>
-
-            </td>
-
-        </tr>-->
-
-            <tr class="hr-style">
-
-              <td class="td-width1"> <h5><b>tags</b><h5></td>
-          <td class="td-width2">
+            <!-- <tags-input data-ng-model="recipe.tags" id="tags" placeholder="Enter the tags"></tags-input>-->
 
 
              <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="recipe.tags" theme="select2" sortable="true" ng-disabled="disabled" style="width: 600px;" title="Choose Recipe Category">
-	<ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
-									<ui-select-choices repeat="tag in availableTags  | filter:$select.search">
-										{{tag}}
-									</ui-select-choices>
-								</ui-select>
+			<ui-select-match placeholder="Select Categories...">{{$item.text}}</ui-select-match>
+			<ui-select-choices repeat="tag in availableTags">
+				{{tag}}
+			</ui-select-choices>
+		</ui-select>
+
+
+
+
             </td>
 
-
-
-						</tr>
-
-
-
+        </tr>
                            </form>
       </tbody>
     </table>

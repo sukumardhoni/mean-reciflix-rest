@@ -1,0 +1,44 @@
+<section data-ng-controller="ArticlesController" data-ng-init="createcategories()">
+  <div class="page-header">
+    <h1>Create  Categories
+         </h1>
+
+    <br>
+
+    <div class="bs-example">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="inputEmail" class="control-label col-xs-2">Cat Id</label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="categorie.catId" placeholder="CatId">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword" class="control-label col-xs-2">DisplayName </label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="categorie.displayName" placeholder="DisplayName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword" class="control-label col-xs-2">ImageName </label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="categorie.imageName" placeholder="ImageName">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-offset-2 col-xs-10">
+            <button type="submit" class="btn btn-primary" ng-click="newcat()">Add Categories</button>
+          </div>
+        </div>
+      </form>
+
+
+
+    </div>
+
+
+
+  </div>
+
+</section>

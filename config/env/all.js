@@ -47,6 +47,7 @@ module.exports = {
     'public/lib/bootstrap/dist/css/bootstrap-theme.css',
     'public/lib/angular-ui-select/dist/select.css',
     'public/lib/select2/select2.css',
+
    ],
       js: [
     'public/lib/angular/angular.js',
@@ -57,7 +58,8 @@ module.exports = {
     'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
     'public/lib/jquery/dist/jquery.min.js',
     'public/lib/angular-ui-select/dist/select.js',
-    'public/lib/select2/select2.js'
+     'public/lib/ngstorage/ngStorage.js',
+
 
    ]
     },

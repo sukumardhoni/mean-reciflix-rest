@@ -22,10 +22,32 @@ angular.module('articles').factory('Vrecipes', ['$resource',
         'update': {
           method: 'PUT'
         }
-      })
+      }),
 
 
-    };
+      getcategory: $resource('/categories/admincats', {}, {
+        'query': {
+          method: 'GET',
+          isArray: true
+        }
+      }),
+
+
+      getcategory: $resource('/categories/admincats', {}, {
+        'query': {
+          method: 'GET',
+          isArray: true
+        }
+      }),
+
+
+      savecategory: $resource('/newcategories', {}, {
+        'save': {
+          method: 'POST'
+        },
+      }),
+
+    }
 
 
  }

@@ -1,6 +1,30 @@
 <section data-ng-controller="ArticlesController" data-ng-init="categories()">
   <div class="page-header">
-    <h1>THIS PAGE CONTAIN Categories</h1>
+    <h1>List of  Categories
+      <small>Browse and watch the best recipes online from any device</small>
+
+      <span class="pull-right"> <button type="button" class="btn btn-info" ui-sref="listArticles.createcategories"><span class="glyphicon glyphicon-plus">Add Categories </span></button></span>
+    </h1>
+
+    <br>
+
+    <div class="bs-example" ng-repeat="categorie in categories">
+      <div class="media">
+        <a href="#" class="pull-left">
+          <img src="../images/avatar-tiny.jpg" class="media-object" alt="Sample Image">
+        </a>
+        <div class="media-body">
+          <h4 class="media-heading"> <b>{{categorie.displayName}} </b><small><i>Posted on  {{categorie.created}}</i></small></h4>
+          <p>{{categorie.description}}</p>
+        </div>
+        <hr>
+      </div>
+    </div>
+
   </div>
+
+
+  <div ui-view="user.createcategories"></div>
+
 
 </section>

@@ -29,6 +29,29 @@ exports.create = function (req, res) {
   });
 };
 
+
+/**
+ * Create a new category
+ */
+exports.createnewcategory = function (req, res) {
+  console.log("Create a new category: " + JSON.stringify(req.body));
+  var category = new Category(req.body);
+  category.user = req.user;
+
+  category.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(category);
+    }
+  });
+};
+
+
+
+
 /**
  * Show the current category
  */
@@ -87,6 +110,28 @@ exports.list = function (req, res) {
     }
   });
 };
+
+
+
+/**
+ * List of catslist
+ */
+exports.catslist = function (req, res) {
+  Category.find().sort('-created').populate('user', 'displayName').exec(function (err, categories) {
+    if (err) {
+      // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      //  console.log('@@@@@@@@@ categories list  successfully fetched ');
+      res.json(categories);
+    }
+  });
+};
+
+
+
 
 /**
  * Category middleware

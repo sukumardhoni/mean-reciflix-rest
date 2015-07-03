@@ -25,6 +25,14 @@ angular.module('articles').config(['$stateProvider',
         }
       }
     }).
+    state('listArticles.createcategories', {
+      url: '/createcategories',
+      views: {
+        'user.categories': {
+          templateUrl: 'modules/articles/views/createcategories.client.view.html'
+        }
+      }
+    }).
     state('listArticles.recipes', {
       url: '/recipes',
       views: {
