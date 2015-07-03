@@ -1,44 +1,35 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication',
- function ($scope, $http, $location, Authentication) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage',
+ function ($scope, $http, $location, Authentication, $localStorage) {
     $scope.authentication = Authentication;
-
     // If user is signed in then redirect back home
     if ($scope.authentication.user) $location.path('/');
-
     $scope.signup = function () {
-      $http.post('/auth/signup', $scope.credentials).success(function (response) {
-        // If successful we assign the response to the global user model
-        $scope.authentication.user = response;
-
-        // And redirect to the index page
-        $location.path('/');
-      }).error(function (response) {
-        $scope.error = response.message;
+      $http.post('/users/signup', $scope.credentials).success(function (response) {
+        console.log('signup client side response ' + JSON.stringify(response));
+        if (response.type === false) {
+          $scope.error = response.data;
+        } else {
+          $scope.authentication.user = response;
+          $localStorage.token = response.token;
+          $location.path('/articles');
+        }
       });
     };
 
     $scope.signin = function () {
-
       console.log('signin');
-
       $http.post('/users/signin', $scope.credentials).success(function (response) {
-        // If successful we assign the response to the global user model
-
-        $scope.authentication.user = response;
-
-        console.log('type of user ------------' + $scope.authentication.user.roles);
-        console.log('user data ' + JSON.stringify(response));
-
-
-
-
-        // And redirect to the index page
-        $location.path('/articles');
-      }).error(function (response) {
-        $scope.error = response.message;
+        if (response.type === false) {
+          $scope.error = response.data;
+        } else {
+          console.log('signin client side response :' + JSON.stringify(response));
+          $scope.authentication.user = response;
+          $localStorage.token = response.token;
+          $location.path('/articles');
+        }
       });
     };
-        }
-        ]);
+
+}]);

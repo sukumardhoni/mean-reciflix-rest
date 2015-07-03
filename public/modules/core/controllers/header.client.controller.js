@@ -17,25 +17,16 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 
 
     $scope.signout = function () {
-
-
-      console.log('createcategories Title create function is called : ' + $localStorage.token);
+      console.log('Checking token when we click on sigout : ' + $localStorage.token);
       $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
-
-
       $http.post('/users/signout').success(function (response) {
-        console.log(response.message);
+        console.log(response.data);
         $scope.authentication.user = "";
-        $location.path('/');
-
         console.log('before delete:::' + JSON.stringify($localStorage.token));
         delete $localStorage.token;
         console.log('after delete:::' + JSON.stringify($localStorage.token));
+        $location.path('/');
       });
-
-
     };
-
-
  }
 ]);
