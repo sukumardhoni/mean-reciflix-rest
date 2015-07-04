@@ -11,9 +11,11 @@
     "angular-sanitize": ">=1.2.18",
     "angular-mocks": "~1.2",
     "angular-bootstrap": "~0.11.0",
-    "jquery": "2.1.x",
     "angular-ui-utils": "~0.1.1",
     "angular-ui-router": "~0.2.11",
     "ngstorage": "0.3.0"
+  },
+  "resolutions": {
+    "angular": "~1.2.x"
   }
 }
