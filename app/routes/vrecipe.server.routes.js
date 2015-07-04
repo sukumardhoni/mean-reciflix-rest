@@ -41,7 +41,7 @@ module.exports = function (app) {
     .get(vrecipes.getAllCategories);
 
   app.route('/VRecipesByCategories/:CategoryName/:pageId')
-    .get(users.ensureAuthenticated, vrecipes.getVIdRecipesByCategories);
+    .get(vrecipes.getVIdRecipesByCategories);
 
   app.route('/VRecipesByCategoriesForAdmin/:CategoryName')
     .get(vrecipes.getVIdRecipesByCategories_Admin);
@@ -56,7 +56,7 @@ module.exports = function (app) {
     .get(users.ensureAuthenticated, vrecipes.getAllMyFavorites);
 
   app.route('/searchedVRecipes/:query/:pageId')
-    .get(users.ensureAuthenticated, vrecipes.getAllSearchedVRecipes);
+    .get(vrecipes.getAllSearchedVRecipes);
 
   app.route('/recipesFavCount/:recipeId')
     .put(users.ensureAuthenticated, vrecipes.updateVRecipesFavCount);

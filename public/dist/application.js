@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'mean';
-  var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngTagsInput'];
+  var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage'];
 
   // Add a new vertical module
   var registerModule = function (moduleName, dependencies) {
@@ -60,13 +60,14 @@ ApplicationConfiguration.registerModule('users');
 
 // Configuring the Articles module
 angular.module('articles').run(['Menus',
-	function(Menus) {
-		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Articles', 'articles', 'dropdown', '/articles(/create)?');
-		Menus.addSubMenuItem('topbar', 'articles', 'List Articles', 'articles');
-		Menus.addSubMenuItem('topbar', 'articles', 'New Article', 'articles/create');
-	}
+ function (Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', 'Articles', 'articles', 'dropdown', '/articles(/create)?');
+    Menus.addSubMenuItem('topbar', 'articles', 'List Articles', 'articles');
+    Menus.addSubMenuItem('topbar', 'articles', 'New Article', 'articles/create');
+ }
 ]);
+
 'use strict';
 
 // Setting up route
@@ -94,6 +95,14 @@ angular.module('articles').config(['$stateProvider',
         }
       }
     }).
+    state('listArticles.createcategories', {
+      url: '/createcategories',
+      views: {
+        'user.categories': {
+          templateUrl: 'modules/articles/views/createcategories.client.view.html'
+        }
+      }
+    }).
     state('listArticles.recipes', {
       url: '/recipes',
       views: {
@@ -108,8 +117,8 @@ angular.module('articles').config(['$stateProvider',
 'use strict';
 
 // Articles controller
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes',
- function ($scope, $stateParams, $location, Authentication, Vrecipes) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
+ function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
     console.log('articals page');
 
     $scope.authentication = Authentication;
@@ -121,8 +130,117 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
       console.log('categories -----------');
 
 
+      Vrecipes.getcategory.query({
+
+      }, function (res) {
+
+
+        $scope.categories = res;
+        console.log('list of categories' + JSON.stringify(res));
+
+      });
+
+
 
     };
+
+
+    $scope.sample = [{
+      value: '1',
+      name: 'nonveg'
+}, {
+      value: '2',
+      name: 'vegetarian'
+}, {
+      value: '3',
+      name: 'seafood'
+}, {
+      value: '4',
+      name: 'snacks'
+}, {
+      value: '5',
+      name: 'fastfood'
+}, {
+      value: '6',
+      name: 'healthy'
+}, {
+      value: '7',
+      name: 'specials'
+}, {
+      value: '8',
+      name: 'kids'
+}, {
+      value: '9',
+      name: 'beverages'
+}, {
+      value: '10',
+      name: 'regional'
+}, {
+      value: '11',
+      name: 'desserts'
+}, {
+      id: '12',
+      name: 'dairy'
+}, {
+      id: '13',
+      name: 'chutneysoups'
+}, {
+      value: '14',
+      name: 'appetizers'
+}, {
+      value: '15',
+      name: 'kicthentips'
+}];
+
+
+
+
+
+
+    $scope.createcategories = function () {
+
+      console.log('createcategories -----------');
+
+
+
+      $scope.newcat = function () {
+
+        console.log('createcategories Title create function is called : ' + $localStorage.token);
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+        var categorie = {
+          'catId': this.categorie.catId,
+          'displayName': this.categorie.displayName,
+          'imageName': this.categorie.imageName,
+
+        };
+        Vrecipes.savecategory.save(categorie, function (result) {
+
+          /*$scope.persons.push({
+            name: result.name,
+              _id:result._id
+        });*/
+
+          $scope.categorie = '';
+
+        });
+
+      };
+
+
+
+
+
+    };
+
+
+
+
+
+
+    $scope.availableTags = ['Chicken', 'Mutton', 'Veg', 'Non-veg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Indo chineese', 'South Indian Recipes', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'SandWhich', 'Fruit', 'Special', 'Hot Drinks', 'Soft Drinks', 'Lunch', 'Break Fast', 'Pasta', 'Ice-Creams', 'Chat', 'Pickle', 'North-Indian', 'Spreads', 'Rice', 'Cashews Special', 'Paratha', 'Chineese', 'Rajasthani', 'Naan', 'Roti', 'Milk', 'Biriyani', 'Pulao', 'Cookies', 'Kitchen Requirements', 'Mushroom', 'Pizza', 'Bakery', 'Chocolates'];
+
+
+    $scope.availableCats = ['Chicken', 'Mutton', 'Veg', 'nonveg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Indo chineese', 'South Indian Recipes', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'SandWhich', 'Fruit', 'Special', 'Hot Drinks', 'Soft Drinks', 'Lunch', 'Break Fast', 'Pasta', 'Ice-Creams', 'Chat', 'Pickle', 'North-Indian', 'Spreads', 'Rice', 'Cashews Special', 'Paratha', 'Chineese', 'Rajasthani', 'Naan', 'Roti', 'Milk', 'Biriyani', 'Pulao', 'Cookies', 'Kitchen Requirements', 'Mushroom', 'Pizza', 'Bakery', 'Chocolates'];
 
 
 
@@ -140,7 +258,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
           console.log('selected item' + JSON.stringify(res));
 
           $scope.totalItems = $scope.recipes.length;
-          $scope.itemsPerPage = 1
+          $scope.itemsPerPage = 1;
           $scope.currentPage = 1;
           $scope.maxSize = 5;
 
@@ -199,36 +317,43 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 */
 
       $scope.updaterecipes = function (recipe) {
-      var updatedRecipe = recipe;
-      updatedRecipe.submitted.by = 'reciflix_admin';
-      updatedRecipe.state = 123;
+        var updatedRecipe = recipe;
+        updatedRecipe.submitted.by = 'reciflix_admin';
+        updatedRecipe.state = 123;
 
         Vrecipes.updaterecipes.update({
           vrecipeId: updatedRecipe._id
         }, updatedRecipe, function (result) {
-          console.log("Update recipe details Successfully   ");
 
         }, function (err) {
-          console.log("Update recipe error : " + JSON.stringify(err));
+          console.log('Update recipe error : ' + JSON.stringify(err));
 
         });
       };
 
-   $scope.removeRecipes = function (recipe) {
+    $scope.removeRecipes = function (recipe) {
       var updatedRecipe = recipe;
       updatedRecipe.submitted.by = 'reciflix_admin';
       updatedRecipe.state = 333;
 
-        Vrecipes.updaterecipes.update({
-          vrecipeId: updatedRecipe._id
-        }, updatedRecipe, function (result) {
-          console.log("Remove Recipe details Successfully   " + JSON.stringify(result));
+      Vrecipes.updaterecipes.update({
+        vrecipeId: updatedRecipe._id
+      }, updatedRecipe, function (result) {
+        console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
 
-        }, function (err) {
-          console.log("Update recipe error : " + JSON.stringify(err));
+      }, function (err) {
+        console.log('Update recipe error : ' + JSON.stringify(err));
 
-        });
-      };
+      });
+    };
+
+
+
+
+
+
+
+
 
  }
 ]);
@@ -246,13 +371,12 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
       console.log('here');
       scope.$watch('code', function (newVal) {
         if (newVal) {
-          scope.url = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + newVal);
+          scope.url = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + newVal);
         }
       });
     }
   };
 }]);
-
 'use strict';
 
 //Articles service used for communicating with the articles REST endpoints
@@ -277,49 +401,77 @@ angular.module('articles').factory('Vrecipes', ['$resource',
         'update': {
           method: 'PUT'
         }
-      })
+      }),
 
 
-    }
+      getcategory: $resource('/categories/admincats', {}, {
+        'query': {
+          method: 'GET',
+          isArray: true
+        }
+      }),
+
+      savecategory: $resource('/newcategories', {}, {
+        'save': {
+          method: 'POST'
+        },
+      }),
+
+    };
 
 
+ }
+]);
+'use strict';
+
+// Setting up route
+angular.module('core').config(['$stateProvider', '$urlRouterProvider',
+ function ($stateProvider, $urlRouterProvider) {
+    // Redirect to home view when route not found
+    $urlRouterProvider.otherwise('/');
+
+    // Home state routing
+    $stateProvider.
+    state('home', {
+      url: '/',
+      templateUrl: 'modules/core/views/home.client.view.html'
+    });
  }
 ]);
 
 'use strict';
 
-// Setting up route
-angular.module('core').config(['$stateProvider', '$urlRouterProvider',
-	function($stateProvider, $urlRouterProvider) {
-		// Redirect to home view when route not found
-		$urlRouterProvider.otherwise('/');
+angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', '$http', '$location', '$localStorage',
+ function ($scope, Authentication, Menus, $http, $location, $localStorage) {
+    $scope.authentication = Authentication;
+    $scope.isCollapsed = false;
+    $scope.menu = Menus.getMenu('topbar');
 
-		// Home state routing
-		$stateProvider.
-		state('home', {
-			url: '/',
-			templateUrl: 'modules/core/views/home.client.view.html'
-		});
-	}
+    $scope.toggleCollapsibleMenu = function () {
+      $scope.isCollapsed = !$scope.isCollapsed;
+    };
+
+    // Collapsing the menu after navigation
+    $scope.$on('$stateChangeSuccess', function () {
+      $scope.isCollapsed = false;
+    });
+
+
+    $scope.signout = function () {
+      console.log('Checking token when we click on sigout : ' + $localStorage.token);
+      $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+      $http.post('/users/signout').success(function (response) {
+        console.log(response.data);
+        $scope.authentication.user = '';
+        console.log('before delete:::' + JSON.stringify($localStorage.token));
+        delete $localStorage.token;
+        console.log('after delete:::' + JSON.stringify($localStorage.token));
+        $location.path('/');
+      });
+    };
+ }
 ]);
-'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus',
-	function($scope, Authentication, Menus) {
-		$scope.authentication = Authentication;
-		$scope.isCollapsed = false;
-		$scope.menu = Menus.getMenu('topbar');
-
-		$scope.toggleCollapsibleMenu = function() {
-			$scope.isCollapsed = !$scope.isCollapsed;
-		};
-
-		// Collapsing the menu after navigation
-		$scope.$on('$stateChangeSuccess', function() {
-			$scope.isCollapsed = false;
-		});
-	}
-]);
 'use strict';
 
 
@@ -393,22 +545,22 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       var notifyUser = {
         'platform': platform,
         'email': this.userEmail
-      }
+      };
 
       ProspectiveEmail.emailPost.save(notifyUser, function (res) {
         if (res.type === false) {
           console.log('Error console that User already exixts');
           $scope.errMsg = res.data;
         } else {
-          console.log('suceess nottify user saved ')
-          console.log('suceess nottify user saved ' + JSON.stringify(res))
+          console.log('suceess nottify user saved ');
+          console.log('suceess nottify user saved ' + JSON.stringify(res));
           $scope.showNotify.count++;
           $scope.userEmail = '';
           $scope.errMsg = '';
           $scope.sucessMsg = 'Your Email id is sucessfully subscribed for ReciFlix App Release Notification';
         }
       }, function (err) {
-        console.log('failed to save nottify user' + JSON.stringify(err))
+        console.log('failed to save nottify user' + JSON.stringify(err));
         $scope.errMsg = err.data.message;
         $scope.userEmail = '';
         $scope.sucessMsg = '';
@@ -428,167 +580,168 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 //Menu service used for managing  menus
 angular.module('core').service('Menus', [
 
-	function() {
-		// Define a set of default roles
-		this.defaultRoles = ['*'];
+ function () {
+    // Define a set of default roles
+    this.defaultRoles = ['*'];
 
-		// Define the menus object
-		this.menus = {};
+    // Define the menus object
+    this.menus = {};
 
-		// A private function for rendering decision
-		var shouldRender = function(user) {
-			if (user) {
-				if (!!~this.roles.indexOf('*')) {
-					return true;
-				} else {
-					for (var userRoleIndex in user.roles) {
-						for (var roleIndex in this.roles) {
-							if (this.roles[roleIndex] === user.roles[userRoleIndex]) {
-								return true;
-							}
-						}
-					}
-				}
-			} else {
-				return this.isPublic;
-			}
+    // A private function for rendering decision
+    var shouldRender = function (user) {
+      if (user) {
+        if (!!~this.roles.indexOf('*')) {
+          return true;
+        } else {
+          for (var userRoleIndex in user.roles) {
+            for (var roleIndex in this.roles) {
+              if (this.roles[roleIndex] === user.roles[userRoleIndex]) {
+                return true;
+              }
+            }
+          }
+        }
+      } else {
+        return this.isPublic;
+      }
 
-			return false;
-		};
+      return false;
+    };
 
-		// Validate menu existance
-		this.validateMenuExistance = function(menuId) {
-			if (menuId && menuId.length) {
-				if (this.menus[menuId]) {
-					return true;
-				} else {
-					throw new Error('Menu does not exists');
-				}
-			} else {
-				throw new Error('MenuId was not provided');
-			}
+    // Validate menu existance
+    this.validateMenuExistance = function (menuId) {
+      if (menuId && menuId.length) {
+        if (this.menus[menuId]) {
+          return true;
+        } else {
+          throw new Error('Menu does not exists');
+        }
+      } else {
+        throw new Error('MenuId was not provided');
+      }
 
-			return false;
-		};
+      return false;
+    };
 
-		// Get the menu object by menu id
-		this.getMenu = function(menuId) {
-			// Validate that the menu exists
-			this.validateMenuExistance(menuId);
+    // Get the menu object by menu id
+    this.getMenu = function (menuId) {
+      // Validate that the menu exists
+      this.validateMenuExistance(menuId);
 
-			// Return the menu object
-			return this.menus[menuId];
-		};
+      // Return the menu object
+      return this.menus[menuId];
+    };
 
-		// Add new menu object by menu id
-		this.addMenu = function(menuId, isPublic, roles) {
-			// Create the new menu
-			this.menus[menuId] = {
-				isPublic: isPublic || false,
-				roles: roles || this.defaultRoles,
-				items: [],
-				shouldRender: shouldRender
-			};
+    // Add new menu object by menu id
+    this.addMenu = function (menuId, isPublic, roles) {
+      // Create the new menu
+      this.menus[menuId] = {
+        isPublic: isPublic || false,
+        roles: roles || this.defaultRoles,
+        items: [],
+        shouldRender: shouldRender
+      };
 
-			// Return the menu object
-			return this.menus[menuId];
-		};
+      // Return the menu object
+      return this.menus[menuId];
+    };
 
-		// Remove existing menu object by menu id
-		this.removeMenu = function(menuId) {
-			// Validate that the menu exists
-			this.validateMenuExistance(menuId);
+    // Remove existing menu object by menu id
+    this.removeMenu = function (menuId) {
+      // Validate that the menu exists
+      this.validateMenuExistance(menuId);
 
-			// Return the menu object
-			delete this.menus[menuId];
-		};
+      // Return the menu object
+      delete this.menus[menuId];
+    };
 
-		// Add menu item object
-		this.addMenuItem = function(menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position) {
-			// Validate that the menu exists
-			this.validateMenuExistance(menuId);
+    // Add menu item object
+    this.addMenuItem = function (menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position) {
+      // Validate that the menu exists
+      this.validateMenuExistance(menuId);
 
-			// Push new menu item
-			this.menus[menuId].items.push({
-				title: menuItemTitle,
-				link: menuItemURL,
-				menuItemType: menuItemType || 'item',
-				menuItemClass: menuItemType,
-				uiRoute: menuItemUIRoute || ('/' + menuItemURL),
-				isPublic: ((isPublic === null || typeof isPublic === 'undefined') ? this.menus[menuId].isPublic : isPublic),
-				roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].roles : roles),
-				position: position || 0,
-				items: [],
-				shouldRender: shouldRender
-			});
+      // Push new menu item
+      this.menus[menuId].items.push({
+        title: menuItemTitle,
+        link: menuItemURL,
+        menuItemType: menuItemType || 'item',
+        menuItemClass: menuItemType,
+        uiRoute: menuItemUIRoute || ('/' + menuItemURL),
+        isPublic: ((isPublic === null || typeof isPublic === 'undefined') ? this.menus[menuId].isPublic : isPublic),
+        roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].roles : roles),
+        position: position || 0,
+        items: [],
+        shouldRender: shouldRender
+      });
 
-			// Return the menu object
-			return this.menus[menuId];
-		};
+      // Return the menu object
+      return this.menus[menuId];
+    };
 
-		// Add submenu item object
-		this.addSubMenuItem = function(menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position) {
-			// Validate that the menu exists
-			this.validateMenuExistance(menuId);
+    // Add submenu item object
+    this.addSubMenuItem = function (menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position) {
+      // Validate that the menu exists
+      this.validateMenuExistance(menuId);
 
-			// Search for menu item
-			for (var itemIndex in this.menus[menuId].items) {
-				if (this.menus[menuId].items[itemIndex].link === rootMenuItemURL) {
-					// Push new submenu item
-					this.menus[menuId].items[itemIndex].items.push({
-						title: menuItemTitle,
-						link: menuItemURL,
-						uiRoute: menuItemUIRoute || ('/' + menuItemURL),
-						isPublic: ((isPublic === null || typeof isPublic === 'undefined') ? this.menus[menuId].items[itemIndex].isPublic : isPublic),
-						roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].items[itemIndex].roles : roles),
-						position: position || 0,
-						shouldRender: shouldRender
-					});
-				}
-			}
+      // Search for menu item
+      for (var itemIndex in this.menus[menuId].items) {
+        if (this.menus[menuId].items[itemIndex].link === rootMenuItemURL) {
+          // Push new submenu item
+          this.menus[menuId].items[itemIndex].items.push({
+            title: menuItemTitle,
+            link: menuItemURL,
+            uiRoute: menuItemUIRoute || ('/' + menuItemURL),
+            isPublic: ((isPublic === null || typeof isPublic === 'undefined') ? this.menus[menuId].items[itemIndex].isPublic : isPublic),
+            roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].items[itemIndex].roles : roles),
+            position: position || 0,
+            shouldRender: shouldRender
+          });
+        }
+      }
 
-			// Return the menu object
-			return this.menus[menuId];
-		};
+      // Return the menu object
+      return this.menus[menuId];
+    };
 
-		// Remove existing menu object by menu id
-		this.removeMenuItem = function(menuId, menuItemURL) {
-			// Validate that the menu exists
-			this.validateMenuExistance(menuId);
+    // Remove existing menu object by menu id
+    this.removeMenuItem = function (menuId, menuItemURL) {
+      // Validate that the menu exists
+      this.validateMenuExistance(menuId);
 
-			// Search for menu item to remove
-			for (var itemIndex in this.menus[menuId].items) {
-				if (this.menus[menuId].items[itemIndex].link === menuItemURL) {
-					this.menus[menuId].items.splice(itemIndex, 1);
-				}
-			}
+      // Search for menu item to remove
+      for (var itemIndex in this.menus[menuId].items) {
+        if (this.menus[menuId].items[itemIndex].link === menuItemURL) {
+          this.menus[menuId].items.splice(itemIndex, 1);
+        }
+      }
 
-			// Return the menu object
-			return this.menus[menuId];
-		};
+      // Return the menu object
+      return this.menus[menuId];
+    };
 
-		// Remove existing menu object by menu id
-		this.removeSubMenuItem = function(menuId, submenuItemURL) {
-			// Validate that the menu exists
-			this.validateMenuExistance(menuId);
+    // Remove existing menu object by menu id
+    this.removeSubMenuItem = function (menuId, submenuItemURL) {
+      // Validate that the menu exists
+      this.validateMenuExistance(menuId);
 
-			// Search for menu item to remove
-			for (var itemIndex in this.menus[menuId].items) {
-				for (var subitemIndex in this.menus[menuId].items[itemIndex].items) {
-					if (this.menus[menuId].items[itemIndex].items[subitemIndex].link === submenuItemURL) {
-						this.menus[menuId].items[itemIndex].items.splice(subitemIndex, 1);
-					}
-				}
-			}
+      // Search for menu item to remove
+      for (var itemIndex in this.menus[menuId].items) {
+        for (var subitemIndex in this.menus[menuId].items[itemIndex].items) {
+          if (this.menus[menuId].items[itemIndex].items[subitemIndex].link === submenuItemURL) {
+            this.menus[menuId].items[itemIndex].items.splice(subitemIndex, 1);
+          }
+        }
+      }
 
-			// Return the menu object
-			return this.menus[menuId];
-		};
+      // Return the menu object
+      return this.menus[menuId];
+    };
 
-		//Adding the topbar menu
-		this.addMenu('topbar');
-	}
+    //Adding the topbar menu
+    this.addMenu('topbar');
+ }
 ]);
+
 'use strict';
 
 //Articles service used for communicating with the articles REST endpoints
@@ -610,7 +763,7 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
         }
       })
 
-    }
+    };
   }
 
 ]);
@@ -692,48 +845,39 @@ angular.module('users').config(['$stateProvider',
 ]);
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication',
- function ($scope, $http, $location, Authentication) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage',
+ function ($scope, $http, $location, Authentication, $localStorage) {
     $scope.authentication = Authentication;
-
     // If user is signed in then redirect back home
     if ($scope.authentication.user) $location.path('/');
-
     $scope.signup = function () {
-      $http.post('/auth/signup', $scope.credentials).success(function (response) {
-        // If successful we assign the response to the global user model
-        $scope.authentication.user = response;
-
-        // And redirect to the index page
-        $location.path('/');
-      }).error(function (response) {
-        $scope.error = response.message;
+      $http.post('/users/signup', $scope.credentials).success(function (response) {
+        console.log('signup client side response ' + JSON.stringify(response));
+        if (response.type === false) {
+          $scope.error = response.data;
+        } else {
+          $scope.authentication.user = response;
+          $localStorage.token = response.token;
+          $location.path('/articles');
+        }
       });
     };
 
     $scope.signin = function () {
-
       console.log('signin');
-
       $http.post('/users/signin', $scope.credentials).success(function (response) {
-        // If successful we assign the response to the global user model
-
-        $scope.authentication.user = response;
-
-        console.log('type of user ------------' + $scope.authentication.user.roles);
-        console.log('user data ' + JSON.stringify(response));
-
-
-
-
-        // And redirect to the index page
-        $location.path('/articles');
-      }).error(function (response) {
-        $scope.error = response.message;
+        if (response.type === false) {
+          $scope.error = response.data;
+        } else {
+          console.log('signin client side response :' + JSON.stringify(response));
+          $scope.authentication.user = response;
+          $localStorage.token = response.token;
+          $location.path('/articles');
+        }
       });
     };
-        }
-        ]);
+
+}]);
 
 'use strict';
 

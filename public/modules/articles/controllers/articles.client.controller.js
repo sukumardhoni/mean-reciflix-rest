@@ -29,51 +29,51 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
     };
 
 
-   $scope.sample = [{
-value: '1',
-name: 'nonveg'
+    $scope.sample = [{
+      value: '1',
+      name: 'nonveg'
 }, {
-value: '2',
-name: 'vegetarian'
+      value: '2',
+      name: 'vegetarian'
 }, {
-value: '3',
-name: 'seafood'
+      value: '3',
+      name: 'seafood'
 }, {
-value: '4',
-name: 'snacks'
+      value: '4',
+      name: 'snacks'
 }, {
-value: '5',
-name: 'fastfood'
+      value: '5',
+      name: 'fastfood'
 }, {
-value: '6',
-name: 'healthy'
+      value: '6',
+      name: 'healthy'
 }, {
-value: '7',
-name: 'specials'
+      value: '7',
+      name: 'specials'
 }, {
-value: '8',
-name: 'kids'
+      value: '8',
+      name: 'kids'
 }, {
-value: '9',
-name: 'beverages'
+      value: '9',
+      name: 'beverages'
 }, {
-value: '10',
-name: 'regional'
+      value: '10',
+      name: 'regional'
 }, {
-value: '11',
-name: 'desserts'
+      value: '11',
+      name: 'desserts'
 }, {
-id: '12',
-name: 'dairy'
+      id: '12',
+      name: 'dairy'
 }, {
-id: '13',
-name: 'chutneysoups'
+      id: '13',
+      name: 'chutneysoups'
 }, {
-value: '14',
-name: 'appetizers'
+      value: '14',
+      name: 'appetizers'
 }, {
-value: '15',
-name: 'kicthentips'
+      value: '15',
+      name: 'kicthentips'
 }];
 
 
@@ -88,7 +88,6 @@ name: 'kicthentips'
 
 
       $scope.newcat = function () {
-        console.log("add createcategories function");
 
         console.log('createcategories Title create function is called : ' + $localStorage.token);
         $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
@@ -98,10 +97,8 @@ name: 'kicthentips'
           'imageName': this.categorie.imageName,
 
         };
-        console.log("add createcategories before:" + JSON.stringify(categorie));
         Vrecipes.savecategory.save(categorie, function (result) {
-          console.log("add categorie after:" + JSON.stringify(result));
-          console.log("add categorie after:");
+
           /*$scope.persons.push({
             name: result.name,
               _id:result._id
@@ -145,7 +142,7 @@ name: 'kicthentips'
           console.log('selected item' + JSON.stringify(res));
 
           $scope.totalItems = $scope.recipes.length;
-          $scope.itemsPerPage = 1
+          $scope.itemsPerPage = 1;
           $scope.currentPage = 1;
           $scope.maxSize = 5;
 
@@ -211,10 +208,9 @@ name: 'kicthentips'
         Vrecipes.updaterecipes.update({
           vrecipeId: updatedRecipe._id
         }, updatedRecipe, function (result) {
-          console.log("Update recipe details Successfully   ");
 
         }, function (err) {
-          console.log("Update recipe error : " + JSON.stringify(err));
+          console.log('Update recipe error : ' + JSON.stringify(err));
 
         });
       };
@@ -227,10 +223,10 @@ name: 'kicthentips'
       Vrecipes.updaterecipes.update({
         vrecipeId: updatedRecipe._id
       }, updatedRecipe, function (result) {
-        console.log("Remove Recipe details Successfully   " + JSON.stringify(result));
+        console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
 
       }, function (err) {
-        console.log("Update recipe error : " + JSON.stringify(err));
+        console.log('Update recipe error : ' + JSON.stringify(err));
 
       });
     };
@@ -259,7 +255,7 @@ angular.module('articles').directive('myYoutube', function ($sce) {
       console.log('here');
       scope.$watch('code', function (newVal) {
         if (newVal) {
-          scope.url = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + newVal);
+          scope.url = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + newVal);
         }
       });
     }

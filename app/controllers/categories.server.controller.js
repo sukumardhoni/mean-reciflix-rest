@@ -34,7 +34,7 @@ exports.create = function (req, res) {
  * Create a new category
  */
 exports.createnewcategory = function (req, res) {
-  console.log("Create a new category: " + JSON.stringify(req.body));
+  console.log('Create a new category: ' + JSON.stringify(req.body));
   var category = new Category(req.body);
   category.user = req.user;
 

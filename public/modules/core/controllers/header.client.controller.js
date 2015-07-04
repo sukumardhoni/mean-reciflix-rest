@@ -21,7 +21,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
       $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
       $http.post('/users/signout').success(function (response) {
         console.log(response.data);
-        $scope.authentication.user = "";
+        $scope.authentication.user = '';
         console.log('before delete:::' + JSON.stringify($localStorage.token));
         delete $localStorage.token;
         console.log('after delete:::' + JSON.stringify($localStorage.token));

@@ -16,18 +16,18 @@ module.exports = function (app) {
   // Category Routes
 
   app.route('/categories/page/:pageId')
-    .get(categories.list)
+    .get(categories.list);
 
   //admin functions are shown here //
 
   app.route('/categories/admincats')
-    .get(categories.catslist)
+    .get(categories.catslist);
 
   app.route('/categories')
     .post(users.ensureAuthenticated, users.checkAdmin, categories.create);
 
   app.route('/newcategories')
-    .post( categories.createnewcategory);
+    .post(categories.createnewcategory);
 
 
   app.route('/categories/:categoryId')
