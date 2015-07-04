@@ -74,15 +74,24 @@ exports.delete = function (req, res) {
  */
 
 exports.listOfGroceries = function (req, res) {
-  Grocery.find({user: req.user.id}).sort('-submitted.date').exec(function (err, groceries) {
+  Grocery.find({
+    user: req.user.id
+  }).sort('-submitted.date').exec(function (err, groceries) {
     var gLists = [];
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
+    } else if (groceries.length === 0) {
+      return res.status(204).send({
+        message: 'No data found'
+      });
     } else {
       for (var i = 0; i < groceries.length; i++) {
-        gLists.push({_id: groceries[i]._id,name: groceries[i].name});
+        gLists.push({
+          _id: groceries[i]._id,
+          name: groceries[i].name
+        });
         if (gLists.length === groceries.length) {
           res.jsonp(gLists);
         }
