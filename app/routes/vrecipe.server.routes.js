@@ -16,7 +16,7 @@ module.exports = function (app) {
 
 
   app.route('/vRecipes/:vrecipeId')
-    .get(users.ensureAuthenticated, vrecipes.read)
+    .get(vrecipes.read)
     //		.put(users.requiresLogin, articles.hasAuthorization, articles.update)
     //		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete);
     .put(users.ensureAuthenticated, vrecipes.update)
