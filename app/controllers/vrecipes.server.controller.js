@@ -353,7 +353,7 @@ exports.getAllMyFavorites = function (req, res) {
 
   var pageid = req.params.pageId;
   var pagelength = 5;
-  var allFavouriteVidoeids = [];
+
   User.findOne({
     _id: req.params.userId
   }, function (err, user) {
@@ -376,7 +376,7 @@ exports.getAllMyFavorites = function (req, res) {
                 res.jsonp(foundRecipes);
               }
             } else {
-              return res.send({
+              return res.status(204).send({
                 message: 'No data found'
               });
             }
@@ -384,7 +384,7 @@ exports.getAllMyFavorites = function (req, res) {
         }
       }
     } else {
-      return res.send({
+      return res.status(204).send({
         message: 'No data found'
       });
     }

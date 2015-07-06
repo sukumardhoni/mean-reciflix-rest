@@ -22,11 +22,41 @@ exports.jwtSignup = function (req, res, next) {
       });
     } else {
       if (user) {
-        res.json({
+        /*res.json({
           type: false,
           data: 'User already exists!',
           user: user
-        });
+        });*/
+        if (user.token === '') {
+          var secret = 'www';
+          var payload = {
+            email: req.body.email
+          };
+          var token = jwt.encode(payload, secret);
+          user.token = token;
+          user.save(function (err) {
+            if (err) {
+              console.log('Error occured on singin function is : ' + err);
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            } else {
+              req.login(user, function (err) {
+                if (err) {
+                  res.status(400).send(err);
+                } else {
+                  //res.jsonp(user);
+                  res.json({
+                    type: false,
+                    data: 'User already exists!',
+                    user: user
+                  });
+                  console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
+                }
+              });
+            }
+          });
+        }
       } else {
         //delete req.body.roles;
         var userModel = new User(req.body);
