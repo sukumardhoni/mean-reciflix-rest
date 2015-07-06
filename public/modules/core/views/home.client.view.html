@@ -9,10 +9,10 @@
     background: -moz-linear-gradient(top, rgba(17, 79, 102, 1) 17%, rgba(17, 79, 102, 1) 32.4%, rgba(255, 255, 255, 1) 32.4%, rgba(255, 255, 255, 1) 32.4%, rgba(250, 250, 250, 1) 32.4%, rgba(247, 244, 244, 1) 32.4%) !important;
   }
 
-  .backimg {
+   .backimg {
     background-image: url(modules/core/img/brand/slide1.png);
-    background-size: 485px 670px;
-    height: 670px;
+    background-size: 485px 665px;
+    height: 665px;
     width: 485px;
   }
 
@@ -70,34 +70,38 @@
       <div class="col-md-6  col-sm-6  col-xs-12 backimg">
         <carousel interval="2000" style="width:285px;top:87px;left:102px;" class="carousel-fade carousel-inner">
           <slide ng-repeat="slide in slides" active="slide.active">
-            <img ng-src="{{slide.image}}" style="margin:auto;width:88%;" class="img-responsive" />
+            <img ng-src="{{slide.image}}" style="margin:auto;width:89%;" class="img-responsive" />
             <div class="carousel-caption">
             </div>
           </slide>
         </carousel>
       </div>
-      <div class="col-md-6  col-sm-6  col-xs-12">
+      <div class="col-md-6  col-sm-6  col-xs-12" style="-webkit-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
+-moz-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
+box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);background:#ffffff;border-radius:5px">
         <br>
         <br class="hidden-lg">
-
+        <center>
         <img src="/modules/core/img/brand/reciflix-logo_400.png" width="280px" height=" 74px">
+        </center>
+       <!-- <button type="button" class="btn btn-primary btn-lg pull-right signin-btn" ui-sref="signin">Sign In</button>-->
 
-        <button type="button" class="btn btn-primary btn-lg pull-right signin-btn" ui-sref="signin">Sign In</button>
-
-        <div style="-webkit-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
--moz-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);margin-top:50px">
-          <div style="padding: 40px 56px 68px 48px;background:#ffffff;border-radius:2px">
+        <div style="margin-top:10px">
+          <div style="padding: 10px 56px 68px 48px;">
             <h1 style="font-size:27px;line-height:32px;color: #06365f;font-weight: bold;">Browse and watch the best recipes online from any device</h1>
             <p class="p-side">ReciFlix is a <b>quick</b>, <b>convenient </b>and <b>easy</b> way to search a recipe online and watch it with a click of a button and add it to your favourites to be able to access the same recipe anytime from any device conveniently.</p>
             <p class="p-side">Browse the categories or set preferences to see a featured recipe. You will be able to like or add to your favourites or share with friends and family all from one app with quick and easy steps.</p>
             <p class="p-side">And.. did you hear us say it’s free? </p>
             <div class="col-sm-6" ng-click="iosShow()" style="cursor:pointer;">
-              <img src="http://host.globaltechminds.com/reciflix/wp-content/uploads/2015/05/badge_ios_english-en.png" height="50" width="100%">
+              <img src="modules/core/img/brand/ios.PNG" height="50" width="100%">
             </div>
             <br class="hidden-lg hidden-md">
-            <div class="col-sm-6" ng-click="androidShow()" style="cursor:pointer;">
-              <img src="http://host.globaltechminds.com/reciflix/wp-content/uploads/2015/05/english_get.png" height="50" width="100%">
+           <!-- <div class="col-sm-6" ng-click="androidShow()" style="cursor:pointer;">
+              <img src="modules/core/img/brand/android.PNG" height="50" width="100%">
+            </div>-->
+            <div class="col-sm-6"  style="cursor:pointer;">
+            <a href="https://play.google.com/store/apps/details?id=com.reciflix.recipesapp&hl=en">  <img src="http://host.globaltechminds.com/reciflix/wp-content/uploads/2015/05/english_get.png" height="50" width="100%">
+              </a>
             </div>
             </b>
             </b>
