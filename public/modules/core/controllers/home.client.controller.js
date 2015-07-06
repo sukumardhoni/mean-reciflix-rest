@@ -10,10 +10,10 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.myint = 1000;
     $scope.slides = [
       {
-        image: 'modules/core/img/brand/landing_1.png'
+        image: 'modules/core/img/brand/landing_1.PNG'
     },
       {
-        image: 'modules/core/img/brand/landing_2.png'
+        image: 'modules/core/img/brand/landing_2.PNG'
     },
       {
         image: 'modules/core/img/brand/landing_3.png'
