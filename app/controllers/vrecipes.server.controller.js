@@ -131,7 +131,7 @@ exports.vrecipeByID = function (req, res, next, id) {
       message: 'Vrecipe is invalid'
     });
   }
-  console.log('Called the single recipe params function');
+  //console.log('Called the single recipe params function');
   Vrecipe.findById(id).populate('user', 'displayName').exec(function (err, vrecipe) {
     if (err) return next(err);
     if (!vrecipe) {
@@ -251,8 +251,8 @@ exports.getAllCategories = function (req, res) {
 
 
 exports.getVIdRecipesByCategories = function (req, res) {
-  console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
-  console.log('Recipes under category is called , PageId is : ' + req.params.pageId);
+  //console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
+  //console.log('Recipes under category is called , PageId is : ' + req.params.pageId);
   Vrecipe.find({
     cats: {
       $in: [req.params.CategoryName]
@@ -266,7 +266,7 @@ exports.getVIdRecipesByCategories = function (req, res) {
           'message': 'There are no recipe items available'
         });
       } else {
-        console.log('Recipes length is : ' + recipes.length);
+        //console.log('Recipes length is : ' + recipes.length);
         res.send(recipes);
       }
     } else {
@@ -276,7 +276,7 @@ exports.getVIdRecipesByCategories = function (req, res) {
 };
 
 exports.getVIdRecipesByCategories_Admin = function (req, res) {
-  console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
+  //console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
   //console.log('Recipes under category is called , PageId is : ' + req.params.pageId);
   Vrecipe.find({
     cats: {
@@ -291,7 +291,7 @@ exports.getVIdRecipesByCategories_Admin = function (req, res) {
           'message': 'There are no recipe items available'
         });
       } else {
-        console.log('Recipes length is : ' + recipes.length);
+        //console.log('Recipes length is : ' + recipes.length);
         res.send(recipes);
       }
     } else {
@@ -358,7 +358,7 @@ exports.getAllMyFavorites = function (req, res) {
     _id: req.params.userId
   }, function (err, user) {
     if (!err) {
-      console.log(' User: ' + user.email + ', fav video ids length is : ' + user.favorites.length);
+      //console.log(' User: ' + user.email + ', fav video ids length is : ' + user.favorites.length);
       var currentFavVideoids = user.favorites.slice(pageid * pagelength, (pageid * pagelength) + pagelength);
       var foundRecipes = [];
       if (currentFavVideoids.length === 0) {
@@ -427,7 +427,7 @@ exports.getAllSearchedVRecipes = function (req, res) {
 
 
 exports.updateVRecipesFavCount = function (req, res) {
-  console.log('Console @ updateVRecipesFavCount');
+  //console.log('Console @ updateVRecipesFavCount');
   Vrecipe.findOne({
     _id: req.params.recipeId
   }, function (err, vrecipe) {
@@ -440,7 +440,7 @@ exports.updateVRecipesFavCount = function (req, res) {
     return vrecipe.save(function (err) {
       if (!err) {
         res.json(vrecipe);
-        console.log('Successfully increment the fav count : ' + JSON.stringify(vrecipe));
+        //console.log('Successfully increment the fav count : ' + JSON.stringify(vrecipe));
       } else {
         res.send({
           message: 'No item were found with that id'
@@ -470,7 +470,7 @@ exports.postSampleJSONData = function (req, res) {
     recipe.submitted = data[i].submitted;
     recipe.save(function (err, cbRecipe) {
       if (err) {
-        console.log(err);
+        //console.log(err);
       } else {
         finalVideosList.push(cbRecipe);
       }

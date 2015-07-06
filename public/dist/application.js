@@ -377,6 +377,7 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 //Articles service used for communicating with the articles REST endpoints
@@ -422,6 +423,7 @@ angular.module('articles').factory('Vrecipes', ['$resource',
 
  }
 ]);
+
 'use strict';
 
 // Setting up route
@@ -484,31 +486,37 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.myint = 1000;
     $scope.slides = [
       {
-        image: 'modules/core/img/brand/Capture1-236x428.png'
+        image: 'modules/core/img/brand/Capture.png'
     },
       {
-        image: 'modules/core/img/brand/createacc-236x428.png'
+        image: 'modules/core/img/brand/Capture1.png'
     },
       {
-        image: 'modules/core/img/brand/Capture-236x428.png'
+        image: 'modules/core/img/brand/Capture2.png'
     },
       {
-        image: 'modules/core/img/brand/Capture4-236x428.png'
+        image: 'modules/core/img/brand/Capture3.png'
     },
       {
-        image: 'modules/core/img/brand/Capture4-236x428.png'
+        image: 'modules/core/img/brand/Capture4.png'
     },
       {
-        image: 'modules/core/img/brand/Capture5-236x428.png'
+       image: 'modules/core/img/brand/Capture5.png'
     },
       {
-        image: 'modules/core/img/brand/Capture6-236x428.png'
+        image: 'modules/core/img/brand/Capture6.png'
     },
       {
-        image: 'modules/core/img/brand/fave-236x428.png'
+        image: 'modules/core/img/brand/Capture7.png'
     },
       {
-        image: 'modules/core/img/brand/Capture3-236x428.png'
+       image: 'modules/core/img/brand/Capture8.png'
+    },
+      {
+        image: 'modules/core/img/brand/Capture9.png'
+    },
+      {
+        image: 'modules/core/img/brand/Capture10.png'
     }
 
   ];

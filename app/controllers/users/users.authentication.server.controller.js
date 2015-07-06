@@ -36,7 +36,7 @@ exports.jwtSignup = function (req, res, next) {
           user.token = token;
           user.save(function (err) {
             if (err) {
-              console.log('Error occured on singin function is : ' + err);
+              //console.log('Error occured on singin function is : ' + err);
               return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
               });
@@ -51,7 +51,7 @@ exports.jwtSignup = function (req, res, next) {
                     data: 'User already exists!',
                     user: user
                   });
-                  console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
+                  //console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
                 }
               });
             }
@@ -93,8 +93,8 @@ exports.jwtSignup = function (req, res, next) {
 /* JWT Signin*/
 
 exports.jwtSignin = function (req, res, next) {
-  console.log('jwtSignin');
-  console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
+  //console.log('jwtSignin');
+  //console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
   User.findOne({
     email: req.body.email
   }, function (err, user) {
@@ -120,7 +120,7 @@ exports.jwtSignin = function (req, res, next) {
             user.password = req.body.password;
             user.save(function (err) {
               if (err) {
-                console.log('Error occured on singin function is : ' + err);
+                //console.log('Error occured on singin function is : ' + err);
                 return res.status(400).send({
                   message: errorHandler.getErrorMessage(err)
                 });
@@ -130,7 +130,7 @@ exports.jwtSignin = function (req, res, next) {
                     res.status(400).send(err);
                   } else {
                     res.jsonp(user);
-                    console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
+                    //console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
                   }
                 });
               }
@@ -240,7 +240,7 @@ exports.jwtSignout = function (req, res, next) {
           user.token = '';
           user.save(function (err) {
             if (err) {
-              console.log('Error occured on singout function is : ' + err);
+              //console.log('Error occured on singout function is : ' + err);
               res.status(400).send(err);
             } else {
               req.logout();
