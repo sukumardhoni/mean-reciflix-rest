@@ -3,19 +3,19 @@
 // Articles controller
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
  function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
-    console.log('articals page');
+    //console.log('articals page');
 
-   console.log('createcategories Title create function is called : ' + $localStorage.token);
+
+   //console.log('createcategories Title create function is called : ' + $localStorage.token);
         $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
-
 
     $scope.authentication = Authentication;
 
-    console.log('type of user ------------' + JSON.stringify($scope.authentication));
+    //console.log('type of user ------------' + JSON.stringify($scope.authentication));
 
     $scope.categories = function () {
 
-      console.log('categories -----------');
+      //console.log('categories -----------');
 
 
       Vrecipes.getcategory.query({
@@ -24,7 +24,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
 
         $scope.categories = res;
-        console.log('list of categories' + JSON.stringify(res));
+        //console.log('list of categories' + JSON.stringify(res));
 
       });
 
@@ -87,11 +87,12 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
     $scope.createcategories = function () {
 
-      console.log('createcategories -----------');
+      //console.log('createcategories -----------');
 
 
 
       $scope.newcat = function () {
+
 
 
         var categorie = {
@@ -133,16 +134,16 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
     $scope.selected = function () {
 
-        console.log('selected item' + this.categoriesname);
+        //console.log('selected item' + this.categoriesname);
 
         Vrecipes.getrecipes.query({
           CategoryName: this.categoriesname
 
         }, function (res) {
 
-          console.log('particular recipeslist' + JSON.stringify(res));
+          //console.log('particular recipeslist' + JSON.stringify(res));
           $scope.recipes = res;
-          console.log('selected item' + JSON.stringify(res));
+          //console.log('selected item' + JSON.stringify(res));
 
           $scope.totalItems = $scope.recipes.length;
           $scope.itemsPerPage = 1;
@@ -213,7 +214,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
         }, updatedRecipe, function (result) {
 
         }, function (err) {
-          console.log('Update recipe error : ' + JSON.stringify(err));
+          //console.log('Update recipe error : ' + JSON.stringify(err));
 
         });
       };
@@ -228,10 +229,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
       Vrecipes.updaterecipes.update({
         vrecipeId: updatedRecipe._id
       }, updatedRecipe, function (result) {
-        console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
+        //console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
 
       }, function (err) {
-        console.log('Update recipe error : ' + JSON.stringify(err));
+        //console.log('Update recipe error : ' + JSON.stringify(err));
 
       });
     };

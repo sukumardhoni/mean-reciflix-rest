@@ -12,6 +12,7 @@ var _ = require('lodash'),
 
 /*JWT Signup*/
 exports.jwtSignup = function (req, res, next) {
+  //console.log('JWT Signup')
   User.findOne({
     email: req.body.email
   }, function (err, user) {
@@ -22,11 +23,43 @@ exports.jwtSignup = function (req, res, next) {
       });
     } else {
       if (user) {
-        res.json({
-          type: false,
-          data: 'User already exists!',
-          user: user
-        });
+        //console.log('User already exists : ' + JSON.stringify(user));
+        if (user.token === '') {
+          var secret = 'www';
+          var payload = {
+            email: req.body.email
+          };
+          var token = jwt.encode(payload, secret);
+          user.token = token;
+          user.save(function (err) {
+            if (err) {
+              //console.log('Error occured on singin function is : ' + err);
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            } else {
+              req.login(user, function (err) {
+                if (err) {
+                  res.status(400).send(err);
+                } else {
+                  //res.jsonp(user);
+                  res.json({
+                    type: false,
+                    data: 'User already exists!11',
+                    user: user
+                  });
+                  //console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
+                }
+              });
+            }
+          });
+        } else {
+          res.json({
+            type: false,
+            data: 'User already exists!222',
+            user: user
+          });
+        }
       } else {
         //delete req.body.roles;
         var userModel = new User(req.body);
@@ -63,8 +96,8 @@ exports.jwtSignup = function (req, res, next) {
 /* JWT Signin*/
 
 exports.jwtSignin = function (req, res, next) {
-  console.log('jwtSignin');
-  console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
+  //console.log('jwtSignin');
+  //console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
   User.findOne({
     email: req.body.email
   }, function (err, user) {
@@ -90,7 +123,7 @@ exports.jwtSignin = function (req, res, next) {
             user.password = req.body.password;
             user.save(function (err) {
               if (err) {
-                console.log('Error occured on singin function is : ' + err);
+                //console.log('Error occured on singin function is : ' + err);
                 return res.status(400).send({
                   message: errorHandler.getErrorMessage(err)
                 });
@@ -100,7 +133,7 @@ exports.jwtSignin = function (req, res, next) {
                     res.status(400).send(err);
                   } else {
                     res.jsonp(user);
-                    console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
+                    //console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
                   }
                 });
               }
@@ -210,7 +243,7 @@ exports.jwtSignout = function (req, res, next) {
           user.token = '';
           user.save(function (err) {
             if (err) {
-              console.log('Error occured on singout function is : ' + err);
+              //console.log('Error occured on singout function is : ' + err);
               res.status(400).send(err);
             } else {
               req.logout();

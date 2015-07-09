@@ -10,37 +10,37 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.myint = 1000;
     $scope.slides = [
       {
-        image: 'modules/core/img/brand/Capture.png'
+        image: 'modules/core/img/brand/landing_1.PNG'
     },
       {
-        image: 'modules/core/img/brand/Capture1.png'
+        image: 'modules/core/img/brand/landing_2.PNG'
     },
       {
-        image: 'modules/core/img/brand/Capture2.png'
+        image: 'modules/core/img/brand/landing_3.png'
     },
       {
-        image: 'modules/core/img/brand/Capture3.png'
+        image: 'modules/core/img/brand/landing_4.png'
     },
       {
-        image: 'modules/core/img/brand/Capture4.png'
+        image: 'modules/core/img/brand/landing_5.png'
     },
       {
-       image: 'modules/core/img/brand/Capture5.png'
+        image: 'modules/core/img/brand/landing_6.png'
     },
       {
-        image: 'modules/core/img/brand/Capture6.png'
+        image: 'modules/core/img/brand/landing_7.png'
     },
       {
-        image: 'modules/core/img/brand/Capture7.png'
+        image: 'modules/core/img/brand/landing_8.png'
     },
       {
-       image: 'modules/core/img/brand/Capture8.png'
+        image: 'modules/core/img/brand/landing_9.png'
     },
       {
-        image: 'modules/core/img/brand/Capture9.png'
+        image: 'modules/core/img/brand/landing_10.png'
     },
       {
-        image: 'modules/core/img/brand/Capture10.png'
+        image: 'modules/core/img/brand/landing_11.png'
     }
 
   ];

@@ -119,15 +119,19 @@ angular.module('articles').config(['$stateProvider',
 // Articles controller
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
  function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
-    console.log('articals page');
+    //console.log('articals page');
+
+
+   //console.log('createcategories Title create function is called : ' + $localStorage.token);
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
     $scope.authentication = Authentication;
 
-    console.log('type of user ------------' + JSON.stringify($scope.authentication));
+    //console.log('type of user ------------' + JSON.stringify($scope.authentication));
 
     $scope.categories = function () {
 
-      console.log('categories -----------');
+      //console.log('categories -----------');
 
 
       Vrecipes.getcategory.query({
@@ -136,7 +140,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
 
         $scope.categories = res;
-        console.log('list of categories' + JSON.stringify(res));
+        //console.log('list of categories' + JSON.stringify(res));
 
       });
 
@@ -199,14 +203,14 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
     $scope.createcategories = function () {
 
-      console.log('createcategories -----------');
+      //console.log('createcategories -----------');
 
 
 
       $scope.newcat = function () {
 
-        console.log('createcategories Title create function is called : ' + $localStorage.token);
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+
+
         var categorie = {
           'catId': this.categorie.catId,
           'displayName': this.categorie.displayName,
@@ -246,16 +250,16 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
     $scope.selected = function () {
 
-        console.log('selected item' + this.categoriesname);
+        //console.log('selected item' + this.categoriesname);
 
         Vrecipes.getrecipes.query({
           CategoryName: this.categoriesname
 
         }, function (res) {
 
-          console.log('particular recipeslist' + JSON.stringify(res));
+          //console.log('particular recipeslist' + JSON.stringify(res));
           $scope.recipes = res;
-          console.log('selected item' + JSON.stringify(res));
+          //console.log('selected item' + JSON.stringify(res));
 
           $scope.totalItems = $scope.recipes.length;
           $scope.itemsPerPage = 1;
@@ -326,12 +330,14 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
         }, updatedRecipe, function (result) {
 
         }, function (err) {
-          console.log('Update recipe error : ' + JSON.stringify(err));
+          //console.log('Update recipe error : ' + JSON.stringify(err));
 
         });
       };
 
     $scope.removeRecipes = function (recipe) {
+
+      console.log('inside removeRecipes');
       var updatedRecipe = recipe;
       updatedRecipe.submitted.by = 'reciflix_admin';
       updatedRecipe.state = 333;
@@ -339,10 +345,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
       Vrecipes.updaterecipes.update({
         vrecipeId: updatedRecipe._id
       }, updatedRecipe, function (result) {
-        console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
+        //console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
 
       }, function (err) {
-        console.log('Update recipe error : ' + JSON.stringify(err));
+        //console.log('Update recipe error : ' + JSON.stringify(err));
 
       });
     };
@@ -377,6 +383,7 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 //Articles service used for communicating with the articles REST endpoints
@@ -422,6 +429,7 @@ angular.module('articles').factory('Vrecipes', ['$resource',
 
  }
 ]);
+
 'use strict';
 
 // Setting up route
@@ -484,31 +492,37 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.myint = 1000;
     $scope.slides = [
       {
-        image: 'modules/core/img/brand/Capture1-236x428.png'
+        image: 'modules/core/img/brand/landing_1.PNG'
     },
       {
-        image: 'modules/core/img/brand/createacc-236x428.png'
+        image: 'modules/core/img/brand/landing_2.PNG'
     },
       {
-        image: 'modules/core/img/brand/Capture-236x428.png'
+        image: 'modules/core/img/brand/landing_3.png'
     },
       {
-        image: 'modules/core/img/brand/Capture4-236x428.png'
+        image: 'modules/core/img/brand/landing_4.png'
     },
       {
-        image: 'modules/core/img/brand/Capture4-236x428.png'
+        image: 'modules/core/img/brand/landing_5.png'
     },
       {
-        image: 'modules/core/img/brand/Capture5-236x428.png'
+        image: 'modules/core/img/brand/landing_6.png'
     },
       {
-        image: 'modules/core/img/brand/Capture6-236x428.png'
+        image: 'modules/core/img/brand/landing_7.png'
     },
       {
-        image: 'modules/core/img/brand/fave-236x428.png'
+        image: 'modules/core/img/brand/landing_8.png'
     },
       {
-        image: 'modules/core/img/brand/Capture3-236x428.png'
+        image: 'modules/core/img/brand/landing_9.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_10.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_11.png'
     }
 
   ];
