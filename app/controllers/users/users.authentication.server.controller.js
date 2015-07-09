@@ -12,6 +12,7 @@ var _ = require('lodash'),
 
 /*JWT Signup*/
 exports.jwtSignup = function (req, res, next) {
+  //console.log('JWT Signup')
   User.findOne({
     email: req.body.email
   }, function (err, user) {
@@ -22,11 +23,7 @@ exports.jwtSignup = function (req, res, next) {
       });
     } else {
       if (user) {
-        /*res.json({
-          type: false,
-          data: 'User already exists!',
-          user: user
-        });*/
+        //console.log('User already exists : ' + JSON.stringify(user));
         if (user.token === '') {
           var secret = 'www';
           var payload = {
@@ -48,13 +45,19 @@ exports.jwtSignup = function (req, res, next) {
                   //res.jsonp(user);
                   res.json({
                     type: false,
-                    data: 'User already exists!',
+                    data: 'User already exists!11',
                     user: user
                   });
                   //console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
                 }
               });
             }
+          });
+        } else {
+          res.json({
+            type: false,
+            data: 'User already exists!222',
+            user: user
           });
         }
       } else {
