@@ -13,6 +13,12 @@ var GrocerySchema = new Schema({
   name: {
     type: String
   },
+  active:{
+    type: Boolean
+  },
+  completed:{
+    type: Boolean
+  },
   items: [],
   user: {
     type: Schema.ObjectId,

@@ -5,6 +5,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
  function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
     console.log('articals page');
 
+   console.log('createcategories Title create function is called : ' + $localStorage.token);
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+
+
     $scope.authentication = Authentication;
 
     console.log('type of user ------------' + JSON.stringify($scope.authentication));
@@ -89,8 +93,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
       $scope.newcat = function () {
 
-        console.log('createcategories Title create function is called : ' + $localStorage.token);
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+
         var categorie = {
           'catId': this.categorie.catId,
           'displayName': this.categorie.displayName,
@@ -216,6 +219,8 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
       };
 
     $scope.removeRecipes = function (recipe) {
+
+      console.log('inside removeRecipes');
       var updatedRecipe = recipe;
       updatedRecipe.submitted.by = 'reciflix_admin';
       updatedRecipe.state = 333;

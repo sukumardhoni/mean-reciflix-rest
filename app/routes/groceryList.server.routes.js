@@ -17,6 +17,11 @@ module.exports = function (app) {
     .put(users.ensureAuthenticated, groceries.update)
     .delete(users.ensureAuthenticated, groceries.delete);
 
+  app.route('/groceriesWithActiveOrCompleted/:active/:completed')
+    .get(users.ensureAuthenticated, groceries.readactive)
+
+
+
   // Finish by binding the grocery middleware
   app.param('groceryId', groceries.groceryByID);
 };

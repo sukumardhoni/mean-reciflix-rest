@@ -30,7 +30,9 @@ exports.create = function (req, res) {
  * Show the current grocery
  */
 exports.read = function (req, res) {
+  console.log('read ----');
   res.json(req.grocery);
+
 };
 
 /**
@@ -90,7 +92,8 @@ exports.listOfGroceries = function (req, res) {
       for (var i = 0; i < groceries.length; i++) {
         gLists.push({
           _id: groceries[i]._id,
-          name: groceries[i].name
+          name: groceries[i].name,
+           active: groceries[i].active
         });
         if (gLists.length === groceries.length) {
           res.jsonp(gLists);
@@ -102,10 +105,41 @@ exports.listOfGroceries = function (req, res) {
 
 
 
+
+/**
+ * List of readactive
+ */
+exports.readactive = function (req, res) {
+
+	Grocery.find({
+         user: req.user.id,
+        active: req.params.active,
+        completed: req.params.completed
+
+    }).sort('-submitted.date').exec(function (err, grocery) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            res.jsonp(grocery);
+        }
+    });
+};
+
+
+
+
+
+
+
+
 /**
  * Grocery middleware
  */
 exports.groceryByID = function (req, res, next, id) {
+
+  console.log('read single by id');
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({

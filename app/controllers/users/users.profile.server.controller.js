@@ -14,6 +14,7 @@ exports.ensureAuthenticated = function (req, res, next) {
   console.log('### ensureAuthenticated is called');
   var bearerToken;
   var bearerHeader = req.headers.authorization;
+  //console.log('bearerHeader---------' +JSON.stringify(req.headers.authorization));
   if (typeof bearerHeader !== 'undefined') {
     var bearer = bearerHeader.split(' ');
     if (bearer[1] === 'undefined') {
@@ -36,6 +37,7 @@ exports.ensureAuthenticated = function (req, res, next) {
             data: 'Empty User Occured '
           });
         } else {
+          //console.log('user is Authenticated' );
           req.user = user;
           next();
         }
@@ -194,7 +196,7 @@ exports.me = function (req, res) {
 
 //TODO yet to test this method, to be used for getting a full user after sign in
 exports.fetchUser = function (req, res, next) {
-  //  console.log('### ensureAuthenticated is called');
+   console.log('### ensureAuthenticated is called');
   var bearerToken;
   var bearerHeader = req.headers.authorization;
   if (typeof bearerHeader !== 'undefined') {
