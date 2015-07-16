@@ -47,17 +47,17 @@
 
 <body class="ng-cloak">
 
-  <header  style="background:#114F66;border:1px solid #114F66" data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar  navbar-inverse"></header>
-	<section class="content">
-		<section class="container">
-			{% block content %}{% endblock %}
-		</section>
-	</section>
+  <header style="background:#114F66;border:1px solid #114F66" data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar  navbar-inverse"></header>
+  <section class="content">
+    <section class="container">
+      {% block content %}{% endblock %}
+    </section>
+  </section>
 
 
   <!--Embedding The User Object-->
   <script type="text/javascript">
-    var user = {{user | json | safe}};
+    var user = {{ user | json | safe }};
   </script>
   <!--Application JavaScript Files-->
   {% for jsFile in jsFiles %}
@@ -75,6 +75,12 @@
 		<p><a href="http://browsehappy.com" class="btn btn-primary btn-lg" role="button">Yes, upgrade my browser!</a></p>
 	</section>
 	<![endif]-->
+<a title="Web Analytics" href="http://clicky.com/100861627"><img alt="Web Analytics" src="//static.getclicky.com/media/links/badge.gif" border="0" /></a>
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100861627); }catch(e){}</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100861627ns.gif" /></p></noscript>
+
+
 </body>
 
 </html>
