@@ -35,12 +35,12 @@ exports.glistcreateitems = function (req, res) {
 
 exports.listOfGlistitems = function (req, res) {
 
-   console.log('create listOfGlistitems calling---------------');
+  console.log('create listOfGlistitems calling---------------');
 
   Items.find({
-    glistid : req.params.glistIditem
+    glistid: req.params.glistIditem
   }).sort('-submitted.date').exec(function (err, items) {
-      if (err) {
+    if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -49,10 +49,37 @@ exports.listOfGlistitems = function (req, res) {
         message: 'No data found'
       });
     } else {
-       res.json(items);
+      res.json(items);
     }
   });
 };
+
+
+
+
+/**
+ * List of Groceries items list state
+ */
+exports.listOfGlistitemssinglebystate = function (req, res) {
+
+  Items.find({
+    glistid: req.params.glistIditem,
+    state: req.params.state
+
+
+  }).sort('-submitted.date').exec(function (err, items) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(items);
+    }
+  });
+};
+
+
+
 
 
 
@@ -132,6 +159,3 @@ exports.glistitemByID = function (req, res, next, id) {
     next();
   });
 };
-
-
-
