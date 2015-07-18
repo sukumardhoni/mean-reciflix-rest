@@ -23,7 +23,7 @@
   <meta property="og:title" content="{{title}}">
   <meta property="og:description" content="{{description}}">
   <meta property="og:url" content="{{url}}">
-  <meta property="og:image" content="/img/brand/logo.png">
+  <meta property="og:image" content="/modules/core/img/brand/reciflix_500.png">
   <meta property="og:type" content="website">
 
   <!-- Twitter META -->
@@ -57,7 +57,11 @@
 
   <!--Embedding The User Object-->
   <script type="text/javascript">
-    var user = {{ user | json | safe }};
+    var user = {
+      {
+        user | json | safe
+      }
+    };
   </script>
   <!--Application JavaScript Files-->
   {% for jsFile in jsFiles %}
@@ -75,10 +79,18 @@
 		<p><a href="http://browsehappy.com" class="btn btn-primary btn-lg" role="button">Yes, upgrade my browser!</a></p>
 	</section>
 	<![endif]-->
-<a title="Web Analytics" href="http://clicky.com/100861627"><img alt="Web Analytics" src="//static.getclicky.com/media/links/badge.gif" border="0" /></a>
-<script src="//static.getclicky.com/js" type="text/javascript"></script>
-<script type="text/javascript">try{ clicky.init(100861627); }catch(e){}</script>
-<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100861627ns.gif" /></p></noscript>
+  <a title="Web Analytics" href="http://clicky.com/100861627"><img alt="Web Analytics" src="//static.getclicky.com/media/links/badge.gif" border="0" />
+  </a>
+  <script src="//static.getclicky.com/js" type="text/javascript"></script>
+  <script type="text/javascript">
+    try {
+      clicky.init(100861627);
+    } catch (e) {}
+  </script>
+  <noscript>
+    <p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100861627ns.gif" />
+    </p>
+  </noscript>
 
 
 </body>

@@ -365,7 +365,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 ]);
 
 
-angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
+angular.module('articles').directive('myYoutube', function ($sce) {
   return {
     restrict: 'EA',
     scope: {
@@ -382,7 +382,7 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
       });
     }
   };
-}]);
+});
 
 'use strict';
 
