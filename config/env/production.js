@@ -70,8 +70,8 @@ module.exports = {
     options: {
       service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
       auth: {
-        user: process.env.MAILER_EMAIL_ID || 'apps.mahasoft@gmail.com',
-        pass: process.env.MAILER_PASSWORD || 'globaltechminds123'
+        user: process.env.MAILER_EMAIL_ID || 'gtmdevenv@gmail.com',
+        pass: process.env.MAILER_PASSWORD || 'testdev1'
       }
     }
   }

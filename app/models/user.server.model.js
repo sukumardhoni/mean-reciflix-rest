@@ -145,6 +145,7 @@ UserSchema.pre('save', function (callback) {
 
 
 UserSchema.methods.verifyPassword = function (password, cb) {
+  console.log('verifyPassword in user model is called : ' + password);
   bcrypt.compare(password, this.password, function (err, isMatch) {
     if (err) return cb(err);
     cb(null, isMatch);
@@ -155,14 +156,30 @@ UserSchema.methods.verifyPassword = function (password, cb) {
  * Create instance method for authenticating user
  */
 UserSchema.methods.authenticate = function (password) {
-  this.verifyPassword(password, function (err, isMatch) {
-    if (isMatch) {
+
+  //return this.password === this.hashPassword(password);
+
+  /*  this.verifyPassword(password, function (err, isMatch) {
       console.log('Authentication in user model is called');
-      return true;
-    } else {
-      return false;
-    }
-  });
+      if (isMatch) {
+        console.log('Authentication in user model is TRUE');
+        return true;
+      } else {
+        console.log('Authentication in user model is FALSE');
+        return false;
+      }
+    });*/
+
+  this.verifyPassword(password, function (err, isMatch) {
+    var result = isMatch;
+    console.log('Authentication in user model is :' + result);
+    return isMatch;
+  })
+
+
+
+
+
 };
 
 /**

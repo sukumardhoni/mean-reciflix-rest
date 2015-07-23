@@ -202,46 +202,51 @@ exports.changePassword = function (req, res) {
   // Init Variables
   var passwordDetails = req.body;
 
+  console.log('Change Password methos is called : ' + JSON.stringify(passwordDetails));
+
   if (req.user) {
     if (passwordDetails.newPassword) {
-      User.findById(req.user.id, function (err, user) {
+      User.findById(req.body._id, function (err, user) {
         if (!err && user) {
-          if (user.authenticate(passwordDetails.currentPassword)) {
-            if (passwordDetails.newPassword === passwordDetails.verifyPassword) {
-              user.password = passwordDetails.newPassword;
-              var secret = 'www';
-              var payload = {
-                email: user.email
-              };
-              var token = jwt.encode(payload, secret);
-              user.token = token;
-              user.save(function (err) {
-                if (err) {
-                  return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                  });
-                } else {
-                  req.login(user, function (err) {
-                    if (err) {
-                      res.status(400).send(err);
-                    } else {
-                      res.send({
-                        message: 'Password changed successfully'
-                      });
-                    }
-                  });
-                }
-              });
+          user.verifyPassword(passwordDetails.currentPassword, function (err, isMatch) {
+            if (isMatch) {
+              console.log('Current Password is match : ' + passwordDetails.currentPassword);
+              if (passwordDetails.newPassword === passwordDetails.verifyPassword) {
+                user.password = passwordDetails.newPassword;
+                var secret = 'www';
+                var payload = {
+                  email: user.email
+                };
+                var token = jwt.encode(payload, secret);
+                user.token = token;
+                user.save(function (err) {
+                  if (err) {
+                    return res.status(400).send({
+                      message: errorHandler.getErrorMessage(err)
+                    });
+                  } else {
+                    req.login(user, function (err) {
+                      if (err) {
+                        res.status(400).send(err);
+                      } else {
+                        res.send({
+                          message: 'Password changed successfully'
+                        });
+                      }
+                    });
+                  }
+                });
+              } else {
+                res.status(400).send({
+                  message: 'Passwords do not match'
+                });
+              }
             } else {
               res.status(400).send({
-                message: 'Passwords do not match'
+                message: 'Current password is incorrect'
               });
             }
-          } else {
-            res.status(400).send({
-              message: 'Current password is incorrect'
-            });
-          }
+          })
         } else {
           res.status(400).send({
             message: 'User is not found'
