@@ -536,7 +536,9 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
         platform: 'ios'
       }, function (data) {
         console.log('particular iosEmails' + JSON.stringify(data));
+        data.count = data.count+85;
         $scope.showNotify = data;
+        //$scope.showNotify.count+85;
       });
     };
 
@@ -895,48 +897,50 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
 'use strict';
 
-angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication',
-	function($scope, $stateParams, $http, $location, Authentication) {
-		$scope.authentication = Authentication;
+angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',
 
-		//If user is signed in then redirect back home
-		if ($scope.authentication.user) $location.path('/');
+ function ($scope, $stateParams, $http, $location, Authentication, $localStorage) {
+    $scope.authentication = Authentication;
 
-		// Submit forgotten password account id
-		$scope.askForPasswordReset = function() {
-			$scope.success = $scope.error = null;
+    //If user is signed in then redirect back home
+    if ($scope.authentication.user) $location.path('/');
 
-			$http.post('/auth/forgot', $scope.credentials).success(function(response) {
-				// Show user success message and clear form
-				$scope.credentials = null;
-				$scope.success = response.message;
+    // Submit forgotten password account id
+    $scope.askForPasswordReset = function () {
+      $scope.success = $scope.error = null;
 
-			}).error(function(response) {
-				// Show user error message and clear form
-				$scope.credentials = null;
-				$scope.error = response.message;
-			});
-		};
+      $http.post('/auth/forgot', $scope.credentials).success(function (response) {
+        // Show user success message and clear form
+        $scope.credentials = null;
+        $scope.success = response.message;
 
-		// Change user password
-		$scope.resetUserPassword = function() {
-			$scope.success = $scope.error = null;
+      }).error(function (response) {
+        // Show user error message and clear form
+        $scope.credentials = null;
+        $scope.error = response.message;
+      });
+    };
 
-			$http.post('/auth/reset/' + $stateParams.token, $scope.passwordDetails).success(function(response) {
-				// If successful show success message and clear form
-				$scope.passwordDetails = null;
+    // Change user password
+    $scope.resetUserPassword = function () {
+      $scope.success = $scope.error = null;
 
-				// Attach user profile
-				Authentication.user = response;
-
-				// And redirect to the index page
-				$location.path('/password/reset/success');
-			}).error(function(response) {
-				$scope.error = response.message;
-			});
-		};
-	}
+      $http.post('/auth/reset/' + $stateParams.token, $scope.passwordDetails).success(function (response) {
+        // If successful show success message and clear form
+        $scope.passwordDetails = null;
+        console.log('Password reset conformation :' + JSON.stringify(response));
+        // Attach user profile
+        Authentication.user = response;
+        $localStorage.token = response.token;
+        // And redirect to the index page
+        $location.path('/password/reset/success');
+      }).error(function (response) {
+        $scope.error = response.message;
+      });
+    };
+ }
 ]);
+
 'use strict';
 
 angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
