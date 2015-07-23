@@ -18,7 +18,7 @@ module.exports = {
     }
   },
   app: {
-    title: 'Dev: Welcome to ReciFlix, a mobile first app to access, view and share best recipes online'
+    title: 'Dev: ReciFlix'
   },
   facebook: {
     clientID: process.env.FACEBOOK_ID || '1607966326154856',
@@ -45,13 +45,31 @@ module.exports = {
     clientSecret: process.env.GITHUB_SECRET || 'APP_SECRET',
     callbackURL: '/auth/github/callback'
   },
+  /*
+    mailer: {
+      from: process.env.MAILER_FROM || 'ReciFlix Admin',
+      options: {
+        host: 'http://reciflix.com',
+        //secure: false,
+        port: 25,
+        tls: {
+          rejectUnauthorized: true
+        },
+        auth: {
+          user: 'support@reciflix.com',
+          pass: 'support123'
+        }
+      }
+    }
+  */
+
   mailer: {
-    from: process.env.MAILER_FROM || 'MAILER_FROM',
+    from: process.env.MAILER_FROM || 'support@reciflix.com',
     options: {
-      service: process.env.MAILER_SERVICE_PROVIDER || 'MAILER_SERVICE_PROVIDER',
+      service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
       auth: {
-        user: process.env.MAILER_EMAIL_ID || 'MAILER_EMAIL_ID',
-        pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
+        user: process.env.MAILER_EMAIL_ID || 'gtmdevenv@gmail.com',
+        pass: process.env.MAILER_PASSWORD || 'testdev1'
       }
     }
   }

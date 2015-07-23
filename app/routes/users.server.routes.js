@@ -64,4 +64,9 @@ module.exports = function (app) {
   app.route('/users/signup').post(users.jwtSignup);
   app.route('/users/signin').post(users.jwtSignin);
   app.route('/users/signout').post(users.jwtSignout);
+
+  app.route('/users/forgotPassword').post(users.forgot);
+  app.route('/users/updateProfile').put(users.update);
+  app.route('/users/changePassword').post(users.changePassword);
+
 };

@@ -130,14 +130,6 @@ UserSchema.methods.hashPassword = function(password) {
 // Execute before each user.save() call
 UserSchema.pre('save', function (callback) {
   var user = this;
-  /*
-    var secret = 'www';
-    var payload = {
-      email: user.email
-    };
-    var jwtToken = jwt.encode(payload, secret);
-    user.token = jwtToken;*/
-
   // Break out if the password hasn't changed
   if (!user.isModified('password')) return callback();
   // Password changed so we need to hash it
@@ -163,7 +155,14 @@ UserSchema.methods.verifyPassword = function (password, cb) {
  * Create instance method for authenticating user
  */
 UserSchema.methods.authenticate = function (password) {
-  return this.password === this.hashPassword(password);
+  this.verifyPassword(password, function (err, isMatch) {
+    if (isMatch) {
+      console.log('Authentication in user model is called');
+      return true;
+    } else {
+      return false;
+    }
+  });
 };
 
 /**

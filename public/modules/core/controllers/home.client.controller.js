@@ -54,7 +54,9 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
         platform: 'ios'
       }, function (data) {
         console.log('particular iosEmails' + JSON.stringify(data));
+        data.count = data.count+85;
         $scope.showNotify = data;
+        //$scope.showNotify.count+85;
       });
     };
 

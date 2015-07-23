@@ -45,13 +45,13 @@ module.exports = {
     clientSecret: process.env.GITHUB_SECRET || 'APP_SECRET',
     callbackURL: '/auth/github/callback'
   },
-  mailer: {
-    from: process.env.MAILER_FROM || 'MAILER_FROM',
+   mailer: {
+    from: process.env.MAILER_FROM || 'ReciFlix Admin',
     options: {
-      service: process.env.MAILER_SERVICE_PROVIDER || 'MAILER_SERVICE_PROVIDER',
+      service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
       auth: {
-        user: process.env.MAILER_EMAIL_ID || 'MAILER_EMAIL_ID',
-        pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
+        user: process.env.MAILER_EMAIL_ID || 'apps.mahasoft@gmail.com',
+        pass: process.env.MAILER_PASSWORD || 'globaltechminds123'
       }
     }
   }
