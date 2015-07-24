@@ -66,12 +66,16 @@ module.exports = {
     callbackURL: '/auth/github/callback'
   },
   mailer: {
-    from: process.env.MAILER_FROM || 'ReciFlix Admin',
+    from: process.env.MAILER_FROM || 'ReciFlix Admin <support@reciflix.com>',
     options: {
-      service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
+      host: 'reciflix.com',
+      port: 25,
+      tls: {
+        rejectUnauthorized: false
+      },
       auth: {
-        user: process.env.MAILER_EMAIL_ID || 'gtmdevenv@gmail.com',
-        pass: process.env.MAILER_PASSWORD || 'testdev1'
+        user: 'support@reciflix.com',
+        pass: 'support123'
       }
     }
   }

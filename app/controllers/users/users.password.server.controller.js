@@ -12,11 +12,11 @@ var _ = require('lodash'),
   nodemailer = require('nodemailer'),
   async = require('async'),
   crypto = require('crypto'),
-  jwt = require('jwt-simple');
-//smtpTransport = require('nodemailer-smtp-transport');
+  jwt = require('jwt-simple'),
+  smtpTransport = require('nodemailer-smtp-transport');
 
-var smtpTransport = nodemailer.createTransport(config.mailer.options);
-//var transporter = nodemailer.createTransport(smtpTransport(config.mailer.options));
+//var smtpTransport = nodemailer.createTransport(config.mailer.options);
+var transporter = nodemailer.createTransport(smtpTransport(config.mailer.options));
 
 /**
  * Forgot for reset password (forgot POST)
@@ -75,8 +75,8 @@ exports.forgot = function (req, res, next) {
         subject: 'Password Reset',
         html: emailHTML
       };
-      smtpTransport.sendMail(mailOptions, function (err) {
-        //transporter.sendMail(mailOptions, function (err) {
+      //smtpTransport.sendMail(mailOptions, function (err) {
+      transporter.sendMail(mailOptions, function (err) {
         if (!err) {
           res.send({
             message: 'An email has been sent to ' + user.email + ' with further instructions.'
@@ -185,8 +185,8 @@ exports.reset = function (req, res, next) {
         html: emailHTML
       };
 
-      smtpTransport.sendMail(mailOptions, function (err) {
-        //transporter.sendMail(mailOptions, function (err) {
+      //smtpTransport.sendMail(mailOptions, function (err) {
+      transporter.sendMail(mailOptions, function (err) {
         done(err, 'done');
       });
   }
