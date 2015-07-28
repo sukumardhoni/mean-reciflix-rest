@@ -6,22 +6,19 @@
 var _ = require('lodash'),
   errorHandler = require('../errors.server.controller'),
   mongoose = require('mongoose'),
+  jwt = require('jwt-simple'),
   passport = require('passport'),
   User = mongoose.model('User'),
   config = require('../../../config/config'),
-  nodemailer = require('nodemailer'),
+  agenda = require('../../../schedules/job-schedule.js')(config.db),
   async = require('async'),
-  jwt = require('jwt-simple'),
+  nodemailer = require('nodemailer'),
   smtpTransport = require('nodemailer-smtp-transport');
 
 var transporter = nodemailer.createTransport(smtpTransport(config.mailer.options));
 
 /*JWT Signup*/
 exports.jwtSignup = function (req, res, next) {
-
-
-
-
         User.findOne({
         email: req.body.email
       }, function (err, user) {
@@ -87,10 +84,9 @@ exports.jwtSignup = function (req, res, next) {
                   if (err) {
                     res.status(400).send(err);
                   } else {
-                    //TODO //send a welcome mail notification using agenda
-
+                    //send a welcome mail notification using agenda
+                    agenda.now('New_User_Welcome', {email : userModel.email, firstName:userModel.firstName});
                     res.jsonp(userModel);
-//                    done(err, userModel);
                   }
                 });
               }
@@ -99,119 +95,7 @@ exports.jwtSignup = function (req, res, next) {
         }
       });
 
-//  async.waterfall([
-//  // Lookup user by email
-//  function (done) {
-//      User.findOne({
-//        email: req.body.email
-//      }, function (err, user) {
-//        if (err) {
-//          res.json({
-//            type: false,
-//            data: 'Error occured: ' + err
-//          });
-//        } else {
-//          if (user) {
-//            if (user.token === '') {
-//              var secret = 'www';
-//              var payload = {
-//                email: req.body.email
-//              };
-//              var token = jwt.encode(payload, secret);
-//              user.token = token;
-//              user.save(function (err) {
-//                if (err) {
-//                  return res.status(400).send({
-//                    message: errorHandler.getErrorMessage(err)
-//                  });
-//                } else {
-//                  req.login(user, function (err) {
-//                    if (err) {
-//                      res.status(400).send(err);
-//                    } else {
-//                      res.json({
-//                        type: false,
-//                        data: 'User already exists!',
-//                        user: user
-//                      });
-//                    }
-//                  });
-//                }
-//              });
-//            } else {
-//              res.json({
-//                type: false,
-//                data: 'User already exists!',
-//                user: user
-//              });
-//            }
-//          } else {
-//            //delete req.body.roles;
-//            var userModel = new User(req.body);
-//            userModel.provider = req.body.provider || 'local';
-//            userModel.displayName = userModel.firstName + ' ' + userModel.lastName;
-//            userModel.username = userModel.email;
-//            var secret = 'www';
-//            var payload = {
-//              email: req.body.email
-//            };
-//            var jwtToken = jwt.encode(payload, secret);
-//            userModel.token = jwtToken;
-//            userModel.save(function (err) {
-//              if (err) {
-//                return res.status(400).send({
-//                  message: errorHandler.getErrorMessage(err)
-//                });
-//              } else {
-//                req.login(userModel, function (err) {
-//                  if (err) {
-//                    res.status(400).send(err);
-//                  } else {
-//                    res.jsonp(userModel);
-//                    done(err, userModel);
-//                  }
-//                });
-//              }
-//            });
-//          }
-//        }
-//      });
-//  },
-//  function (userModel, done) {
-//      res.render('templates/signuped-user-conformation-email', {
-//        name: userModel.displayName,
-//        appName: config.app.title
-//      }, function (err, emailHTML) {
-//        done(err, emailHTML, userModel);
-//      });
-//  },
-//  // If user is newly created send welcome email
-//  function (emailHTML, userModel, done) {
-//      var mailOptions = {
-//        to: userModel.email,
-//        from: config.mailer.from,
-//        subject: 'Sucessfully Created Account',
-//        html: emailHTML
-//      };
-//      transporter.sendMail(mailOptions, function (err) {
-//        if (!err) {
-//          /*res.send({
-//            message: 'An email conformation sent to ' + userModel.email + ' with further instructions.',
-//            data: userModel
-//          });*/
-//          console.log('An email conformation sent to ' + userModel.email + ' with further instructions.');
-//        } else {
-//           console.log('error in sending mail: '+ err);
-//          return res.status(400).send({
-//            message: 'Failure sending email'
-//          });
-//        }
-//        done(err);
-//      });
-//  }
-// ], function (err) {
-//    if (err) return next(err);
-//  });
+
 
 };
 
@@ -219,8 +103,8 @@ exports.jwtSignup = function (req, res, next) {
 /* JWT Signin*/
 
 exports.jwtSignin = function (req, res, next) {
-  //console.log('jwtSignin');
-  //console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
+  console.log('jwtSignin');
+  console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
   User.findOne({
     email: req.body.email
   }, function (err, user) {
@@ -255,6 +139,11 @@ exports.jwtSignin = function (req, res, next) {
                   if (err) {
                     res.status(400).send(err);
                   } else {
+
+                    //user is successfully logged in send a notification to the job to count user signins
+                    agenda.now('User_Signedin', {data:user.email});
+
+
                     res.jsonp(user);
                     //console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
                   }

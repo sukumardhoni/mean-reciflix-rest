@@ -46,10 +46,10 @@ module.exports = {
     callbackURL: '/auth/github/callback'
   },
   mailer: {
-    from: process.env.MAILER_FROM || 'ReciFlix Admin <support@reciflix.com>',
+    from: process.env.MAILER_FROM || 'ReciFlix Support <support@reciflix.com>',
     options: {
       host: 'reciflix.com',
-      port: 25,
+      port: 26,
       tls: {
         rejectUnauthorized: false
       },
