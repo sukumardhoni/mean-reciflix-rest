@@ -19,81 +19,84 @@ var transporter = nodemailer.createTransport(smtpTransport(config.mailer.options
 
 /*JWT Signup*/
 exports.jwtSignup = function (req, res, next) {
-        User.findOne({
-        email: req.body.email
-      }, function (err, user) {
-        if (err) {
-          res.json({
-            type: false,
-            data: 'Error occured: ' + err
-          });
-        } else {
-          if (user) {
-            if (user.token === '') {
-              var secret = 'www';
-              var payload = {
-                email: req.body.email
-              };
-              var token = jwt.encode(payload, secret);
-              user.token = token;
-              user.save(function (err) {
+  User.findOne({
+    email: req.body.email
+  }, function (err, user) {
+    if (err) {
+      res.json({
+        type: false,
+        data: 'Error occured: ' + err
+      });
+    } else {
+      if (user) {
+        if (user.token === '') {
+          var secret = 'www';
+          var payload = {
+            email: req.body.email
+          };
+          var token = jwt.encode(payload, secret);
+          user.token = token;
+          user.save(function (err) {
+            if (err) {
+              return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+              });
+            } else {
+              req.login(user, function (err) {
                 if (err) {
-                  return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                  });
+                  res.status(400).send(err);
                 } else {
-                  req.login(user, function (err) {
-                    if (err) {
-                      res.status(400).send(err);
-                    } else {
-                      res.json({
-                        type: false,
-                        data: 'User already exists!',
-                        user: user
-                      });
-                    }
+                  res.json({
+                    type: false,
+                    data: 'User already exists!',
+                    user: user
                   });
                 }
               });
-            } else {
-              res.json({
-                type: false,
-                data: 'User already exists!',
-                user: user
-              });
             }
+          });
+        } else {
+          res.json({
+            type: false,
+            data: 'User already exists!',
+            user: user
+          });
+        }
+      } else {
+        //delete req.body.roles;
+        var userModel = new User(req.body);
+        userModel.provider = req.body.provider || 'local';
+        userModel.displayName = userModel.firstName + ' ' + userModel.lastName;
+        userModel.username = userModel.email;
+        var secret = 'www';
+        var payload = {
+          email: req.body.email
+        };
+        var jwtToken = jwt.encode(payload, secret);
+        userModel.token = jwtToken;
+        userModel.save(function (err) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
           } else {
-            //delete req.body.roles;
-            var userModel = new User(req.body);
-            userModel.provider = req.body.provider || 'local';
-            userModel.displayName = userModel.firstName + ' ' + userModel.lastName;
-            userModel.username = userModel.email;
-            var secret = 'www';
-            var payload = {
-              email: req.body.email
-            };
-            var jwtToken = jwt.encode(payload, secret);
-            userModel.token = jwtToken;
-            userModel.save(function (err) {
+            req.login(userModel, function (err) {
               if (err) {
-                return res.status(400).send({
-                  message: errorHandler.getErrorMessage(err)
-                });
+                res.status(400).send(err);
               } else {
-                req.login(userModel, function (err) {
-                  if (err) {
-                    res.status(400).send(err);
-                  } else {
-                    //send a welcome mail notification using agenda
-                    agenda.now('New_User_Welcome', {email : userModel.email, firstName:userModel.firstName});
-                    res.jsonp(userModel);
-                  }
+                //send a welcome mail notification using agenda
+                agenda.now('New_User_Welcome', {
+                  email: userModel.email,
+                  displayName: userModel.displayName
                 });
+                res.jsonp(userModel);
               }
             });
           }
-        }
-      });
+        });
+      }
+    }
+  });
 
 
 
@@ -141,7 +144,9 @@ exports.jwtSignin = function (req, res, next) {
                   } else {
 
                     //user is successfully logged in send a notification to the job to count user signins
-                    agenda.now('User_Signedin', {data:user.email});
+                    agenda.now('User_Signedin', {
+                      data: user.email
+                    });
 
 
                     res.jsonp(user);

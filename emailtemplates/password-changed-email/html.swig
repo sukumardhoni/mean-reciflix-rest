@@ -569,7 +569,7 @@
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templatePreheader">
                                         <tr>
                                             <td valign="top" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:20px;" mc:edit="preheader_content00">
-                                                Welcome to ReciFlix, a mobile app to access, view and share best recipes online.                                            </td>
+                                               Password for your ReciFlix account is changed successfully.                                            </td>
                                         </tr>
                                     </table>
                                     <!-- // END PREHEADER -->
@@ -595,15 +595,18 @@
                                         <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content00">
                                                 Hi {{displayName}}, <br/><br/>
-                                                Thank you for joining the ReciFlix community. You can now browse, search online recipe videos, add to your favourites, setup grocery lists and share your favourite recipes with your friends and family conveniently.
-                                            </td>
-                                        </tr>
-                                  	
+                                                This is a confirmation that the password for your {{appEnv}} account has just been changed.                           </td>
+                                        </tr>                                	
 <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content01">
-You can access the recipe videos through mobile app or at <a href="http://www.reciflix.com">www.reciflix.com</a> after signing in to your account.
+{{resetUrl}}
 </td>
-                                        </tr>   
+                                        </tr>  
+                                        <tr>
+                                            <td valign="top" class="bodyContent" mc:edit="body_content02">
+You can now access the {{appEnv}} account using your new password.
+</td>
+                                        </tr>  
 <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content03">
 Best regards,<br/>

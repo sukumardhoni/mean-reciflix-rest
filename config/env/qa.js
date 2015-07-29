@@ -18,7 +18,7 @@ module.exports = {
     }
   },
   app: {
-    title: 'QA: ReciFlix, a mobile app to access, view and share best recipes online'
+    title: 'QA: ReciFlix'
   },
   facebook: {
     clientID: process.env.FACEBOOK_ID || '1607966326154856',
@@ -46,7 +46,7 @@ module.exports = {
     callbackURL: '/auth/github/callback'
   },
   mailer: {
-    from: process.env.MAILER_FROM || 'ReciFlix Admin <support@reciflix.com>',
+    from: process.env.MAILER_FROM || 'ReciFlix Support <support@reciflix.com>',
     options: {
       host: 'reciflix.com',
       port: 25,
