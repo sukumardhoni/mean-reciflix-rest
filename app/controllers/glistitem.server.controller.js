@@ -5,25 +5,25 @@
  */
 var mongoose = require('mongoose'),
   errorHandler = require('./errors.server.controller'),
-  Items = mongoose.model('Glistitem'),
+  Items = mongoose.model('GListItem'),
   _ = require('lodash');
 
 
 /**
  * Create a grocery items
  */
-exports.glistcreateitems = function (req, res) {
+exports.gListItemCreate = function (req, res) {
   console.log('create glistcreateitems calling---------------');
-  var items = new Items(req.body);
-  items.glistid = req.params.glistIditem;
+  var item = new Items(req.body);
+  item.gListId = req.params.gListId;
 
-  items.save(function (err) {
+  item.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(items);
+      res.json(item);
     }
   });
 };
@@ -33,12 +33,12 @@ exports.glistcreateitems = function (req, res) {
  * List of Groceries items
  */
 
-exports.listOfGlistitems = function (req, res) {
+exports.listOfGlistItems = function (req, res) {
 
   console.log('create listOfGlistitems calling---------------');
 
   Items.find({
-    glistid: req.params.glistIditem
+    gListId: req.params.gListId
   }).sort('-submitted.date').exec(function (err, items) {
     if (err) {
       return res.status(400).send({
@@ -54,41 +54,12 @@ exports.listOfGlistitems = function (req, res) {
   });
 };
 
-
-
-
-/**
- * List of Groceries items list state
- */
-exports.listOfGlistitemssinglebystate = function (req, res) {
-
-  Items.find({
-    glistid: req.params.glistIditem,
-    state: req.params.state
-
-
-  }).sort('-submitted.date').exec(function (err, items) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(items);
-    }
-  });
-};
-
-
-
-
-
-
 /**
  * Show the current grocery item
  */
-exports.listOfGlistitemssingle = function (req, res) {
+exports.getSingleGListItem = function (req, res) {
   console.log('read ----');
-  res.json(req.items);
+  res.json(req.item);
 
 };
 
@@ -97,18 +68,18 @@ exports.listOfGlistitemssingle = function (req, res) {
 /**
  * Update a grocery item
  */
-exports.glistupdateitemssingle = function (req, res) {
-  var items = req.items;
+exports.updateSingleGListItem = function (req, res) {
+  var item = req.item;
 
-  items = _.extend(items, req.body);
+  item = _.extend(item, req.body);
 
-  items.save(function (err) {
+  item.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(items);
+      res.json(item);
     }
   });
 };
@@ -118,16 +89,16 @@ exports.glistupdateitemssingle = function (req, res) {
 /**
  * Delete an grocery item
  */
-exports.glistitemdeletesingle = function (req, res) {
-  var items = req.items;
+exports.deleteSingleGListItem = function (req, res) {
+  var item = req.item;
 
-  items.remove(function (err) {
+  item.remove(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(items);
+      res.json(item);
     }
   });
 };
@@ -138,24 +109,21 @@ exports.glistitemdeletesingle = function (req, res) {
 /**
  * Grocery middleware
  */
-exports.glistitemByID = function (req, res, next, id) {
-
+exports.gListItemByID = function (req, res, next, id) {
   console.log('read single item by id');
-
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'Grocery is invalid'
     });
   }
-
-  Items.findById(id).exec(function (err, items) {
+  Items.findById(id).exec(function (err, item) {
     if (err) return next(err);
-    if (!items) {
+    if (!item) {
       return res.status(404).send({
         message: 'items not found'
       });
     }
-    req.items = items;
+    req.item = item;
     next();
   });
 };

@@ -1,22 +1,23 @@
 <div class="container" data-ng-controller="HeaderController">
-  <div class="navbar-header" ng-show="$state.includes('home')">
+  <div class="navbar-header" ng-hide="$state.includes('home')">
     <button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <img src="modules/core/img/brand/reciflix-logo_400.png" width="60%">
+    <img src="modules/core/img/brand/reciflix-logo_400.png" width="60%" style="background-color:#FFF;padding:5px;margin:5px;">
   </div>
   <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
 
     <ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
       <li class="dropdown">
-        <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{authentication.user.displayName}} <b class="caret"></b></a>
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#!">{{authentication.user.displayName}} <b class="caret"></b></a>
         <ul role="menu" class="dropdown-menu">
-          <li><a href="#">Profile</a>
+          <li><a href="/#!/settings/profile">Edit Profile</a>
           </li>
-          <li><a href="#">Change Password</a>
+          <li data-ng-show="authentication.user.provider === 'local'">
+            <a href="/#!/settings/password">Change Password</a>
           </li>
           <li class="divider"></li>
           <li> <a ng-click="signout()" style="cursor:pointer;">Signout</a>

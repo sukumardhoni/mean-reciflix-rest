@@ -13,7 +13,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
         } else {
           $scope.authentication.user = response;
           $localStorage.token = response.token;
-          $location.path('/articles');
+          $location.path('/welcomePage');
         }
       });
     };
@@ -27,7 +27,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
           console.log('signin client side response :' + JSON.stringify(response));
           $scope.authentication.user = response;
           $localStorage.token = response.token;
-          $location.path('/articles');
+          $location.path('/welcomePage');
         }
       });
     };

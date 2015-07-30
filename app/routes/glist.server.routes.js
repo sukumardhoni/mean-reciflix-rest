@@ -4,24 +4,22 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller'),
-  groceries = require('../../app/controllers/glist.server.controller');
+  groceries = require('../../app/controllers/gList.server.controller');
 
 module.exports = function (app) {
   // Grocery Routes
-  app.route('/glist')
-    .get(users.ensureAuthenticated, groceries.listOfGlist)
-    .post(users.ensureAuthenticated, groceries.glistcreate);
+  app.route('/gList')
+    .get(users.ensureAuthenticated, groceries.listOfGLists)
+    .post(users.ensureAuthenticated, groceries.createGList);
 
-  app.route('/glist/:glistId')
-    .get(users.ensureAuthenticated, groceries.glistread)
-    .put(users.ensureAuthenticated, groceries.glistupdate)
-    .delete(users.ensureAuthenticated, groceries.glistdelete);
+  app.route('/gList/:gListId')
+    .get(users.ensureAuthenticated, groceries.singleGList)
+    .put(users.ensureAuthenticated, groceries.updateGList)
+    .delete(users.ensureAuthenticated, groceries.deleteGList);
 
   /*app.route('/groceriesWithActiveOrCompleted/:active/:completed')
     .get(users.ensureAuthenticated, groceries.readactive)*/
 
-
-
   // Finish by binding the grocery middleware
-  app.param('glistId', groceries.glistByID);
+  app.param('gListId', groceries.gListByID);
 };

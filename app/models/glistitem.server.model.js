@@ -16,9 +16,9 @@ var itemSchema = new Schema({
   state:{
     type: Boolean
   },
-  glistid: {
+  gListId: {
     type: Schema.ObjectId,
-    ref: 'Glist'
+    ref: 'GList'
   },
   submitted: {
     date: {
@@ -29,4 +29,4 @@ var itemSchema = new Schema({
 
 });
 
-mongoose.model('Glistitem', itemSchema);
+mongoose.model('GListItem', itemSchema);

@@ -13,4 +13,6 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
       templateUrl: 'modules/core/views/home.client.view.html'
     });
  }
-]);
+]).run(function ($state,$rootScope) {
+    $rootScope.$state = $state;
+});

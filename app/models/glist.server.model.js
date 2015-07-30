@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 /**
  * Grocery Schema
  */
-var GlistSchema = new Schema({
+var GListSchema = new Schema({
   name: {
     type: String
   },
@@ -28,4 +28,4 @@ var GlistSchema = new Schema({
   }
 });
 
-mongoose.model('Glist', GlistSchema);
+mongoose.model('GList', GListSchema);

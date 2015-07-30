@@ -4,24 +4,19 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller'),
-  items = require('../../app/controllers/glistitem.server.controller');
+  items = require('../../app/controllers/gListItem.server.controller');
 
 module.exports = function (app) {
   // Grocery Routes
-  app.route('/glistitem/:glistIditem/item')
-    .get(users.ensureAuthenticated, items.listOfGlistitems)
-    .post(users.ensureAuthenticated, items.glistcreateitems);
+  app.route('/gListItems/:gListId/item')
+    .get(users.ensureAuthenticated, items.listOfGlistItems)
+    .post(users.ensureAuthenticated, items.gListItemCreate);
 
-  app.route('/glistitemsingle/:glistIditem/item/:itemId')
-    .get(users.ensureAuthenticated, items.listOfGlistitemssingle)
-    .put(users.ensureAuthenticated, items.glistupdateitemssingle)
-    .delete(users.ensureAuthenticated, items.glistitemdeletesingle);
-
-
-  app.route('/glistitemstate/:glistIditem/item/:state')
-    .get(users.ensureAuthenticated, items.listOfGlistitemssinglebystate);
-
+  app.route('/singleGListItem/:gListId/item/:itemId')
+    .get(users.ensureAuthenticated, items.getSingleGListItem)
+    .put(users.ensureAuthenticated, items.updateSingleGListItem)
+    .delete(users.ensureAuthenticated, items.deleteSingleGListItem);
 
   // Finish by binding the grocery middleware
-  app.param('itemId', items.glistitemByID);
+  app.param('itemId', items.gListItemByID);
 };

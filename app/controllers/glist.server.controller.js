@@ -5,13 +5,14 @@
  */
 var mongoose = require('mongoose'),
   errorHandler = require('./errors.server.controller'),
-  Grocery = mongoose.model('Glist'),
+  Grocery = mongoose.model('GList'),
+  Items = mongoose.model('GListItem'),
   _ = require('lodash');
 
 /**
  * Create a grocery
  */
-exports.glistcreate = function (req, res) {
+exports.createGList = function (req, res) {
   console.log('create grocery calling---------------');
   var grocery = new Grocery(req.body);
   grocery.user = req.user;
@@ -33,11 +34,11 @@ exports.glistcreate = function (req, res) {
  * List of Groceries
  */
 
-exports.listOfGlist = function (req, res) {
+exports.listOfGLists = function (req, res) {
   Grocery.find({
     user: req.user.id
   }).sort('-submitted.date').exec(function (err, groceries) {
-      if (err) {
+    if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
@@ -46,7 +47,7 @@ exports.listOfGlist = function (req, res) {
         message: 'No data found'
       });
     } else {
-       res.json(groceries);
+      res.json(groceries);
     }
   });
 };
@@ -55,7 +56,7 @@ exports.listOfGlist = function (req, res) {
 /**
  * Show the current grocery
  */
-exports.glistread = function (req, res) {
+exports.singleGList = function (req, res) {
   console.log('read ----');
   res.json(req.grocery);
 
@@ -64,7 +65,7 @@ exports.glistread = function (req, res) {
 /**
  * Update a grocery
  */
-exports.glistupdate = function (req, res) {
+exports.updateGList = function (req, res) {
   var grocery = req.grocery;
 
   grocery = _.extend(grocery, req.body);
@@ -84,7 +85,7 @@ exports.glistupdate = function (req, res) {
 /**
  * Delete an grocery
  */
-exports.glistdelete = function (req, res) {
+exports.deleteGList = function (req, res) {
   var grocery = req.grocery;
 
   grocery.remove(function (err) {
@@ -93,6 +94,18 @@ exports.glistdelete = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      Items.remove({
+        gListId: grocery._id
+      }, function (err) {
+        if (err) {
+          return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+          });
+        } else {
+          //res.json(item);
+          console.log('Sucessfully deleted items while deleteing respective GroceryList')
+        }
+      });
       res.json(grocery);
     }
   });
@@ -102,7 +115,7 @@ exports.glistdelete = function (req, res) {
 /**
  * Grocery middleware
  */
-exports.glistByID = function (req, res, next, id) {
+exports.gListByID = function (req, res, next, id) {
 
   console.log('read single by id');
 
