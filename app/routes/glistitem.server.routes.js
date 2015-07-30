@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller'),
-  items = require('../../app/controllers/gListItem.server.controller');
+  items = require('../../app/controllers/glistitem.server.controller');
 
 module.exports = function (app) {
   // Grocery Routes
