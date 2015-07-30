@@ -36,7 +36,7 @@ exports.forgot = function (req, res, next) {
         });
       } else if (user.provider !== 'local') {
         return res.status(400).send({
-          message: 'It seems like you signed up using your ' + user.provider + ' account'
+          message: 'It seems like you connected using your ' + user.provider + ' account'
         });
       } else {
         crypto.randomBytes(20, function (err, buffer) {

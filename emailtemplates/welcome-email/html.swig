@@ -595,7 +595,7 @@
                                         <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content00">
                                                 Hi {{displayName}}, <br/><br/>
-                                                Thank you for joining the ReciFlix community. You can now browse, search online recipe videos, add to your favourites, setup grocery lists and share your favourite recipes with your friends and family conveniently.
+                                                Thank you for joining the ReciFlix community. You can browse, search online recipe videos, add to your favourites, setup grocery lists and share your favorite recipes with your friends and family conveniently.
                                             </td>
                                         </tr>
                                   	

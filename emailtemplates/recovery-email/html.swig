@@ -595,8 +595,8 @@
                                         <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content00">
                                                 Hi {{displayName}}, <br/><br/>
-                                                You have requested to have your password reset for your account at {{appEnv}}. <br/><br/>
-Please visit this url to reset your password, you can also copy the url into a browser window.                            </td>
+                                                You have requested to reset password for your account at {{appEnv}}. <br/><br/>
+Please visit this url to do so, you can also copy the url into a browser window.                            </td>
                                         </tr>                                	
 <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content01">
@@ -605,7 +605,7 @@ Please visit this url to reset your password, you can also copy the url into a b
                                         </tr>  
                                         <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content02">
-If you didn't make this request, you can ignore this email. Notify us as a reply to this email, if you are suspicious of this activity.
+If you didn't make this request please notify us as reply or ignore, it won't affect your account.
 </td>
                                         </tr>  
 <tr>
