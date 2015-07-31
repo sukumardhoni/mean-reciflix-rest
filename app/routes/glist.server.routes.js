@@ -15,6 +15,10 @@ module.exports = function (app) {
   app.route('/gList/:gListId')
     .get(users.ensureAuthenticated, groceries.singleGList)
     .put(users.ensureAuthenticated, groceries.updateGList)
+
+
+
+  app.route('/gList/:gListId/:userConfirm')
     .delete(users.ensureAuthenticated, groceries.deleteGList);
 
   /*app.route('/groceriesWithActiveOrCompleted/:active/:completed')

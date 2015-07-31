@@ -615,6 +615,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
  }
 ]);
+
 'use strict';
 
 //Menu service used for managing  menus

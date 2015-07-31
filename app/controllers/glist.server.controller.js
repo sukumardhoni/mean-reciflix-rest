@@ -87,30 +87,55 @@ exports.updateGList = function (req, res) {
  */
 exports.deleteGList = function (req, res) {
   var grocery = req.grocery;
-
-  grocery.remove(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      Items.remove({
-        gListId: grocery._id
-      }, function (err) {
-        if (err) {
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        } else {
-          //res.json(item);
-          console.log('Sucessfully deleted items while deleteing respective GroceryList')
-        }
-      });
-      res.json(grocery);
-    }
-  });
+  if (req.params.userConfirm === 'Y') {
+    Items.remove({
+      gListId: grocery._id
+    }, function (err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        console.log('Sucessfully deleted items while deleteing respective GroceryList')
+        grocery.remove(function (err) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          } else {
+            console.log('Sucessfully deleted GroceryList');
+            res.json(grocery);
+          }
+        });
+      }
+    });
+  } else {
+    Items.find({
+      gListId: grocery._id
+    }, function (err, items) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else if (items.length !== 0) {
+        res.status(400).send({
+          message: 'This List contains items'
+        });
+      } else {
+        grocery.remove(function (err) {
+          if (err) {
+            return res.status(400).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          } else {
+            res.json(grocery);
+            console.log('Sucessfully deleted GroceryList');
+          }
+        });
+      }
+    });
+  };
 };
-
 
 /**
  * Grocery middleware
