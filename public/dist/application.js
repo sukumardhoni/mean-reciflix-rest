@@ -530,6 +530,24 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     },
       {
         image: 'modules/core/img/brand/landing_11.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_12.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_13.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_14.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_15.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_16.png'
+    },
+      {
+        image: 'modules/core/img/brand/landing_17.png'
     }
 
   ];
@@ -543,7 +561,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
         platform: 'ios'
       }, function (data) {
         console.log('particular iosEmails' + JSON.stringify(data));
-        data.count = data.count+85;
+        data.count = data.count + 85;
         $scope.showNotify = data;
         //$scope.showNotify.count+85;
       });
@@ -597,7 +615,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
  }
 ]);
-
 'use strict';
 
 //Menu service used for managing  menus
