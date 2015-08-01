@@ -118,8 +118,9 @@ exports.deleteGList = function (req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else if (items.length !== 0) {
-        res.status(400).send({
-          message: 'This List contains items'
+        res.json({
+          type: false,
+          data: 'This List contains items!'
         });
       } else {
         grocery.remove(function (err) {

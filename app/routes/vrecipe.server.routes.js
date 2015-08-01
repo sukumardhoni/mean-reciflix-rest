@@ -52,7 +52,7 @@ module.exports = function (app) {
   app.route('/VRecipesByViewsAndTags/:maxViews/:minViews/:maxLikes/:minLikes/:tags')
     .get(vrecipes.getVIdRecipesByViewsAndTags);
 
-  app.route('/myFavorites/:userId/:pageId')
+  app.route('/myFavorites/:uId/:pageId')
     .get(users.ensureAuthenticated, vrecipes.getAllMyFavorites);
 
   app.route('/searchedVRecipes/:query/:pageId')

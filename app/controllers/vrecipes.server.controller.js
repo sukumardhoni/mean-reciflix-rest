@@ -355,7 +355,7 @@ exports.getAllMyFavorites = function (req, res) {
   var pagelength = 5;
 
   User.findOne({
-    _id: req.params.userId
+    _id: req.params.uId
   }, function (err, user) {
     if (!err) {
       //console.log(' User: ' + user.email + ', fav video ids length is : ' + user.favorites.length);
