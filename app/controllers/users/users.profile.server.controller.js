@@ -65,7 +65,7 @@ exports.checkingUser = function (req, res, next) {
 };
 
 exports.checkAdmin = function (req, res, next) {
-  // console.log('checking if User is Admin');
+  //console.log('checking if User is Admin');
   var bearerToken;
   var bearerHeader = req.headers.authorization;
   if (typeof bearerHeader !== 'undefined') {
@@ -74,7 +74,7 @@ exports.checkAdmin = function (req, res, next) {
       res.sendStatus(401);
     } else {
       bearerToken = bearer[1];
-      //console.log('2222 Token fetched from header is : ' + bearerToken);
+      //console.log('Token fetched from header is : ' + bearerToken);
       User.findOne({
         token: bearerToken
       }, function (err, user) {
@@ -84,7 +84,7 @@ exports.checkAdmin = function (req, res, next) {
             data: 'Error occured: ' + err
           });
         } else {
-          // console.log('user is: ' + JSON.stringify(user));
+          //console.log('user is: ' + JSON.stringify(user));
           if (user.roles.indexOf('admin') > -1) {
             next();
           } else {
@@ -196,7 +196,7 @@ exports.me = function (req, res) {
 
 //TODO yet to test this method, to be used for getting a full user after sign in
 exports.fetchUser = function (req, res, next) {
-   console.log('### ensureAuthenticated is called');
+  console.log('### ensureAuthenticated is called');
   var bearerToken;
   var bearerHeader = req.headers.authorization;
   if (typeof bearerHeader !== 'undefined') {
