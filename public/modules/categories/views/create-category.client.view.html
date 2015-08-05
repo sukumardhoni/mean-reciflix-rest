@@ -1,0 +1,56 @@
+<section data-ng-controller="CategoriesCtl">
+  <div class="page-header">
+    <h1>Create  Categories
+         </h1>
+
+    <br>
+
+    <div class="bs-example" ng-init="editCategory()">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-xs-2">Cat Id</label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="category.catId" placeholder="CatId">
+          </div>
+        </div>
+        <div class="form-group">
+          <label  class="control-label col-xs-2">DisplayName </label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="category.displayName" placeholder="DisplayName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-xs-2">ImageName </label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="category.imageName" placeholder="ImageName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-xs-2">Rank </label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="category.rank" placeholder="Rank">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-xs-2">Sub Cat. Exists </label>
+          <div class="col-xs-10">
+            <input type="text" class="form-control" ng-model="category.subCatExist" placeholder="Sub Category Exists">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-2 col-xs-10">
+            <button type="submit" class="btn btn-primary" ng-click="newcat(category)" ng-hide="editcategory">Create Category</button>
+            <button type="submit" class="btn btn-primary" ng-click="updateCat(category)" ng-show="editcategory">Update Category</button>
+          </div>
+        </div>
+      </form>
+
+
+
+    </div>
+
+
+
+  </div>
+
+</section>

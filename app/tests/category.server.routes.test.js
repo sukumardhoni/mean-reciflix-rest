@@ -14,7 +14,7 @@ var should = require('should'),
 var credentials, adminCredentials, user, adminUser, category;
 
 /**
- * Article routes tests
+ * Category routes tests
  */
 describe('Category CRUD tests', function () {
 

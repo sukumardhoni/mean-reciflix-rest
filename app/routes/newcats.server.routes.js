@@ -15,7 +15,7 @@ module.exports = function (app) {
 
   // Category Routes
 
-  app.route('/newcats/:pageId')
+  app.route('/newcats/page/:pageId')
     .get(categories.list);
 
   //admin functions are shown here //

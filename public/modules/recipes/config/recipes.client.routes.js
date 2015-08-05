@@ -1,16 +1,13 @@
 'use strict';
 
 // Setting up route
-angular.module('articles').config(['$stateProvider',
+angular.module('recipes').config(['$stateProvider',
  function ($stateProvider) {
-    // Articles state routing
+    // Recipes state routing
     $stateProvider.
-    state('listCategories', {
-      url: '/listCategories',
-      templateUrl: 'modules/recipes/views/list-categories.client.view.html'
-    }).state('Welcome Page', {
+state('WelcomePage', {
       url: '/welcomePage',
-      templateUrl: 'modules/recipes/views/welcomePage.client.view.html'
+      templateUrl: 'modules/recipes/views/welcome.client.view.html'
     })
  }
 ]);

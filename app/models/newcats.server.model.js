@@ -33,7 +33,7 @@ var NewCategorySchema = new Schema({
   },
   subCatExist: {
     type: String,
-    default: ''
+    default: 'N'
   },
   rank: {
     type: Number,

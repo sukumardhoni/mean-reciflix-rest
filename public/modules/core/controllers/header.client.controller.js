@@ -17,7 +17,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 
 
     $scope.signout = function () {
-      console.log('Checking token when we click on sigout : ' + $localStorage.token);
+      //console.log('Checking token when we click on sigout : ' + $localStorage.token);
       $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
       $http.post('/users/signout').success(function (response) {
         console.log(response.data);

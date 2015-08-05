@@ -1,8 +1,8 @@
 'use strict';
 
 // Articles controller
-angular.module('recipes').controller('RecipesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
- function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
+angular.module('categories').controller('CategoriesCtl', ['$scope', '$stateParams', '$location', 'Authentication', 'Categories', '$localStorage', '$http',
+ function ($scope, $stateParams, $location, Authentication, Categories, $localStorage, $http) {
     //console.log('articals page');
 
 
@@ -11,25 +11,77 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
     $scope.authentication = Authentication;
 
-    //console.log('type of user ------------' + JSON.stringify($scope.authentication));
 
+   $scope.listCategories = function(){
+
+     Categories.categoryList.query({pageId:999},function(cats){
+     console.log('categoryList details : ' + JSON.stringify(cats));
+       $scope.categories = cats;
+
+
+     })
+
+   };
+
+
+   $scope.newcat = function(newCat){
+
+
+     Categories.newCategory.save(newCat,function(result){
+
+     console.log('Sucessfully created category : '+ JSON.stringify(result));
+       $scope.category = '';
+       $location.path('/categories');
+
+
+     })
+
+   }
+
+
+   $scope.editCategory = function(){
+
+     $scope.editcategory = true;
+
+     Categories.editCategory.get({newCatId:$stateParams.newCatId},function(result){
+
+     console.log('Sucessfully get category : '+ JSON.stringify(result));
+       $scope.category = result;
+
+     })
+
+
+   };
+
+   $scope.updateCat = function(cat){
+
+      console.log('Before Updated category : '+ JSON.stringify(cat));
+
+     Categories.updateCategory.update({newCatId:cat._id},function(result){
+
+     console.log('Sucessfully Updated category : '+ JSON.stringify(result));
+
+       $scope.category = '';
+       $location.path('/categories');
+
+     })
+
+
+   };
+
+
+
+
+
+
+
+
+/*
     $scope.categories = function () {
-
-      //console.log('categories -----------');
-
-
       Vrecipes.getcategory.query({
-
       }, function (res) {
-
-
         $scope.categories = res;
-        //console.log('list of categories' + JSON.stringify(res));
-
       });
-
-
-
     };
 
 
@@ -86,14 +138,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
 
     $scope.createcategories = function () {
-
-      //console.log('createcategories -----------');
-
-
-
       $scope.newcat = function () {
-
-
 
         var categorie = {
           'catId': this.categorie.catId,
@@ -102,21 +147,11 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
         };
         Vrecipes.savecategory.save(categorie, function (result) {
-
-          /*$scope.persons.push({
-            name: result.name,
-              _id:result._id
-        });*/
-
           $scope.categorie = '';
 
         });
 
       };
-
-
-
-
 
     };
 
@@ -166,43 +201,6 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
       },
 
-      // Find existing Article
-      /*$scope.recipeslist = function () {
-
-
-        console.log('recipeslist -----------');
-
-        Vrecipes.getrecipes.query({
-
-
-
-          },
-          function (data) {
-            console.log('particular recipeslist' + JSON.stringify(data));
-            $scope.recipes = data;
-
-
-            $scope.totalItems = $scope.recipes.length;
-            $scope.itemsPerPage = 1
-            $scope.currentPage = 1;
-            $scope.maxSize = 5;
-
-
-            $scope.pageCount = function () {
-              return Math.ceil($scope.recipes.length / $scope.itemsPerPage);
-            };
-
-            $scope.$watch('currentPage + itemsPerPage', function () {
-              var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
-                end = begin + $scope.itemsPerPage;
-
-              $scope.filteredrecipe = $scope.recipes.slice(begin, end);
-            });
-
-          });
-
-      };
-*/
 
       $scope.updaterecipes = function (recipe) {
         var updatedRecipe = recipe;
@@ -236,11 +234,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
       });
     };
-
-
-
-
-
+ */
 
 
 
@@ -249,21 +243,4 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 ]);
 
 
-angular.module('articles').directive('myYoutube', function ($sce) {
-  return {
-    restrict: 'EA',
-    scope: {
-      code: '='
-    },
-    replace: true,
-    template: '<div style="height:350px; width:100%"><iframe style="overflow:hidden;height:100%;width:70%" controls="0" src="{{url}}" frameborder="0" allowfullscreen></iframe></div>',
-    link: function (scope) {
-      console.log('here');
-      scope.$watch('code', function (newVal) {
-        if (newVal) {
-          scope.url = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + newVal);
-        }
-      });
-    }
-  };
-});
+

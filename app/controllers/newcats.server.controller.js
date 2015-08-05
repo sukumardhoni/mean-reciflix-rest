@@ -98,25 +98,10 @@ exports.delete = function (req, res) {
  * List of Categories
  */
 exports.list = function (req, res) {
-  Category.find().sort('-created').populate('user', 'displayName').skip(req.params.pageId * 4).limit(4).exec(function (err, categories) {
-    if (err) {
-      // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      //  console.log('@@@@@@@@@ categories list  successfully fetched ');
-      res.json(categories);
-    }
-  });
-};
 
-
-
-/**
- * List of catslist
- */
-exports.catslist = function (req, res) {
+   console.log('@@@@@@@@@ categories list  successfully fetched 111111111111111111111');
+  if(req.params.pageId == 999){
+    console.log('@@@@@@@@@ categories list  successfully fetched 22222222222');
   Category.find().sort('-created').populate('user', 'displayName').exec(function (err, categories) {
     if (err) {
       // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
@@ -128,8 +113,22 @@ exports.catslist = function (req, res) {
       res.json(categories);
     }
   });
-};
 
+  }else{
+
+  Category.find().sort('-created').populate('user', 'displayName').skip(req.params.pageId * 4).limit(4).exec(function (err, categories) {
+    if (err) {
+      // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      //  console.log('@@@@@@@@@ categories list  successfully fetched ');
+      res.json(categories);
+    }
+  });
+  };
+};
 
 
 
