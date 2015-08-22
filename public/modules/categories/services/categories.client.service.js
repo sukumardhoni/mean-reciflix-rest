@@ -8,7 +8,7 @@ angular.module('categories')
 
 
 .factory('Categories', function ($resource, API_HOST) {
-  console.log('service Categories -------------- ++++++ ');
+  //console.log('service Categories -------------- ++++++ ');
   return $resource(API_HOST + '/newcats/page/:pageId', {
     pageId: '@pageId'
   }, {

@@ -7,7 +7,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
     //if ($scope.authentication.user) $location.path('/');
     $scope.signup = function () {
       $http.post('/users/signup', $scope.credentials).success(function (response) {
-        console.log('signup client side response ' + JSON.stringify(response));
+        //console.log('signup client side response ' + JSON.stringify(response));
         if (response.type === false) {
           $scope.error = response.data;
         } else {
@@ -18,15 +18,15 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
     if (navigator.userAgent.match(/Android/i)) {
-      console.log('Android user came');
-      alert('Android user came');
+      //console.log('Android user came');
+      //alert('Android user came');
       $scope.androidUser = true;
     } else if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
       $scope.iosUser = true;
     }
     $scope.Login = function () {
       $scope.loading = true;
-      console.log('Login Function is Triggred: ' + JSON.stringify($scope.credentials));
+      //console.log('Login Function is Triggred: ' + JSON.stringify($scope.credentials));
       Users.Login.create($scope.credentials).$promise.then(function (res) {
         console.log('Res after login : ' + JSON.stringify(res));
         if (res.type === false) {
@@ -34,15 +34,15 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
           $scope.loading = false;
         } else {
           $scope.errMsg = false;
-          console.log('User details after login: ' + JSON.stringify(res));
+          //console.log('User details after login: ' + JSON.stringify(res));
           $localStorage.user = res;
           $localStorage.token = res.token;
           $state.go('reciflix.categories');
           $scope.loading = false;
         }
       }).catch(function (err) {
-        console.log('Error happened: ' + JSON.stringify(err));
-        console.log('Looks like there is an issue with your connectivity, Please try after sometime!');
+        //console.log('Error happened: ' + JSON.stringify(err));
+        //console.log('Looks like there is an issue with your connectivity, Please try after sometime!');
       });
     };
 

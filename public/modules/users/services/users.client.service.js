@@ -16,7 +16,7 @@ angular.module('users').factory('Users', ['$resource',
 
 .factory('Users', ['$resource', 'API_HOST',
  function ($resource, API_HOST) {
-    console.log('User service is called');
+    //console.log('User service is called');
     return {
       Signup: $resource(API_HOST + '/users/signup', {}, {
         create: {
