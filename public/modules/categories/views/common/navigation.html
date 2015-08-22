@@ -27,11 +27,15 @@
         </div>
       </li>
       <li ui-sref-active="active">
-        <a ui-sref="reciflix.categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories page</span></a>
+        <a ui-sref="reciflix.categories" title="Categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories page</span></a>
       </li>
 
       <li ui-sref-active="active">
-        <a ui-sref="reciflix.recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes page</span></a>
+        <a ui-sref="reciflix.recipes" title="Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes page</span></a>
+      </li>
+
+      <li>
+        <a ng-click="signout()" title="Logout"><i class="fa fa-sign-out"></i> <span class="nav-label">Logout</span></a>
       </li>
     </ul>
   </div>
