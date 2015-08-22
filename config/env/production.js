@@ -20,21 +20,29 @@ module.exports = {
   assets: {
     lib: {
       css: [
-    'public/lib/bootstrap/dist/css/bootstrap.min.css',
-    'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
-    'public/lib/angular-ui-select/dist/select.min.css',
-    'public/lib/select2/select2.css'
+        'public/lib/bootstrap/dist/css/bootstrap.css',
+    'public/lib/metisMenu/dist/metisMenu.min.css',
+    'public/lib/fontawesome/css/font-awesome.min.css'
    ],
       js: [
-    'public/lib/angular/angular.min.js',
-    'public/lib/angular-resource/angular-resource.min.js',
-    'public/lib/angular-animate/angular-animate.min.js',
-    'public/lib/angular-ui-router/release/angular-ui-router.min.js',
-    'public/lib/angular-ui-utils/ui-utils.min.js',
-    'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
     'public/lib/jquery/dist/jquery.min.js',
-    'public/lib/angular-ui-select/dist/select.min.js',
-    'public/lib/ngstorage/ngStorage.min.js'
+    'public/lib/bootstrap/dist/js/bootstrap.min.js',
+    'public/lib/metisMenu/dist/metisMenu.min.js',
+    'public/lib/PACE/pace.min.js',
+    'public/scripts.js',
+    'public/lib/angular/angular.js',
+    'public/lib/angular-resource/angular-resource.js',
+    'public/lib/angular-cookies/angular-cookies.js',
+    'public/lib/angular-animate/angular-animate.js',
+    'public/lib/angular-touch/angular-touch.js',
+    'public/lib/angular-sanitize/angular-sanitize.js',
+    'public/lib/angular-ui-router/release/angular-ui-router.js',
+    'public/lib/angular-ui-utils/ui-utils.js',
+    'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+    'public/lib/ngstorage/ngStorage.js',
+    'public/lib/toastr/toastr.js',
+    'public/lib/jquery-ui/jquery-ui.min.js',
+    'public/lib/slimScroll/jquery.slimscroll.min.js'
    ]
     },
     css: 'public/dist/application.min.css',
