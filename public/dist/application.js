@@ -3,8 +3,10 @@
 // Init the application configuration module for AngularJS application
 var ApplicationConfiguration = (function () {
   // Init module configuration options
-  var applicationModuleName = 'mean';
-  var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage'];
+  var applicationModuleName = 'reciflixApp';
+  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage'];
+
+  //['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage']
 
   // Add a new vertical module
   var registerModule = function (moduleName, dependencies) {
@@ -29,23 +31,43 @@ angular.module(ApplicationConfiguration.applicationModuleName, ApplicationConfig
 
 // Setting HTML5 Location Mode
 angular.module(ApplicationConfiguration.applicationModuleName).config(['$locationProvider',
-	function($locationProvider) {
-		$locationProvider.hashPrefix('!');
-	}
-]);
+ function ($locationProvider) {
+    $locationProvider.hashPrefix('!');
+ }
+]).run(["$rootScope", "$state", "$localStorage", function ($rootScope, $state, $localStorage) {
+  $rootScope.$state = $state;
+  $rootScope.$on('$stateChangeStart',
+    function (e, toState, toParams, fromState, fromParams) {
+      if (toState.module === 'private' && !$localStorage.user) {
+        // If logged out and transitioning to a logged in page:
+        e.preventDefault();
+        $state.go('signin');
+      } else if (toState.module === 'public' && $localStorage.user) {
+        // If logged in and transitioning to a logged out page:
+        e.preventDefault();
+        $state.go('reciflix.categories');
+      };
+    });
+}]);
 
 //Then define the init function for starting up the application
-angular.element(document).ready(function() {
-	//Fixing facebook bug with redirect
-	if (window.location.hash === '#_=_') window.location.hash = '#!';
+angular.element(document).ready(function () {
+  //Fixing facebook bug with redirect
+  if (window.location.hash === '#_=_') window.location.hash = '#!';
 
-	//Then init the app
-	angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
+  //Then init the app
+  angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
 'use strict';
 
 // Use Application configuration module to register a new module
 ApplicationConfiguration.registerModule('articles');
+
+'use strict';
+
+// Use Application configuration module to register a new module
+ApplicationConfiguration.registerModule('categories');
 
 'use strict';
 
@@ -55,7 +77,7 @@ ApplicationConfiguration.registerModule('core');
 'use strict';
 
 // Use Application configuration module to register a new module
-ApplicationConfiguration.registerModule('articles');
+ApplicationConfiguration.registerModule('recipes');
 
 'use strict';
 
@@ -437,6 +459,254 @@ angular.module('articles').factory('Vrecipes', ['$resource',
 
 'use strict';
 
+// Configuring the Articles module
+angular.module('categories').run(['Menus',
+ function (Menus) {
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', 'Categories', 'categories', 'dropdown', '/categories(/create)?');
+    Menus.addSubMenuItem('topbar', 'categories', 'List Articles', 'categories');
+    Menus.addSubMenuItem('topbar', 'categories', 'New Category', 'categories/create');
+ }
+]);
+
+'use strict';
+
+// Setting up routes for categories
+angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
+ function ($stateProvider, $urlRouterProvider) {
+    // Home state routing
+    $stateProvider
+      .state('reciflix', {
+        url: '/reciflix',
+        templateUrl: 'modules/categories/views/common/content.html',
+        controller: 'ReciflixCtrl',
+        data: {
+          bodyClass: ''
+        }
+      })
+      .state('reciflix.categories', {
+        url: "/categories",
+        templateUrl: "modules/categories/views/categories.html",
+        controller: 'CategoryCtrl',
+        module: 'private'
+      })
+      .state('reciflix.categories.subcats', {
+        url: "/subcats",
+        views: {
+          'child-view': {
+            templateUrl: "modules/categories/views/subCats.html"
+          }
+        }
+      })
+      .state('reciflix.recipes', {
+        url: "/recipes",
+        templateUrl: "modules/categories/views/recipes.html",
+        controller: 'CategoryCtrl',
+        module: 'private'
+      });
+}])
+
+.run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
+}]);
+
+'use strict';
+
+// Articles controller
+angular.module('categories').controller('CategoryCtrl', ['$scope', '$state', '$stateParams', '$location', 'Authentication', 'Categories', '$localStorage', '$http',
+ function ($scope, $state, $stateParams, $location, Authentication, Categories, $localStorage, $http) {
+    $scope.authentication = Authentication;
+
+    $scope.categoryFun = function () {
+      console.log('categoryFun is called');
+      Categories.query({
+        pageId: 999
+      }).$promise.then(function (res) {
+        $scope.categories = res;
+        console.log('we r in catagory controller' + JSON.stringify($scope.categories));
+      }).catch(function (err) {
+        console.log('Error happened : ' + JSON.stringify(err));
+        //alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+      });
+    };
+ }
+])
+
+.controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
+  $scope.authentication = Authentication;
+  $scope.userName = $localStorage.user.displayName || 'ReciFlix Admin';
+  $scope.localUser = $localStorage.user;
+
+  $scope.signout = function () {
+    console.log('Checking token when we click on sigout : ' + $localStorage.token);
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+    $http.post('/users/signout').success(function (response) {
+      console.log(response.data);
+      $scope.authentication = '';
+      console.log('before delete:::' + $localStorage.token);
+      delete $localStorage.token;
+      delete $localStorage.user;
+      console.log('after delete:::' + $localStorage.token);
+      $state.go('signin');
+    });
+  };
+
+}])
+
+'use strict';
+
+//Directive used to set metisMenu and minimalize button
+angular.module('categories')
+  /**
+   * INSPINIA - Responsive Admin Theme
+   * Copyright 2015 Webapplayers.com
+   *
+   */
+
+
+/**
+ * pageTitle - Directive for set Page title - mata title
+ */
+function pageTitle($rootScope, $timeout) {
+  return {
+    link: function (scope, element) {
+      var listener = function (event, toState, toParams, fromState, fromParams) {
+        // Default title - load on Dashboard 1
+        var title = 'ReciFlix';
+        // Create your own title pattern
+        if (toState.data && toState.data.pageTitle) title = 'ReciFlix ';
+        // if (toState.data && toState.data.pageTitle) title = 'ReciFlix | ' + toState.data.pageTitle;
+        $timeout(function () {
+          element.text(title);
+        });
+      };
+      $rootScope.$on('$stateChangeStart', listener);
+    }
+  }
+}
+pageTitle.$inject = ["$rootScope", "$timeout"];;
+
+/**
+ * sideNavigation - Directive for run metsiMenu on sidebar navigation
+ */
+function sideNavigation($timeout) {
+  return {
+    restrict: 'A',
+    link: function (scope, element) {
+      // Call the metsiMenu plugin and plug it to sidebar navigation
+      $timeout(function () {
+        element.metisMenu();
+      });
+    }
+  };
+}
+sideNavigation.$inject = ["$timeout"];;
+
+/**
+ * iboxTools - Directive for iBox tools elements in right corner of ibox
+ */
+function iboxTools($timeout) {
+  return {
+    restrict: 'A',
+    scope: true,
+    templateUrl: 'views/common/ibox_tools.html',
+    controller: ["$scope", "$element", function ($scope, $element) {
+      // Function for collapse ibox
+      $scope.showhide = function () {
+          var ibox = $element.closest('div.ibox');
+          var icon = $element.find('i:first');
+          var content = ibox.find('div.ibox-content');
+          content.slideToggle(200);
+          // Toggle icon from up to down
+          icon.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+          ibox.toggleClass('').toggleClass('border-bottom');
+          $timeout(function () {
+            ibox.resize();
+            ibox.find('[id^=map-]').resize();
+          }, 50);
+        },
+        // Function for close ibox
+        $scope.closebox = function () {
+          var ibox = $element.closest('div.ibox');
+          ibox.remove();
+        }
+    }]
+  };
+}
+iboxTools.$inject = ["$timeout"];;
+
+/**
+ * minimalizaSidebar - Directive for minimalize sidebar
+ */
+function minimalizaSidebar($timeout) {
+  return {
+    restrict: 'A',
+    template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
+    controller: ["$scope", "$element", function ($scope, $element) {
+      $scope.minimalize = function () {
+        $("body").toggleClass("mini-navbar");
+        if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+          // Hide menu in order to smoothly turn on when maximize menu
+          $('#side-menu').hide();
+          // For smoothly turn on menu
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(500);
+            }, 100);
+        } else if ($('body').hasClass('fixed-sidebar')) {
+          $('#side-menu').hide();
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(500);
+            }, 300);
+        } else {
+          // Remove all inline style from jquery fadeIn function to reset menu state
+          $('#side-menu').removeAttr('style');
+        }
+      }
+    }]
+  };
+}
+minimalizaSidebar.$inject = ["$timeout"];;
+
+
+
+/**
+ *
+ * Pass all functions into module
+ */
+angular
+  .module('categories')
+  .directive('pageTitle', pageTitle)
+  .directive('sideNavigation', sideNavigation)
+  .directive('iboxTools', iboxTools)
+  .directive('minimalizaSidebar', minimalizaSidebar)
+
+'use strict';
+
+//Categories service used for communicating with the categories REST endpoints
+angular.module('categories')
+
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
+
+
+.factory('Categories', ["$resource", "API_HOST", function ($resource, API_HOST) {
+  console.log('service Categories -------------- ++++++ ');
+  return $resource(API_HOST + '/newcats/page/:pageId', {
+    pageId: '@pageId'
+  }, {
+    'query': {
+      method: 'GET',
+      isArray: true,
+      timeout: 20000
+    }
+  });
+}])
+
+'use strict';
+
 // Setting up route
 angular.module('core').config(['$stateProvider', '$urlRouterProvider',
  function ($stateProvider, $urlRouterProvider) {
@@ -447,11 +717,16 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
     $stateProvider.
     state('home', {
       url: '/',
-      templateUrl: 'modules/core/views/home.client.view.html'
+      templateUrl: 'modules/core/views/home.client.view.html',
+      module: 'public',
+      data: {
+        bodyClass: 'bg-body'
+      }
     });
  }
-]).run(["$state", "$rootScope", function ($state,$rootScope) {
-    $rootScope.$state = $state;
+]).run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
 }]);
 
 'use strict';
@@ -463,6 +738,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
     $scope.menu = Menus.getMenu('topbar');
 
     $scope.toggleCollapsibleMenu = function () {
+      console.log('Checking toggleCollapsibleMenu ');
       $scope.isCollapsed = !$scope.isCollapsed;
     };
 
@@ -471,19 +747,6 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
       $scope.isCollapsed = false;
     });
 
-
-    $scope.signout = function () {
-      console.log('Checking token when we click on sigout : ' + $localStorage.token);
-      $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
-      $http.post('/users/signout').success(function (response) {
-        console.log(response.data);
-        $scope.authentication.user = '';
-        console.log('before delete:::' + JSON.stringify($localStorage.token));
-        delete $localStorage.token;
-        console.log('after delete:::' + JSON.stringify($localStorage.token));
-        $location.path('/');
-      });
-    };
  }
 ]);
 
@@ -492,129 +755,54 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 
 angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$state', 'ProspectiveEmail',
  function ($scope, Authentication, $state, ProspectiveEmail) {
-    // This provides Authentication context.
+
     $scope.authentication = Authentication;
 
-
-    $scope.myint = 1000;
-    $scope.slides = [
-      {
-        image: 'modules/core/img/brand/landing_1.PNG'
-    },
-      {
-        image: 'modules/core/img/brand/landing_2.PNG'
-    },
-      {
-        image: 'modules/core/img/brand/landing_3.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_4.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_5.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_6.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_7.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_8.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_9.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_10.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_11.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_12.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_13.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_14.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_15.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_16.png'
-    },
-      {
-        image: 'modules/core/img/brand/landing_17.png'
+    if (navigator.userAgent.match(/Android/i)) {
+      console.log('Android user came');
+      alert('Android user came');
+      $scope.androidUser = true;
+    } else if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
+      $scope.iosUser = true;
     }
+ }]);
 
-  ];
+/**
+ * INSPINIA - Responsive Admin Theme
+ * Copyright 2014 Webapplayers.com
+ *
+ * Custom scripts
+ */
 
+$(document).ready(function () {
 
-    $scope.iosShow = function () {
-      $scope.errMsg = '';
-      $scope.sucessMsg = '';
-      console.log('U click on iosShow:');
-      ProspectiveEmail.emailGet.query({
-        platform: 'ios'
-      }, function (data) {
-        console.log('particular iosEmails' + JSON.stringify(data));
-        data.count = data.count + 85;
-        $scope.showNotify = data;
-        //$scope.showNotify.count+85;
-      });
-    };
+    fix_height();
 
-    $scope.androidShow = function () {
-      $scope.errMsg = '';
-      $scope.sucessMsg = '';
-      console.log('U click on androidShow:');
-      ProspectiveEmail.emailGet.query({
-        platform: 'android'
-      }, function (data) {
-        console.log('particular androidEmails' + JSON.stringify(data));
-        $scope.showNotify = data;
-      });
-    };
+});
 
-    $scope.notifyme = function (platform) {
-      console.log('U click on notifyme:' + this.userEmail);
-      console.log('U click on platform:' + platform);
+// Full height of sidebar
+function fix_height() {
+    var heightWithoutNavbar = $("body > #wrapper").height() - 61;
+    $(".sidebard-panel").css("min-height", heightWithoutNavbar + "px");
+    var windowHeight = $( window ).height();
+    $("#page-wrapper").css("min-height", windowHeight + "px");
+};
 
-      var notifyUser = {
-        'platform': platform,
-        'email': this.userEmail
-      };
+$(window).bind("load resize click scroll", function() {
+    if(!$("body").hasClass('body-small')) {
+        fix_height();
+    }
+});
 
-      ProspectiveEmail.emailPost.save(notifyUser, function (res) {
-        if (res.type === false) {
-          console.log('Error console that User already exixts');
-          $scope.errMsg = res.data;
-        } else {
-          console.log('suceess nottify user saved ');
-          console.log('suceess nottify user saved ' + JSON.stringify(res));
-          $scope.showNotify.count++;
-          $scope.userEmail = '';
-          $scope.errMsg = '';
-          $scope.sucessMsg = 'Your Email id is sucessfully subscribed for ReciFlix App Release Notification';
-        }
-      }, function (err) {
-        console.log('failed to save nottify user' + JSON.stringify(err));
-        $scope.errMsg = err.data.message;
-        $scope.userEmail = '';
-        $scope.sucessMsg = '';
-      });
+// Minimalize menu when screen is less than 768px
+$(window).bind("load resize", function() {
+    if ($(this).width() < 769) {
+        $('body').addClass('body-small')
+    } else {
+        $('body').removeClass('body-small')
+    }
+});
 
-
-
-    };
-
-
-
- }
-]);
 
 'use strict';
 
@@ -824,16 +1012,13 @@ angular.module('articles').run(['Menus',
 'use strict';
 
 // Setting up route
-angular.module('articles').config(['$stateProvider',
+angular.module('recipes').config(['$stateProvider',
  function ($stateProvider) {
-    // Articles state routing
+    // Recipes state routing
     $stateProvider.
-    state('listCategories', {
-      url: '/listCategories',
-      templateUrl: 'modules/recipes/views/list-categories.client.view.html'
-    }).state('Welcome Page', {
+state('WelcomePage', {
       url: '/welcomePage',
-      templateUrl: 'modules/recipes/views/welcomePage.client.view.html'
+      templateUrl: 'modules/recipes/views/welcome.client.view.html'
     })
  }
 ]);
@@ -841,7 +1026,7 @@ angular.module('articles').config(['$stateProvider',
 'use strict';
 
 // Articles controller
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
+angular.module('recipes').controller('RecipesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
  function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
     //console.log('articals page');
 
@@ -1188,54 +1373,62 @@ angular.module('users').config(['$httpProvider',
 
 // Setting up route
 angular.module('users').config(['$stateProvider',
-	function($stateProvider) {
-		// Users state routing
-		$stateProvider.
-		state('profile', {
-			url: '/settings/profile',
-			templateUrl: 'modules/users/views/settings/edit-profile.client.view.html'
-		}).
-		state('password', {
-			url: '/settings/password',
-			templateUrl: 'modules/users/views/settings/change-password.client.view.html'
-		}).
-		state('accounts', {
-			url: '/settings/accounts',
-			templateUrl: 'modules/users/views/settings/social-accounts.client.view.html'
-		}).
-		state('signup', {
-			url: '/signup',
-			templateUrl: 'modules/users/views/authentication/signup.client.view.html'
-		}).
-		state('signin', {
-			url: '/signin',
-			templateUrl: 'modules/users/views/authentication/signin.client.view.html'
-		}).
-		state('forgot', {
-			url: '/password/forgot',
-			templateUrl: 'modules/users/views/password/forgot-password.client.view.html'
-		}).
-		state('reset-invalid', {
-			url: '/password/reset/invalid',
-			templateUrl: 'modules/users/views/password/reset-password-invalid.client.view.html'
-		}).
-		state('reset-success', {
-			url: '/password/reset/success',
-			templateUrl: 'modules/users/views/password/reset-password-success.client.view.html'
-		}).
-		state('reset', {
-			url: '/password/reset/:token',
-			templateUrl: 'modules/users/views/password/reset-password.client.view.html'
-		});
-	}
-]);
+ function ($stateProvider) {
+    // Users state routing
+    $stateProvider.
+    state('profile', {
+      url: '/settings/profile',
+      templateUrl: 'modules/users/views/settings/edit-profile.client.view.html'
+    }).
+    state('password', {
+      url: '/settings/password',
+      templateUrl: 'modules/users/views/settings/change-password.client.view.html'
+    }).
+    state('accounts', {
+      url: '/settings/accounts',
+      templateUrl: 'modules/users/views/settings/social-accounts.client.view.html'
+    }).
+    state('signup', {
+      url: '/signup',
+      templateUrl: 'modules/users/views/authentication/signup.client.view.html'
+    }).
+    state('signin', {
+      url: '/signin',
+      templateUrl: 'modules/users/views/authentication/signin.client.view.html',
+      module: 'public',
+      data: {
+        bodyClass: 'bg-body'
+      }
+    }).
+    state('forgot', {
+      url: '/password/forgot',
+      templateUrl: 'modules/users/views/password/forgot-password.client.view.html'
+    }).
+    state('reset-invalid', {
+      url: '/password/reset/invalid',
+      templateUrl: 'modules/users/views/password/reset-password-invalid.client.view.html'
+    }).
+    state('reset-success', {
+      url: '/password/reset/success',
+      templateUrl: 'modules/users/views/password/reset-password-success.client.view.html'
+    }).
+    state('reset', {
+      url: '/password/reset/:token',
+      templateUrl: 'modules/users/views/password/reset-password.client.view.html'
+    });
+ }
+]).run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
+}]);
+
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage',
- function ($scope, $http, $location, Authentication, $localStorage) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state',
+ function ($scope, $http, $location, Authentication, $localStorage, Users, $state) {
     $scope.authentication = Authentication;
     // If user is signed in then redirect back home
-    if ($scope.authentication.user) $location.path('/');
+    //if ($scope.authentication.user) $location.path('/');
     $scope.signup = function () {
       $http.post('/users/signup', $scope.credentials).success(function (response) {
         console.log('signup client side response ' + JSON.stringify(response));
@@ -1248,20 +1441,35 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
         }
       });
     };
-
-    $scope.signin = function () {
-      console.log('signin');
-      $http.post('/users/signin', $scope.credentials).success(function (response) {
-        if (response.type === false) {
-          $scope.error = response.data;
+    if (navigator.userAgent.match(/Android/i)) {
+      console.log('Android user came');
+      alert('Android user came');
+      $scope.androidUser = true;
+    } else if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
+      $scope.iosUser = true;
+    }
+    $scope.Login = function () {
+      $scope.loading = true;
+      console.log('Login Function is Triggred: ' + JSON.stringify($scope.credentials));
+      Users.Login.create($scope.credentials).$promise.then(function (res) {
+        console.log('Res after login : ' + JSON.stringify(res));
+        if (res.type === false) {
+          $scope.errMsg = res.data;
+          $scope.loading = false;
         } else {
-          console.log('signin client side response :' + JSON.stringify(response));
-          $scope.authentication.user = response;
-          $localStorage.token = response.token;
-          $location.path('/welcomePage');
+          $scope.errMsg = false;
+          console.log('User details after login: ' + JSON.stringify(res));
+          $localStorage.user = res;
+          $localStorage.token = res.token;
+          $state.go('reciflix.categories');
+          $scope.loading = false;
         }
+      }).catch(function (err) {
+        console.log('Error happened: ' + JSON.stringify(err));
+        console.log('Looks like there is an issue with your connectivity, Please try after sometime!');
       });
     };
+
 
 }]);
 
@@ -1397,11 +1605,34 @@ angular.module('users').factory('Authentication', ['$window', function($window) 
 
 // Users service used for communicating with the users REST endpoint
 angular.module('users').factory('Users', ['$resource',
-	function($resource) {
-		return $resource('users', {}, {
-			update: {
-				method: 'PUT'
-			}
-		});
-	}
+ function ($resource) {
+    return $resource('users', {}, {
+      update: {
+        method: 'PUT'
+      }
+    });
+ }
+])
+
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
+
+.factory('Users', ['$resource', 'API_HOST',
+ function ($resource, API_HOST) {
+    console.log('User service is called');
+    return {
+      Signup: $resource(API_HOST + '/users/signup', {}, {
+        create: {
+          method: 'POST',
+          timeout: 30000
+        }
+      }),
+      Login: $resource(API_HOST + '/users/signin', {}, {
+        create: {
+          method: 'POST',
+          timeout: 20000
+        }
+      }),
+    }
+    }
 ]);
