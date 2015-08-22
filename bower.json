@@ -1,6 +1,6 @@
 {
   "name": "reciflix",
-  "version": "0.3.2",
+  "version": "1.0.3",
   "description": "ReciFlix is a quick, convenient and easy way to search a recipe online and watch it with a click of a button.",
   "dependencies": {
     "bootstrap": "~3.3.1",
