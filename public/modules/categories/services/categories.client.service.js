@@ -1,39 +1,21 @@
 'use strict';
 
 //Categories service used for communicating with the categories REST endpoints
-angular.module('categories').factory('Categories', ['$resource',
- function ($resource) {
+angular.module('categories')
 
-    return {
-      categoryList: $resource('/newcats/page/:pageId', {
-      pageId:'@pageId'
-      }, {
-        'query': {
-          method: 'GET',
-          isArray: true
-        }
-      }),
-       newCategory: $resource('/newcats', {}, {
-        'save': {
-          method: 'POST'
-        }
-      }),
-
-      editCategory: $resource('/newcats/:newCatId', {newCatId:'@newCatId'}, {
-        'get': {
-          method: 'GET'
-        }
-      }),
-
-      updateCategory: $resource('/newcats/:newCatId', {newCatId:'@newCatId'}, {
-        'update': {
-          method: 'PUT'
-        }
-      }),
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
 
 
-    };
-
-
- }
-]);
+.factory('Categories', function ($resource, API_HOST) {
+  console.log('service Categories -------------- ++++++ ');
+  return $resource(API_HOST + '/newcats/page/:pageId', {
+    pageId: '@pageId'
+  }, {
+    'query': {
+      method: 'GET',
+      isArray: true,
+      timeout: 20000
+    }
+  });
+})

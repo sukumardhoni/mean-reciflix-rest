@@ -10,9 +10,14 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
     $stateProvider.
     state('home', {
       url: '/',
-      templateUrl: 'modules/core/views/home.client.view.html'
+      templateUrl: 'modules/core/views/home.client.view.html',
+      module: 'public',
+      data: {
+        bodyClass: 'bg-body'
+      }
     });
  }
-]).run(function ($state,$rootScope) {
-    $rootScope.$state = $state;
+]).run(function ($rootScope, $state, $stateParams) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
 });

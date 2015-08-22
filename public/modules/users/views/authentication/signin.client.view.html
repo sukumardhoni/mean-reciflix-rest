@@ -1,67 +1,291 @@
-<section class="row" data-ng-controller="AuthenticationController">
-  <!--<h3 class="col-md-12 text-center">Sign in using your social accounts</h3>
-  <div class="col-md-12 text-center">
-    <a href="/auth/facebook" class="undecorated-link">
-      <img src="/modules/users/img/buttons/facebook-4-64.png">
-    </a>
-    <a href="/auth/google" class="undecorated-link">
-      <img src="/modules/users/img/buttons/google-plus-4-64.png">
-    </a>
-  </div>
-  <h3 class="col-md-12 text-center">Or with your account</h3>
-  -->
+<style>
+  .darken {
+    z-index: 2px;
+    background: rgba(0, 0, 0, .3);
+  }
 
-  <h3 class="col-md-12 text-center">Log In using your account</h3>
-  <div class="col-xs-offset-2 col-xs-8 col-md-offset-4 col-md-4">
-  <div >
-    <form data-ng-submit="signin()" class="signin form-horizontal" autocomplete="off">
-      <fieldset>
-        <div class="form-group">
-          <label for="username">Email</label>
-          <input type="text" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email">
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label><a href="/#!/password/forgot" style="float:right">Forgot your password?</a>
-          <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
-        </div>
-        <div class="text-center form-group">
-          <button type="submit" class="btn btn-primary">Log In</button>
+  .loginscreen {
+    width: 400px;
+    margin-left: 100px;
+    margin-top: 100px;
+  }
 
-        </div>
-        <div data-ng-show="error" class="text-center text-danger">
-          <strong data-ng-bind="error"></strong>
-        </div>
-      </fieldset>
-    </form>
+  .store-links {
+    margin-left: 75px;
+    margin-bottom: 55px;
+  }
 
-  </div>
+  @media screen and (max-width: 1024px) {
+    .loginscreen {
+      width: 400px;
+      margin-left: 90px;
+      margin-top: 15px;
+    }
+    .store-links {
+      width: 450px;
+      margin-left: 115px;
+      margin-top: 15px;
+    }
+    @media screen and (max-width: 990px) {
+      .loginscreen {
+        width: 400px;
+        margin-left: 90px;
+        margin-top: 15px;
+      }
+      .store-links {
+        width: 350px;
+        margin-left: 110px;
+        margin-top: 15px;
+      }
+      @media screen and (max-width: 750px) {
+        .loginscreen {
+          width: 375px;
+          margin-left: 75px;
+          margin-top: 15px;
+        }
+        .store-links {
+          width: 350px;
+          margin-left: 80px;
+          margin-top: 15px;
+        }
+        @media screen and (max-width: 500px) {
+          .loginscreen {
+            width: 320px;
+            margin-left: 10px;
+            margin-top: 15px;
+          }
+          .store-links {
+            width: 250px;
+            margin-left: 40px;
+            margin-top: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .small2 {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    background-color: transparent;
+    top: 50vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .small1 {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    top: 50vh;
+    left: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background-color: transparent;
+  }
+
+  .bigcon {
+    position: absolute;
+    height: 95px;
+    width: 95px;
+    top: 50vh;
+    left: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    background-color: transparent;
+    animation: bigcon 2s infinite linear;
+    animation-delay: 0.25s;
+  }
+
+  .ball {
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .small {
+    width: 25px;
+    height: 25px;
+    animation: small 2s infinite ease;
+    box-shadow: 0px 2px rgba(0, 0, 0, 0.3);
+    background-color: #FF5722;
+  }
+
+  .small:nth-child(1) {
+    top: 0%;
+    left: 0%;
+  }
+
+  .small:nth-child(2) {
+    top: 0%;
+    right: 0%;
+  }
+
+  .small:nth-child(3) {
+    right: 0%;
+    bottom: 0%;
+  }
+
+  .small:nth-child(4) {
+    bottom: 0%;
+    left: 0%;
+  }
+
+  .big {
+    width: 20px;
+    height: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px #FFF, 0px 0px 20px #FFF, 0px 0px 30px #FFF, 0px 0px 50px #FFF, 0px 0px 60px #FFF;
+    z-index: 1;
+    background-color: #FFF;
+    animation: bigball 1s infinite linear;
+  }
+
+  .smallball1 {
+    animation-delay: -1.75s;
+  }
+
+  .smallball6 {
+    animation-delay: -1.5s;
+  }
+
+  .smallball2 {
+    animation-delay: -1.25s;
+  }
+
+  .smallball7 {
+    animation-delay: -1s;
+  }
+
+  .smallball3 {
+    animation-delay: -0.75s;
+  }
+
+  .smallball8 {
+    animation-delay: -0.5s;
+  }
+
+  .smallball4 {
+    animation-delay: -0.25s;
+  }
+
+  .smallball5 {
+    animation-delay: -0s;
+  }
+
+  @keyframes bigcon {
+    0% {
+      transform-origin: center;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    100% {
+      transform-origin: center;
+      transform: translate(-50%, -50%) rotate(405deg);
+    }
+  }
+
+  @keyframes small {
+    0% {
+      transform: scale(1);
+      background-color: #FF5722;
+    }
+    10% {
+      transform: scale(1.3);
+      background-color: #FFF;
+    }
+    15% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1);
+      background-color: #FF5722;
+    }
+    100% {
+      transform: scale(1);
+      background-color: #FF5722;
+    }
+  }
+</style>
+<div class="wrapper wrapper-content" data-ng-controller="AuthenticationController">
+  <div class="row loginscreen">
+    <div>
+      <div class="ibox float-e-margins">
+        <div class="darken" style="border-radius:5px;border:1px solid #edeeee;padding:15px;-webkit-box-shadow:1px 1px 10px 1px rgba(77,82,86,0.91);-moz-box-shadow:1px 1px 10px 1px rgba(77,82,86,0.91)">
+          <h3 style="color:#FFF" class="text-center">Welcome to ReciFlix</h3>
+          <p style="color:#FFF" class="text-center">Log In to ReciFlix, and see it in action.</p>
+          <form class="m-t" role="form" name="login_form">
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="Email" name="email" ng-model="credentials.email" required="">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" placeholder="Password" name="password" ng-model="credentials.password" required="">
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b" ng-click="Login()" ng-disabled="(login_form.email.$invalid || login_form.password.$invalid)">Log In</button>
+            <p class="text-center">
+              <a href="#" style="color:#FFF"><small>Forgot password?</small></a>
+            </p>
+          </form>
+          <div data-ng-show="errMsg" class="text-center text-danger">
+            <strong data-ng-bind="errMsg"></strong>
+          </div>
+        </div>
+      </div>
     </div>
-  <!--<div style='border:1px solid red'>
-  Hello
-  </div>-->
-</section>
 
-<section class="row ">
-<div class="col-xs-offset-2 col-xs-8 col-md-offset-4 col-md-4" >
+  </div>
 
-  <h4 align="center">Need an account?</h4>
-  <h5 align="center">Dowload the app to signup</h5>
+  <section class="row ">
+    <div class="col-xs-offset-2 col-xs-8 col-md-offset-3 col-md-4 store-links">
+      <h4 align="center" style="color:#FFF">Need an account?</h4>
+      <h5 align="center" style="color:#FFF">Dowload the app to signup</h5>
+      <br>
+      <div class="row">
+        <div class="col-md-6" style="">
+          <center>
+            <a href="https://itunes.apple.com/us/app/reciflix/id1019002413" class="app-store-badge" ng-hide="androidUser" style="margin-left:-5px">
+              <img src="modules/core/img/brand/app-store.png" alt="App Store" class="playstore">
+            </a>
+          </center>
+        </div>
+        <br class="hidden-md hidden-lg">
+        <div class="col-md-6" style="">
+          <center>
+            <a href="https://play.google.com/store/apps/details?id=com.reciflix.recipesapp&hl=en" class="google-play-badge" ng-hide="iosUser" style="margin:10px">
+              <img src="modules/core/img/brand/google-play.png" alt="Google Play" class="playstore">
+            </a>
+          </center>
+        </div>
+      </div>
+      <br>
+      <br>
+    </div>
+  </section>
 
 
-             <div class="col-sm-6" onClick="javascript:alert('Currently in Appstore Review, It will be available shortly.')" style="cursor:pointer;">
-
-              <img src="modules/core/img/brand/ios.png"  height="50px">
-
-            </div>
-            <br class="hidden-lg hidden-md">
-
-            <div class="col-sm-6"  style="cursor:pointer;">
-            <a href="https://play.google.com/store/apps/details?id=com.reciflix.recipesapp&hl=en">  <img src="modules/core/img/brand/android.png" height="50px">
-
-              </a>
-            </div>
 
 
+  <div class="main" ng-show="loading">
 
+
+    <div class="small1">
+      <div class="small ball smallball1"></div>
+      <div class="small ball smallball2"></div>
+      <div class="small ball smallball3"></div>
+      <div class="small ball smallball4"></div>
+    </div>
+
+
+    <div class="small2">
+      <div class="small ball smallball5"></div>
+      <div class="small ball smallball6"></div>
+      <div class="small ball smallball7"></div>
+      <div class="small ball smallball8"></div>
+    </div>
+
+    <div class="bigcon">
+      <div class="big ball"></div>
+    </div>
+
+
+  </div>
 </div>
-</section>

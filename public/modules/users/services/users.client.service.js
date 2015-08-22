@@ -2,11 +2,34 @@
 
 // Users service used for communicating with the users REST endpoint
 angular.module('users').factory('Users', ['$resource',
-	function($resource) {
-		return $resource('users', {}, {
-			update: {
-				method: 'PUT'
-			}
-		});
-	}
+ function ($resource) {
+    return $resource('users', {}, {
+      update: {
+        method: 'PUT'
+      }
+    });
+ }
+])
+
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
+
+.factory('Users', ['$resource', 'API_HOST',
+ function ($resource, API_HOST) {
+    console.log('User service is called');
+    return {
+      Signup: $resource(API_HOST + '/users/signup', {}, {
+        create: {
+          method: 'POST',
+          timeout: 30000
+        }
+      }),
+      Login: $resource(API_HOST + '/users/signin', {}, {
+        create: {
+          method: 'POST',
+          timeout: 20000
+        }
+      }),
+    }
+    }
 ]);

@@ -1,146 +1,118 @@
-<style>
-  body {
-    background: -webkit-linear-gradient(top, rgba(17, 79, 102, 1) 25%, rgba(17, 79, 102, 1) 37.5%, rgba(255, 255, 255, 1) 37.5%, rgba(255, 255, 255, 1) 37.5%, rgba(250, 250, 250, 1) 37.5%, rgba(247, 244, 244, 1) 37.5%) !important;
-    background: -moz-linear-gradient(top, rgba(17, 79, 102, 1) 25%, rgba(17, 79, 102, 1) 37.5%, rgba(255, 255, 255, 1) 37.5%, rgba(255, 255, 255, 1) 37.5%, rgba(250, 250, 250, 1) 37.5%, rgba(247, 244, 244, 1) 37.5%) !important;
-  }
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#myCarousel").carousel({
+      interval: 2000,
+      pause: false
+    });
+  });
+</script>
 
-  .bgcolor {
-    background: -webkit-linear-gradient(top, rgba(17, 79, 102, 1) 25%, rgba(17, 79, 102, 1) 31.65%, rgba(255, 255, 255, 1) 31.65%, rgba(255, 255, 255, 1) 31.65%, rgba(250, 250, 250, 1) 31.65%, rgba(247, 244, 244, 1) 31.65%) !important;
-    background: -moz-linear-gradient(top, rgba(17, 79, 102, 1) 25%, rgba(17, 79, 102, 1) 32.43%, rgba(255, 255, 255, 1) 32.43%, rgba(255, 255, 255, 1) 32.43%, rgba(250, 250, 250, 1) 32.43%, rgba(247, 244, 244, 1) 32.43%) !important;
-  }
-
-  .backimg {
-    background-image: url(modules/core/img/brand/slide1.png);
-    background-size: 485px 665px;
-    height: 665px;
-    width: 485px;
-    margin-top: 40px;
-  }
-
-  .jumbotrons p {
-    margin-bottom: 15px;
-    font-size: 16px;
-    font-weight: 200;
-  }
-
-  .carousel-control {
-    visibility: hidden;
-  }
-
-  .carousel-indicators {
-    visibility: hidden;
-  }
-
-  .carousel-fade .carousel-inner .item {
-    opacity: 0;
-    -webkit-transition-property: opacity;
-    -moz-transition-property: opacity;
-    -o-transition-property: opacity;
-    transition-property: opacity;
-  }
-
-  .carousel-fade .carousel-inner .active {
-    opacity: 1;
-  }
-
-  .carousel-fade .carousel-inner .active.left,
-  .carousel-fade .carousel-inner .active.right {
-    left: 0;
-    opacity: 0;
-    z-index: 1;
-  }
-
-  .carousel-fade .carousel-inner .next.left,
-  .carousel-fade .carousel-inner .prev.right {
-    opacity: 1;
-  }
-
-  .carousel-fade .carousel-control {
-    z-index: 2;
-  }
-
-  .signin-btn {
-    margin-right: 30px;
-    margin-top: 10px;
-    padding: 6px 14px;
-  }
-</style>
-<section data-ng-controller="HomeController">
-  <div class="jumbotrons bgcolor">
+<section data-ng-controller="HomeController" style="min-height:635px">
+  <div class="wrapper wrapper-content container" data-ng-controller="HomeController">
     <div class="row">
-      <div class="col-md-6    col-xs-12 backimg hidden-xs">
-        <carousel interval="2000" style="width:285px;top:87px;left:102px;" class="carousel-fade carousel-inner">
-          <slide ng-repeat="slide in slides" active="slide.active">
-            <img ng-src="{{slide.image}}" style="margin:auto;width:89%;" class="img-responsive" />
-            <div class="carousel-caption">
+      <div class="col-sm-5 col-xs-12 text-center">
+        <div class="carousel   carousel-fade" data-ride="carousel" data-interval="1000" id="myCarousel">
+          <div class="carousel-inner">
+            <div class="item active">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (6).png">
             </div>
-          </slide>
-        </carousel>
-      </div>
-      <div class="col-md-6    col-xs-12" style="-webkit-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
--moz-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);
-box-shadow: -8px -5px 5px -1px rgba(194,188,194,0.65);background:#ffffff;border-radius:5px;margin-top:12px">
-        <br class="hidden-sm hidden-xs">
-        <br class="hidden-sm hidden-xs">
-        <br class="hidden-lg ">
-        <center>
-
-          <img src="/modules/core/img/brand/reciflix-logo_400.png" width="85%">
-
-        </center>
-        <button type="button" class="btn btn-primary btn-lg pull-right signin-btn" ui-sref="signin">Sign In</button>
-
-        <div style="margin-top:10px;margin-bottom:40px" class="row">
-          <div class="col-md-1 col-xs-0 col-sm-0"></div>
-          <div style="padding-top:10px;padding-bottom:10px" class="col-md-10 col-xs-12 col-sm-12">
-            <h3 style="font-size:27px;line-height:35px;color: #06365f;font-weight: bold;">Browse and watch the best recipes online from any device</h3>
-
-            <p class="p-side ">ReciFlix is a <b>quick</b>, <b>convenient </b>and <b>easy</b> way to search a recipe online and watch it with a click of a button and add it to your favourites to be able to access the same recipe anytime from any device conveniently.</p>
-            <p class="p-side ">Browse the categories or set preferences to see a featured recipe. You will be able to like or add to your favourites or share with friends and family all from one app with quick and easy steps.</p>
-            <p class="p-side ">And.. did you hear us say it’s free? </p>
-            <br class="hidden-sm hidden-xs">
-            <br class="hidden-sm hidden-xs">
-            <div class="col-sm-6" ng-click="iosShow()" style="cursor:pointer;">
-
-              <img src="modules/core/img/brand/ios.png" height="60" width="80%">
-
+            <div class="item ">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (4).png">
             </div>
-            <br class="hidden-lg hidden-md">
-            <!-- <div class="col-sm-6" ng-click="androidShow()" style="cursor:pointer;">
-              <img src="modules/core/img/brand/android.PNG" height="50" width="100%">
-            </div>-->
-
-            <div class="col-sm-6" style="cursor:pointer;">
-              <a href="https://play.google.com/store/apps/details?id=com.reciflix.recipesapp&hl=en"> <img src="modules/core/img/brand/android.png" height="60" width="80%">
-
-              </a>
+            <div class="item">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (9).png">
             </div>
-
-            <br>
-            <br>
-
+            <div class="item">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (1).png">
+            </div>
+            <div class="item">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (2).png">
+            </div>
+            <div class="item">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (8).png">
+            </div>
+            <div class="item">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (7).png">
+            </div>
+            <div class="item">
+              <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (5).png">
+            </div>
           </div>
-
-          <div class="col-md-1 col-xs-0 col-sm-0"></div>
-
         </div>
-        <br>
-        <div class="hh" ng-show="showNotify">
-          <hr style="color:#9E9E9E;border-bottom:1px solid #9E9E9E">
-          <h4><b>{{showNotify.count}}&nbsp;&nbsp;&nbsp;{{showNotify.platform}} Users are already Subscribed.</b></h4>
-          <h4><b>Notify me when this App is in Store:</b></h4>
-          <h4 style="color:green" ng-hide="userEmail">{{sucessMsg}}</h4>
-          <h4 style="color:red" ng-hide="userEmail">{{errMsg}}</h4>
-          <form class="form-horizontal" name="notify_form" novalidate ng-submit=notifyme(showNotify.platform)>
-            <div class="col-xs-7">
-              <input type="email" class="form-control" id="Email" placeholder="Email" ng-model="userEmail" required>
-            </div>
-            <div class="col-xs-3">
-              <button type="submit" class="btn btn-primary" ng-disabled="notify_form.$invalid">Notify Me</button>
-            </div>
-          </form>
-        </div>
+      </div>
+      <div class="col-sm-7 col-xs-12" id="reciflix-desc">
+
+        <h2 class="about-h2">Browse and watch the best recipes online from any device</h2>
+        <p class="about-p">ReciFlix is a quick, convenient and easy way to search a recipe online and watch it with a click of a button and add it to your favourites to be able to access the same recipe anytime from any device conveniently. </p>
+        <p class="about-p">Browse the categories or set preferences to see a featured recipe. You will be able to like or add to your favourites or share with friends and family all from one app with quick and easy steps. </p>
+        <p class="about-p">And.. did you hear us say it’s free? </p>
+        <center>
+          <a href="https://itunes.apple.com/us/app/reciflix/id1019002413" class="app-store-badge" target="_blank" ng-hide="androidUser">
+            <img src="modules/core/img/brand/app-store.png" class="playstore">
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.reciflix.recipesapp&hl=en" class="google-play-badge" target="_blank" ng-hide="iosUser">
+            <img src="modules/core/img/brand/google-play.png" class="playstore">
+          </a>
+        </center>
       </div>
     </div>
   </div>
 </section>
+
+
+
+<!--<div id="public-landing-page" class="template-1" data-ng-controller="HomeController">
+  <section class="hero">
+</div>
+<div class="wrapper wrapper-content container">
+  <div class="row">
+    <div class="col-sm-5 col-xs-12 text-center">
+      <div class="carousel carousel-fade" data-ride="carousel" data-interval="1000" id="myCarousel">
+        <div class="carousel-inner">
+          <div class="item active">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (6).png">
+          </div>
+          <div class="item ">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (4).png">
+          </div>
+          <div class="item">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (9).png">
+          </div>
+          <div class="item">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (1).png">
+          </div>
+          <div class="item">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (2).png">
+          </div>
+          <div class="item">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (8).png">
+          </div>
+          <div class="item">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (7).png">
+          </div>
+          <div class="item">
+            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (5).png">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-7 col-xs-12" style="background:rgba(0,0,0,0.3);padding-bottom: 12px;">
+      <br class="hidden-xs hidden-sm">
+      <br class="hidden-xs hidden-sm">
+      <br class="hidden-xs hidden-sm">
+      <h2 class="about-h2">Browse and watch the best recipes online from any device</h2>
+      <p class="about-p">ReciFlix is a quick, convenient and easy way to search a recipe online and watch it with a click of a button and add it to your favourites to be able to access the same recipe anytime from any device conveniently. </p>
+
+      <p class="about-p">Browse the categories or set preferences to see a featured recipe. You will be able to like or add to your favourites or share with friends and family all from one app with quick and easy steps. </p>
+      <p class="about-p">And.. did you hear us say it’s free? </p>
+      <a href="https://itunes.apple.com/us/app/reciflix/id1019002413" class="app-store-badge" target="_blank" ng-hide="androidUser">
+        <img src="modules/core/img/brand/app-store.png" class="playstore">
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.reciflix.recipesapp&hl=en" class="google-play-badge" target="_blank" ng-hide="iosUser">
+        <img src="modules/core/img/brand/google-play.png" class="playstore">
+      </a>
+    </div>
+  </div>
+</div>
+</section>
+</div>-->

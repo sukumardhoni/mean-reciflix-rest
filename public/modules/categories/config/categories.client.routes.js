@@ -1,50 +1,41 @@
 'use strict';
 
 // Setting up routes for categories
-angular.module('categories').config(['$stateProvider',
- function ($stateProvider) {
-    // Categories state routing
-    $stateProvider.
-    state('listCategories', {
-      url: '/categories',
-      templateUrl: 'modules/categories/views/list-categories.client.view.html'
-      }).
-    state('createcategory', {
-      url: '/create',
-      templateUrl: 'modules/categories/views/create-category.client.view.html'
-    }).
-    state('editCategory', {
-      url: '/editCat/:newCatId',
-      templateUrl: 'modules/categories/views/create-category.client.view.html'
-    });
-
-
-/*
-
-    }).
-    state('listCategories.category', {
-      url: '/category',
-      views: {
-        'user.categories': {
-          templateUrl: 'modules/articles/views/edit-article.client.view.html'
+angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
+ function ($stateProvider, $urlRouterProvider) {
+    // Home state routing
+    $stateProvider
+      .state('reciflix', {
+        url: '/reciflix',
+        templateUrl: 'modules/categories/views/common/content.html',
+        controller: 'ReciflixCtrl',
+        data: {
+          bodyClass: ''
         }
-      }
-    }).
-    state('listArticles.createcategories', {
-      url: '/createcategories',
-      views: {
-        'user.categories': {
-          templateUrl: 'modules/articles/views/createcategories.client.view.html'
+      })
+      .state('reciflix.categories', {
+        url: "/categories",
+        templateUrl: "modules/categories/views/categories.html",
+        controller: 'CategoryCtrl',
+        module: 'private'
+      })
+      .state('reciflix.categories.subcats', {
+        url: "/subcats",
+        views: {
+          'child-view': {
+            templateUrl: "modules/categories/views/subCats.html"
+          }
         }
-      }
-    }).
-    state('listArticles.recipes', {
-      url: '/recipes',
-      views: {
-        'user.recipes': {
-          templateUrl: 'modules/articles/views/view-article.client.view.html'
-        }
-      }
-*/
- }
-]);
+      })
+      .state('reciflix.recipes', {
+        url: "/recipes",
+        templateUrl: "modules/categories/views/recipes.html",
+        controller: 'CategoryCtrl',
+        module: 'private'
+      });
+}])
+
+.run(function ($rootScope, $state, $stateParams) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
+});

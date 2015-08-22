@@ -4,7 +4,9 @@
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'reciflixApp';
-  var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage'];
+  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage'];
+
+  //['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage']
 
   // Add a new vertical module
   var registerModule = function (moduleName, dependencies) {

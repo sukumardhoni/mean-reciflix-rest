@@ -45,20 +45,31 @@
 	<![endif]-->
 </head>
 
-<body class="ng-cloak">
+<body class="ng-cloak" ng-class="$state.current.data.bodyClass">
 
-  <header style="background:#114F66;border:1px solid #114F66" data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar  navbar-inverse"></header>
-  <footer data-ng-include="'/modules/core/views/footer.client.view.html'" class="navbar navbar-fixed-bottom">
-<!--
-    <a title="Web Analytics" href="http://clicky.com/100861627"><img alt="Web Analytics" src="//static.getclicky.com/media/links/badge.gif" border="0" />
-  </a>
--->
-  </footer>
-  <section class="content">
-    <section class="container">
-      {% block content %}{% endblock %}
-    </section>
-  </section>
+
+
+
+  <!-- Wrapper-->
+  <div id="wrapper">
+
+    <!-- Navigation -->
+    <!-- <div data-ng-include="'/modules/core/views/navigation.client.view.html'"></div>-->
+
+    <!-- Page wraper -->
+    <!-- Page wrapper -->
+    <div ng-include="'/modules/core/views/header.client.view.html'"></div>
+
+    <!-- Main view  -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <div ng-include="'/modules/core/views/footer.client.view.html'" ng-hide="$state.includes('reciflix')"></div>
+
+    <!-- End page wrapper-->
+
+  </div>
+
 
 
   <!--Embedding The User Object-->
