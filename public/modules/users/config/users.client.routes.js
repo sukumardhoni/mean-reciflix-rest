@@ -31,7 +31,11 @@ angular.module('users').config(['$stateProvider',
     }).
     state('forgot', {
       url: '/password/forgot',
-      templateUrl: 'modules/users/views/password/forgot-password.client.view.html'
+      templateUrl: 'modules/users/views/password/forgot-password.client.view.html',
+      module: 'public',
+      data: {
+        bodyClass: 'bg-body'
+      }
     }).
     state('reset-invalid', {
       url: '/password/reset/invalid',

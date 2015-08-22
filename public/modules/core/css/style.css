@@ -194,7 +194,7 @@ h5 {
 
 .nav-header {
   padding: 33px 25px;
-  background: url("patterns/header-profile.png") no-repeat;
+  background: url("../img/patterns/header-profile.png") no-repeat;
 }
 
 .pace-done .nav-header {
@@ -5497,7 +5497,7 @@ body.rtls.top-navigation .footer.fixed {
 
 .blue-skin {
   font-weight: 600;
-  background: url("patterns/header-profile-skin-1.png") repeat scroll 0 0;
+  background: url("../img/patterns/header-profile-skin-1.png") repeat scroll 0 0;
 }
 
 .blue-skin:hover {
@@ -5506,7 +5506,7 @@ body.rtls.top-navigation .footer.fixed {
 
 .yellow-skin {
   font-weight: 600;
-  background: url("patterns/header-profile-skin-3.png") repeat scroll 0 100%;
+  background: url("../img/patterns/header-profile-skin-3.png") repeat scroll 0 100%;
 }
 
 .yellow-skin:hover {
@@ -5515,7 +5515,7 @@ body.rtls.top-navigation .footer.fixed {
 
 .ultra-skin {
   font-weight: 600;
-  background: url("patterns/header-profile-skin-2.png") repeat scroll 0 0;
+  background: url("../img/patterns/header-profile-skin-2.png") repeat scroll 0 0;
 }
 
 .ultra-skin:hover {
@@ -5546,7 +5546,7 @@ body.rtls.top-navigation .footer.fixed {
 
 .skin-1 .nav-header {
   background: #0e9aef;
-  background: url('patterns/header-profile-skin-1.png');
+  background: url('../img/patterns/header-profile-skin-1.png');
 }
 
 .skin-1.mini-navbar .nav-second-level {
@@ -5678,7 +5678,7 @@ body.skin-2 {
 
 .skin-2 .nav-header {
   background: #23c6c8;
-  background: url('patterns/header-profile-skin-2.png');
+  background: url('../img/patterns/header-profile-skin-2.png');
 }
 
 .skin-2.mini-navbar .nav-second-level {
@@ -5868,7 +5868,7 @@ body.boxed-layout.skin-3 #wrapper {
 
 .skin-3 .nav-header {
   background: #ecba52;
-  background: url('patterns/header-profile-skin-3.png');
+  background: url('../img/patterns/header-profile-skin-3.png');
 }
 
 .skin-3.mini-navbar .nav-second-level {
