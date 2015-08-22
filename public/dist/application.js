@@ -553,6 +553,7 @@ angular.module('categories').controller('CategoryCtrl', ['$scope', '$state', '$s
   };
 
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -703,6 +704,7 @@ angular.module('categories')
     }
   });
 }])
+
 'use strict';
 
 // Setting up route
@@ -764,6 +766,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.iosUser = true;
     }
  }]);
+
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -1469,6 +1472,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
 
 }]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',
