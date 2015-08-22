@@ -88,7 +88,7 @@ function minimalizaSidebar($timeout) {
       $scope.minimalize = function () {
         $("body").toggleClass("mini-navbar");
         if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-          console.log('Device view in small screen');
+
           // Hide menu in order to smoothly turn on when maximize menu
           $('#side-menu').hide();
           // For smoothly turn on menu
@@ -97,7 +97,7 @@ function minimalizaSidebar($timeout) {
               $('#side-menu').fadeIn(500);
             }, 100);
         } else if ($('body').hasClass('fixed-sidebar')) {
-          console.log('Device view in medium screen');
+
           $('#side-menu').hide();
           setTimeout(
             function () {

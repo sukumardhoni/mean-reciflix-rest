@@ -647,6 +647,7 @@ function minimalizaSidebar($timeout) {
       $scope.minimalize = function () {
         $("body").toggleClass("mini-navbar");
         if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+
           // Hide menu in order to smoothly turn on when maximize menu
           $('#side-menu').hide();
           // For smoothly turn on menu
@@ -655,6 +656,7 @@ function minimalizaSidebar($timeout) {
               $('#side-menu').fadeIn(500);
             }, 100);
         } else if ($('body').hasClass('fixed-sidebar')) {
+
           $('#side-menu').hide();
           setTimeout(
             function () {
@@ -682,7 +684,6 @@ angular
   .directive('sideNavigation', sideNavigation)
   .directive('iboxTools', iboxTools)
   .directive('minimalizaSidebar', minimalizaSidebar)
-
 'use strict';
 
 //Categories service used for communicating with the categories REST endpoints
@@ -1358,7 +1359,7 @@ angular.module('users').config(['$httpProvider',
 								$location.path('signin');
 								break;
 							case 403:
-								// Add unauthorized behaviour
+								// Add unauthorized behaviour 
 								break;
 						}
 
@@ -1402,7 +1403,11 @@ angular.module('users').config(['$stateProvider',
     }).
     state('forgot', {
       url: '/password/forgot',
-      templateUrl: 'modules/users/views/password/forgot-password.client.view.html'
+      templateUrl: 'modules/users/views/password/forgot-password.client.view.html',
+      module: 'public',
+      data: {
+        bodyClass: 'bg-body'
+      }
     }).
     state('reset-invalid', {
       url: '/password/reset/invalid',
@@ -1528,7 +1533,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		// If user is not signed in then redirect back home
 		if (!$scope.user) $location.path('/');
 
-		// Check if there are additional accounts
+		// Check if there are additional accounts 
 		$scope.hasConnectedAdditionalSocialAccounts = function(provider) {
 			for (var i in $scope.user.additionalProvidersData) {
 				return true;
@@ -1597,7 +1602,7 @@ angular.module('users').factory('Authentication', ['$window', function($window) 
 	var auth = {
 		user: $window.user
 	};
-
+	
 	return auth;
 }]);
 
