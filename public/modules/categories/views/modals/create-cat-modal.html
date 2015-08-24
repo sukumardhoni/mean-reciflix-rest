@@ -1,0 +1,62 @@
+<div class="inmodal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" ng-click="cancel()"><span aria-hidden="true">×</span> </button>
+    <h4 class="modal-title">{{modalName}}</h4>
+  </div>
+  <div class="modal-body">
+    <form role="form" name="cat_form">
+      <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" name="displayName" placeholder="Display Name, eg: 'Vegeterian'" class="form-control" ng-model="cat.displayName" required>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4 col-xs-4">
+          <label class="control-label">Sub-category Exists</label>
+          <input type="text" placeholder="Sub-category exists, eg: 'Y' or 'N'" class="form-control" ng-model="cat.subCatExist">
+        </div>
+        <div class="form-group col-md-4 col-xs-4">
+          <label class="control-label">Rank</label>
+          <input type="text" placeholder="Sub-category exists, eg: 'Y' or 'N'" class="form-control" ng-model="cat.subCatExist">
+        </div>
+        <div class="form-group col-md-4 col-xs-4">
+          <label class="control-label">Status</label>
+          <input type="text" placeholder="Status, eg: 'Active' or 'Inactive'" class="form-control" ng-model="cat.status">
+        </div>
+      </div>
+
+
+
+      <!--<div class="form-group">
+  <label>Sub-category Exists</label>
+  <input type="text" placeholder="Sub-category exists, eg: 'Y' or 'N'" class="form-control" ng-model="cat.subCatExist">
+</div>-->
+      <!--<div class="form-group">
+  <label>Rank</label>
+  <input type="number" placeholder="Rank, eg: '1' or '2' or '3'..." class="form-control" ng-model="cat.rank">
+</div>-->
+
+      <!--<div class="form-group">
+  <label>Status</label>
+  <input type="text" placeholder="Status, eg: 'Active' or 'Inactive'" class="form-control" ng-model="cat.status">
+</div>-->
+      <div class="form-group">
+        <label>Category Id</label>
+        <input type="text" name="catId" placeholder="Category Id, eg: 'vegeterian'" class="form-control" ng-model="cat.catId" required>
+      </div>
+      <div class="form-group">
+        <label>Image Name</label>
+        <input type="text" placeholder="Image Name, eg: 'vegeterian.png'" class="form-control" ng-model="cat.imageName">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea type="text" rows="5" cols="15" placeholder="Description, eg: Few lines about this category" class="form-control" ng-model="cat.description"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
+    <button type="button" class="btn btn-primary" ng-click="createCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid)" ng-show="modalName === 'Create Category'">{{modalName}}</button>
+    <a ng-click="deleteCat(cat,$index)" title="Delete this category"><i class="fa fa-times" style="color:red;font-size:20px;float:left" ng-show="modalName === 'Update Category'"></i></a>
+    <button type="button" class="btn btn-primary" ng-click="updateCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid)" ng-show="modalName === 'Update Category'">{{modalName}}</button>
+  </div>
+</div>

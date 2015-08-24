@@ -574,8 +574,8 @@ body.fixed-sidebar.mini-navbar .navbar-default .nav li a span {
 }
 
 .top-navigation .navbar-header {
-  /*display: inline-block;*/
-  /*float: none;*/
+  display: inline-block;
+  float: none;
 }
 
 .top-navigation.mini-navbar #page-wrapper,

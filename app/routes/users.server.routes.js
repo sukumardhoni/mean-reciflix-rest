@@ -25,8 +25,8 @@ module.exports = function (app) {
   app.route('/auth/reset/:token').post(users.reset);
 
   // Setting up the users authentication api
-  app.route('/auth/signup').post(users.signup);
-  app.route('/auth/signin').post(users.signin);
+  //app.route('/auth/signup').post(users.signup);
+  //app.route('/auth/signin').post(users.signin);
   app.route('/auth/signout').get(users.signout);
   // Setting the facebook oauth routes
   app.route('/auth/facebook').get(passport.authenticate('facebook', {
@@ -64,7 +64,7 @@ module.exports = function (app) {
   app.route('/users/signup').post(users.jwtSignup);
   app.route('/users/signin').post(users.jwtSignin);
   app.route('/users/signout').post(users.jwtSignout);
-
+  app.route('/users/checking').get(users.checkUserByToken);
   app.route('/users/forgotPassword').post(users.forgot);
   app.route('/users/updateProfile').put(users.update);
   app.route('/users/changePassword').post(users.changePassword);

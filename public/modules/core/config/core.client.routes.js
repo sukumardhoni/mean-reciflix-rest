@@ -9,13 +9,23 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
     // Home state routing
     $stateProvider.
     state('home', {
-      url: '/',
-      templateUrl: 'modules/core/views/home.client.view.html',
-      module: 'public',
-      data: {
-        bodyClass: 'bg-body'
-      }
-    });
+        url: '/',
+        templateUrl: 'modules/core/views/home.client.view.html',
+        module: 'public',
+        data: {
+          bodyClass: 'bg-body'
+        }
+      })
+      .state('terms', {
+        url: '/terms',
+        templateUrl: 'modules/core/views/terms.client.view.html',
+        module: 'public'
+      })
+      .state('privacy', {
+        url: '/privacy',
+        templateUrl: 'modules/core/views/privacy.client.view.html',
+        module: 'public'
+      });
  }
 ]).run(function ($rootScope, $state, $stateParams) {
   $rootScope.$state = $state;

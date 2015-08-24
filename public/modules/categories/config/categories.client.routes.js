@@ -20,12 +20,14 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
         module: 'private'
       })
       .state('reciflix.categories.subcats', {
-        url: "/subcats",
+        url: "/:catId",
         views: {
           'child-view': {
-            templateUrl: "modules/categories/views/subCats.html"
+            templateUrl: "modules/categories/views/subCats.html",
+            controller: 'SubCatCtrl',
           }
-        }
+        },
+        module: 'private'
       })
       .state('reciflix.recipes', {
         url: "/recipes",

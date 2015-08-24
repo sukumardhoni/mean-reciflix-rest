@@ -172,65 +172,42 @@ exports.jwtSignin = function (req, res, next) {
   });
 };
 
-/**
- * Signup
- */
-exports.signup = function (req, res) {
-  // For security measurement we remove the roles from the req.body object
-  delete req.body.roles;
 
-  // Init Variables
-  var user = new User(req.body);
-  var message = null;
 
-  // Add missing user fields
-  user.provider = 'local';
-  user.displayName = user.firstName + ' ' + user.lastName;
 
-  // Then save the user
-  user.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
+exports.checkUserByToken = function (req, res) {
+  var bearerToken;
+  var bearerHeader = req.headers.authorization;
+  if (typeof bearerHeader !== 'undefined') {
+    var bearer = bearerHeader.split(' ');
+    if (bearer[1] === 'undefined') {
+      res.sendStatus(401);
     } else {
-      // Remove sensitive data before login
-      user.password = undefined;
-      user.salt = undefined;
-
-      req.login(user, function (err) {
+      bearerToken = bearer[1];
+      User.findOne({
+        token: bearerToken
+      }, function (err, user) {
         if (err) {
-          res.status(400).send(err);
+          res.json({
+            type: false,
+            data: 'Error occured: ' + err
+          });
+        } else if (user === null) {
+          res.json({
+            type: false,
+            data: 'Empty User Occured '
+          });
         } else {
-          res.json(user);
+          req.user = user;
+          res.jsonp(user);
         }
       });
     }
-  });
+  } else {
+    res.sendStatus(401);
+  }
 };
 
-/**
- * Signin after passport authentication
- */
-exports.signin = function (req, res, next) {
-  passport.authenticate('local', function (err, user, info) {
-    if (err || !user) {
-      res.status(400).send(info);
-    } else {
-      // Remove sensitive data before login
-      user.password = undefined;
-      user.salt = undefined;
-
-      req.login(user, function (err) {
-        if (err) {
-          res.status(400).send(err);
-        } else {
-          res.json(user);
-        }
-      });
-    }
-  })(req, res, next);
-};
 
 
 
