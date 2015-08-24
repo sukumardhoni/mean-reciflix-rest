@@ -985,6 +985,7 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
