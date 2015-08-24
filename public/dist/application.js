@@ -512,6 +512,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
+
 'use strict';
 
 // Articles controller
@@ -753,6 +754,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -1016,6 +1018,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
+
 'use strict';
 
 angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', '$http', '$location', '$localStorage',
