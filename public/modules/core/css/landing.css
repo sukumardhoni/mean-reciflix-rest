@@ -1,8 +1,15 @@
-.bg-body {
+.bg-body #wrapper{
   background-image: url('../../../modules/core/img/brand/img_60522306-min.png') !important;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+  background-color: #f8f8f8;
+  #height:899px;
+
+}
+
+.bg-body{
+background-color: #f8f8f8;;
 }
 
 #public-landing-page .container {
@@ -118,6 +125,7 @@ footer {
   left: 0;
   right: 0;
   display: block;
+  #position:absolute;
 }
 
 #public-landing-page footer a {
