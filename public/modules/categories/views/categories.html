@@ -27,7 +27,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="cat in categories">
+                  <tr ng-repeat="cat in categories" ng-hide="categories.length === 0">
                     <td class="project-status">
                       <span class="label label-primary" ng-show="cat.status === 'Active' ">{{cat.status}}</span>
                       <span class="label label-default" ng-show="cat.status === 'Inactive' ">{{cat.status}}</span>
@@ -53,6 +53,11 @@
                   </tr>
                 </tbody>
               </table>
+              <div ng-show="categories.length === 0">
+                <center>
+                  <h3>There are no Categories, you can create one now.</h3>
+                </center>
+              </div>
             </div>
           </div>
         </div>
