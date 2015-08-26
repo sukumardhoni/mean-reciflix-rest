@@ -14,3 +14,17 @@
   right: 10px;
   position: absolute;
 }
+/*Pagination styles*/
+
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  background-color: #1ab394;
+  border-color: #1ab394;
+  color: #FFFFFF;
+  cursor: default;
+  z-index: 2;
+}

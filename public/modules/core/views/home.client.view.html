@@ -1,7 +1,62 @@
+<style>
+  .carousel-fade {
+    z-index: 2;
+  }
+
+  .carousel-fade {
+    opacity: 2;
+    -webkit-transition-property: opacity;
+    -moz-transition-property: opacity;
+    -o-transition-property: opacity;
+    transition-property: opacity;
+  }
+
+  .carousel-fade,
+  .carousel-fade,
+  .carousel-fade {
+    opacity: 1;
+  }
+
+  .carousel-fade .active.left,
+  .carousel-fade .active.right {
+    left: 0;
+    opacity: 2;
+    z-index: 1;
+  }
+  /* Safari Fix */
+
+  @media all and (transform-3d),
+  (-webkit-transform-3d) {
+    .carousel-fade .carousel-inner > .item.next,
+    .carousel-fade .carousel-inner > .item.active.right {
+      opacity: 0;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+    .carousel-fade .carousel-inner > .item.prev,
+    .carousel-fade .carousel-inner > .item.active.left {
+      opacity: 0;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+    .carousel-fade .carousel-inner > .item.next.left,
+    .carousel-fade .carousel-inner > .item.prev.right,
+    .carousel-fade .carousel-inner > .item.active {
+      opacity: 1;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+</style>
+
+
 <script type="text/javascript">
   $(document).ready(function () {
     $("#myCarousel").carousel({
-      interval: 2000,
+      interval: 3000,
       pause: false
     });
   });
@@ -11,7 +66,7 @@
   <div class="wrapper wrapper-content container" data-ng-controller="HomeController">
     <div class="row">
       <div class="col-sm-5 col-xs-12 text-center">
-        <div class="carousel   carousel-fade" data-ride="carousel" data-interval="1000" id="myCarousel">
+        <div class="carousel slide carousel-fade" data-ride="carousel" data-interval="1000" id="myCarousel">
           <div class="carousel-inner">
             <div class="item active">
               <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (6).png">
@@ -58,61 +113,3 @@
     </div>
   </div>
 </section>
-
-
-
-<!--<div id="public-landing-page" class="template-1" data-ng-controller="HomeController">
-  <section class="hero">
-</div>
-<div class="wrapper wrapper-content container">
-  <div class="row">
-    <div class="col-sm-5 col-xs-12 text-center">
-      <div class="carousel carousel-fade" data-ride="carousel" data-interval="1000" id="myCarousel">
-        <div class="carousel-inner">
-          <div class="item active">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (6).png">
-          </div>
-          <div class="item ">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (4).png">
-          </div>
-          <div class="item">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (9).png">
-          </div>
-          <div class="item">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (1).png">
-          </div>
-          <div class="item">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (2).png">
-          </div>
-          <div class="item">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (8).png">
-          </div>
-          <div class="item">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (7).png">
-          </div>
-          <div class="item">
-            <img alt="image" class="img-responsive screenshot center-block" src="modules/core/img/brand/iPhone6White (5).png">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-7 col-xs-12" style="background:rgba(0,0,0,0.3);padding-bottom: 12px;">
-      <br class="hidden-xs hidden-sm">
-      <br class="hidden-xs hidden-sm">
-      <br class="hidden-xs hidden-sm">
-      <h2 class="about-h2">Browse and watch the best recipes online from any device</h2>
-      <p class="about-p">ReciFlix is a quick, convenient and easy way to search a recipe online and watch it with a click of a button and add it to your favourites to be able to access the same recipe anytime from any device conveniently. </p>
-
-      <p class="about-p">Browse the categories or set preferences to see a featured recipe. You will be able to like or add to your favourites or share with friends and family all from one app with quick and easy steps. </p>
-      <p class="about-p">And.. did you hear us say it’s free? </p>
-      <a href="https://itunes.apple.com/us/app/reciflix/id1019002413" class="app-store-badge" target="_blank" ng-hide="androidUser">
-        <img src="modules/core/img/brand/app-store.png" class="playstore">
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.reciflix.recipesapp&hl=en" class="google-play-badge" target="_blank" ng-hide="iosUser">
-        <img src="modules/core/img/brand/google-play.png" class="playstore">
-      </a>
-    </div>
-  </div>
-</div>
-</section>
-</div>-->

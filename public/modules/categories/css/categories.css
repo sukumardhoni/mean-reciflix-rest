@@ -1,3 +1,9 @@
 .reciflix.categories {
   min-height: 740px !important;
 }
+
+.cat-table-titles {
+  font-size: 18px;
+  font-weight: bold;
+  color: darkgray;
+}

@@ -1,0 +1,58 @@
+<div class="row" ng-init="getAllUsers()">
+  <div class="col-lg-12">
+    <div class="wrapper wrapper-content animated fadeInUp">
+      <div class="ibox">
+        <div class="ibox-title">
+          <a class="btn btn-sm btn-primary" ui-sref="reciflix.categories"><i class="fa fa-arrow-left"> Back</i> </a>
+          <div style="text-align:center;font-size:18px;margin-top:-30px">ReciFlix Users : <span style="font-weight:bold;color:#18a689">{{users.length}}</span> <small>members</small>
+          </div>
+        </div>
+
+        <center>
+          <!--<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage"></pagination>-->
+
+          <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage"></pagination>
+
+        </center>
+        <div class="ibox-content">
+          <div class="project-list">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <td class="project-status cat-table-titles">Provider</td>
+                  <td class="project-title cat-table-titles">Name</td>
+                  <td class="project-completion cat-table-titles">Email</td>
+                  <td class="project-actions cat-table-titles">Joined On ReciFlix</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="user in users.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))" ng-hide="users.length === 0">
+                  <td class="project-status">
+                    <span class="label label-success" ng-show="user.provider === 'fb' ">{{user.provider}}</span>
+                    <span class="label label-primary" ng-show="user.provider === 'gmail' ">{{user.provider}}</span>
+                    <span class="label label-default" ng-show="user.provider === 'local' ">{{user.provider}}</span>
+                  </td>
+                  <td class="project-title">
+                    <a>{{user.displayName}}</a>
+                  </td>
+                  <td class="project-completion">
+                    <a>{{user.email}}</a>
+                  </td>
+                  <td class="project-actions">
+                    <a>{{user.created}}</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div ng-show="users.length === 0">
+              <center>
+                <h3>There is no Users in ReciFlix.</h3>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

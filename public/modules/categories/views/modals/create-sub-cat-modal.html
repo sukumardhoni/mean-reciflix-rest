@@ -10,8 +10,8 @@
         <input type="text" name="displayName" placeholder="Display Name, eg: 'Vegeterian'" class="form-control" ng-model="subCat.displayName" required>
       </div>
       <div class="form-group">
-        <label>State</label>
-        <input type="text" placeholder="Status, eg: 'True' or 'False'" class="form-control" ng-model="subCat.state">
+        <label>Status</label>
+        <input type="text" placeholder="Status ,eg: 'Active' or 'Inactive'" class="form-control" ng-model="subCat.status">
       </div>
       <div class="form-group">
         <label>Image Name</label>
@@ -26,6 +26,7 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
     <button type="button" class="btn btn-primary" ng-click="createSubCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid)" ng-show="modalName === 'Create Sub-Category'">{{modalName}}</button>
+    <a ng-click="deleteSubCat(subCat,$index)" title="Delete this Subcategory"><i class="fa fa-times" style="color:red;font-size:20px;float:left" ng-show="modalName === 'Update Sub-Category'"></i></a>
     <button type="button" class="btn btn-primary" ng-click="updateSubCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid)" ng-show="modalName === 'Update Sub-Category'">{{modalName}}</button>
   </div>
 </div>

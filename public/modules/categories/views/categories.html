@@ -11,46 +11,44 @@
           <div class="ibox-title">
             <h5>All Categories available in the ReciFlix</h5>
             <div class="ibox-tools">
-              <a class="btn btn-primary btn-xs" ng-click="openModal()">Create new Category</a>
+              <a class="btn btn-primary btn-sm" ng-click="openModal()">Create new Category</a>
             </div>
           </div>
           <div class="ibox-content">
-            <div class="row m-b-sm m-t-sm">
-              <div class="col-md-1">
-                <button type="button" id="loading-example-btn" class="btn btn-white btn-sm"><i class="fa fa-refresh"></i> Refresh</button>
-              </div>
-              <div class="col-md-11">
-                <div class="input-group">
-                  <input type="text" placeholder="Search Category" class="input-sm form-control"> <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span>
-                </div>
-              </div>
-            </div>
-
             <div class="project-list">
               <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <td class="project-status cat-table-titles">Status</td>
+                    <td class="project-title cat-table-titles">Name</td>
+                    <td class="project-completion cat-table-titles">Image Name</td>
+                    <td class="project-people cat-table-titles" style="text-align:center">Sub Cats.</td>
+                    <td class="project-actions cat-table-titles">Operations</td>
+                  </tr>
+                </thead>
                 <tbody>
                   <tr ng-repeat="cat in categories">
                     <td class="project-status">
-                      <span class="label label-primary" ng-show="cat.status === 'Y' || cat.status === 'Active' ">{{cat.status}}</span>
-                      <span class="label label-default" ng-show="cat.status === 'N' || cat.status === 'Inactive' ">{{cat.status}}</span>
+                      <span class="label label-primary" ng-show="cat.status === 'Active' ">{{cat.status}}</span>
+                      <span class="label label-default" ng-show="cat.status === 'Inactive' ">{{cat.status}}</span>
                     </td>
                     <td class="project-title">
-                      <a href="project_detail.html">{{cat.displayName}}</a>
+                      <a ng-click="displayCat(cat)">{{cat.displayName}}</a>
                       <br/>
                       <small>{{cat.created}}</small>
                     </td>
                     <td class="project-completion">
-                      <small>Recipes under this category: 48%</small>
-                      <div class="progress progress-mini">
-                        <div style="width: 48%;" class="progress-bar"></div>
-                      </div>
+                      <a>{{cat.imageName}}</a>
+                    </td>
+                    <td class="project-people" style="text-align:center">
+                      <div>{{cat.subCatExist}}</div>
                     </td>
                     <td class="project-actions">
-                      <a ng-click="displayCat(cat)"><i class="fa fa-eye" style="color:green;font-size:20px"></i>  </a>
+                      <a class="btn btn-white btn-sm" ng-click="displayCat(cat)"><i class="fa fa-eye" style="color:green;"></i> View </a>
 
-                      <a ng-click="editCat(cat,$index)"><i class="fa fa-pencil"  style="color:grey;font-size:20px;padding-left:10px"></i></a>
-                      <a class="btn btn-white btn-sm" ui-sref="reciflix.categories.subcats({catId:cat._id})"><i class="fa fa-folder" ></i> Sub Cats </a>
+                      <a class="btn btn-white btn-sm" ng-click="editCat(cat,$index)"><i class="fa fa-pencil"></i> Edit</a>
+                      <a class="btn btn-white btn-sm" ui-sref="reciflix.categories.subcats({catId:cat._id,catName:cat.displayName})"><i class="fa fa-folder" ></i>
+                        Sub Cats </a>
                     </td>
                   </tr>
                 </tbody>
@@ -62,24 +60,3 @@
     </div>
   </div>
 </div>
-<script>
-  $(document).ready(function () {
-    $('#loading-example-btn').click(function () {
-      btn = $(this);
-      simpleLoad(btn, true)
-      simpleLoad(btn, false)
-    });
-  });
-
-  function simpleLoad(btn, state) {
-    if (state) {
-      btn.children().addClass('fa-spin');
-      btn.contents().last().replaceWith(" Loading");
-    } else {
-      setTimeout(function () {
-        btn.children().removeClass('fa-spin');
-        btn.contents().last().replaceWith(" Refresh");
-      }, 2000);
-    }
-  }
-</script>

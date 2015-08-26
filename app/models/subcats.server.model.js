@@ -10,8 +10,9 @@ var mongoose = require('mongoose'),
  * Grocery Schema
  */
 var SubCatsSchema = new Schema({
-  state: {
-    type: Boolean
+  status: {
+    type: String,
+    default: 'Inactive'
   },
   catId: {
     type: Schema.ObjectId,

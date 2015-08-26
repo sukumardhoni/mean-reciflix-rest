@@ -48,6 +48,17 @@ angular.module('users').config(['$stateProvider',
     state('reset', {
       url: '/password/reset/:token',
       templateUrl: 'modules/users/views/password/reset-password.client.view.html'
+    })
+
+
+
+
+
+    .state('reciflix.users', {
+      url: "/users",
+      templateUrl: "modules/users/views/users.html",
+      controller: 'UsersCtrl',
+      module: 'private'
     });
  }
 ]).run(function ($rootScope, $state, $stateParams) {

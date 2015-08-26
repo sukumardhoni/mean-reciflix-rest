@@ -1,0 +1,33 @@
+<div class="inmodal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" ng-click="cancel()"><span aria-hidden="true">×</span> </button>
+    <h4 class="modal-title">View Sub Category</h4>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+      <tr>
+        <td>DisplayName</td>
+        <td>:</td>
+        <td>{{subCat.displayName}}</td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td>:</td>
+        <td>{{subCat.status}}</td>
+      </tr>
+      <tr>
+        <td>ImageName</td>
+        <td>:</td>
+        <td>{{subCat.imageName}}</td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>:</td>
+        <td>{{subCat.description}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
+  </div>
+</div>

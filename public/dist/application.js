@@ -23,7 +23,6 @@ var ApplicationConfiguration = (function () {
     registerModule: registerModule
   };
 })();
-
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -491,7 +490,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
         module: 'private'
       })
       .state('reciflix.categories.subcats', {
-        url: "/:catId",
+        url: "/:catId/:catName",
         views: {
           'child-view': {
             templateUrl: "modules/categories/views/subCats.html",
@@ -512,7 +511,6 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
-
 'use strict';
 
 // Articles controller
@@ -541,15 +539,16 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
 
+
+
 .controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory) {
   $scope.categoryFun = function () {
-    console.log('categoryFun is called');
     Categories.query({
       pageId: 999
     }).$promise.then(function (res) {
       $scope.categories = res;
     }).catch(function (err) {
-      console.log('Error happened : ' + JSON.stringify(err));
+      //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
@@ -575,54 +574,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   };
 
-
-  $scope.getCatDetails = function (cat) {
-    SingleCat.get({
-      newCatId: cat._id
-    }, function (res) {
-      console.log('Sucessfully fetched category details: ' + JSON.stringify(res));
-      $scope.cat = res;
-    }, function (err) {
-      console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
-    });
-  };
-
-
-
-
-  $scope.createCat = function () {
-    console.log('Console at create cat func. & cat details are : ' + JSON.stringify($scope.cat));
-    SingleCat.save($scope.cat, function (res) {
-      console.log('Sucessfully created category details: ' + JSON.stringify(res));
-      $scope.categories.unshift(res);
-      $scope.modalInstance.close();
-    }, function (err) {
-      console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
-    });
-  };
-
-  $scope.cancel = function () {
-    $scope.modalInstance.dismiss('cancel');
-  };
-
-  $scope.updateCat = function () {
-    console.log('Index value is : ' + $localStorage.indexVal);
-    var indexVal = $localStorage.indexVal;
-    SingleCat.update({
-      newCatId: $scope.cat._id
-    }, $scope.cat, function (res) {
-      console.log('Sucessfully Updated category details: ' + JSON.stringify(res));
-      $scope.categories.splice(indexVal, 1);
-      $scope.categories.splice(indexVal, 0, res);
-      delete $localStorage.indexVal;
-      $scope.modalInstance.close();
-    }, function (err) {
-      console.log('Error occured while Updating category, Error details are : ' + JSON.stringify(err));
-    });
-  };
-
-  $scope.displayCat = function (cat, index) {
-    $localStorage.indexVal = index;
+  $scope.displayCat = function (cat) {
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/view-cat-modal.html',
       scope: $scope,
@@ -631,8 +583,52 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.getCatDetails(cat);
   }
 
+  $scope.getCatDetails = function (cat) {
+    SingleCat.get({
+      newCatId: cat._id
+    }, function (res) {
+      //console.log('Sucessfully fetched category details: ' + JSON.stringify(res));
+      $scope.cat = res;
+    }, function (err) {
+      //console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
+    });
+  };
+
+
+
+
+  $scope.createCat = function () {
+    //console.log('Console at create cat func. & cat details are : ' + JSON.stringify($scope.cat));
+    SingleCat.save($scope.cat, function (res) {
+      //console.log('Sucessfully created category details: ' + JSON.stringify(res));
+      $scope.categories.unshift(res);
+      $scope.modalInstance.close();
+    }, function (err) {
+      //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
+    });
+  };
+
+  $scope.cancel = function () {
+    $scope.modalInstance.dismiss('cancel');
+  };
+
+  $scope.updateCat = function () {
+    //console.log('Index value is : ' + $localStorage.indexVal);
+    var indexVal = $localStorage.indexVal;
+    SingleCat.update({
+      newCatId: $scope.cat._id
+    }, $scope.cat, function (res) {
+      //console.log('Sucessfully Updated category details: ' + JSON.stringify(res));
+      $scope.categories.splice(indexVal, 1);
+      $scope.categories.splice(indexVal, 0, res);
+      delete $localStorage.indexVal;
+      $scope.modalInstance.close();
+    }, function (err) {
+      //console.log('Error occured while Updating category, Error details are : ' + JSON.stringify(err));
+    });
+  };
+
   $scope.deleteCat = function (cat) {
-    //$scope.getCatDetails(cat);
     var modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/del-cat-modal.html',
       scope: $scope,
@@ -640,17 +636,17 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
 
     modalInstance.result.then(function () {
-      console.log('Delete clicked on modal');
+      //console.log('Delete clicked on modal');
       var indexVal = $localStorage.indexVal;
       SingleCat.delete({
         newCatId: cat._id
       }, function (res) {
-        console.log('Sucessfully deleted category details: ' + JSON.stringify(res));
+        //console.log('Sucessfully deleted category details: ' + JSON.stringify(res));
         $scope.categories.splice(indexVal, 1);
         delete $localStorage.indexVal;
         $scope.modalInstance.close();
       }, function (err) {
-        console.log('Error occured while deleteing category, Error details are : ' + JSON.stringify(err));
+        //console.log('Error occured while deleteing category, Error details are : ' + JSON.stringify(err));
       });
       $scope.modalInstance.dismiss('cancel');
     }, function () {});
@@ -679,15 +675,15 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
 .controller('SubCatCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "SubCat", "$localStorage", function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage) {
-  console.log('SubCatCtrl is fetched and Stateparams is : ' + $stateParams.catId);
+  $scope.catName = $stateParams.catName;
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId
     }).$promise.then(function (res) {
-      console.log('Successfullly fetched sub categories :' + JSON.stringify(res))
+      //console.log('Successfullly fetched sub categories :' + JSON.stringify(res))
       $scope.subCats = res;
     }).catch(function (err) {
-      console.log('Error happened : ' + JSON.stringify(err));
+      //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
@@ -703,22 +699,33 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.createSubCat = function () {
-    console.log('Console at createSubCat. & cat details are : ' + JSON.stringify($scope.subCat));
+    //console.log('Console at createSubCat. & cat details are : ' + JSON.stringify($scope.subCat));
     SubCategories.save({
       catId: $stateParams.catId
     }, $scope.subCat, function (res) {
-      console.log('Sucessfully created SubCategories   details: ' + JSON.stringify(res));
+      //console.log('Sucessfully created SubCategories   details: ' + JSON.stringify(res));
       $scope.subCats.unshift(res);
       $scope.modalInstance.close();
     }, function (err) {
-      console.log('Error occured while SubCategories creating , Error details are : ' + JSON.stringify(err));
+      //console.log('Error occured while SubCategories creating , Error details are : ' + JSON.stringify(err));
     });
   };
   $scope.cancel = function () {
     $scope.modalInstance.dismiss('cancel');
   };
 
-  $scope.getSingleSubCat = function (subCat, index) {
+
+  $scope.displaySubCat = function (subCat) {
+    $scope.modalInstance = $modal.open({
+      templateUrl: 'modules/categories/views/modals/view-sub-cat-modal.html',
+      scope: $scope,
+      controller: 'SubCatCtrl'
+    });
+    $scope.getSingleSubCat(subCat);
+  }
+
+
+  $scope.editSubCat = function (subCat, index) {
     $scope.modalName = "Update Sub-Category";
     $localStorage.indexVal = index;
     $scope.modalInstance = $modal.open({
@@ -726,35 +733,78 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       scope: $scope,
       controller: 'SubCatCtrl'
     });
+    $scope.getSingleSubCat(subCat);
+  };
 
+
+  $scope.getSingleSubCat = function (subCat, index) {
     SubCat.get({
       subCatId: subCat._id
     }, function (res) {
-      console.log('Sucessfully fetched category details: ' + JSON.stringify(res));
+      //console.log('Sucessfully fetched category details: ' + JSON.stringify(res));
       $scope.subCat = res;
     }, function (err) {
-      console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
+      //console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
     });
   };
 
   $scope.updateSubCat = function () {
-    console.log('updateSubCat is fetched ' + JSON.stringify($scope.subCat));
+    //console.log('updateSubCat is fetched ' + JSON.stringify($scope.subCat));
     var indexVal = $localStorage.indexVal;
     SubCat.update({
       subCatId: $scope.subCat._id
     }, $scope.subCat, function (res) {
-      console.log('Sucessfully updated sub category details: ' + JSON.stringify(res));
+      //console.log('Sucessfully updated sub category details: ' + JSON.stringify(res));
       $scope.subCats.splice(indexVal, 1);
       $scope.subCats.splice(indexVal, 0, res);
       delete $localStorage.indexVal;
       $scope.modalInstance.close();
     }, function (err) {
-      console.log('Error occured while updating sub category, Error details are : ' + JSON.stringify(err));
+      //console.log('Error occured while updating sub category, Error details are : ' + JSON.stringify(err));
     });
   };
 
+
+  $scope.deleteSubCat = function (subCat) {
+    console.log('Want to del sub cat details are :' + JSON.stringify(subCat));
+    var modalInstance = $modal.open({
+      templateUrl: 'modules/categories/views/modals/del-sub-cat-modal.html',
+      scope: $scope,
+      controller: 'DelSubCatCtrl'
+    });
+
+    modalInstance.result.then(function () {
+      //console.log('Delete clicked on modal');
+      var indexVal = $localStorage.indexVal;
+      SubCat.delete({
+        subCatId: subCat._id
+      }, function (res) {
+        //console.log('Sucessfully deleted category details: ' + JSON.stringify(res));
+        $scope.subCats.splice(indexVal, 1);
+        delete $localStorage.indexVal;
+        $scope.modalInstance.close();
+      }, function (err) {
+        //console.log('Error occured while deleteing category, Error details are : ' + JSON.stringify(err));
+      });
+      $scope.modalInstance.dismiss('cancel');
+    }, function () {});
+  }
+
 }])
 
+
+.controller('DelSubCatCtrl', ["$scope", "$modalInstance", function ($scope, $modalInstance) {
+
+  $scope.deleteSubCatConfirm = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+
+}])
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -811,7 +861,7 @@ function iboxTools($timeout) {
   return {
     restrict: 'A',
     scope: true,
-    templateUrl: 'views/common/ibox_tools.html',
+    templateUrl: 'modules/categories/views/common/ibox_tools.html',
     controller: ["$scope", "$element", function ($scope, $element) {
       // Function for collapse ibox
       $scope.showhide = function () {
@@ -891,8 +941,8 @@ angular
 //Categories service used for communicating with the categories REST endpoints
 angular.module('categories')
 
-//.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://localhost:3000')
+//.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Categories', ["$resource", "API_HOST", function ($resource, API_HOST) {
@@ -1710,13 +1760,23 @@ angular.module('users').config(['$stateProvider',
     state('reset', {
       url: '/password/reset/:token',
       templateUrl: 'modules/users/views/password/reset-password.client.view.html'
+    })
+
+
+
+
+
+    .state('reciflix.users', {
+      url: "/users",
+      templateUrl: "modules/users/views/users.html",
+      controller: 'UsersCtrl',
+      module: 'private'
     });
  }
 ]).run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
-
 'use strict';
 
 angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state',
@@ -1887,6 +1947,33 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 ]);
 'use strict';
 
+angular.module('users')
+
+.controller('UsersCtrl', ['$scope', '$state', 'Users', '$rootScope', function ($scope, $state, Users, $rootScope) {
+
+  $scope.getAllUsers = function () {
+    Users.AllUsers.query().$promise.then(function (res) {
+      $scope.users = res;
+      $scope.itemsPerPage = 5;
+      $scope.maxSize = 5;
+      $scope.totalItems = res.length;
+      if ($rootScope.pageNumStore > 1) {
+        $scope.currentPage = $rootScope.pageNumStore;
+        $rootScope.pageNumStore = 1;
+      } else {
+        $scope.currentPage = 1;
+      }
+    }).catch(function (err) {});
+  };
+
+  $scope.pageChanged = function () {
+    if ($scope.currentPage === 1) return;
+    $rootScope.pageNumStore = $scope.currentPage;
+  };
+
+}])
+'use strict';
+
 // Authentication service for user variables
 angular.module('users').factory('Authentication', ['$window', function($window) {
 	var auth = {
@@ -1909,25 +1996,29 @@ angular.module('users').factory('Users', ['$resource',
  }
 ])
 
-//.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
 
-.factory('Users', ['$resource', 'API_HOST',
- function ($resource, API_HOST) {
-    //console.log('User service is called');
-    return {
-      Signup: $resource(API_HOST + '/users/signup', {}, {
-        create: {
-          method: 'POST',
-          timeout: 30000
-        }
-      }),
-      Login: $resource(API_HOST + '/users/signin', {}, {
-        create: {
-          method: 'POST',
-          timeout: 20000
-        }
-      }),
-    }
-    }
-]);
+.factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST) {
+  return {
+    Signup: $resource(API_HOST + '/users/signup', {}, {
+      create: {
+        method: 'POST',
+        timeout: 30000
+      }
+    }),
+    Login: $resource(API_HOST + '/users/signin', {}, {
+      create: {
+        method: 'POST',
+        timeout: 20000
+      }
+    }),
+    AllUsers: $resource(API_HOST + '/users/totalUsers', {}, {
+      query: {
+        method: 'GET',
+        isArray: true,
+        timeout: 20000
+      }
+    })
+  }
+}]);

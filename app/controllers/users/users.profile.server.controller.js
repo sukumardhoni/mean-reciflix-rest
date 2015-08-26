@@ -104,6 +104,19 @@ exports.checkAdmin = function (req, res, next) {
 
 
 
+exports.totalUsers = function (req, res) {
+  User.find().sort('-created').exec(function (err, users) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(users);
+    }
+  });
+};
+
+
 
 /* Update Favorities and Likes on User Profile */
 

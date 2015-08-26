@@ -68,5 +68,6 @@ module.exports = function (app) {
   app.route('/users/forgotPassword').post(users.forgot);
   app.route('/users/updateProfile').put(users.update);
   app.route('/users/changePassword').post(users.changePassword);
+  app.route('/users/totalUsers').get(users.totalUsers);
 
 };

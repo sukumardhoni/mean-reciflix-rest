@@ -40,9 +40,9 @@ var NewCategorySchema = new Schema({
     default: ''
   },
   status: {
-    type: String,
-    default: 'N'
-  },
+  type: String,
+  default: 'Inactive'
+},
   user: {
     type: Schema.ObjectId,
     ref: 'User'
