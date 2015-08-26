@@ -23,6 +23,7 @@ var ApplicationConfiguration = (function () {
     registerModule: registerModule
   };
 })();
+
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -511,6 +512,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
+
 'use strict';
 
 // Articles controller
@@ -805,6 +807,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -941,8 +944,8 @@ angular
 //Categories service used for communicating with the categories REST endpoints
 angular.module('categories')
 
-.constant('API_HOST', 'http://localhost:3000')
-//.constant('API_HOST', 'http://www.reciflix.com')
+//.constant('API_HOST', 'http://localhost:3000')
+.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Categories', ["$resource", "API_HOST", function ($resource, API_HOST) {
@@ -1777,6 +1780,7 @@ angular.module('users').config(['$stateProvider',
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
+
 'use strict';
 
 angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state',
@@ -1972,6 +1976,7 @@ angular.module('users')
   };
 
 }])
+
 'use strict';
 
 // Authentication service for user variables
@@ -1996,8 +2001,8 @@ angular.module('users').factory('Users', ['$resource',
  }
 ])
 
-.constant('API_HOST', 'http://localhost:3000')
-  //.constant('API_HOST', 'http://www.reciflix.com')
+//.constant('API_HOST', 'http://localhost:3000')
+.constant('API_HOST', 'http://www.reciflix.com')
 
 .factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST) {
   return {
