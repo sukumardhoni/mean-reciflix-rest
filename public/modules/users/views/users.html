@@ -3,13 +3,11 @@
     <div class="wrapper wrapper-content animated fadeInUp">
       <div class="ibox">
         <div class="ibox-title">
-          <a class="btn btn-sm btn-primary" ui-sref="reciflix.categories"><i class="fa fa-arrow-left"> Back</i> </a>
-          <div style="text-align:center;font-size:18px;margin-top:-30px">ReciFlix Users : <span style="font-weight:bold;color:#18a689">{{users.length}}</span> <small>members</small>
+          <div style="text-align:center;font-size:18px;">ReciFlix Users : <span style="font-weight:bold;color:#18a689">{{users.length}}</span> <small>members</small>
           </div>
         </div>
 
         <center>
-          <!--<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage"></pagination>-->
 
           <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage"></pagination>
 
