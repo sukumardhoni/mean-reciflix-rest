@@ -5,7 +5,7 @@
 
         <div class="ibox-title">
           <a class="btn btn-sm btn-primary" ui-sref="reciflix.categories"><i class="fa fa-arrow-left"> Back</i> </a>
-          <div style="text-align:center;font-size:18px;margin-top:-30px"><span style="font-weight:bold;color:#18a689">{{catName}} </span>Sub Categories</div>
+          <div style="text-align:center;font-size:18px;margin-top:-30px">Sub Categories (<span style="font-weight:bold;color:#18a689">{{catName}} </span>)</div>
           <div class="ibox-tools" style="margin-top:-25px">
             <a class="btn btn-primary btn-sm" ng-click="openCreateSubCatModal()">Create new Sub-Category</a>
           </div>
@@ -24,16 +24,13 @@
               <tbody>
                 <tr ng-repeat="cat in subCats" ng-hide="subCats.length === 0">
                   <td class="project-status">
-                    <span class="label label-primary" ng-show="cat.status === 'Active' ">{{cat.status}}</span>
-                    <span class="label label-default" ng-show="cat.status === 'Inactive' ">{{cat.status}}</span>
+                    <span ng-class="cat.active ? 'label label-primary' : 'label label-default'">{{cat.active ?'Active':'InActive'}}</span>
                   </td>
                   <td class="project-title">
                     <a ng-click="displaySubCat(cat)">{{cat.displayName}}</a>
-                    <br/>
-                    <small>{{cat.submitted.date}}</small>
                   </td>
                   <td class="project-completion">
-                    <a>{{cat.imageName}}</a>
+                    <a>{{cat.subCatId}}.png</a>
                   </td>
                   <td class="project-actions">
                     <a class="btn btn-white btn-sm" ng-click="displaySubCat(cat)"><i class="fa fa-eye" style="color:green;"></i> View </a>

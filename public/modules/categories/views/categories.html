@@ -22,32 +22,35 @@
                     <td class="project-status cat-table-titles">Status</td>
                     <td class="project-title cat-table-titles">Name</td>
                     <td class="project-completion cat-table-titles">Image Name</td>
-                    <td class="project-people cat-table-titles" style="text-align:center">Sub Cats.</td>
+                    <!--<td class="project-people cat-table-titles" style="text-align:center">Sub Cats.</td>-->
                     <td class="project-actions cat-table-titles">Operations</td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr ng-repeat="cat in categories" ng-hide="categories.length === 0">
+                    <!--<td class="project-status">
+  <span class="label label-primary" ng-show="cat.status === 'Active' ">{{cat.status=='Active'?'Active':'InActive'}}</span>
+  <span class="label label-default" ng-show="cat.status === 'Inactive' ">{{cat.status=='Active'?'Active':'InActive'}}</span>
+</td>-->
                     <td class="project-status">
-                      <span class="label label-primary" ng-show="cat.status === 'Active' ">{{cat.status}}</span>
-                      <span class="label label-default" ng-show="cat.status === 'Inactive' ">{{cat.status}}</span>
+                      <span ng-class="cat.active ? 'label label-primary' : 'label label-default'">{{cat.active ?'Active':'InActive'}}</span>
                     </td>
                     <td class="project-title">
                       <a ng-click="displayCat(cat)">{{cat.displayName}}</a>
-                      <br/>
-                      <small>{{cat.created}}</small>
+                      <!--<br/>
+<small>{{cat.created}}</small>-->
                     </td>
                     <td class="project-completion">
-                      <a>{{cat.imageName}}</a>
+                      <a>{{cat.catId}}.png</a>
                     </td>
-                    <td class="project-people" style="text-align:center">
-                      <div>{{cat.subCatExist}}</div>
-                    </td>
+                    <!--<td class="project-people" style="text-align:center">
+                      <div>{{cat.subCatsExist}}</div>
+                    </td>-->
                     <td class="project-actions">
                       <a class="btn btn-white btn-sm" ng-click="displayCat(cat)"><i class="fa fa-eye" style="color:green;"></i> View </a>
 
                       <a class="btn btn-white btn-sm" ng-click="editCat(cat,$index)"><i class="fa fa-pencil"></i> Edit</a>
-                      <a class="btn btn-white btn-sm" ui-sref="reciflix.categories.subcats({catId:cat._id,catName:cat.displayName})"><i class="fa fa-folder" ></i>
+                      <a class="btn btn-white btn-sm" ui-sref="reciflix.categories.subcats({catId:cat._id,catName:cat.displayName})" ng-show="cat.subCatsExist"><i class="fa fa-folder" ></i>
                         Sub Cats </a>
                     </td>
                   </tr>

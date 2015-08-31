@@ -27,22 +27,18 @@ var NewCategorySchema = new Schema({
     default: '',
     trim: true
   },
-  imageName: {
-    type: String,
-    default: ''
-  },
-  subCatExist: {
-    type: String,
-    default: 'N'
+  subCatsExist: {
+    type: Boolean,
+    default: false
   },
   rank: {
     type: Number,
     default: ''
   },
-  status: {
-  type: String,
-  default: 'Inactive'
-},
+  active: {
+    type: Boolean,
+    default: false
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User'

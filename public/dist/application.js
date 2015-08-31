@@ -556,6 +556,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.openModal = function () {
+    $scope.cat = '';
     $scope.modalName = "Create Category";
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-cat-modal.html',
@@ -807,7 +808,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
 }])
-
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -1038,7 +1038,6 @@ angular.module('categories')
     }
   };
 })
-
 'use strict';
 
 // Setting up route

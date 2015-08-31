@@ -41,6 +41,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.openModal = function () {
+    $scope.cat = '';
     $scope.modalName = "Create Category";
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-cat-modal.html',

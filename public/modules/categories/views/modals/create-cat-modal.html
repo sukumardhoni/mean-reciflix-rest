@@ -12,24 +12,21 @@
       <div class="row">
         <div class="form-group col-md-4 col-xs-4">
           <label class="control-label">Sub-category Exists</label>
-          <input type="text" placeholder="eg: 'Y' or 'N'" class="form-control" ng-model="cat.subCatExist">
+          <input type="checkbox" class="form-control" ng-model="cat.subCatsExist">
         </div>
         <div class="form-group col-md-4 col-xs-4">
           <label class="control-label">Rank</label>
           <input type="number" placeholder="eg: 1,2,3..." class="form-control" ng-model="cat.rank">
         </div>
         <div class="form-group col-md-4 col-xs-4">
-          <label class="control-label">Status</label>
-          <input type="text" placeholder="eg:'Active'or'Inactive'" class="form-control" ng-model="cat.status">
+          <label class="control-label">Active</label>
+          <!-- <input type="text" placeholder="eg:'Active'or'Inactive'" class="form-control" ng-model="cat.status">-->
+          <input type="checkbox" class="form-control" ng-model="cat.active">
         </div>
       </div>
       <div class="form-group">
         <label>Category Id</label>
         <input type="text" name="catId" placeholder="Category Id, eg: 'vegeterian'" class="form-control" ng-model="cat.catId" required>
-      </div>
-      <div class="form-group">
-        <label>Image Name</label>
-        <input type="text" placeholder="Image Name, eg: 'vegeterian.png'" class="form-control" ng-model="cat.imageName">
       </div>
       <div class="form-group">
         <label>Description</label>

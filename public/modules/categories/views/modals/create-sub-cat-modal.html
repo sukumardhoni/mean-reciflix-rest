@@ -1,21 +1,23 @@
 <div class="inmodal">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" ng-click="cancel()"><span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title">{{modalName}}</h4>
+    <h4 class="modal-title">{{modalName}} (<span style="font-weight:bold;color:#18a689">{{catName}} </span>)</h4>
   </div>
   <div class="modal-body">
     <form role="form" name="cat_form">
       <div class="form-group">
         <label>Display Name</label>
-        <input type="text" name="displayName" placeholder="Display Name, eg: 'Vegeterian'" class="form-control" ng-model="subCat.displayName" required>
+        <input type="text" name="displayName" class="form-control" ng-model="subCat.displayName" required>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6 col-xs-6">
+          <label class="control-label">Active</label>
+          <input type="checkbox" class="form-control" ng-model="subCat.active">
+        </div>
       </div>
       <div class="form-group">
-        <label>Status</label>
-        <input type="text" placeholder="Status ,eg: 'Active' or 'Inactive'" class="form-control" ng-model="subCat.status">
-      </div>
-      <div class="form-group">
-        <label>Image Name</label>
-        <input type="text" placeholder="Image Name, eg: 'vegeterian.png'" class="form-control" ng-model="subCat.imageName">
+        <label>SubCatId</label>
+        <input type="text" class="form-control" ng-model="subCat.subCatId">
       </div>
       <div class="form-group">
         <label>Description</label>
