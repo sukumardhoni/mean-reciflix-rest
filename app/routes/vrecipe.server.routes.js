@@ -62,6 +62,11 @@ module.exports = function (app) {
     .put(users.ensureAuthenticated, vrecipes.updateVRecipesFavCount);
 
 
+  /*New Cats & sub cats routes for recipes*/
+
+  app.route('/newrecipes/:SubCatName/:pageId')
+    .get(vrecipes.getRecipesBySubCats);
+
   app.route('/initialize')
     .post(vrecipes.postSampleJSONData);
   /*app.route('/VRecipesByViews/:maxViews/:minViews')

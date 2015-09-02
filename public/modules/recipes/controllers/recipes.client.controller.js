@@ -1,13 +1,13 @@
 'use strict';
 
-// Articles controller
+// Recipes controller
 angular.module('recipes').controller('RecipesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
  function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
     //console.log('articals page');
 
 
-   //console.log('createcategories Title create function is called : ' + $localStorage.token);
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+    //console.log('createcategories Title create function is called : ' + $localStorage.token);
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
     $scope.authentication = Authentication;
 
@@ -236,18 +236,134 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
       });
     };
+}])
+
+.controller('RecipesCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory) {
+  $scope.categoryFun = function () {
+    Categories.query({
+      pageId: 999
+    }).$promise.then(function (res) {
+      $scope.categories = res;
+    }).catch(function (err) {
+      console.log('Error happened : ' + JSON.stringify(err));
+      //alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
+
+  $scope.minimalize = function () {
+    $("body").addClass("mini-navbar");
+    if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+
+      // Hide menu in order to smoothly turn on when maximize menu
+      $('#side-menu').hide();
+      // For smoothly turn on menu
+      setTimeout(
+        function () {
+          $('#side-menu').fadeIn(500);
+        }, 100);
+    } else if ($('body').hasClass('fixed-sidebar')) {
+
+      $('#side-menu').hide();
+      setTimeout(
+        function () {
+          $('#side-menu').fadeIn(500);
+        }, 300);
+    } else {
+      // Remove all inline style from jquery fadeIn function to reset menu state
+      $('#side-menu').removeAttr('style');
+    }
+  }
+})
+
+
+.controller('SubCategoriesCtrl', function ($scope, $stateParams, SubCategories, $modal, $localStorage) {
+  $scope.catName = $stateParams.catName;
+  $scope.catId = $stateParams.catId;
+  $scope.SubCatName = $stateParams.SubCatName;
+  $scope.subCatFun = function () {
+    SubCategories.query({
+      catId: $stateParams.cat_Id,
+      pageId: 999
+    }).$promise.then(function (res) {
+      console.log('Successfullly fetched sub categories :' + JSON.stringify(res))
+      $scope.subCats = res;
+    }).catch(function (err) {
+      console.log('Error happened : ' + JSON.stringify(err));
+      // alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
+
+})
 
 
 
 
+.controller('SubCategoriesCtrl', function ($scope, $stateParams, SubCategories, $modal, $localStorage) {
+  $scope.catName = $stateParams.catName;
+  $scope.catId = $stateParams.catId;
+  $scope.SubCatName = $stateParams.SubCatName;
+  $scope.subCatFun = function () {
+    SubCategories.query({
+      catId: $stateParams.cat_Id,
+      pageId: 999
+    }).$promise.then(function (res) {
+      console.log('Successfullly fetched sub categories :' + JSON.stringify(res))
+      $scope.subCats = res;
+    }).catch(function (err) {
+      console.log('Error happened : ' + JSON.stringify(err));
+      // alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
+
+})
 
 
 
 
+.controller('SubCatRecipesCtrl', function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce) {
+  $scope.catName = $stateParams.catName;
+  $scope.subCatId = $stateParams.subCatId;
+  $scope.SubCatName = $stateParams.SubCatName;
+  $scope.totalItems = 500;
+  $scope.vm = {
+    currentPage: 1
+  };
+  $scope.itemsPerPage = 5;
+  $scope.maxSize = 5;
 
- }
-]);
+  $scope.recipesUnserSubCat = function (pageNum) {
+    SubCategoryRecipes.query({
+      subCatId: $stateParams.subCatId,
+      pageId: (pageNum - 1)
+    }).$promise.then(function (res) {
+      console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+      $scope.subCatRecipes = res;
+    }).catch(function (err) {
+      console.log('Error happened : ' + JSON.stringify(err));
+      // alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
 
+  $scope.pageChanged = function () {
+    console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
+    $scope.recipesUnserSubCat($scope.vm.currentPage);
+  }
+
+
+  $scope.getSingleRecipe = function () {
+    Recipe.get({
+      vrecipeId: $stateParams.recipeId
+    }).$promise.then(function (res) {
+      console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
+      $scope.recipe = res;
+      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId);
+
+    }).catch(function (err) {
+      console.log('Error happened : ' + JSON.stringify(err));
+      // alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
+});
 
 angular.module('articles').directive('myYoutube', function ($sce) {
   return {

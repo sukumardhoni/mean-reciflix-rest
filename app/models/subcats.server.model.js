@@ -35,7 +35,11 @@ var SubCatsSchema = new Schema({
   },
   rank: {
     type: Number,
-    default: ''
+    default: 0
+  },
+  recipeCount: {
+    type: Number,
+    default: 0
   },
   submitted: {
     date: {

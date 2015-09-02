@@ -37,7 +37,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
           //console.log('User details after login: ' + JSON.stringify(res));
           $localStorage.user = res;
           $localStorage.token = res.token;
-          $state.go('reciflix.categories');
+          $state.go('reciflix.recipes');
           $scope.loading = false;
         }
       }).catch(function (err) {

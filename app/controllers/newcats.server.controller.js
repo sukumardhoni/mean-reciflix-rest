@@ -99,34 +99,32 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
 
-   console.log('@@@@@@@@@ categories list  successfully fetched 111111111111111111111');
-  if(req.params.pageId == 999){
-    console.log('@@@@@@@@@ categories list  successfully fetched 22222222222');
-  Category.find().sort('-created').populate('user', 'displayName').exec(function (err, categories) {
-    if (err) {
-      // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      //  console.log('@@@@@@@@@ categories list  successfully fetched ');
-      res.json(categories);
-    }
-  });
+  if (req.params.pageId == 999) {
+    Category.find().sort('-created').populate('user', 'displayName').exec(function (err, categories) {
+      if (err) {
+        // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        //  console.log('@@@@@@@@@ categories list  successfully fetched ');
+        res.json(categories);
+      }
+    });
 
-  }else{
+  } else {
 
-  Category.find().sort('-created').populate('user', 'displayName').skip(req.params.pageId * 4).limit(4).exec(function (err, categories) {
-    if (err) {
-      // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      //  console.log('@@@@@@@@@ categories list  successfully fetched ');
-      res.json(categories);
-    }
-  });
+    Category.find().sort('-created').populate('user', 'displayName').skip(req.params.pageId * 8).limit(8).exec(function (err, categories) {
+      if (err) {
+        // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        //  console.log('@@@@@@@@@ categories list  successfully fetched ');
+        res.json(categories);
+      }
+    });
   };
 };
 

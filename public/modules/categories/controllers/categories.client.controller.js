@@ -21,6 +21,32 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
 
+
+
+
+  $scope.minimalize = function () {
+    $("body").toggleClass("mini-navbar");
+    if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+
+      // Hide menu in order to smoothly turn on when maximize menu
+      $('#side-menu').hide();
+      // For smoothly turn on menu
+      setTimeout(
+        function () {
+          $('#side-menu').fadeIn(500);
+        }, 100);
+    } else if ($('body').hasClass('fixed-sidebar')) {
+
+      $('#side-menu').hide();
+      setTimeout(
+        function () {
+          $('#side-menu').fadeIn(500);
+        }, 300);
+    } else {
+      // Remove all inline style from jquery fadeIn function to reset menu state
+      $('#side-menu').removeAttr('style');
+    }
+  }
 }])
 
 
@@ -166,7 +192,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.catName = $stateParams.catName;
   $scope.subCatFun = function () {
     SubCategories.query({
-      catId: $stateParams.catId
+      catId: $stateParams.catId,
+      pageId: 999
     }).$promise.then(function (res) {
       //console.log('Successfullly fetched sub categories :' + JSON.stringify(res))
       $scope.subCats = res;

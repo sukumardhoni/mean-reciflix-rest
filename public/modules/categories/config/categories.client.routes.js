@@ -29,12 +29,12 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
         },
         module: 'private'
       })
-      .state('reciflix.recipes', {
-        url: "/recipes",
-        templateUrl: "modules/categories/views/recipes.html",
-        controller: 'CategoryCtrl',
-        module: 'private'
-      });
+      /*.state('reciflix.recipes', {
+  url: "/recipes",
+  templateUrl: "modules/categories/views/recipes.html",
+  controller: 'CategoryCtrl',
+  module: 'private'
+})*/;
 }])
 
 .run(function ($rootScope, $state, $stateParams) {

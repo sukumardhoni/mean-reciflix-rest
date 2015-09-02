@@ -19,7 +19,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
       } else if (toState.module === 'public' && $localStorage.user) {
         // If logged in and transitioning to a logged out page:
         e.preventDefault();
-        $state.go('reciflix.categories');
+        $state.go('reciflix.recipes');
       };
     });
 });

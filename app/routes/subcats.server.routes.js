@@ -8,7 +8,7 @@ var users = require('../../app/controllers/users.server.controller'),
 
 module.exports = function (app) {
   // SubCats Routes
-  app.route('/subCats/:catId')
+  app.route('/subCats/:catId/:pageId')
     .get(users.ensureAuthenticated, subcats.listOfSubCats)
     .post(users.ensureAuthenticated, subcats.subCatsCreate);
 

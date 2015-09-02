@@ -33,7 +33,11 @@ var NewCategorySchema = new Schema({
   },
   rank: {
     type: Number,
-    default: ''
+    default: 0
+  },
+  recipeCount: {
+    type: Number,
+    default: 0
   },
   active: {
     type: Boolean,

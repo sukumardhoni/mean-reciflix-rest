@@ -26,11 +26,11 @@
           <img alt="image" class="img-circle" src="https://cdn0.iconfinder.com/data/icons/PRACTIKA/256/user.png" width="41%">
         </div>
       </li>
-      <li ui-sref-active="active">
+      <li ui-sref-active="active" data-ng-show="localUser.roles.indexOf('admin') > -1">
         <a ui-sref="reciflix.categories" title="Categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories page</span></a>
       </li>
 
-      <li ui-sref-active="active">
+      <li ui-sref-active="active" ng-click="minimalize()">
         <a ui-sref="reciflix.recipes" title="Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes page</span></a>
       </li>
 

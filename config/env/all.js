@@ -76,7 +76,8 @@ module.exports = {
     'public/lib/ngstorage/ngStorage.js',
     'public/lib/toastr/toastr.js',
     'public/lib/jquery-ui/jquery-ui.min.js',
-    'public/lib/slimScroll/jquery.slimscroll.min.js'
+    'public/lib/slimScroll/jquery.slimscroll.min.js',
+    'public/lib/numeral/min/numeral.min.js'
    ]
     },
     css: [

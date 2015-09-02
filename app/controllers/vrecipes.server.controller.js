@@ -250,6 +250,32 @@ exports.getAllCategories = function (req, res) {
 };
 
 
+exports.getRecipesBySubCats = function (req, res) {
+  console.log('Recipes under Sub-category is called , SubCatName is : ' + req.params.SubCatName);
+  console.log('Recipes under Sub-category is called , PageId is : ' + req.params.pageId);
+  Vrecipe.find({
+    subcats: {
+      $in: [req.params.SubCatName]
+    }
+  }).sort({
+    rank: -1
+  }).skip(req.params.pageId * 5).limit(5).exec(function (err, recipes) {
+    if (!err) {
+      if ((recipes.length === 0)) {
+        res.status(204).send({
+          'message': 'There are no recipe items available'
+        });
+      } else {
+        //console.log('Recipes length is : ' + recipes.length);
+        res.send(recipes);
+      }
+    } else {
+      return console.log(err);
+    }
+  });
+};
+
+
 exports.getVIdRecipesByCategories = function (req, res) {
   //console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
   //console.log('Recipes under category is called , PageId is : ' + req.params.pageId);

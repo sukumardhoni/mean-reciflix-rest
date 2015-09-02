@@ -3,8 +3,8 @@
 //Categories service used for communicating with the categories REST endpoints
 angular.module('categories')
 
-//.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Categories', function ($resource, API_HOST) {
@@ -41,8 +41,9 @@ angular.module('categories')
 
 
 .factory('SubCategories', function ($resource, API_HOST) {
-  return $resource(API_HOST + '/subCats/:catId', {
-    catId: '@catId'
+  return $resource(API_HOST + '/subCats/:catId/:pageId', {
+    catId: '@catId',
+    pageId: '@pageId'
   }, {
     'query': {
       method: 'GET',

@@ -35,24 +35,63 @@ exports.subCatsCreate = function (req, res) {
 
 exports.listOfSubCats = function (req, res) {
 
-  console.log('create listOfSubCats calling---------------');
+  console.log('listOfSubCats calling---------------');
 
-  SubCats.find({
-    catId: req.params.catId
-  }).sort('-submitted.date').exec(function (err, subcats) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else if (subcats.length === 0) {
-      return res.status(204).send({
-        message: 'No data found'
-      });
-    } else {
-      res.json(subcats);
-    }
-  });
+  /*  SubCats.find({
+      catId: req.params.catId
+    }).sort('-submitted.date').exec(function (err, subcats) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else if (subcats.length === 0) {
+        return res.status(204).send({
+          message: 'No data found'
+        });
+      } else {
+        res.json(subcats);
+      }
+    });*/
+
+
+
+  if (req.params.pageId == 999) {
+    SubCats.find({
+      catId: req.params.catId
+    }).sort('-submitted.date').exec(function (err, subcats) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else if (subcats.length === 0) {
+        return res.status(204).send({
+          message: 'No data found'
+        });
+      } else {
+        res.json(subcats);
+      }
+    })
+
+  } else {
+
+    SubCats.find({
+      catId: req.params.catId
+    }).sort('-submitted.date').skip(req.params.pageId * 8).limit(8).exec(function (err, subcats) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else if (subcats.length === 0) {
+        return res.status(204).send({
+          message: 'No data found'
+        });
+      } else {
+        res.json(subcats);
+      }
+    })
+  };
 };
+
 
 /**
  * Show the current subcats
