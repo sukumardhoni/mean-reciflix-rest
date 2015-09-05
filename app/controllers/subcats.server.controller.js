@@ -36,6 +36,7 @@ exports.subCatsCreate = function (req, res) {
 exports.listOfSubCats = function (req, res) {
 
   console.log('listOfSubCats calling---------------');
+  console.log('listOfSubCats called and CAt model is : --------------- ' + JSON.stringify(req.category));
 
   /*  SubCats.find({
       catId: req.params.catId
@@ -53,11 +54,13 @@ exports.listOfSubCats = function (req, res) {
       }
     });*/
 
-
+  var catResult = req.category.toObject();
+  catResult.recipeCount = 462;
+  catResult.subCats = [];
 
   if (req.params.pageId == 999) {
     SubCats.find({
-      catId: req.params.catId
+      catId: req.params.newCatId
     }).sort('-submitted.date').exec(function (err, subcats) {
       if (err) {
         return res.status(400).send({
@@ -75,7 +78,7 @@ exports.listOfSubCats = function (req, res) {
   } else {
 
     SubCats.find({
-      catId: req.params.catId
+      catId: req.params.newCatId
     }).sort('-submitted.date').skip(req.params.pageId * 8).limit(8).exec(function (err, subcats) {
       if (err) {
         return res.status(400).send({
@@ -86,7 +89,12 @@ exports.listOfSubCats = function (req, res) {
           message: 'No data found'
         });
       } else {
-        res.json(subcats);
+        console.log('Before pushing the subcats into cats obj : ' + JSON.stringify(catResult));
+        console.log('@@@@@@@@@@@@@@@@@@@@@');
+        console.log(' subcats into cats obj : ' + JSON.stringify(subcats));
+        catResult.subCats = subcats;
+        console.log('After pushed the subcats into cats obj : ' + JSON.stringify(catResult));
+        res.json(catResult);
       }
     })
   };

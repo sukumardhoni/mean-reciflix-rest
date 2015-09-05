@@ -8,7 +8,6 @@ angular.module('recipes').config(['$stateProvider',
     state('reciflix.recipes', {
       url: '/recipes',
       templateUrl: 'modules/recipes/views/recipes.html',
-
       controller: 'RecipesCtrl',
       module: 'private'
     })

@@ -15,8 +15,15 @@ module.exports = function (app) {
 
   // Category Routes
 
-  app.route('/newcats/page/:pageId')
+  app.route('/newcats/page/:pageId/:activeFilter')
     .get(categories.list);
+
+
+  app.route('/newCatAndSubCats/:rank')
+    .get(categories.singleCatByRank);
+
+
+
 
   //admin functions are shown here //
 

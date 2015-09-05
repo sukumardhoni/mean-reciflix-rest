@@ -8,21 +8,14 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
   $scope.signout = function () {
-    //console.log('Checking token when we click on sigout : ' + $localStorage.token);
-
     $http.post('/users/signout').success(function (response) {
       console.log(response.data);
       $scope.authentication = '';
-      //console.log('before delete:::' + $localStorage.token);
       delete $localStorage.token;
       delete $localStorage.user;
-      //console.log('after delete:::' + $localStorage.token);
       $state.go('signin');
     });
   };
-
-
-
 
   $scope.minimalize = function () {
     $("body").toggleClass("mini-navbar");
@@ -49,19 +42,15 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-
-
-
-
-
 .controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory) {
+  //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
-      pageId: 999
+      pageId: 999,
+      activeFilter: 3
     }).$promise.then(function (res) {
       $scope.categories = res;
     }).catch(function (err) {
-      //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
@@ -101,7 +90,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     SingleCat.get({
       newCatId: cat._id
     }, function (res) {
-      //console.log('Sucessfully fetched category details: ' + JSON.stringify(res));
       $scope.cat = res;
     }, function (err) {
       //console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
@@ -112,10 +100,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
   $scope.createCat = function () {
-    //console.log('Console at create cat func. & cat details are : ' + JSON.stringify($scope.cat));
     SingleCat.save($scope.cat, function (res) {
-      //console.log('Sucessfully created category details: ' + JSON.stringify(res));
-      $scope.categories.unshift(res);
+      $scope.categories.push(res);
       $scope.modalInstance.close();
     }, function (err) {
       //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
@@ -127,12 +113,10 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.updateCat = function () {
-    //console.log('Index value is : ' + $localStorage.indexVal);
     var indexVal = $localStorage.indexVal;
     SingleCat.update({
       newCatId: $scope.cat._id
     }, $scope.cat, function (res) {
-      //console.log('Sucessfully Updated category details: ' + JSON.stringify(res));
       $scope.categories.splice(indexVal, 1);
       $scope.categories.splice(indexVal, 0, res);
       delete $localStorage.indexVal;
@@ -150,12 +134,10 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
 
     modalInstance.result.then(function () {
-      //console.log('Delete clicked on modal');
       var indexVal = $localStorage.indexVal;
       SingleCat.delete({
         newCatId: cat._id
       }, function (res) {
-        //console.log('Sucessfully deleted category details: ' + JSON.stringify(res));
         $scope.categories.splice(indexVal, 1);
         delete $localStorage.indexVal;
         $scope.modalInstance.close();
@@ -164,29 +146,17 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       });
       $scope.modalInstance.dismiss('cancel');
     }, function () {});
-
   };
-
-
 })
 
-
 .controller('DelCatCtrl', function ($scope, $modalInstance) {
-
   $scope.deleteCatConfirm = function () {
     $modalInstance.close();
   };
-
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
-
-
 })
-
-
-
-
 
 .controller('SubCatCtrl', function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage) {
   $scope.catName = $stateParams.catName;
@@ -195,7 +165,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       catId: $stateParams.catId,
       pageId: 999
     }).$promise.then(function (res) {
-      //console.log('Successfullly fetched sub categories :' + JSON.stringify(res))
       $scope.subCats = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
@@ -214,11 +183,10 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.createSubCat = function () {
-    //console.log('Console at createSubCat. & cat details are : ' + JSON.stringify($scope.subCat));
     SubCategories.save({
-      catId: $stateParams.catId
+      catId: $stateParams.catId,
+      pageId: 999
     }, $scope.subCat, function (res) {
-      //console.log('Sucessfully created SubCategories   details: ' + JSON.stringify(res));
       $scope.subCats.unshift(res);
       $scope.modalInstance.close();
     }, function (err) {
@@ -228,8 +196,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.cancel = function () {
     $scope.modalInstance.dismiss('cancel');
   };
-
-
   $scope.displaySubCat = function (subCat) {
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/view-sub-cat-modal.html',
@@ -238,8 +204,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
     $scope.getSingleSubCat(subCat);
   }
-
-
   $scope.editSubCat = function (subCat, index) {
     $scope.modalName = "Update Sub-Category";
     $localStorage.indexVal = index;
@@ -256,7 +220,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     SubCat.get({
       subCatId: subCat._id
     }, function (res) {
-      //console.log('Sucessfully fetched category details: ' + JSON.stringify(res));
       $scope.subCat = res;
     }, function (err) {
       //console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
@@ -264,12 +227,10 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.updateSubCat = function () {
-    //console.log('updateSubCat is fetched ' + JSON.stringify($scope.subCat));
     var indexVal = $localStorage.indexVal;
     SubCat.update({
       subCatId: $scope.subCat._id
     }, $scope.subCat, function (res) {
-      //console.log('Sucessfully updated sub category details: ' + JSON.stringify(res));
       $scope.subCats.splice(indexVal, 1);
       $scope.subCats.splice(indexVal, 0, res);
       delete $localStorage.indexVal;
@@ -278,8 +239,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       //console.log('Error occured while updating sub category, Error details are : ' + JSON.stringify(err));
     });
   };
-
-
   $scope.deleteSubCat = function (subCat) {
     console.log('Want to del sub cat details are :' + JSON.stringify(subCat));
     var modalInstance = $modal.open({
@@ -289,12 +248,10 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
 
     modalInstance.result.then(function () {
-      //console.log('Delete clicked on modal');
       var indexVal = $localStorage.indexVal;
       SubCat.delete({
         subCatId: subCat._id
       }, function (res) {
-        //console.log('Sucessfully deleted category details: ' + JSON.stringify(res));
         $scope.subCats.splice(indexVal, 1);
         delete $localStorage.indexVal;
         $scope.modalInstance.close();
@@ -304,19 +261,13 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.modalInstance.dismiss('cancel');
     }, function () {});
   }
-
 })
 
-
 .controller('DelSubCatCtrl', function ($scope, $modalInstance) {
-
   $scope.deleteSubCatConfirm = function () {
     $modalInstance.close();
   };
-
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
-
-
 })

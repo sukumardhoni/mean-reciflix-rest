@@ -9,8 +9,9 @@ angular.module('categories')
 
 .factory('Categories', function ($resource, API_HOST) {
     //console.log('service Categories -------------- ++++++ ');
-    return $resource(API_HOST + '/newcats/page/:pageId', {
-      pageId: '@pageId'
+    return $resource(API_HOST + '/newcats/page/:pageId/:activeFilter', {
+      pageId: '@pageId',
+      activeFilter: '@activeFilter'
     }, {
       'query': {
         method: 'GET',

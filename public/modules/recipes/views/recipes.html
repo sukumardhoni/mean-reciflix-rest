@@ -1,14 +1,19 @@
 <div ui-view="child-view">
   <center>
-    <div data-ng-hide="localUser.roles.indexOf('admin') > -1" class="well well-lg">
+    <div class="well well-lg">
       <div class="row" ng-init="categoryFun()">
-        <div class="header-page">Categories</div>
-        <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="cat in categories">
-          <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats({cat_Id:cat._id,catId:cat.catId,catName:cat.displayName})" ng-click="minimalize()">
-            <img ng-src="modules/recipes/img/cats-img/{{cat.catId}}.png" alt="Sample Image" class="img-responsive">
-            <hr>
-            <h3 class="h3-styles media-heading"><a>{{cat.displayName}}</a></h3>
+        <div ng-hide="categories.length === 0">
+          <div class="header-page">Categories</div>
+          <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="cat in categories">
+            <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats({cat_Id:cat._id,catId:cat.catId,catName:cat.displayName})" ng-click="minimalize()">
+              <img ng-src="modules/recipes/img/cats-img/{{cat.catId}}.png" alt="Sample Image" class="img-responsive">
+              <hr>
+              <h3 class="h3-styles media-heading"><a>{{cat.displayName}}</a></h3>
+            </div>
           </div>
+        </div>
+        <div ng-show="categories.length === 0">
+          Thanks for logging in to ReciFlix Web, We are following a mobile first approach, also actively working on making this website ready for you, meanwhile please continue to use ReciFlix mobile app, we will announce soon when this website is ready with the functionality.
         </div>
       </div>
     </div>

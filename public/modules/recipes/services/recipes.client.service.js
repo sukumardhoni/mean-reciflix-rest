@@ -51,7 +51,6 @@ angular.module('recipes')
 ])
 
 .factory('SubCategoryRecipes', function ($resource, API_HOST) {
-  console.log('service SubCat -------------- ++++++ ');
   return $resource(API_HOST + '/newrecipes/:subCatId/:pageId', {
     subCatId: '@subCatId',
     pageId: '@pageId'
@@ -66,7 +65,6 @@ angular.module('recipes')
 
 
 .factory('Recipe', function ($resource, API_HOST) {
-  console.log('service SubCat -------------- ++++++ ');
   return $resource(API_HOST + '/vRecipes/:vrecipeId', {
     vrecipeId: '@vrecipeId'
   }, {
