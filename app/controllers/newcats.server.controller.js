@@ -76,9 +76,7 @@ exports.singleCatByRank = function (req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else if (subcats.length === 0) {
-        return res.status(204).send({
-          message: 'No data found'
-        });
+        res.json(catResult);
       } else {
         console.log('Before pushing the subcats into cats obj : ' + JSON.stringify(catResult));
         console.log('@@@@@@@@@@@@@@@@@@@@@');
