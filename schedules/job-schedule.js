@@ -12,6 +12,7 @@ module.exports = function (agendaDb) {
   emailJob.sendRecoveryLinkEmail(agenda);
   emailJob.sendPasswordChangedEmail(agenda);
   emailJob.sendUserSignin(agenda);
+  emailJob.sendUserInfoToReciFlixTeam(agenda);
   agenda.start();
   return agenda;
 }

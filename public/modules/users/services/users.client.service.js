@@ -11,20 +11,26 @@ angular.module('users').factory('Users', ['$resource',
  }
 ])
 
-//.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
 
 .factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST) {
   return {
     Signup: $resource(API_HOST + '/users/signup', {}, {
       create: {
         method: 'POST',
+        headers: {
+          'Device': 'Device ' + navigator.userAgent
+        },
         timeout: 30000
       }
     }),
     Login: $resource(API_HOST + '/users/signin', {}, {
       create: {
         method: 'POST',
+        headers: {
+          'Device': 'Device ' + navigator.userAgent
+        },
         timeout: 20000
       }
     }),

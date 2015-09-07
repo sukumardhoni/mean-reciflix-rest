@@ -16,6 +16,22 @@ exports.sendNewUserWelcomeEmail = function (agenda) {
   })
 }
 
+exports.sendUserInfoToReciFlixTeam = function (agenda) {
+  agenda.define('User_Info_To_ReciFlix_Team', function (job, done) {
+    console.log('###user User_Info_To_ReciFlix_Team to the app, email: ' + JSON.stringify(job.attrs.data.userData));
+    var mailData = {};
+    mailData.templateName = 'emailtemplates/email-to-reciflix';
+    mailData.to = 'support@reciflix.com';
+    mailData.subject = 'New User To ReciFlix';
+    mailData.userData = job.attrs.data.userData;
+    mailData.appEnv = config.app.title;
+    console.log('Before sending to reciemail User_Info_To_ReciFlix_Team mailData: ' + JSON.stringify(mailData));
+    reci_emailer.sendMail(mailData);
+    done();
+  })
+}
+
+
 exports.sendUserSignin = function (agenda) {
   agenda.define('User_Signedin', function (job, done) {
     console.log('###user SIGNIN to the app, email: ' + JSON.stringify(job.attrs.data));

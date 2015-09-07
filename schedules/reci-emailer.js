@@ -13,7 +13,7 @@ exports.sendMail = function (mailData) {
   var emailTemplate = new EmailTemplate(mailData.templateName);
 
   var mailOptions = {
-    from: config.mailer.from,//'ReciFlix Support <support@reciflix.com>', // sender address
+    from: config.mailer.from, //'ReciFlix Support <support@reciflix.com>', // sender address
     secureConnection: false,
     to: mailData.to, // list of receivers
     subject: mailData.subject // Subject line
@@ -21,6 +21,7 @@ exports.sendMail = function (mailData) {
   emailTemplate.render({
       displayName: mailData.displayName,
       email: mailData.to,
+      userData:mailData.userData,
       resetUrl: mailData.url,
       appEnv: config.app.title
     },

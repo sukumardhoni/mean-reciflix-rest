@@ -8,7 +8,9 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
  function ($locationProvider) {
     $locationProvider.hashPrefix('!');
  }
-]).run(function ($rootScope, $state, $localStorage) {
+]).run(function ($rootScope, $state, $localStorage, $http) {
+
+  $http.defaults.headers.common['Device'] = 'Device ' + navigator.userAgent;
   $rootScope.$state = $state;
   $rootScope.$on('$stateChangeStart',
     function (e, toState, toParams, fromState, fromParams) {

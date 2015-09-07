@@ -253,6 +253,15 @@ exports.getAllCategories = function (req, res) {
 exports.getRecipesBySubCats = function (req, res) {
   console.log('Recipes under Sub-category is called , SubCatName is : ' + req.params.SubCatName);
   console.log('Recipes under Sub-category is called , PageId is : ' + req.params.pageId);
+
+
+  var bearerHeader = req.headers.device;
+  var bearer = bearerHeader.split(' ');
+
+  console.log('Device ifo headers testing : ' + bearer);
+
+
+
   Vrecipe.find({
     subcats: {
       $in: [req.params.SubCatName]

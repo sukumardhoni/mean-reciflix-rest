@@ -19,6 +19,10 @@ var transporter = nodemailer.createTransport(smtpTransport(config.mailer.options
 
 /*JWT Signup*/
 exports.jwtSignup = function (req, res, next) {
+
+
+
+
   User.findOne({
     email: req.body.email
   }, function (err, user) {
@@ -89,6 +93,15 @@ exports.jwtSignup = function (req, res, next) {
                   email: userModel.email,
                   displayName: userModel.displayName
                 });
+                //send a User_Info_To_ReciFlix_Team mail notification using agenda
+                agenda.now('User_Info_To_ReciFlix_Team', {
+                    userData: '\n Email: ' + userModel.email + '\n displayName: ' + userModel.displayName + '\n Provider :' + userModel.provider + '\n'
+                  }
+                  /*
+                                    email: userModel.email,
+                                    displayName: userModel.displayName,
+                                    provider: userModel.provider*/
+                );
                 res.jsonp(userModel);
               }
             });
@@ -99,15 +112,26 @@ exports.jwtSignup = function (req, res, next) {
   });
 
 
-
 };
 
 
 /* JWT Signin*/
 
 exports.jwtSignin = function (req, res, next) {
+
+
+
   console.log('jwtSignin');
   console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
+
+
+  var bearerHeader = req.headers.device;
+  var bearer = bearerHeader.split(' ');
+
+  console.log('Device ifo headers testing : ' + bearer);
+
+
+
   User.findOne({
     email: req.body.email
   }, function (err, user) {

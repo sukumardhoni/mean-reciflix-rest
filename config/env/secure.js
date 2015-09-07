@@ -71,7 +71,7 @@ module.exports = {
       },
       auth: {
         user: 'support@reciflix.com',
-        pass: 'support123'
+        pass: 'gtmsupport123'
       }
     }
   }
