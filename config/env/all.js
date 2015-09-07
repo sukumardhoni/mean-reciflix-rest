@@ -49,16 +49,6 @@ module.exports = {
 
    ],
       js: [
-/*    'public/lib/angular/angular.js',
-    'public/lib/angular-resource/angular-resource.js',
-    'public/lib/angular-animate/angular-animate.js',
-    'public/lib/angular-ui-router/release/angular-ui-router.js',
-    'public/lib/angular-ui-utils/ui-utils.js',
-    'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
-    'public/lib/jquery/dist/jquery.min.js',
-    'public/lib/angular-ui-select/dist/select.js',
-     'public/lib/ngstorage/ngStorage.js',*/
-
     'public/lib/jquery/dist/jquery.min.js',
     'public/lib/bootstrap/dist/js/bootstrap.min.js',
     'public/lib/metisMenu/dist/metisMenu.min.js',
