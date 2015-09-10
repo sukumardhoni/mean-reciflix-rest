@@ -9,13 +9,13 @@ var users = require('../../app/controllers/users.server.controller'),
 module.exports = function (app) {
   // SubCats Routes
   app.route('/subCats/:newCatId/:pageId')
-    .get(users.ensureAuthenticated, subcats.listOfSubCats)
-    .post(users.ensureAuthenticated, subcats.subCatsCreate);
+    .get(subcats.listOfSubCats)
+    .post(users.ensureAuthenticated, subcats.subCatCreate);
 
   app.route('/singleSubCat/:subCatId')
-    .get(users.ensureAuthenticated, subcats.getSingleSubCat)
-    .put(users.ensureAuthenticated, subcats.updateSingleSubCat)
-    .delete(users.ensureAuthenticated, subcats.deleteSingleSubCat);
+    .get(users.ensureAuthenticated, subcats.getSubCat)
+    .put(users.ensureAuthenticated, subcats.updateSubCat)
+    .delete(users.ensureAuthenticated, subcats.deleteSubCat);
 
   // Finish by binding the subcats middleware
   app.param('subCatId', subcats.subCatByID);

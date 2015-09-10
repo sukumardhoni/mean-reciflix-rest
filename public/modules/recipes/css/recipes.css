@@ -111,3 +111,8 @@ ul.list-inline a {
     padding: 7px 20px;
   }
 }
+
+.recipe-title {
+  font-size: 20px;
+  color: #2F4050;
+}

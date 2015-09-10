@@ -45,7 +45,7 @@
                       <a class="btn btn-white btn-sm" ng-click="displayCat(cat)"><i class="fa fa-eye" style="color:green;"></i> View </a>
 
                       <a class="btn btn-white btn-sm" ng-click="editCat(cat,$index)"><i class="fa fa-pencil"></i> Edit</a>
-                      <a class="btn btn-white btn-sm" ui-sref="reciflix.categories.subcats({catId:cat._id,catName:cat.displayName})" ng-show="cat.subCatsExist"><i class="fa fa-folder" ></i>
+                      <a class="btn btn-white btn-sm" ui-sref="reciflix.categories.subcats({catId:cat.catId})" ng-show="cat.subCatsExist"><i class="fa fa-folder" ></i>
                         Sub Cats </a>
                     </td>
                   </tr>

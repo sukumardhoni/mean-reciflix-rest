@@ -48,7 +48,6 @@ angular.module('categories')
   }, {
     'query': {
       method: 'GET',
-      isArray: true,
       timeout: 20000
     },
     'save': {

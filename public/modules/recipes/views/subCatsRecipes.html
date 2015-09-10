@@ -4,15 +4,15 @@
       <div class="wrapper wrapper-content animated fadeInUp">
         <div class="ibox">
           <ol class="breadcrumb breadcrumb-style">
-            <div class="text-center header-page1">Recipes</div>
+            <!--<div class="text-center header-page1">Recipes</div>-->
             <li>
               <a ui-sref="reciflix.recipes">Categories</a>
             </li>
             <li>
-              <a ui-sref="reciflix.recipes.subcats">{{catName}}</a>
+              <a ui-sref="reciflix.recipes.subcats">{{catId}}</a>
             </li>
             <li class="active">
-              <strong>{{SubCatName}}</strong>
+              <strong>{{subCatId}}</strong>
             </li>
           </ol>
         </div>
@@ -24,7 +24,7 @@
               </div>
               <hr class="hidden-lg hidden-md">
               <div class="col-md-6">
-                <h1 class="page-header text-capitalize text-center">{{SubCatName}}</small></h1>
+                <h1 class="page-header text-capitalize text-center">{{subCatId}}</small></h1>
                 <table class="table">
                   <tbody>
                     <tr>
@@ -41,6 +41,8 @@
                 </table>
               </div>
             </div>
+            <hr>
+          <div class="text-center header-page1">Recipes</div>
             <hr>
             <div class="row" ng-init="recipesUnserSubCat(1)">
               <center>

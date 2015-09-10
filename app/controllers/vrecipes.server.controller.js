@@ -9,6 +9,8 @@ var _ = require('lodash'),
   passport = require('passport'),
   Vrecipe = mongoose.model('Vrecipe'),
   User = mongoose.model('User'),
+  config = require('../../config/config'),
+  agenda = require('../../schedules/job-schedule.js')(config.db),
   sampleJSON = require('../assets/vidsample.json');
 
 
@@ -34,7 +36,7 @@ exports.create = function (req, res) {
 /**
  * Show the current vrecipe
  */
-exports.read = function (req, res) {
+exports.getRecipe = function (req, res) {
   res.json(req.vrecipe);
 };
 
@@ -44,7 +46,7 @@ exports.read = function (req, res) {
 /**
  * Update a vrecipe
  */
-exports.update = function (req, res) {
+exports.updateRecipe = function (req, res) {
   var vrecipe = req.vrecipe;
 
   vrecipe = _.extend(vrecipe, req.body);
@@ -63,7 +65,7 @@ exports.update = function (req, res) {
 /**
  * Delete an vrecipe
  */
-exports.delete = function (req, res) {
+exports.deleteRecipe = function (req, res) {
   var vrecipe = req.vrecipe;
 
   vrecipe.remove(function (err) {
@@ -125,7 +127,8 @@ exports.list = function (req, res) {
  * Vrecipe middleware
  */
 exports.vrecipeByID = function (req, res, next, id) {
-
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
       message: 'Vrecipe is invalid'
@@ -139,6 +142,12 @@ exports.vrecipeByID = function (req, res, next, id) {
         message: 'Vrecipe not found'
       });
     }
+    //user is successfully fetched single recipe save action into user usage details collection
+    agenda.now('User_Usage_Details', {
+      email: emailInfo,
+      device: deviceInfo,
+      action: 'vrecipeByID : ' + vrecipe._id
+    });
     req.vrecipe = vrecipe;
     next();
   });
@@ -251,17 +260,10 @@ exports.getAllCategories = function (req, res) {
 
 
 exports.getRecipesBySubCats = function (req, res) {
-  console.log('Recipes under Sub-category is called , SubCatName is : ' + req.params.SubCatName);
-  console.log('Recipes under Sub-category is called , PageId is : ' + req.params.pageId);
-
-
-  var bearerHeader = req.headers.device;
-  var bearer = bearerHeader.split(' ');
-
-  console.log('Device ifo headers testing : ' + bearer);
-
-
-
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
+  //console.log('Recipes under Sub-category is called , SubCatName is : ' + req.params.SubCatName);
+  //console.log('Recipes under Sub-category is called , PageId is : ' + req.params.pageId);
   Vrecipe.find({
     subcats: {
       $in: [req.params.SubCatName]
@@ -275,6 +277,12 @@ exports.getRecipesBySubCats = function (req, res) {
           'message': 'There are no recipe items available'
         });
       } else {
+        //user is successfully fetched list of recipes based on subcats save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'getRecipesBySubCats : ' + req.params.SubCatName
+        });
         //console.log('Recipes length is : ' + recipes.length);
         res.send(recipes);
       }
@@ -286,6 +294,8 @@ exports.getRecipesBySubCats = function (req, res) {
 
 
 exports.getVIdRecipesByCategories = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   //console.log('Recipes under category is called , CatName is : ' + req.params.CategoryName);
   //console.log('Recipes under category is called , PageId is : ' + req.params.pageId);
   Vrecipe.find({
@@ -301,6 +311,12 @@ exports.getVIdRecipesByCategories = function (req, res) {
           'message': 'There are no recipe items available'
         });
       } else {
+        //user is successfully fetched list of recipes based on categories save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'getVIdRecipesByCategories : ' + req.params.CategoryName
+        });
         //console.log('Recipes length is : ' + recipes.length);
         res.send(recipes);
       }
@@ -385,7 +401,8 @@ exports.getVIdRecipesByViewsAndTags = function (req, res) {
 };
 
 exports.getAllMyFavorites = function (req, res) {
-
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   var pageid = req.params.pageId;
   var pagelength = 5;
 
@@ -408,6 +425,12 @@ exports.getAllMyFavorites = function (req, res) {
             if (!err) {
               foundRecipes.push(recipe);
               if (foundRecipes.length === currentFavVideoids.length) {
+                //user is successfully fetched MyFav recipes save action into user usage details collection
+                agenda.now('User_Usage_Details', {
+                  email: emailInfo,
+                  device: deviceInfo,
+                  action: 'getAllMyFavorites : ' + user.displayName
+                });
                 res.jsonp(foundRecipes);
               }
             } else {
@@ -427,6 +450,8 @@ exports.getAllMyFavorites = function (req, res) {
 };
 
 exports.getAllSearchedVRecipes = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   var pageid = req.params.pageId;
   var pagelength = 5;
   var queries = req.params.query.split(' ');
@@ -447,6 +472,12 @@ exports.getAllSearchedVRecipes = function (req, res) {
         } else {
           foundRecipes.push(recipes);
           if (foundRecipes.length === queries.length) {
+            //user is successfully fetched searched recipes save action into user usage details collection
+            agenda.now('User_Usage_Details', {
+              email: emailInfo,
+              device: deviceInfo,
+              action: 'getAllSearchedVRecipes : ' + emailInfo
+            });
             res.jsonp(foundRecipes);
           }
         }

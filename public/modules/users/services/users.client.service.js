@@ -19,18 +19,12 @@ angular.module('users').factory('Users', ['$resource',
     Signup: $resource(API_HOST + '/users/signup', {}, {
       create: {
         method: 'POST',
-        headers: {
-          'Device': 'Device ' + navigator.userAgent
-        },
         timeout: 30000
       }
     }),
     Login: $resource(API_HOST + '/users/signin', {}, {
       create: {
         method: 'POST',
-        headers: {
-          'Device': 'Device ' + navigator.userAgent
-        },
         timeout: 20000
       }
     }),

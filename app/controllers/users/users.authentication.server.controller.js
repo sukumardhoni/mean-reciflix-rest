@@ -17,11 +17,9 @@ var _ = require('lodash'),
 
 var transporter = nodemailer.createTransport(smtpTransport(config.mailer.options));
 
+
 /*JWT Signup*/
 exports.jwtSignup = function (req, res, next) {
-
-
-
 
   User.findOne({
     email: req.body.email
@@ -95,13 +93,8 @@ exports.jwtSignup = function (req, res, next) {
                 });
                 //send a User_Info_To_ReciFlix_Team mail notification using agenda
                 agenda.now('User_Info_To_ReciFlix_Team', {
-                    userData: '\n Email: ' + userModel.email + '\n displayName: ' + userModel.displayName + '\n Provider :' + userModel.provider + '\n'
-                  }
-                  /*
-                                    email: userModel.email,
-                                    displayName: userModel.displayName,
-                                    provider: userModel.provider*/
-                );
+                  userData: '\n Email: ' + userModel.email + '\n displayName: ' + userModel.displayName + '\n Provider :' + userModel.provider + '\n'
+                });
                 res.jsonp(userModel);
               }
             });
@@ -119,19 +112,7 @@ exports.jwtSignup = function (req, res, next) {
 
 exports.jwtSignin = function (req, res, next) {
 
-
-
-  console.log('jwtSignin');
-  console.log('@@@@@@ JWt server side signin   @@@@@@@' + JSON.stringify(req.body));
-
-
-  var bearerHeader = req.headers.device;
-  var bearer = bearerHeader.split(' ');
-
-  console.log('Device ifo headers testing : ' + bearer);
-
-
-
+  var deviceInfo = req.headers.device;
   User.findOne({
     email: req.body.email
   }, function (err, user) {
@@ -171,8 +152,12 @@ exports.jwtSignin = function (req, res, next) {
                     agenda.now('User_Signedin', {
                       data: user.email
                     });
-
-
+                    //user is successfully logged in save action into user usage details collection
+                    agenda.now('User_Usage_Details', {
+                      email: user.email,
+                      device: deviceInfo,
+                      action: 'Log In user : ' + user.displayName,
+                    });
                     res.jsonp(user);
                     //console.log('@@@@@@ Found user in signin  func.  @@@@@@@' + JSON.stringify(user));
                   }

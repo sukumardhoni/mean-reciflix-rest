@@ -4,7 +4,7 @@
       <div class="ibox">
         <div class="ibox-title">
           <a class="btn btn-sm btn-primary" ui-sref="reciflix.categories"><i class="fa fa-arrow-left"> Back</i> </a>
-          <div style="text-align:center;font-size:18px;margin-top:-30px">Sub Categories (<span style="font-weight:bold;color:#18a689">{{catName}} </span>)</div>
+          <div style="text-align:center;font-size:18px;margin-top:-30px">Sub Categories (<span style="font-weight:bold;color:#18a689">{{CatObjWithSubCats.displayName}} </span>)</div>
           <div class="ibox-tools" style="margin-top:-25px">
             <a class="btn btn-primary btn-sm" ng-click="openCreateSubCatModal()">Create new Sub-Category</a>
           </div>
@@ -21,7 +21,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="cat in subCats" ng-hide="subCats.length === 0">
+                <tr ng-repeat="cat in CatObjWithSubCats.subCats" ng-hide="subCats.length === 0">
                   <td class="project-status">
                     <span ng-class="cat.active ? 'label label-primary' : 'label label-default'">{{cat.active ?'Active':'InActive'}}</span>
                   </td>

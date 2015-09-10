@@ -88,7 +88,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.getCatDetails = function (cat) {
     SingleCat.get({
-      newCatId: cat._id
+      newCatId: cat.catId
     }, function (res) {
       $scope.cat = res;
     }, function (err) {
@@ -115,7 +115,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.updateCat = function () {
     var indexVal = $localStorage.indexVal;
     SingleCat.update({
-      newCatId: $scope.cat._id
+      newCatId: $scope.cat.catId
     }, $scope.cat, function (res) {
       $scope.categories.splice(indexVal, 1);
       $scope.categories.splice(indexVal, 0, res);
@@ -136,7 +136,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     modalInstance.result.then(function () {
       var indexVal = $localStorage.indexVal;
       SingleCat.delete({
-        newCatId: cat._id
+        newCatId: cat.catId
       }, function (res) {
         $scope.categories.splice(indexVal, 1);
         delete $localStorage.indexVal;
@@ -159,13 +159,12 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 })
 
 .controller('SubCatCtrl', function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage) {
-  $scope.catName = $stateParams.catName;
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
       pageId: 999
     }).$promise.then(function (res) {
-      $scope.subCats = res;
+      $scope.CatObjWithSubCats = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
@@ -187,7 +186,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       catId: $stateParams.catId,
       pageId: 999
     }, $scope.subCat, function (res) {
-      $scope.subCats.unshift(res);
+      $scope.CatObjWithSubCats.subCats.unshift(res);
       $scope.modalInstance.close();
     }, function (err) {
       //console.log('Error occured while SubCategories creating , Error details are : ' + JSON.stringify(err));
@@ -231,8 +230,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     SubCat.update({
       subCatId: $scope.subCat._id
     }, $scope.subCat, function (res) {
-      $scope.subCats.splice(indexVal, 1);
-      $scope.subCats.splice(indexVal, 0, res);
+      $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
+      $scope.CatObjWithSubCats.subCats.splice(indexVal, 0, res);
       delete $localStorage.indexVal;
       $scope.modalInstance.close();
     }, function (err) {
@@ -252,7 +251,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       SubCat.delete({
         subCatId: subCat._id
       }, function (res) {
-        $scope.subCats.splice(indexVal, 1);
+        $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
         delete $localStorage.indexVal;
         $scope.modalInstance.close();
       }, function (err) {

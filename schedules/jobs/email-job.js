@@ -1,5 +1,7 @@
 "use strict"
 var _ = require('lodash'),
+  mongoose = require('mongoose'),
+  UsageDetails = mongoose.model('UsageDetails'),
   config = require('../../config/config'),
   reci_emailer = require('../../schedules/reci-emailer.js');
 
@@ -64,5 +66,31 @@ exports.sendPasswordChangedEmail = function (agenda) {
     mailData.appEnv = config.app.title;
     reci_emailer.sendMail(mailData);
     done();
+  })
+}
+
+
+exports.saveUserUsageDetails = function (agenda) {
+  agenda.define('User_Usage_Details', function (job, done) {
+
+    //console.log('### User_Usage_Details save to collection : ' + JSON.stringify(job.attrs.data));
+    //console.log('### User_Usage_Details user details : ' + JSON.stringify(req.user));
+
+    var usageDetails = new UsageDetails(job.attrs.data);
+    usageDetails.userId = job.attrs.data.userId;
+
+    usageDetails.save(function (err) {
+      if (err) {
+        /*return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });*/
+        console.log('Error while saving user usage details in agenda : ' + err);
+        // done();
+      } else {
+        //res.json(category);
+        console.log('Successfully saved user usage details in agenda : ' + JSON.stringify(usageDetails));
+        done();
+      }
+    });
   })
 }

@@ -6,14 +6,14 @@ angular.module('recipes').config(['$stateProvider',
     // Recipes state routing
     $stateProvider.
     state('reciflix.recipes', {
-      url: '/recipes',
+      url: '/category',
       templateUrl: 'modules/recipes/views/recipes.html',
       controller: 'RecipesCtrl',
       module: 'private'
     })
 
     .state('reciflix.recipes.subcats', {
-      url: "/:cat_Id/:catId/:catName",
+      url: "/:catId",
       views: {
         'child-view': {
           templateUrl: "modules/recipes/views/subCats.html",
@@ -24,7 +24,7 @@ angular.module('recipes').config(['$stateProvider',
     })
 
     .state('reciflix.recipes.subcats.recipes', {
-      url: "/:subCatId/:SubCatName/recipes",
+      url: "/:subCatId/recipes",
       views: {
         'child-recipes-view': {
           templateUrl: "modules/recipes/views/subCatsRecipes.html",
@@ -35,7 +35,7 @@ angular.module('recipes').config(['$stateProvider',
     })
 
     .state('reciflix.recipes.subcats.recipes.singlerecipes', {
-      url: "/singlerecipes/:recipeId",
+      url: "/:recipeId",
       views: {
         'child-singlerecipes-view': {
           templateUrl: "modules/recipes/views/singleRecipe.html",

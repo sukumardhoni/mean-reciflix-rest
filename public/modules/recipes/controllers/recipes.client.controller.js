@@ -121,27 +121,27 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
 
 .controller('SubCategoriesCtrl', function ($scope, $stateParams, SubCategories, $modal, $localStorage) {
-  $scope.catName = $stateParams.catName;
+  //$scope.catName = $stateParams.catName;
   $scope.catId = $stateParams.catId;
-  $scope.SubCatName = $stateParams.SubCatName;
+  //$scope.SubCatName = $stateParams.SubCatName;
   $scope.subCatFun = function () {
     SubCategories.query({
-      catId: $stateParams.cat_Id,
+      catId: $stateParams.catId,
       pageId: 999
     }).$promise.then(function (res) {
-      //console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
-      $scope.subCats = res;
+      console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
+      $scope.CatObjWithSubCats = res;
     }).catch(function (err) {
-      //console.log('Error happened : ' + JSON.stringify(err));
+      console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
 })
 
 .controller('SubCatRecipesCtrl', function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce) {
-  $scope.catName = $stateParams.catName;
+  $scope.catId = $stateParams.catId;
   $scope.subCatId = $stateParams.subCatId;
-  $scope.SubCatName = $stateParams.SubCatName;
+  //$scope.SubCatName = $stateParams.SubCatName;
   $scope.totalItems = 500;
   $scope.vm = {
     currentPage: 1
@@ -173,7 +173,9 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     }).$promise.then(function (res) {
       // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
       $scope.recipe = res;
-      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId);
+      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&amp;controls=1&amp;showinfo=0");
+
+      //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');

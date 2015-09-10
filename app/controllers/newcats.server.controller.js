@@ -7,6 +7,8 @@ var mongoose = require('mongoose'),
   errorHandler = require('./errors.server.controller'),
   Category = mongoose.model('NewCategory'),
   SubCats = mongoose.model('SubCats'),
+  config = require('../../config/config'),
+  agenda = require('../../schedules/job-schedule.js')(config.db),
   User = mongoose.model('User'),
   _ = require('lodash');
 
@@ -14,7 +16,9 @@ var mongoose = require('mongoose'),
 /**
  * Create a category
  */
-exports.create = function (req, res) {
+exports.createCat = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   // console.log("reached the create received: " + JSON.stringify(req.body));
   var category = new Category(req.body);
   category.user = req.user;
@@ -25,34 +29,20 @@ exports.create = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(category);
-    }
-  });
-};
-
-
-/**
- * Create a new category
- */
-exports.createnewcategory = function (req, res) {
-  console.log('Create a new category: ' + JSON.stringify(req.body));
-  var category = new Category(req.body);
-  category.user = req.user;
-
-  category.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
+      //user is successfully created cat save action into user usage details collection
+      agenda.now('User_Usage_Details', {
+        email: emailInfo,
+        device: deviceInfo,
+        action: 'createCat : ' + category.displayName
       });
-    } else {
       res.json(category);
     }
   });
 };
-
-
 
 exports.singleCatByRank = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   console.log('Successfully called the singleCatByRank fun. in server and RANK is : ' + req.params.rank);
 
   Category.findOne({
@@ -76,13 +66,20 @@ exports.singleCatByRank = function (req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else if (subcats.length === 0) {
+
         res.json(catResult);
       } else {
-        console.log('Before pushing the subcats into cats obj : ' + JSON.stringify(catResult));
-        console.log('@@@@@@@@@@@@@@@@@@@@@');
-        console.log(' subcats into cats obj : ' + JSON.stringify(subcats));
+        //console.log('Before pushing the subcats into cats obj : ' + JSON.stringify(catResult));
+        //console.log('@@@@@@@@@@@@@@@@@@@@@');
+        //console.log(' subcats into cats obj : ' + JSON.stringify(subcats));
         catResult.subCats = subcats;
-        console.log('After pushed the subcats into cats obj : ' + JSON.stringify(catResult));
+        //console.log('After pushed the subcats into cats obj : ' + JSON.stringify(catResult));
+        //user is successfully fetched sub cats based on cat save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'singleCatByRank : ' + category.displayName
+        });
         res.json(catResult);
       }
     })
@@ -100,7 +97,9 @@ exports.read = function (req, res) {
 /**
  * Update a category
  */
-exports.update = function (req, res) {
+exports.updateCat = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   var category = req.category;
   category = _.extend(category, req.body);
   category.save(function (err) {
@@ -109,6 +108,12 @@ exports.update = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      //user is successfully updated cat save action into user usage details collection
+      agenda.now('User_Usage_Details', {
+        email: emailInfo,
+        device: deviceInfo,
+        action: 'updateCat : ' + category.displayName
+      });
       res.json(category);
     }
   });
@@ -117,7 +122,9 @@ exports.update = function (req, res) {
 /**
  * Delete a category
  */
-exports.delete = function (req, res) {
+exports.deleteCat = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   var category = req.category;
 
   category.remove(function (err) {
@@ -126,6 +133,12 @@ exports.delete = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      //user is successfully deleted cat save action into user usage details collection
+      agenda.now('User_Usage_Details', {
+        email: emailInfo,
+        device: deviceInfo,
+        action: 'deleteCat : ' + category.displayName
+      });
       res.json(category);
     }
   });
@@ -134,7 +147,9 @@ exports.delete = function (req, res) {
 /**
  * List of Categories
  */
-exports.list = function (req, res) {
+exports.listOfCats = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
   //activeFilter 1= Active, 2=InActive, 3=All
   if (req.params.pageId == 999 && req.params.activeFilter == 3) {
     Category.find().sort('rank').populate('user', 'displayName').exec(function (err, categories) {
@@ -144,6 +159,15 @@ exports.list = function (req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else {
+
+        //user is successfully Fetched cats list save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'listOfCats'
+        });
+
+
         //  console.log('@@@@@@@@@ categories list  successfully fetched ');
         res.json(categories);
       }
@@ -160,6 +184,14 @@ exports.list = function (req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else {
+
+        //user is successfully Fetched cats list save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'listOfCats'
+        });
+
         //  console.log('@@@@@@@@@ categories list  successfully fetched ');
         res.json(categories);
       }
@@ -173,19 +205,29 @@ exports.list = function (req, res) {
  * Category middleware
  */
 exports.categoryByID = function (req, res, next, id) {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'Category is invalid'
-    });
-  }
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
+  /* if (!mongoose.Types.ObjectId.isValid(id)) {
+     return res.status(400).send({
+       message: 'Category is invalid'
+     });
+   }*/
 
-  Category.findById(id).exec(function (err, category) {
+  Category.findOne({
+    catId: id
+  }).exec(function (err, category) {
     if (err) return next(err);
     if (!category) {
       return res.status(404).send({
         message: 'Category not found'
       });
     }
+    //user is successfully Single cat save action into user usage details collection
+    agenda.now('User_Usage_Details', {
+      email: emailInfo,
+      device: deviceInfo,
+      action: 'categoryByID : ' + category.displayName
+    });
     req.category = category;
     next();
   });

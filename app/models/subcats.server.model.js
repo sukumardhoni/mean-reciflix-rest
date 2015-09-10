@@ -15,8 +15,10 @@ var SubCatsSchema = new Schema({
     default: false
   },
   catId: {
-    type: Schema.ObjectId,
-    ref: 'Category'
+    type: String,
+    default: '',
+    trim: true,
+    required: 'catId cannot be blank'
   },
   displayName: {
     type: String,

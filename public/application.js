@@ -10,7 +10,30 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
  }
 ]).run(function ($rootScope, $state, $localStorage, $http) {
 
-  $http.defaults.headers.common['Device'] = 'Device ' + navigator.userAgent;
+
+
+  var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+  var is_explorer = navigator.userAgent.indexOf('MSIE') > -1;
+  var is_firefox = navigator.userAgent.indexOf('Firefox') > -1;
+  var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+  var is_opera = navigator.userAgent.toLowerCase().indexOf("op") > -1;
+  var browser = '';
+  if ((is_chrome) && (is_safari)) {
+    browser = 'Chrome';
+  } else if ((is_chrome) && (is_opera)) {
+    browser = 'Opera';
+  } else if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+    browser = 'Safari';
+  } else if (is_firefox) {
+    browser = 'Firefox';
+  } else if (is_explorer) {
+    browser = 'Explorer';
+  }
+
+  console.log('$localStorage.user.email is : ' + $localStorage.user.email);
+
+  $http.defaults.headers.common['Device'] = 'Web,' + browser;
+  $http.defaults.headers.common['Email'] = $localStorage.user.email;
   $rootScope.$state = $state;
   $rootScope.$on('$stateChangeStart',
     function (e, toState, toParams, fromState, fromParams) {

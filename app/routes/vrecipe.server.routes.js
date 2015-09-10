@@ -16,11 +16,11 @@ module.exports = function (app) {
 
 
   app.route('/vRecipes/:vrecipeId')
-    .get(vrecipes.read)
+    .get(vrecipes.getRecipe)
     //		.put(users.requiresLogin, articles.hasAuthorization, articles.update)
     //		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete);
-    .put(users.ensureAuthenticated, vrecipes.update)
-    .delete(users.ensureAuthenticated, vrecipes.delete);
+    .put(users.ensureAuthenticated, vrecipes.updateRecipe)
+    .delete(users.ensureAuthenticated, vrecipes.deleteRecipe);
 
 
   // Finish by binding the vrecipe middleware

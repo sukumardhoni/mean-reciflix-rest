@@ -16,7 +16,7 @@ module.exports = function (app) {
   // Category Routes
 
   app.route('/newcats/page/:pageId/:activeFilter')
-    .get(categories.list);
+    .get(categories.listOfCats);
 
 
   app.route('/newCatAndSubCats/:rank')
@@ -31,7 +31,7 @@ module.exports = function (app) {
       .get(categories.catslist);*/
 
   app.route('/newcats')
-    .post(users.ensureAuthenticated, users.checkAdmin, categories.create);
+    .post(users.ensureAuthenticated, users.checkAdmin, categories.createCat);
 
   /* app.route('/newcategories')
      .post(categories.createnewcategory);*/
@@ -39,8 +39,8 @@ module.exports = function (app) {
 
   app.route('/newcats/:newCatId')
     .get(categories.read)
-    .put(users.ensureAuthenticated, categories.update)
-    .delete(users.ensureAuthenticated, categories.delete);
+    .put(users.ensureAuthenticated, categories.updateCat)
+    .delete(users.ensureAuthenticated, categories.deleteCat);
 
   /*	app.route('/categories/page/:pageId')
 			.get(categories.read);*/

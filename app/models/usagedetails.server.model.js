@@ -11,10 +11,6 @@ var mongoose = require('mongoose'),
  */
 
 var UsageDetailsSchema = new Schema({
-  userId: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
   email: {
     type: String,
     default: ''
