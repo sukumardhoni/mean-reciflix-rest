@@ -34,7 +34,38 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
  function ($locationProvider) {
     $locationProvider.hashPrefix('!');
  }
-]).run(["$rootScope", "$state", "$localStorage", function ($rootScope, $state, $localStorage) {
+]).run(["$rootScope", "$state", "$localStorage", "$http", function ($rootScope, $state, $localStorage, $http) {
+  var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+  var is_explorer = navigator.userAgent.indexOf('MSIE') > -1;
+  var is_firefox = navigator.userAgent.indexOf('Firefox') > -1;
+  var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+  var is_opera = navigator.userAgent.toLowerCase().indexOf("op") > -1;
+  var browser = '';
+  if ((is_chrome) && (is_safari)) {
+    browser = 'Chrome';
+  } else if ((is_chrome) && (is_opera)) {
+    browser = 'Opera';
+  } else if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+    browser = 'Safari';
+  } else if (is_firefox) {
+    browser = 'Firefox';
+  } else if (is_explorer) {
+    browser = 'Explorer';
+  }
+
+  var currentUser = $localStorage.user;
+
+  var userEmail = 'guest';
+  if(currentUser){
+    userEmail = currentUser.email;
+  }
+
+
+  console.log('$localStorage.user.email is : ' + userEmail);
+
+  $http.defaults.headers.common['Device'] = 'Web,' + browser;
+  $http.defaults.headers.common['Email'] = userEmail;
+
   $rootScope.$state = $state;
   $rootScope.$on('$stateChangeStart',
     function (e, toState, toParams, fromState, fromParams) {
@@ -491,7 +522,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
         module: 'private'
       })
       .state('reciflix.categories.subcats', {
-        url: "/:catId/:catName",
+        url: "/:catId/subcats",
         views: {
           'child-view': {
             templateUrl: "modules/categories/views/subCats.html",
@@ -597,7 +628,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.getCatDetails = function (cat) {
     SingleCat.get({
-      newCatId: cat._id
+      newCatId: cat.catId
     }, function (res) {
       $scope.cat = res;
     }, function (err) {
@@ -624,7 +655,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.updateCat = function () {
     var indexVal = $localStorage.indexVal;
     SingleCat.update({
-      newCatId: $scope.cat._id
+      newCatId: $scope.cat.catId
     }, $scope.cat, function (res) {
       $scope.categories.splice(indexVal, 1);
       $scope.categories.splice(indexVal, 0, res);
@@ -645,7 +676,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     modalInstance.result.then(function () {
       var indexVal = $localStorage.indexVal;
       SingleCat.delete({
-        newCatId: cat._id
+        newCatId: cat.catId
       }, function (res) {
         $scope.categories.splice(indexVal, 1);
         delete $localStorage.indexVal;
@@ -668,13 +699,13 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 }])
 
 .controller('SubCatCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "SubCat", "$localStorage", function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage) {
-  $scope.catName = $stateParams.catName;
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
-      pageId: 999
+      pageId: 999,
+      activeFilter: 3
     }).$promise.then(function (res) {
-      $scope.subCats = res;
+      $scope.CatObjWithSubCats = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
@@ -694,9 +725,10 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.createSubCat = function () {
     SubCategories.save({
       catId: $stateParams.catId,
-      pageId: 999
+      pageId: 999,
+      activeFilter: 3
     }, $scope.subCat, function (res) {
-      $scope.subCats.unshift(res);
+      $scope.CatObjWithSubCats.subCats.unshift(res);
       $scope.modalInstance.close();
     }, function (err) {
       //console.log('Error occured while SubCategories creating , Error details are : ' + JSON.stringify(err));
@@ -740,8 +772,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     SubCat.update({
       subCatId: $scope.subCat._id
     }, $scope.subCat, function (res) {
-      $scope.subCats.splice(indexVal, 1);
-      $scope.subCats.splice(indexVal, 0, res);
+      $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
+      $scope.CatObjWithSubCats.subCats.splice(indexVal, 0, res);
       delete $localStorage.indexVal;
       $scope.modalInstance.close();
     }, function (err) {
@@ -761,7 +793,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       SubCat.delete({
         subCatId: subCat._id
       }, function (res) {
-        $scope.subCats.splice(indexVal, 1);
+        $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
         delete $localStorage.indexVal;
         $scope.modalInstance.close();
       }, function (err) {
@@ -956,13 +988,13 @@ angular.module('categories')
 
 
 .factory('SubCategories', ["$resource", "API_HOST", function ($resource, API_HOST) {
-  return $resource(API_HOST + '/subCats/:catId/:pageId', {
+  return $resource(API_HOST + '/subCats/:catId/:pageId/:activeFilter', {
     catId: '@catId',
-    pageId: '@pageId'
+    pageId: '@pageId',
+    activeFilter: '@activeFilter'
   }, {
     'query': {
       method: 'GET',
-      isArray: true,
       timeout: 20000
     },
     'save': {
@@ -1013,7 +1045,6 @@ angular.module('categories')
     }
   };
 })
-
 'use strict';
 
 // Setting up route
@@ -1336,14 +1367,14 @@ angular.module('recipes').config(['$stateProvider',
     // Recipes state routing
     $stateProvider.
     state('reciflix.recipes', {
-      url: '/recipes',
+      url: '/category',
       templateUrl: 'modules/recipes/views/recipes.html',
       controller: 'RecipesCtrl',
       module: 'private'
     })
 
     .state('reciflix.recipes.subcats', {
-      url: "/:cat_Id/:catId/:catName",
+      url: "/:catId",
       views: {
         'child-view': {
           templateUrl: "modules/recipes/views/subCats.html",
@@ -1354,7 +1385,7 @@ angular.module('recipes').config(['$stateProvider',
     })
 
     .state('reciflix.recipes.subcats.recipes', {
-      url: "/:subCatId/:SubCatName/recipes",
+      url: "/:subCatId/recipes",
       views: {
         'child-recipes-view': {
           templateUrl: "modules/recipes/views/subCatsRecipes.html",
@@ -1365,7 +1396,7 @@ angular.module('recipes').config(['$stateProvider',
     })
 
     .state('reciflix.recipes.subcats.recipes.singlerecipes', {
-      url: "/singlerecipes/:recipeId",
+      url: "/:recipeId",
       views: {
         'child-singlerecipes-view': {
           templateUrl: "modules/recipes/views/singleRecipe.html",
@@ -1465,7 +1496,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.categoryFun = function () {
     Categories.query({
       pageId: 999,
-      activeFilter: 3
+      activeFilter: 1 // get only active cats
     }).$promise.then(function (res) {
       $scope.categories = res;
     }).catch(function (err) {
@@ -1501,27 +1532,28 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
 
 .controller('SubCategoriesCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "$localStorage", function ($scope, $stateParams, SubCategories, $modal, $localStorage) {
-  $scope.catName = $stateParams.catName;
+  //$scope.catName = $stateParams.catName;
   $scope.catId = $stateParams.catId;
-  $scope.SubCatName = $stateParams.SubCatName;
+  //$scope.SubCatName = $stateParams.SubCatName;
   $scope.subCatFun = function () {
     SubCategories.query({
-      catId: $stateParams.cat_Id,
-      pageId: 999
+      catId: $stateParams.catId,
+      pageId: 999,
+      activeFilter: 1 // get only active sub cats
     }).$promise.then(function (res) {
-      //console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
-      $scope.subCats = res;
+      console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
+      $scope.CatObjWithSubCats = res;
     }).catch(function (err) {
-      //console.log('Error happened : ' + JSON.stringify(err));
+      console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
 }])
 
 .controller('SubCatRecipesCtrl', ["$scope", "$stateParams", "SubCategoryRecipes", "$rootScope", "Recipe", "$sce", function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce) {
-  $scope.catName = $stateParams.catName;
+  $scope.catId = $stateParams.catId;
   $scope.subCatId = $stateParams.subCatId;
-  $scope.SubCatName = $stateParams.SubCatName;
+  //$scope.SubCatName = $stateParams.SubCatName;
   $scope.totalItems = 500;
   $scope.vm = {
     currentPage: 1
@@ -1553,7 +1585,9 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     }).$promise.then(function (res) {
       // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
       $scope.recipe = res;
-      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId);
+      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&amp;controls=1&amp;showinfo=0");
+
+      //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
@@ -1676,7 +1710,7 @@ angular.module('recipes')
 
 
 .factory('Recipe', ["$resource", "API_HOST", function ($resource, API_HOST) {
-  return $resource(API_HOST + '/vRecipes/:vrecipeId', {
+  return $resource(API_HOST + '/nVRecipes/:vrecipeId', {
     vrecipeId: '@vrecipeId'
   }, {
     'get': {
@@ -1685,7 +1719,6 @@ angular.module('recipes')
     }
   });
 }])
-
 'use strict';
 
 // Config HTTP Error Handling
@@ -1791,6 +1824,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
     $scope.authentication = Authentication;
     // If user is signed in then redirect back home
     //if ($scope.authentication.user) $location.path('/');
+
     $scope.signup = function () {
       $http.post('/users/signup', $scope.credentials).success(function (response) {
         //console.log('signup client side response ' + JSON.stringify(response));
