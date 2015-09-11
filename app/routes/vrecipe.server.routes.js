@@ -23,8 +23,21 @@ module.exports = function (app) {
     .delete(users.ensureAuthenticated, vrecipes.deleteRecipe);
 
 
+
+  app.route('/nVRecipes/:nVRecipeId')
+    .get(vrecipes.getRecipe)
+    //		.put(users.requiresLogin, articles.hasAuthorization, articles.update)
+    //		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete);
+    .put(users.ensureAuthenticated, vrecipes.updateRecipe)
+    .delete(users.ensureAuthenticated, vrecipes.deleteRecipe);
+
+
   // Finish by binding the vrecipe middleware
   app.param('vrecipeId', vrecipes.vrecipeByID);
+
+
+  //New recipe based on recipeId
+  app.param('nVRecipeId', vrecipes.nVRecipeByID);
 
 
   app.route('/cleanAllvrecipes')
@@ -57,6 +70,12 @@ module.exports = function (app) {
 
   app.route('/searchedVRecipes/:query/:pageId')
     .get(vrecipes.getAllSearchedVRecipes);
+
+
+  app.route('/searchedVRecipesByIndex/:query/:pageId')
+    .get(vrecipes.getAllSearchedVRecipesByIndex);
+
+
 
   app.route('/recipesFavCount/:recipeId')
     .put(users.ensureAuthenticated, vrecipes.updateVRecipesFavCount);

@@ -131,7 +131,7 @@ exports.vrecipeByID = function (req, res, next, id) {
   var emailInfo = req.headers.email;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'Vrecipe is invalid'
+      message: 'Recipe is invalid'
     });
   }
   //console.log('Called the single recipe params function');
@@ -139,7 +139,36 @@ exports.vrecipeByID = function (req, res, next, id) {
     if (err) return next(err);
     if (!vrecipe) {
       return res.status(404).send({
-        message: 'Vrecipe not found'
+        message: 'Recipe not found'
+      });
+    }
+    //user is successfully fetched single recipe save action into user usage details collection
+    agenda.now('User_Usage_Details', {
+      email: emailInfo,
+      device: deviceInfo,
+      action: 'vrecipeByID : ' + vrecipe._id
+    });
+    req.vrecipe = vrecipe;
+    next();
+  });
+};
+
+
+/**
+ * New Vrecipe middleware
+ */
+exports.nVRecipeByID = function (req, res, next, id) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
+
+  //console.log('Called the single recipe params function');
+  Vrecipe.findOne({
+    recipeId: id
+  }).populate('user', 'displayName').exec(function (err, vrecipe) {
+    if (err) return next(err);
+    if (!vrecipe) {
+      return res.status(404).send({
+        message: 'Recipe not found'
       });
     }
     //user is successfully fetched single recipe save action into user usage details collection
@@ -270,7 +299,7 @@ exports.getRecipesBySubCats = function (req, res) {
     }
   }).sort({
     rank: -1
-  }).skip(req.params.pageId * 5).limit(5).exec(function (err, recipes) {
+  }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
     if (!err) {
       if ((recipes.length === 0)) {
         res.status(204).send({
@@ -449,6 +478,7 @@ exports.getAllMyFavorites = function (req, res) {
   });
 };
 
+//TODO to bs deleted after testing
 exports.getAllSearchedVRecipes = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
@@ -488,6 +518,44 @@ exports.getAllSearchedVRecipes = function (req, res) {
       }
     });
   }
+};
+
+
+
+exports.getAllSearchedVRecipesByIndex = function (req, res) {
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
+  var pageid = req.params.pageId;
+  var pagelength = 5;
+  //var queries = req.params.query.split(' ');
+  Vrecipe.find({
+    $text: {
+      $search: req.params.query
+    }
+  }).sort({
+    rank: -1
+  }).skip(req.params.pageId * 5).limit(5).exec(function (err, recipes) {
+    if (!err) {
+      if (recipes.length === 0) {
+        return res.status(204).send({
+          message: 'No data found'
+        });
+      } else {
+        //user is successfully fetched searched recipes save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'getAllSearchedVRecipes : ' + emailInfo
+        });
+        res.jsonp(recipes);
+      }
+    } else {
+      return res.send({
+        message: 'No data found'
+      });
+    }
+  });
+
 };
 
 

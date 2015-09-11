@@ -20,7 +20,7 @@
           <div class="project-list">
             <div class="row">
               <div class="col-md-6 border-style">
-                <img ng-src="modules/recipes/img/subcats-img/{{subCatId}}.jpg" alt="Sample Image" class="img-responsive img-rounded img-class">
+                <img ng-src="modules/recipes/img/v2/subcats-img/{{subCatId}}.jpg" alt="Sample Image" class="img-responsive img-rounded img-class">
               </div>
               <hr class="hidden-lg hidden-md">
               <div class="col-md-6">
@@ -41,37 +41,48 @@
                 </table>
               </div>
             </div>
-            <hr>
-          <div class="text-center header-page1">Recipes</div>
-            <hr>
+            <!--<hr>
+<div class="text-center header-page1">Recipes</div>
+<hr>-->
             <div class="row" ng-init="recipesUnserSubCat(1)">
-              <center>
-                <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
-              </center>
+
               <div class="col-lg-4" ng-repeat="recipe in subCatRecipes">
                 <div class="contact-box items-box">
                   <div class="m-t-xs font-bold post-label item-title">{{recipe.title}}</div>
                   <hr>
-                  <a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes">
-                    <div class="col-sm-5">
+                  <a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">
+                    <div>
                       <div class="text-center">
-                        <img alt="image" class="img-thumbnail m-t-xs img-responsive" ng-src="{{recipe.images.dft}}">
+                        <!--<img alt="image" class="img-thumbnail m-t-xs img-responsive" ng-src="{{recipe.images.mq}}">-->
+                        <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive" height="180px" />
                         <div class="m-t-xs font-bold"><strong><i class="fa fa-user"></i> <span class=""><mark >{{recipe.author}}</mark></span></strong>
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-7">
+
+                    <div class="btn-group">
+                      <button class="btn btn-white btn-sm"><i class="fa fa-eye"></i>{{recipe.views | numeral}}</button>
+                      <button class="btn btn-white btn-sm"><i class="fa fa-clock-o"></i>{{recipe.duration | durationFltr}}</button>
+                      <button class="btn btn-white btn-sm"><i class="fa fa-thumbs-o-up"></i>{{recipe.ytlikes + recipe.applikes | numeral}}</button>
+                      <button class="btn btn-white btn-sm"><i class="fa fa-heart"></i> </button>
+                    </div>
+                    <span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">More</span>
+                    <!--<div class="col-sm-7">
                       <h3> <a class="btn  btn-white"><i class="fa fa-eye"></i> <span class=" text-color">{{recipe.views | numeral}}</span> </a></h3>
                       <h3> <a class="btn  btn-white"><i class="fa fa-clock-o"></i> <span class=" text-color">{{recipe.duration | durationFltr}}</span> </a></h3>
                       <h3> <a class="btn  btn-white"><i class="fa fa-thumbs-o-up"></i> <span class=" text-color">{{recipe.ytlikes + recipe.applikes | numeral}}</span> </a></h3>
                       <h3> <a class="btn  btn-white"><i class="fa fa-heart"></i></a>
-                     <span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe._id})">More</span>
+                     <span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">More</span>
                    </h3>
-                    </div>
-                    <div class="clearfix"></div>
+                    </div>-->
+
                   </a>
                 </div>
               </div>
+              <div class="clearfix"></div>
+              <center>
+                <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+              </center>
             </div>
           </div>
         </div>

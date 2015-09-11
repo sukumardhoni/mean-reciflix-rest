@@ -42,9 +42,10 @@ angular.module('categories')
 
 
 .factory('SubCategories', function ($resource, API_HOST) {
-  return $resource(API_HOST + '/subCats/:catId/:pageId', {
+  return $resource(API_HOST + '/subCats/:catId/:pageId/:activeFilter', {
     catId: '@catId',
-    pageId: '@pageId'
+    pageId: '@pageId',
+    activeFilter: '@activeFilter'
   }, {
     'query': {
       method: 'GET',

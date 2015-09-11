@@ -162,7 +162,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
-      pageId: 999
+      pageId: 999,
+      activeFilter: 3
     }).$promise.then(function (res) {
       $scope.CatObjWithSubCats = res;
     }).catch(function (err) {
@@ -184,7 +185,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.createSubCat = function () {
     SubCategories.save({
       catId: $stateParams.catId,
-      pageId: 999
+      pageId: 999,
+      activeFilter: 3
     }, $scope.subCat, function (res) {
       $scope.CatObjWithSubCats.subCats.unshift(res);
       $scope.modalInstance.close();

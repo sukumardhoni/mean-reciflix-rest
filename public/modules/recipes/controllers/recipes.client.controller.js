@@ -127,7 +127,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
-      pageId: 999
+      pageId: 999,
+      activeFilter: 1 // get only active sub cats
     }).$promise.then(function (res) {
       console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
       $scope.CatObjWithSubCats = res;

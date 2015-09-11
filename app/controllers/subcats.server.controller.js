@@ -53,18 +53,30 @@ exports.listOfSubCats = function (req, res) {
   var catResult = req.category.toObject();
   catResult.recipeCount = 462;
   catResult.subCats = [];
-  //catResult.recipes = [];
+
+  var activeFltrFlgs = [];
+  if (req.params.activeFilter == 1) {
+    activeFltrFlgs.push(true);
+  } else if (req.params.activeFilter == 2) {
+    activeFltrFlgs.push(false);
+  } else {
+    activeFltrFlgs.push(true);
+    activeFltrFlgs.push(false);
+  }
 
   if (req.params.pageId == 999) {
     SubCats.find({
-      catId: req.params.newCatId
+      catId: req.params.newCatId,
+      active: {
+        $in: activeFltrFlgs
+      }
     }).sort('-submitted.date').exec(function (err, subcats) {
       if (err) {
         return res.status(400).send({
           message: errorHandler.getErrorMessage(err)
         });
       } else if (subcats.length === 0) {
-          res.json(catResult);
+        res.json(catResult);
       } else {
         catResult.subCats = subcats;
         //user is successfully fetched list of sub cats save action into user usage details collection
@@ -81,7 +93,10 @@ exports.listOfSubCats = function (req, res) {
     console.log('listOfSubCats calling-------PageId-------- : ' + req.params.pageId);
 
     SubCats.find({
-      catId: req.params.newCatId
+      catId: req.params.newCatId,
+      active: {
+        $in: activeFltrFlgs
+      }
     }).sort('-submitted.date').skip(req.params.pageId * 8).limit(8).exec(function (err, subcats) {
       if (err) {
         return res.status(400).send({

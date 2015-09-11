@@ -65,7 +65,7 @@ angular.module('recipes')
 
 
 .factory('Recipe', function ($resource, API_HOST) {
-  return $resource(API_HOST + '/vRecipes/:vrecipeId', {
+  return $resource(API_HOST + '/nVRecipes/:vrecipeId', {
     vrecipeId: '@vrecipeId'
   }, {
     'get': {

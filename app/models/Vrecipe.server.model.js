@@ -16,6 +16,10 @@ var VrecipeSchema = new Schema({
     trim: true,
     required: 'Title cannot be blank'
   },
+  recipeId: {
+    type: String,
+    default: '',
+  },
   videoId: {
     type: String,
     default: '',

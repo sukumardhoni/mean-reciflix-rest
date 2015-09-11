@@ -152,12 +152,12 @@ exports.listOfCats = function (req, res) {
   var emailInfo = req.headers.email;
   //activeFilter 1= Active, 2=InActive, 3=All
 
-  var activeFltrFlgs=[];
-  if(req.params.activeFilter == 1){
+  var activeFltrFlgs = [];
+  if (req.params.activeFilter == 1) {
     activeFltrFlgs.push(true);
-  }else if(req.params.activeFilter == 2){
+  } else if (req.params.activeFilter == 2) {
     activeFltrFlgs.push(false);
-  }else{
+  } else {
     activeFltrFlgs.push(true);
     activeFltrFlgs.push(false);
   }
@@ -165,7 +165,9 @@ exports.listOfCats = function (req, res) {
 
   if (req.params.pageId == 999) {
     Category.find({
-      active:  { $in: activeFltrFlgs }
+      active: {
+        $in: activeFltrFlgs
+      }
     }).sort('rank').populate('user', 'displayName').exec(function (err, categories) {
       if (err) {
         // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
@@ -190,7 +192,9 @@ exports.listOfCats = function (req, res) {
   } else {
 
     Category.find({
-      active: { $in: activeFltrFlgs }
+      active: {
+        $in: activeFltrFlgs
+      }
     }).sort('rank').populate('user', 'displayName').skip(req.params.pageId * 8).limit(8).exec(function (err, categories) {
       if (err) {
         // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
