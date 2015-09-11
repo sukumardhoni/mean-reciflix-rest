@@ -29,7 +29,7 @@
                     <a ng-click="displaySubCat(cat)">{{cat.displayName}}</a>
                   </td>
                   <td class="project-completion">
-                    <a>{{cat.subCatId}}.png</a>
+                    <a>{{cat.subCatId}}.jpg</a>
                   </td>
                   <td class="project-actions">
                     <a class="btn btn-white btn-sm" ng-click="displaySubCat(cat)"><i class="fa fa-eye" style="color:green;"></i> View </a>
@@ -38,9 +38,9 @@
                 </tr>
               </tbody>
             </table>
-            <div ng-show="subCats.length === 0">
+            <div ng-show="CatObjWithSubCats.subCats.length === 0">
               <center>
-                <h3>There is no Sub-Categories in this category.</h3>
+                <h3>There are no sub categories in this category.</h3>
               </center>
             </div>
           </div>

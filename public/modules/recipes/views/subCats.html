@@ -43,10 +43,13 @@
               <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="subcat in CatObjWithSubCats.subCats">
                   <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats.recipes({SubCatName:subcat.displayName,subCatId:subcat.subCatId})">
-                    <img ng-src="modules/recipes/img/subcats-img/{{subcat.subCatId}}.png" alt="Sample Image" class="img-responsive">
+                    <img ng-src="modules/recipes/img/subcats-img/{{subcat.subCatId}}.jpg" alt="Sample Image" class="img-responsive">
                     <hr>
                     <h3 class="h3-styles media-heading text-center"><a >{{subcat.displayName}}</a></h3>
                   </div>
+                </div>
+                 <div class="text-center" ng-show="CatObjWithSubCats.subCats.length==0">
+                   <center>currently no sub categories exist for this category.</center>
                 </div>
               </div>
             </div>
