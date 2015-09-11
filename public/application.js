@@ -9,9 +9,6 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
     $locationProvider.hashPrefix('!');
  }
 ]).run(function ($rootScope, $state, $localStorage, $http) {
-
-
-
   var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
   var is_explorer = navigator.userAgent.indexOf('MSIE') > -1;
   var is_firefox = navigator.userAgent.indexOf('Firefox') > -1;
@@ -30,10 +27,19 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
     browser = 'Explorer';
   }
 
-  console.log('$localStorage.user.email is : ' + $localStorage.user.email);
+  var currentUser = $localStorage.user;
+
+  var userEmail = 'guest';
+  if(currentUser){
+    userEmail = currentUser.email;
+  }
+
+
+  console.log('$localStorage.user.email is : ' + userEmail);
 
   $http.defaults.headers.common['Device'] = 'Web,' + browser;
-  $http.defaults.headers.common['Email'] = $localStorage.user.email;
+  $http.defaults.headers.common['Email'] = userEmail;
+
   $rootScope.$state = $state;
   $rootScope.$on('$stateChangeStart',
     function (e, toState, toParams, fromState, fromParams) {
