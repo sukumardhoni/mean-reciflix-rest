@@ -36,7 +36,8 @@
                       <a ng-click="displayCat(cat)">{{cat.displayName}}</a>
                     </td>
                     <td class="project-completion">
-                      <a>{{cat.catId}}.png</a>
+                      <img class="img-thumbnail m-t-xs img-responsive" ng-src="modules/recipes/img/v2/cats-img/{{cat.catId}}.jpg" alt="Category Image" style="height:60px"> {{cat.catId}}.jpg
+
                     </td>
                     <td class="project-people" style="text-align:center">
                       <div>{{cat.rank}}</div>

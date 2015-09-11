@@ -1045,6 +1045,7 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
@@ -1719,6 +1720,7 @@ angular.module('recipes')
     }
   });
 }])
+
 'use strict';
 
 // Config HTTP Error Handling
