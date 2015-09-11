@@ -151,8 +151,22 @@ exports.listOfCats = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
   //activeFilter 1= Active, 2=InActive, 3=All
-  if (req.params.pageId == 999 && req.params.activeFilter == 3) {
-    Category.find().sort('rank').populate('user', 'displayName').exec(function (err, categories) {
+
+  var activeFltrFlgs=[];
+  if(req.params.activeFilter == 1){
+    activeFltrFlgs.push(true);
+  }else if(req.params.activeFilter == 2){
+    activeFltrFlgs.push(false);
+  }else{
+    activeFltrFlgs.push(true);
+    activeFltrFlgs.push(false);
+  }
+
+
+  if (req.params.pageId == 999) {
+    Category.find({
+      active:  { $in: activeFltrFlgs }
+    }).sort('rank').populate('user', 'displayName').exec(function (err, categories) {
       if (err) {
         // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
         return res.status(400).send({
@@ -176,7 +190,7 @@ exports.listOfCats = function (req, res) {
   } else {
 
     Category.find({
-      active: (req.params.activeFilter == 1)
+      active: { $in: activeFltrFlgs }
     }).sort('rank').populate('user', 'displayName').skip(req.params.pageId * 8).limit(8).exec(function (err, categories) {
       if (err) {
         // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);

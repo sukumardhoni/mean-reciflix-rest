@@ -85,7 +85,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.categoryFun = function () {
     Categories.query({
       pageId: 999,
-      activeFilter: 3
+      activeFilter: 1 // get only active cats
     }).$promise.then(function (res) {
       $scope.categories = res;
     }).catch(function (err) {
