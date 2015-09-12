@@ -70,4 +70,10 @@ module.exports = function (app) {
   app.route('/users/changePassword').post(users.changePassword);
   app.route('/users/totalUsers').get(users.totalUsers);
 
+
+
+  app.route('/users/usage-details-collection/:pageId').get(users.usersUsageCount, users.usersUsageDetails);
+
+
+
 };

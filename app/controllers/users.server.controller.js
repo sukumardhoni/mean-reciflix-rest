@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var _ = require('lodash'),
-	mongoose = require('mongoose'),
-	User = mongoose.model('User');
+  mongoose = require('mongoose'),
+  User = mongoose.model('User');
 /*
 exports.userFavorites = function (req, res) {
 	console.log('userFavorites is called');
@@ -34,8 +34,9 @@ exports.userFavorites = function (req, res) {
  * Extend user's controller
  */
 module.exports = _.extend(
-	require('./users/users.authentication.server.controller'),
-	require('./users/users.authorization.server.controller'),
-	require('./users/users.password.server.controller'),
-	require('./users/users.profile.server.controller')
+  require('./users/users.authentication.server.controller'),
+  require('./users/users.authorization.server.controller'),
+  require('./users/users.password.server.controller'),
+  require('./users/users.profile.server.controller'),
+  require('./users/users.usagedetails.server.controller')
 );

@@ -20,6 +20,7 @@ var transporter = nodemailer.createTransport(smtpTransport(config.mailer.options
 
 /*JWT Signup*/
 exports.jwtSignup = function (req, res, next) {
+  var deviceInfo = req.headers.device;
 
   User.findOne({
     email: req.body.email
@@ -46,6 +47,7 @@ exports.jwtSignup = function (req, res, next) {
             } else {
               req.login(user, function (err) {
                 if (err) {
+                  console.log('Error while Login user : ' + err);
                   res.status(400).send(err);
                 } else {
                   res.json({
@@ -78,12 +80,19 @@ exports.jwtSignup = function (req, res, next) {
         userModel.token = jwtToken;
         userModel.save(function (err) {
           if (err) {
+            /*console.log('Error while saving user 111111: ' + err);
             return res.status(400).send({
               message: errorHandler.getErrorMessage(err)
+            });*/
+            res.json({
+              type: false,
+              data: 'User already exists with email : ' + userModel.email,
+              user: user
             });
           } else {
             req.login(userModel, function (err) {
               if (err) {
+                //console.log('Error while saving user 2222222: ' + err);
                 res.status(400).send(err);
               } else {
                 //send a welcome mail notification using agenda
@@ -93,7 +102,7 @@ exports.jwtSignup = function (req, res, next) {
                 });
                 //send a User_Info_To_ReciFlix_Team mail notification using agenda
                 agenda.now('User_Info_To_ReciFlix_Team', {
-                  userData: '\n Email: ' + userModel.email + '\n displayName: ' + userModel.displayName + '\n Provider :' + userModel.provider + '\n'
+                  userData: '\n Email: ' + userModel.email + '\n displayName: ' + userModel.displayName + '\n Provider :' + userModel.provider + '\n Came from :' + deviceInfo + '\n'
                 });
                 res.jsonp(userModel);
               }

@@ -14,7 +14,7 @@ angular.module('users').factory('Users', ['$resource',
 //.constant('API_HOST', 'http://localhost:3000')
 .constant('API_HOST', 'http://www.reciflix.com')
 
-.factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST) {
+.factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
   return {
     Signup: $resource(API_HOST + '/users/signup', {}, {
       create: {
@@ -32,6 +32,17 @@ angular.module('users').factory('Users', ['$resource',
       query: {
         method: 'GET',
         isArray: true,
+        timeout: 20000
+      }
+    }),
+    UsageDetails: $resource(API_HOST + '/users/usage-details-collection/:pageId', {
+      pageId: '@pageId'
+    }, {
+      query: {
+        method: 'GET',
+        /* headers: {
+   'Usage': $localStorage.usageCount
+ },*/
         timeout: 20000
       }
     })

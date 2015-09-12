@@ -56,12 +56,12 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
   var currentUser = $localStorage.user;
 
   var userEmail = 'guest';
-  if(currentUser){
+  if (currentUser) {
     userEmail = currentUser.email;
   }
 
 
-  console.log('$localStorage.user.email is : ' + userEmail);
+  //console.log('$localStorage.user.email is : ' + userEmail);
 
   $http.defaults.headers.common['Device'] = 'Web,' + browser;
   $http.defaults.headers.common['Email'] = userEmail;
@@ -89,7 +89,6 @@ angular.element(document).ready(function () {
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
-
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -1045,7 +1044,6 @@ angular.module('categories')
     }
   };
 })
-
 'use strict';
 
 // Setting up route
@@ -1561,7 +1559,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   };
   $scope.itemsPerPage = 5;
   $scope.maxSize = 5;
-  $scope.recipesUnserSubCat = function (pageNum) {
+  $scope.recipesUnderSubCat = function (pageNum) {
     SubCategoryRecipes.query({
       subCatId: $stateParams.subCatId,
       pageId: (pageNum - 1)
@@ -1576,7 +1574,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
   $scope.pageChanged = function () {
     //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
-    $scope.recipesUnserSubCat($scope.vm.currentPage);
+    $scope.recipesUnderSubCat($scope.vm.currentPage);
   }
 
 
@@ -1614,7 +1612,6 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
-
 'use strict';
 
 // Recipes Filter
@@ -1720,7 +1717,6 @@ angular.module('recipes')
     }
   });
 }])
-
 'use strict';
 
 // Config HTTP Error Handling
@@ -2009,13 +2005,47 @@ angular.module('users')
     }).catch(function (err) {});
   };
 
+
+  $scope.getUsageDetails = function (pageNum) {
+    $scope.getAllUsers();
+    //console.log('Successfullly fetched getUsageDetails :' + pageNum)
+    Users.UsageDetails.query({
+      pageId: (pageNum - 1)
+    }).$promise.then(function (res) {
+      //console.log('Successfullly fetched getUsageDetails :' + JSON.stringify(res))
+      $scope.usageDetails = res.details;
+      $scope.totalItems1 = res.count;
+      $scope.itemsPerPage1 = 5;
+      $scope.maxSize1 = 5;
+      if ($rootScope.pageNumStore1 > 1) {
+        $scope.currentPage1 = $rootScope.pageNumStore1;
+        $rootScope.pageNumStore1 = 1;
+      } else {
+        $scope.currentPage1 = 1;
+      }
+    }).catch(function (err) {
+      //console.log('Error happened : ' + JSON.stringify(err));
+      alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
+
+  $scope.pageChanged1 = function () {
+    //console.log('Page changed console and current page is : ' + $scope.currentPage1);
+    if ($scope.currentPage1 === 1) {
+      $scope.getUsageDetails($scope.currentPage1);
+    } else {
+      $rootScope.pageNumStore1 = $scope.currentPage1;
+      //console.log('Page changed console and current page is : ' + $scope.currentPage1);
+      $scope.getUsageDetails($scope.currentPage1);
+    }
+  }
+
   $scope.pageChanged = function () {
     if ($scope.currentPage === 1) return;
     $rootScope.pageNumStore = $scope.currentPage;
   };
 
 }])
-
 'use strict';
 
 // Authentication service for user variables
@@ -2043,7 +2073,7 @@ angular.module('users').factory('Users', ['$resource',
 //.constant('API_HOST', 'http://localhost:3000')
 .constant('API_HOST', 'http://www.reciflix.com')
 
-.factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST) {
+.factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
   return {
     Signup: $resource(API_HOST + '/users/signup', {}, {
       create: {
@@ -2061,6 +2091,17 @@ angular.module('users').factory('Users', ['$resource',
       query: {
         method: 'GET',
         isArray: true,
+        timeout: 20000
+      }
+    }),
+    UsageDetails: $resource(API_HOST + '/users/usage-details-collection/:pageId', {
+      pageId: '@pageId'
+    }, {
+      query: {
+        method: 'GET',
+        /* headers: {
+   'Usage': $localStorage.usageCount
+ },*/
         timeout: 20000
       }
     })

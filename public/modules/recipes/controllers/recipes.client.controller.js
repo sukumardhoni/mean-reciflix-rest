@@ -149,7 +149,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   };
   $scope.itemsPerPage = 5;
   $scope.maxSize = 5;
-  $scope.recipesUnserSubCat = function (pageNum) {
+  $scope.recipesUnderSubCat = function (pageNum) {
     SubCategoryRecipes.query({
       subCatId: $stateParams.subCatId,
       pageId: (pageNum - 1)
@@ -164,7 +164,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
   $scope.pageChanged = function () {
     //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
-    $scope.recipesUnserSubCat($scope.vm.currentPage);
+    $scope.recipesUnderSubCat($scope.vm.currentPage);
   }
 
 

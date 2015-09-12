@@ -30,12 +30,12 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
   var currentUser = $localStorage.user;
 
   var userEmail = 'guest';
-  if(currentUser){
+  if (currentUser) {
     userEmail = currentUser.email;
   }
 
 
-  console.log('$localStorage.user.email is : ' + userEmail);
+  //console.log('$localStorage.user.email is : ' + userEmail);
 
   $http.defaults.headers.common['Device'] = 'Web,' + browser;
   $http.defaults.headers.common['Email'] = userEmail;
