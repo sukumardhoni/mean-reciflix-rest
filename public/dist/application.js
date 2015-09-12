@@ -89,6 +89,7 @@ angular.element(document).ready(function () {
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -1044,6 +1045,7 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
@@ -1612,6 +1614,7 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 // Recipes Filter
@@ -1717,6 +1720,7 @@ angular.module('recipes')
     }
   });
 }])
+
 'use strict';
 
 // Config HTTP Error Handling
@@ -2046,6 +2050,7 @@ angular.module('users')
   };
 
 }])
+
 'use strict';
 
 // Authentication service for user variables

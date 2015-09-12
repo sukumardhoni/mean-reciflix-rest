@@ -52,7 +52,7 @@ exports.jwtSignup = function (req, res, next) {
                 } else {
                   res.json({
                     type: false,
-                    data: 'User already exists!',
+                    data: 'User already exists :' + user.email,
                     user: user
                   });
                 }
@@ -80,13 +80,21 @@ exports.jwtSignup = function (req, res, next) {
         userModel.token = jwtToken;
         userModel.save(function (err) {
           if (err) {
-            /*console.log('Error while saving user 111111: ' + err);
+            //console.log('Error while saving user 111111: ' + err.errors.email.message);
+            //console.log('Error while saving user 2222: ' + err.code);
+            var errData;
+            if (err.code === 11000) {
+              errData = 'User already exists with email : ' + userModel.email
+            } else {
+              errData = err.errors.email.message;
+            }
+            /*
             return res.status(400).send({
               message: errorHandler.getErrorMessage(err)
             });*/
             res.json({
               type: false,
-              data: 'User already exists with email : ' + userModel.email,
+              data: errData,
               user: user
             });
           } else {
