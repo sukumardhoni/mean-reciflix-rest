@@ -9,7 +9,7 @@ angular.module('recipes').config(['$stateProvider',
       url: '/category',
       templateUrl: 'modules/recipes/views/recipes.html',
       controller: 'RecipesCtrl',
-      module: 'private'
+      module: ''
     })
 
     .state('reciflix.recipes.subcats', {

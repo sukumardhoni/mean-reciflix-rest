@@ -3,13 +3,21 @@
 // Articles controller
 angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
   $scope.authentication = Authentication;
-  $scope.userName = $localStorage.user.displayName || 'ReciFlix Admin';
+
+  var currentUser = $localStorage.user;
+
+  var userDisplayName = 'Guest';
+  if (currentUser) {
+    userDisplayName = $localStorage.user.displayName;
+  }
+
+  $scope.userName = userDisplayName;
   $scope.localUser = $localStorage.user;
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
   $scope.signout = function () {
     $http.post('/users/signout').success(function (response) {
-      console.log(response.data);
+      //console.log(response.data);
       $scope.authentication = '';
       delete $localStorage.token;
       delete $localStorage.user;

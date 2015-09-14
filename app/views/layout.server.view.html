@@ -43,6 +43,7 @@
   <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+  <script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
 </head>
 
 <body class="ng-cloak" ng-class="$state.current.data.bodyClass">
@@ -98,6 +99,12 @@
     try {
       clicky.init(100861627);
     } catch (e) {}
+
+	/*console.log("Your location Country Name is: " + geoplugin_countryName() + ", Region Name :" + geoplugin_region() + ", City Name :" + geoplugin_city());
+	console.log(" Area Name is: " +geoplugin_areaCode());
+	console.log(" Reuest Name is: " +geoplugin_request());*/
+
+
   </script>
   <noscript>
     <p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100861627ns.gif" />

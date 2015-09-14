@@ -4,7 +4,7 @@
       <div class="row" ng-init="categoryFun()">
         <div ng-hide="categories.length === 0">
           <div class="header-page">Categories</div>
-          <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="cat in categories">
+          <div class="col-xs-6 col-sm-6 col-md-4" ng-repeat="cat in categories">
             <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats({catId:cat.catId})" ng-click="minimalize()">
               <img ng-src="modules/recipes/img/v2/cats-img/{{cat.catId}}.jpg" alt="Sample Image" class="img-responsive">
               <hr>

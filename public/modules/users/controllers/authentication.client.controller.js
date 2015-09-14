@@ -29,7 +29,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $scope.loading = true;
       //console.log('Login Function is Triggred: ' + JSON.stringify($scope.credentials));
       Users.Login.create($scope.credentials).$promise.then(function (res) {
-        console.log('Res after login : ' + JSON.stringify(res));
+        //console.log('Res after login : ' + JSON.stringify(res));
         if (res.type === false) {
           $scope.errMsg = res.data;
           $scope.loading = false;

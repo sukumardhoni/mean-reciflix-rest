@@ -12,12 +12,15 @@
                                 <span class="block m-t-xs">
                                     <strong class="font-bold">{{userName}}</strong>
                              </span>
-            <span class="text-muted text-xs block">Options<b class="caret"></b></span>
+            <span class="text-muted text-xs block" data-ng-show="localUser">Options<b class="caret"></b></span>
             </span>
           </a>
           <ul class="dropdown-menu animated fadeInRight m-t-xs">
-            <li>
+            <li data-ng-show="localUser">
               <a ng-click="signout()"> Logout</a>
+            </li>
+            <li data-ng-hide="localUser">
+              <a ui-sref="signin"> Log In</a>
             </li>
           </ul>
         </div>
@@ -26,11 +29,11 @@
         </div>
       </li>
       <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="localUser.roles.indexOf('admin') > -1">
-        <a ui-sref="reciflix.categories" title="Categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories page</span></a>
+        <a ui-sref="reciflix.categories" title="Categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories</span></a>
       </li>
 
       <li ui-sref-active="active" ng-click="minimalize()">
-        <a ui-sref="reciflix.recipes" title="Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes page</span></a>
+        <a ui-sref="reciflix.recipes" title="Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes</span></a>
       </li>
 
       <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="localUser.roles.indexOf('admin') > -1">
@@ -38,7 +41,7 @@
       </li>
 
       <li>
-        <a ng-click="signout()" title="Logout"><i class="fa fa-sign-out"></i> <span class="nav-label">Logout</span></a>
+        <a ng-click="signout()" title="Logout" data-ng-show="localUser"><i class="fa fa-sign-out"></i> <span class="nav-label">Logout</span></a>
       </li>
     </ul>
   </div>

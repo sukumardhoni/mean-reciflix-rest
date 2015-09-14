@@ -29,7 +29,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 
   var currentUser = $localStorage.user;
 
-  var userEmail = 'guest';
+  var userEmail = 'guest, ip : ' + geoplugin_request();
   if (currentUser) {
     userEmail = currentUser.email;
   }
@@ -38,10 +38,10 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
   //console.log('$localStorage.user.email is : ' + userEmail);
 
   $http.defaults.headers.common['Device'] = 'Web,' + browser;
-  $http.defaults.headers.common['Email'] = userEmail;
+  $http.defaults.headers.common['Email'] = userEmail + ', country :'+geoplugin_countryName();
 
   $rootScope.$state = $state;
-  $rootScope.$on('$stateChangeStart',
+  /*$rootScope.$on('$stateChangeStart',
     function (e, toState, toParams, fromState, fromParams) {
       if (toState.module === 'private' && !$localStorage.user) {
         // If logged out and transitioning to a logged in page:
@@ -52,7 +52,8 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
         e.preventDefault();
         $state.go('reciflix.recipes');
       };
-    });
+    });*/
+
 });
 
 //Then define the init function for starting up the application

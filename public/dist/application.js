@@ -55,7 +55,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 
   var currentUser = $localStorage.user;
 
-  var userEmail = 'guest';
+  var userEmail = 'guest, ip : ' + geoplugin_request();
   if (currentUser) {
     userEmail = currentUser.email;
   }
@@ -64,10 +64,10 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
   //console.log('$localStorage.user.email is : ' + userEmail);
 
   $http.defaults.headers.common['Device'] = 'Web,' + browser;
-  $http.defaults.headers.common['Email'] = userEmail;
+  $http.defaults.headers.common['Email'] = userEmail + ', country :'+geoplugin_countryName();
 
   $rootScope.$state = $state;
-  $rootScope.$on('$stateChangeStart',
+  /*$rootScope.$on('$stateChangeStart',
     function (e, toState, toParams, fromState, fromParams) {
       if (toState.module === 'private' && !$localStorage.user) {
         // If logged out and transitioning to a logged in page:
@@ -78,7 +78,8 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
         e.preventDefault();
         $state.go('reciflix.recipes');
       };
-    });
+    });*/
+
 }]);
 
 //Then define the init function for starting up the application
@@ -543,13 +544,21 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
 // Articles controller
 angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
   $scope.authentication = Authentication;
-  $scope.userName = $localStorage.user.displayName || 'ReciFlix Admin';
+
+  var currentUser = $localStorage.user;
+
+  var userDisplayName = 'Guest';
+  if (currentUser) {
+    userDisplayName = $localStorage.user.displayName;
+  }
+
+  $scope.userName = userDisplayName;
   $scope.localUser = $localStorage.user;
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
   $scope.signout = function () {
     $http.post('/users/signout').success(function (response) {
-      console.log(response.data);
+      //console.log(response.data);
       $scope.authentication = '';
       delete $localStorage.token;
       delete $localStorage.user;
@@ -812,7 +821,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -950,7 +958,7 @@ angular
 angular.module('categories')
 
 //.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+  .constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Categories', ["$resource", "API_HOST", function ($resource, API_HOST) {
@@ -1045,7 +1053,6 @@ angular.module('categories')
     }
   };
 })
-
 'use strict';
 
 // Setting up route
@@ -1371,7 +1378,7 @@ angular.module('recipes').config(['$stateProvider',
       url: '/category',
       templateUrl: 'modules/recipes/views/recipes.html',
       controller: 'RecipesCtrl',
-      module: 'private'
+      module: ''
     })
 
     .state('reciflix.recipes.subcats', {
@@ -1409,7 +1416,6 @@ angular.module('recipes').config(['$stateProvider',
 
  }
 ]);
-
 'use strict';
 
 // Recipes controller
@@ -1650,7 +1656,7 @@ angular.module('recipes')
 angular.module('recipes')
 
 //.constant('API_HOST', 'http://192.168.0.100:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+  .constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Vrecipes', ['$resource',
@@ -1720,7 +1726,6 @@ angular.module('recipes')
     }
   });
 }])
-
 'use strict';
 
 // Config HTTP Error Handling
@@ -1850,7 +1855,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $scope.loading = true;
       //console.log('Login Function is Triggred: ' + JSON.stringify($scope.credentials));
       Users.Login.create($scope.credentials).$promise.then(function (res) {
-        console.log('Res after login : ' + JSON.stringify(res));
+        //console.log('Res after login : ' + JSON.stringify(res));
         if (res.type === false) {
           $scope.errMsg = res.data;
           $scope.loading = false;
@@ -2076,7 +2081,7 @@ angular.module('users').factory('Users', ['$resource',
 ])
 
 //.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+  .constant('API_HOST', 'http://www.reciflix.com')
 
 .factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
   return {

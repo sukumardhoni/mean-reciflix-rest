@@ -4,7 +4,7 @@
 angular.module('recipes')
 
 //.constant('API_HOST', 'http://192.168.0.100:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+  .constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Vrecipes', ['$resource',
