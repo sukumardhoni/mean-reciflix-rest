@@ -821,6 +821,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -1053,6 +1054,7 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
@@ -1416,6 +1418,7 @@ angular.module('recipes').config(['$stateProvider',
 
  }
 ]);
+
 'use strict';
 
 // Recipes controller
@@ -1726,6 +1729,7 @@ angular.module('recipes')
     }
   });
 }])
+
 'use strict';
 
 // Config HTTP Error Handling
