@@ -31,6 +31,10 @@ var SubCatsSchema = new Schema({
     default: '',
     trim: true
   },
+  imageName: {
+    type: String,
+    default: ''
+  },
   subCatId: {
     type: String,
     default: ''

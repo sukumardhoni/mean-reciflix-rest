@@ -27,6 +27,10 @@ var NewCategorySchema = new Schema({
     default: '',
     trim: true
   },
+  imageName: {
+    type: String,
+    default: ''
+  },
   subCatsExist: {
     type: Boolean,
     default: false

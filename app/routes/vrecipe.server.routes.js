@@ -7,11 +7,11 @@ var users = require('../../app/controllers/users.server.controller'),
   vrecipes = require('../../app/controllers/vrecipes.server.controller');
 
 module.exports = function (app) {
-  // Article Routes
+  // Recipes Routes
   app.route('/vrecipes')
-    .get(users.ensureAuthenticated, vrecipes.list)
+    .get(vrecipes.list)
     //		.post(users.requiresLogin, articles.create);
-    .post(users.ensureAuthenticated, vrecipes.create);
+    .post(vrecipes.create);
 
 
 
@@ -19,9 +19,16 @@ module.exports = function (app) {
     .get(vrecipes.getRecipe)
     //		.put(users.requiresLogin, articles.hasAuthorization, articles.update)
     //		.delete(users.requiresLogin, articles.hasAuthorization, articles.delete);
-    .put(users.ensureAuthenticated, vrecipes.updateRecipe)
-    .delete(users.ensureAuthenticated, vrecipes.deleteRecipe);
+    /*    .put(users.ensureAuthenticated, vrecipes.updateRecipe)
+        .delete(users.ensureAuthenticated, vrecipes.deleteRecipe);*/
+    .put(vrecipes.updateRecipe)
+    .delete(vrecipes.deleteRecipe);
 
+
+  app.route('/nVRecipes')
+    .get(vrecipes.list)
+    //		.post(users.requiresLogin, articles.create);
+    .post(vrecipes.create);
 
 
   app.route('/nVRecipes/:nVRecipeId')

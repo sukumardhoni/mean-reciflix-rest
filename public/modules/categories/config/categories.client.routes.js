@@ -13,6 +13,11 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
           bodyClass: ''
         }
       })
+      .state('reciflix.recipesUpdate', {
+        url: "/recipes/update",
+        templateUrl: "modules/categories/views/recipesUpdate.html",
+        controller: 'RecipesUpdateCtrl'
+      })
       .state('reciflix.categories', {
         url: "/categories",
         templateUrl: "modules/categories/views/categories.html",

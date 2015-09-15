@@ -516,6 +516,11 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
           bodyClass: ''
         }
       })
+      .state('reciflix.recipesUpdate', {
+        url: "/recipes/update",
+        templateUrl: "modules/categories/views/recipesUpdate.html",
+        controller: 'RecipesUpdateCtrl'
+      })
       .state('reciflix.categories', {
         url: "/categories",
         templateUrl: "modules/categories/views/categories.html",
@@ -541,7 +546,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
 
 'use strict';
 
-// Articles controller
+// Categories controller
 angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
   $scope.authentication = Authentication;
 
@@ -824,6 +829,64 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 'use strict';
 
+// Recipes Edit controller
+angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state", "$localStorage", "$location", "$http", "Authentication", "Recipe", "$rootScope", function ($scope, $state, $localStorage, $location, $http, Authentication, Recipe, $rootScope) {
+
+  $scope.getAllVideosInfo = function () {
+    Recipe.query().$promise.then(function (res) {
+      $scope.videosList = res;
+      $scope.itemsPerPage = 1;
+      $scope.currentPage = 1;
+      $scope.maxSize = 5;
+      $scope.$watch('currentPage + itemsPerPage', function () {
+        $scope.faqSingle = '';
+        var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+          end = begin + $scope.itemsPerPage;
+        $scope.finalitems = $scope.videosList.slice(begin, end);
+      });
+    });
+  };
+
+
+  $scope.pageChanged1 = function () {
+    if ($scope.currentPage1 === 1) return;
+    $rootScope.pageNumStore1 = $scope.currentPage1;
+  };
+
+  $scope.updateRecipeItem = function (item) {
+    Recipe.update({
+      vrecipeId: item.recipeId
+    }, item, function () {
+      console.log('Successfully updated Recipe');
+      //$state.go('faqs.dashboard', {});
+    }, function (errorResponse) {
+      $scope.error = errorResponse.data.message;
+    });
+  }
+
+}])
+
+.directive('myYoutube', ["$sce", function ($sce) {
+  return {
+    restrict: 'EA',
+    scope: {
+      code: '='
+    },
+    replace: true,
+    template: '<div style="height:300px"><iframe style="overflow:hidden;height:100%;width:70%" controls="0" src="{{url}}" frameborder="0" allowfullscreen></iframe></div>',
+    link: function (scope) {
+      console.log('here');
+      scope.$watch('code', function (newVal) {
+        if (newVal) {
+          scope.url = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + newVal);
+        }
+      });
+    }
+  };
+}]);
+
+'use strict';
+
 //Directive used to set metisMenu and minimalize button
 angular.module('categories')
   /**
@@ -959,7 +1022,7 @@ angular
 angular.module('categories')
 
 //.constant('API_HOST', 'http://localhost:3000')
-  .constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Categories', ["$resource", "API_HOST", function ($resource, API_HOST) {
@@ -1659,7 +1722,7 @@ angular.module('recipes')
 angular.module('recipes')
 
 //.constant('API_HOST', 'http://192.168.0.100:3000')
-  .constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Vrecipes', ['$resource',
@@ -1726,9 +1789,57 @@ angular.module('recipes')
     'get': {
       method: 'GET',
       timeout: 20000
+    },
+    'save': {
+      method: 'POST'
+    },
+    'update': {
+      method: 'PUT'
+    },
+    'query': {
+      method: 'GET',
+      isArray: true
+    },
+    'remove': {
+      method: 'DELETE'
+    },
+    'delete': {
+      method: 'DELETE'
     }
   });
 }])
+
+
+
+
+
+
+
+/*app.factory('VideoService', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + 'vRecipes/:vId', {
+    vId: '@vId'
+  }, {
+    'get': {
+      method: 'GET'
+    },
+    'save': {
+      method: 'POST'
+    },
+    'update': {
+      method: 'PUT'
+    },
+    'query': {
+      method: 'GET',
+      isArray: true
+    },
+    'remove': {
+      method: 'DELETE'
+    },
+    'delete': {
+      method: 'DELETE'
+    }
+  });
+});*/
 
 'use strict';
 
@@ -2085,7 +2196,7 @@ angular.module('users').factory('Users', ['$resource',
 ])
 
 //.constant('API_HOST', 'http://localhost:3000')
-  .constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://www.reciflix.com')
 
 .factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
   return {
@@ -2113,9 +2224,6 @@ angular.module('users').factory('Users', ['$resource',
     }, {
       query: {
         method: 'GET',
-        /* headers: {
-   'Usage': $localStorage.usageCount
- },*/
         timeout: 20000
       }
     })

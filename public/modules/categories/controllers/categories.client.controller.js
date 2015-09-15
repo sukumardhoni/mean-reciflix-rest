@@ -1,6 +1,6 @@
 'use strict';
 
-// Articles controller
+// Categories controller
 angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
   $scope.authentication = Authentication;
 

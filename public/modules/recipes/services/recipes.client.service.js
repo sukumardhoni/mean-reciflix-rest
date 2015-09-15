@@ -4,7 +4,7 @@
 angular.module('recipes')
 
 //.constant('API_HOST', 'http://192.168.0.100:3000')
-  .constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Vrecipes', ['$resource',
@@ -71,6 +71,54 @@ angular.module('recipes')
     'get': {
       method: 'GET',
       timeout: 20000
+    },
+    'save': {
+      method: 'POST'
+    },
+    'update': {
+      method: 'PUT'
+    },
+    'query': {
+      method: 'GET',
+      isArray: true
+    },
+    'remove': {
+      method: 'DELETE'
+    },
+    'delete': {
+      method: 'DELETE'
     }
   });
 })
+
+
+
+
+
+
+
+/*app.factory('VideoService', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + 'vRecipes/:vId', {
+    vId: '@vId'
+  }, {
+    'get': {
+      method: 'GET'
+    },
+    'save': {
+      method: 'POST'
+    },
+    'update': {
+      method: 'PUT'
+    },
+    'query': {
+      method: 'GET',
+      isArray: true
+    },
+    'remove': {
+      method: 'DELETE'
+    },
+    'delete': {
+      method: 'DELETE'
+    }
+  });
+});*/

@@ -112,7 +112,7 @@ exports.cleanAllVRecipes = function (req, res) {
  * List of Articles
  */
 exports.list = function (req, res) {
-  Vrecipe.find().sort('-created').populate('user', 'displayName').exec(function (err, vrecipes) {
+  Vrecipe.find().sort('-rank').populate('user', 'displayName').exec(function (err, vrecipes) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

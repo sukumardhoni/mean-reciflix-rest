@@ -15,9 +15,15 @@
           <input type="checkbox" class="form-control" ng-model="subCat.active">
         </div>
       </div>
-      <div class="form-group">
-        <label>SubCatId</label>
-        <input type="text" class="form-control" ng-model="subCat.subCatId">
+      <div class="row">
+        <div class="form-group col-md-6 col-xs-6">
+          <label>SubCatId</label>
+          <input type="text" class="form-control" ng-model="subCat.subCatId">
+        </div>
+        <div class="form-group col-md-6 col-xs-6">
+          <label>Image Name</label>
+          <input type="text" class="form-control" placeholder="without extension" ng-model="subCat.imageName">
+        </div>
       </div>
       <div class="form-group">
         <label>Description</label>
