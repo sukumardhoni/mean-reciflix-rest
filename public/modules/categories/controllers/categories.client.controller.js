@@ -249,7 +249,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
   $scope.deleteSubCat = function (subCat) {
-    console.log('Want to del sub cat details are :' + JSON.stringify(subCat));
+    //console.log('Want to del sub cat details are :' + JSON.stringify(subCat));
     var modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/del-sub-cat-modal.html',
       scope: $scope,

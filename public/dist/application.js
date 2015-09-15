@@ -795,7 +795,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
   $scope.deleteSubCat = function (subCat) {
-    console.log('Want to del sub cat details are :' + JSON.stringify(subCat));
+    //console.log('Want to del sub cat details are :' + JSON.stringify(subCat));
     var modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/del-sub-cat-modal.html',
       scope: $scope,
@@ -826,7 +826,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
@@ -1551,7 +1550,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     };
 
     $scope.removeRecipes = function (recipe) {
-      console.log('inside removeRecipes');
+      //console.log('inside removeRecipes');
       var updatedRecipe = recipe;
       updatedRecipe.submitted.by = 'reciflix_admin';
       updatedRecipe.state = 333;
@@ -1614,10 +1613,10 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       pageId: 999,
       activeFilter: 1 // get only active sub cats
     }).$promise.then(function (res) {
-      console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
+      //console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
       $scope.CatObjWithSubCats = res;
     }).catch(function (err) {
-      console.log('Error happened : ' + JSON.stringify(err));
+      //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
@@ -1677,7 +1676,7 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
     replace: true,
     template: '<div style="height:350px; width:100%"><iframe style="overflow:hidden;height:100%;width:70%" controls="0" src="{{url}}" frameborder="0" allowfullscreen></iframe></div>',
     link: function (scope) {
-      console.log('here');
+      //console.log('here');
       scope.$watch('code', function (newVal) {
         if (newVal) {
           scope.url = $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + newVal);
@@ -1686,7 +1685,6 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
-
 'use strict';
 
 // Recipes Filter

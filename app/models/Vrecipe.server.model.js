@@ -50,7 +50,7 @@ var VrecipeSchema = new Schema({
   rank: Number,
   likes: Number,
   dislikes: Number,
-  adminboost: Number,
+  rfpoints: Number,
   description: String,
   notes: String,
   state: Number,
