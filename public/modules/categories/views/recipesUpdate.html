@@ -1,49 +1,51 @@
-<div ng-init="getAllVideosInfo()">
-  <center>
-    <pagination total-items="videosList.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" boundary-links="true" rotate="false"></pagination>
+<div class="wrapper wrapper-content animated fadeInUp" ng-init="getAllCats()">
+  <div style="padding:10px">
+    <label>Select Category :</label>
+    <select ng-model="catSelected" ng-options="cat as cat.displayName for cat in cats" ng-change="getSubCats()">
+      <option value="">Select Category</option>
+    </select>
+    <span style="padding-left:50px">
+
+      <label>Select Sub Category :</label>
+      <select ng-model="subCatSelected" ng-options="subCat as subCat.displayName for subCat in subCats" ng-change="getSubCatRecipes(1)">
+        <option value="">Select Sub Category</option>
+      </select>
+    </span>
+  </div>
+
+  <center ng-hide="subCatRecipes.length === 0">
+    <pagination total-items="subCatRecipes.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" boundary-links="true" rotate="false"></pagination>
   </center>
-  <div class="allCatFaqs">
-    <div class="scroll1">
-      <table class="table table-hover">
-        <div ng-repeat="item in finalitems | filter:query">
-          <form class="form-horizontal size" role="form" name="itemForm">
 
-
-            <div class="col-md-12 col-xs-11">
-              <label>Title :</label>
-              <input type="text" ng-model="item.title" size="85"></input>
-              <span>RecipeId:{{item.recipeId}}</span>
-              <span style="padding-left:300px">
+  <table class="table table-hover">
+    <div ng-repeat="item in finalitems | filter:query">
+      <form class="form-horizontal size" role="form" name="itemForm">
+        <div class="col-md-12 col-xs-11">
+          <label>Title :</label>
+          <input type="text" ng-model="item.title" size="85"></input>
+          <!--<span>RecipeId:{{item.recipeId}}</span>-->
+          <span style="padding-left:300px">
               <label>Image :</label><img ng-src="{{item.images.dft}}" />
               </span>
-            </div>
-            <div class="col-md-12 col-xs-11">
-              <label>Description :</label>
-              <!--<span>{{item.description}}</span>-->
-              <textarea rows="10" cols="15" class="form-control form-cust-size" ng-model="item.description"></textarea>
-            </div>
-            <!--<div class="col-md-12 col-xs-11">
-  <label>Video :</label>.
-  <span my-youtube code=item.videoId></span>
-</div>-->
-
-            <div class="form-group">
-              <div class="col-md-12 col-xs-11">
-                <label>Tags : {{item.tags}}</label>
-                <!--<textarea rows="3" cols="10" class="form-control form-cust-size" placeholder="Enter tags as comma seprated list like :  snacks,veg, non-veg,.." ng-model=""></textarea>-->
-              </div>
-            </div>
-            <div class="form-group">
-              <br>
-              <div class="col-md-offset-9 col-md-5">
-                <button type="submit" class="btn btn-default btn-primary col-md-3" ng-click="updateRecipeItem(item)">Update</button>
-
-                <button class="btn btn-warning  col-md-offset-1 col-md-2" back-button>Cancel</button>
-              </div>
-            </div>
-          </form>
         </div>
-      </table>
+        <div class="col-md-12 col-xs-11">
+          <label>Description :</label>
+          <textarea rows="13" cols="15" class="form-control form-cust-size" ng-model="item.description"></textarea>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12 col-xs-11">
+            <label>Tags : {{item.tags}}</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <br>
+          <div class="col-md-offset-9 col-md-5">
+            <button type="submit" class="btn btn-default btn-primary col-md-3" ng-click="updateRecipeItem(item)">Update</button>
+
+            <button class="btn btn-warning  col-md-offset-1 col-md-2" back-button>Cancel</button>
+          </div>
+        </div>
+      </form>
     </div>
-  </div>
+  </table>
 </div>

@@ -58,10 +58,6 @@ ul.list-inline a {
   padding-left: 10px
 }
 
-.item-title {
-  color: #2F4050;
-}
-
 .sub-title {
   padding: 5px;
 }
@@ -91,7 +87,8 @@ ul.list-inline a {
 
 .post-label {
   display: inline-block;
-  background: #65CCE3;
+  background: linear-gradient(to bottom, #aad061, #7cb72f);
+  color: #FFF;
   position: absolute;
   left: 4%;
   top: 1px;

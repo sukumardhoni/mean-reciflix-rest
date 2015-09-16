@@ -160,8 +160,6 @@ exports.vrecipeByID = function (req, res, next, id) {
 exports.nVRecipeByID = function (req, res, next, id) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-
-  //console.log('Called the single recipe params function');
   Vrecipe.findOne({
     recipeId: id
   }).populate('user', 'displayName').exec(function (err, vrecipe) {
@@ -291,34 +289,67 @@ exports.getAllCategories = function (req, res) {
 exports.getRecipesBySubCats = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-  //console.log('Recipes under Sub-category is called , SubCatName is : ' + req.params.SubCatName);
-  //console.log('Recipes under Sub-category is called , PageId is : ' + req.params.pageId);
-  Vrecipe.find({
-    subcats: {
-      $in: [req.params.SubCatName]
-    }
-  }).sort({
-    rank: -1
-  }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
-    if (!err) {
-      if ((recipes.length === 0)) {
-        res.status(204).send({
-          'message': 'There are no recipe items available'
-        });
-      } else {
-        //user is successfully fetched list of recipes based on subcats save action into user usage details collection
-        agenda.now('User_Usage_Details', {
-          email: emailInfo,
-          device: deviceInfo,
-          action: 'getRecipesBySubCats : ' + req.params.SubCatName
-        });
-        //console.log('Recipes length is : ' + recipes.length);
-        res.send(recipes);
+
+  console.log('Recipes under getRecipesBySubCats is called , SubCatName is : ' + req.params.SubCatName);
+  console.log('Recipes under getRecipesBySubCats is called , PageId is : ' + req.params.pageId);
+  if (req.params.pageId == 999) {
+    Vrecipe.find({
+      subcats: {
+        $in: [req.params.SubCatName]
       }
-    } else {
-      return console.log(err);
-    }
-  });
+    }).sort({
+      rank: -1
+    }).exec(function (err, recipes) {
+      if (!err) {
+        if ((recipes.length === 0)) {
+          res.status(204).send({
+            'message': 'There are no recipe items available'
+          });
+        } else {
+          //user is successfully fetched list of recipes based on subcats save action into user usage details collection
+          agenda.now('User_Usage_Details', {
+            email: emailInfo,
+            device: deviceInfo,
+            action: 'getRecipesBySubCats : ' + req.params.SubCatName
+          });
+          //console.log('Recipes length is : ' + recipes.length);
+          res.send(recipes);
+        }
+      } else {
+        return console.log(err);
+      }
+    });
+
+  } else {
+
+    Vrecipe.find({
+      subcats: {
+        $in: [req.params.SubCatName]
+      }
+    }).sort({
+      rank: -1
+    }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
+      if (!err) {
+        if ((recipes.length === 0)) {
+          res.status(204).send({
+            'message': 'There are no recipe items available'
+          });
+        } else {
+          //user is successfully fetched list of recipes based on subcats save action into user usage details collection
+          agenda.now('User_Usage_Details', {
+            email: emailInfo,
+            device: deviceInfo,
+            action: 'getRecipesBySubCats : ' + req.params.SubCatName
+          });
+          //console.log('Recipes length is : ' + recipes.length);
+          res.send(recipes);
+        }
+      } else {
+        return console.log(err);
+      }
+    });
+  }
+
 };
 
 

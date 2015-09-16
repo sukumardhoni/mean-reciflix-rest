@@ -1,11 +1,53 @@
 'use strict';
 
 // Recipes Edit controller
-angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $state, $localStorage, $location, $http, Authentication, Recipe, $rootScope) {
+angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $state, $localStorage, Recipe, $rootScope, Categories, SubCategories, SubCategoryRecipes) {
 
-  $scope.getAllVideosInfo = function () {
-    Recipe.query().$promise.then(function (res) {
-      $scope.videosList = res;
+
+
+  $scope.getAllCats = function () {
+    Categories.query({
+      pageId: 999,
+      activeFilter: 1 // get only active cats
+    }).$promise.then(function (res) {
+      $scope.cats = res;
+    }).catch(function (err) {
+      //console.log('Error happened : ' + JSON.stringify(err));
+      alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
+
+
+
+  $scope.getSubCats = function () {
+
+    console.log('Selected cat for sub cats : ' + JSON.stringify($scope.catSelected));
+
+    SubCategories.query({
+      catId: $scope.catSelected.catId,
+      pageId: 999,
+      activeFilter: 1 // get only active sub cats
+    }).$promise.then(function (res) {
+      console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
+      $scope.subCats = res.subCats;
+    }).catch(function (err) {
+      //console.log('Error happened : ' + JSON.stringify(err));
+      alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  };
+
+
+
+
+
+  $scope.getSubCatRecipes = function (pageNum) {
+    console.log('Selected Sub cat for Recipes : ' + JSON.stringify($scope.subCatSelected));
+    SubCategoryRecipes.query({
+      subCatId: $scope.subCatSelected.subCatId,
+      pageId: 999
+    }).$promise.then(function (res) {
+      console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+      $scope.subCatRecipes = res;
       $scope.itemsPerPage = 1;
       $scope.currentPage = 1;
       $scope.maxSize = 5;
@@ -13,18 +55,25 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
         $scope.faqSingle = '';
         var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
           end = begin + $scope.itemsPerPage;
-        $scope.finalitems = $scope.videosList.slice(begin, end);
+        $scope.finalitems = $scope.subCatRecipes.slice(begin, end);
       });
+
+    }).catch(function (err) {
+      //console.log('Error happened : ' + JSON.stringify(err));
+      alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
+
   };
 
-
-  $scope.pageChanged1 = function () {
-    if ($scope.currentPage1 === 1) return;
-    $rootScope.pageNumStore1 = $scope.currentPage1;
-  };
+  $scope.pageChanged = function () {
+    //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
+    $scope.getSubCatRecipes($scope.vm.currentPage);
+  }
 
   $scope.updateRecipeItem = function (item) {
+
+    item.submitted.by = $localStorage.user.displayName
+
     Recipe.update({
       vrecipeId: item.recipeId
     }, item, function () {
@@ -36,22 +85,3 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
   }
 
 })
-
-.directive('myYoutube', function ($sce) {
-  return {
-    restrict: 'EA',
-    scope: {
-      code: '='
-    },
-    replace: true,
-    template: '<div style="height:300px"><iframe style="overflow:hidden;height:100%;width:70%" controls="0" src="{{url}}" frameborder="0" allowfullscreen></iframe></div>',
-    link: function (scope) {
-      console.log('here');
-      scope.$watch('code', function (newVal) {
-        if (newVal) {
-          scope.url = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + newVal);
-        }
-      });
-    }
-  };
-});
