@@ -11,6 +11,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     userDisplayName = $localStorage.user.displayName;
   }
 
+
+
   $scope.userName = userDisplayName;
   $scope.localUser = $localStorage.user;
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;

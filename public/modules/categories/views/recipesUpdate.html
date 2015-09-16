@@ -14,12 +14,14 @@
   </div>
 
   <center ng-hide="subCatRecipes.length === 0">
-    <pagination total-items="subCatRecipes.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" boundary-links="true" rotate="false"></pagination>
+    <pagination total-items="subCatRecipes.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
   </center>
 
   <table class="table table-hover">
     <div ng-repeat="item in finalitems | filter:query">
       <form class="form-horizontal size" role="form" name="itemForm">
+        <center ng-show="UpdateMsg"><span style="color:green;font-size:18px;">Suucessfuuly updated Recipe</span>
+        </center>
         <div class="col-md-12 col-xs-11">
           <label>Title :</label>
           <input type="text" ng-model="item.title" size="85"></input>
