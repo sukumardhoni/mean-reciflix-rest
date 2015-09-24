@@ -24,7 +24,7 @@ angular.module('recipes').config(['$stateProvider',
     })
 
     .state('reciflix.recipes.subcats.recipes', {
-      url: "/:subCatId/recipes",
+      url: "/:subCatId",
       views: {
         'child-recipes-view': {
           templateUrl: "modules/recipes/views/subCatsRecipes.html",

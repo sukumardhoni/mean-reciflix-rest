@@ -81,7 +81,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     };
 }])
 
-.controller('RecipesCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory) {
+.controller('RecipesCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion) {
   $scope.categoryFun = function () {
     Categories.query({
       pageId: 999,
@@ -117,6 +117,43 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       $('#side-menu').removeAttr('style');
     }
   }
+
+
+
+  $scope.OpenCreateSuggest = function () {
+    //console.log('Successfullly fetched Open Model');
+
+    $scope.modalInstance = $modal.open({
+      templateUrl: 'modules/categories/views/modals/create-suggestion-modal.html',
+      controller: 'RecipesCtrl',
+      scope: $scope
+    });
+  };
+
+  $scope.cancel = function () {
+    $scope.modalInstance.dismiss('cancel');
+  };
+
+
+  $scope.createSuggest = function () {
+    UserSuggestion.save({
+      pageId: 0
+    }, $scope.suggest, function (res) {
+      //$scope.categories.push(res);
+      $scope.modalInstance.close();
+      //console.log('Successfullly Saved suggestion ' + JSON.stringify(res));
+    }, function (err) {
+      console.log('Error occured while creating suggestion, Error details are : ' + JSON.stringify(err));
+    });
+  };
+
+
+
+
+
+
+
+
 })
 
 
@@ -184,7 +221,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   };
 });
 
-angular.module('articles').directive('myYoutube', function ($sce) {
+angular.module('recipes').directive('myYoutube', function ($sce) {
   return {
     restrict: 'EA',
     scope: {

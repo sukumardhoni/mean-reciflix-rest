@@ -28,14 +28,23 @@ angular.module('users').factory('Users', ['$resource',
         timeout: 20000
       }
     }),
-    AllUsers: $resource(API_HOST + '/users/totalUsers', {}, {
+    AllUsers: $resource(API_HOST + '/users/totalUsers/:pageId', {
+      pageId: '@pageId'
+    }, {
       query: {
         method: 'GET',
-        isArray: true,
         timeout: 20000
       }
     }),
     UsageDetails: $resource(API_HOST + '/users/usage-details-collection/:pageId', {
+      pageId: '@pageId'
+    }, {
+      query: {
+        method: 'GET',
+        timeout: 20000
+      }
+    }),
+    UsersSuggestion: $resource(API_HOST + '/users/suggestions/:pageId', {
       pageId: '@pageId'
     }, {
       query: {

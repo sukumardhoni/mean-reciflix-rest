@@ -97,9 +97,9 @@ angular.module('recipes')
 
 
 
-/*app.factory('VideoService', function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + 'vRecipes/:vId', {
-    vId: '@vId'
+.factory('UserSuggestion', function ($resource, API_HOST) {
+  return $resource(API_HOST + '/users/suggestions/:pageId', {
+    pageId: '@pageId'
   }, {
     'get': {
       method: 'GET'
@@ -121,4 +121,4 @@ angular.module('recipes')
       method: 'DELETE'
     }
   });
-});*/
+});

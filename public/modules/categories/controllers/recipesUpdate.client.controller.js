@@ -86,4 +86,29 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
     });
   }
 
+
+  $scope.deleteRecipe = function (item) {
+
+    console.log('Recipe bedore state update : ' + JSON.stringify(item));
+    item.submitted.by = $localStorage.user.displayName;
+    item.state = 1111;
+    // console.log('Recipe after state update : ' + JSON.stringify(item));
+
+    Recipe.update({
+      vrecipeId: item.recipeId
+    }, item, function (res) {
+      console.log('Successfully updated Recipe' + JSON.stringify(res));
+      $scope.UpdateMsg = true;
+      //$state.go('faqs.dashboard', {});
+    }, function (errorResponse) {
+      $scope.error = errorResponse.data.message;
+    });
+  }
+
+
+
+
+
+
+
 })

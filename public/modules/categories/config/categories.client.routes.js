@@ -6,7 +6,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
     // Home state routing
     $stateProvider
       .state('reciflix', {
-        url: '/reciflix',
+        url: '',
         templateUrl: 'modules/categories/views/common/content.html',
         controller: 'ReciflixCtrl',
         data: {

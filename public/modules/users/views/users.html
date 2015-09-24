@@ -1,100 +1,148 @@
-<div class="row" ng-init="getUsageDetails(1)">
+<div class="row">
   <div class="col-lg-12">
-    <div class="wrapper wrapper-content animated fadeInUp">
-      <div class="ibox">
-        <div class="ibox-title">
-          <div style="text-align:center;font-size:18px;">Users Usage Collection</div>
-        </div>
-
-        <center>
-          <pagination boundary-links="true" total-items="totalItems1" ng-model="currentPage1" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged1()" class="pagination-sm" max-size="maxSize1" items-per-page="itemsPerPage1"></pagination>
-        </center>
-        <div class="ibox-content">
-          <div class="project-list">
-            <table class="table table-hover" ng-hide="users.length === 0">
-              <thead>
-                <tr>
-                  <td class="project-status cat-table-titles">From</td>
-                  <td class="project-title cat-table-titles">Action</td>
-                  <td class="project-completion cat-table-titles">Email</td>
-                  <td class="project-actions cat-table-titles">Time</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="user in usageDetails">
-                  <td class="project-status">
-                    <span ng-class="user.device.indexOf('Web') > -1 ? 'label label-success' : 'label label-primary'">{{user.device}}</span>
-                  </td>
-                  <td class="project-title">
-                    <a>{{user.action}}</a>
-                  </td>
-                  <td class="project-completion">
-                    <a>{{user.email}}</a>
-                  </td>
-                  <td class="project-actions">
-                    <a>{{user.time.date}}</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div ng-show="usageDetails.length === 0">
-              <center>
-                <h3>There is no Users Usage collection in ReciFlix.</h3>
-              </center>
-            </div>
-          </div>
-        </div>
-
-        <hr>
-        <div class="ibox-title">
-          <div style="text-align:center;font-size:18px;">ReciFlix Users : <span style="font-weight:bold;color:#18a689">{{users.length}}</span> <small>members</small>
-          </div>
-        </div>
-
-        <center>
-
-          <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage" max-size="maxSize"></pagination>
-
-        </center>
-        <div class="ibox-content">
-          <div class="project-list">
-            <table class="table table-hover" ng-hide="users.length === 0">
-              <thead>
-                <tr>
-                  <td class="project-status cat-table-titles">Provider</td>
-                  <td class="project-title cat-table-titles">Name</td>
-                  <td class="project-completion cat-table-titles">Email</td>
-                  <td class="project-actions cat-table-titles">Joined On ReciFlix</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="user in users.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))">
-                  <td class="project-status">
-                    <span class="label label-success" ng-show="user.provider === 'fb' ">{{user.provider}}</span>
-                    <span class="label label-primary" ng-show="user.provider === 'gmail' ">{{user.provider}}</span>
-                    <span class="label label-default" ng-show="user.provider === 'local' ">{{user.provider}}</span>
-                  </td>
-                  <td class="project-title">
-                    <a>{{user.displayName}}</a>
-                  </td>
-                  <td class="project-completion">
-                    <a>{{user.email}}</a>
-                  </td>
-                  <td class="project-actions">
-                    <a>{{user.created}}</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div ng-show="users.length === 0">
-              <center>
-                <h3>There is no Users in ReciFlix.</h3>
-              </center>
-            </div>
-          </div>
+    <div class="panel blank-panel ui-tab">
+      <div class="panel-heading">
+        <div class="panel-title m-b-md">
+          <h2 align="center">Users Analytics</h2>
         </div>
       </div>
+      <div class="panel-body">
+        <tabset>
+          <tab heading="Users" ng-init="getAllUsers(1)">
+            <div class="ibox-title">
+              <div style="text-align:center;font-size:18px;">ReciFlix Users : <span style="font-weight:bold;color:#18a689">{{totalItems}}</span> <small>members</small>
+              </div>
+            </div>
+            <center>
+              <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" items-per-page="itemsPerPage" max-size="maxSize"></pagination>
+            </center>
+            <div class="ibox-content">
+              <div class="project-list">
+                <table class="table table-hover" ng-hide="users.length === 0">
+                  <thead>
+                    <tr>
+                      <td class="project-status cat-table-titles">Provider</td>
+                      <td class="project-title cat-table-titles">Name</td>
+                      <td class="project-completion cat-table-titles">Email</td>
+                      <td class="project-actions cat-table-titles">Joined On ReciFlix</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="user in users">
+                      <td class="project-status">
+                        <span class="label label-success" ng-show="user.provider === 'fb' ">{{user.provider}}</span>
+                        <span class="label label-primary" ng-show="user.provider === 'gmail' ">{{user.provider}}</span>
+                        <span class="label label-default" ng-show="user.provider === 'local' ">{{user.provider}}</span>
+                      </td>
+                      <td class="project-title">
+                        <a>{{user.displayName}}</a>
+                      </td>
+                      <td class="project-completion">
+                        <a>{{user.email}}</a>
+                      </td>
+                      <td class="project-actions">
+                        <a>{{user.created}}</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div ng-show="users.length === 0">
+                  <center>
+                    <h3>There is no Users in ReciFlix.</h3>
+                  </center>
+                </div>
+              </div>
+            </div>
+          </tab>
+          <tab heading="Usage" ng-click="getUsageDetails(1)">
+            <div class="ibox-title">
+              <div style="text-align:center;font-size:18px;">Usage Count: <span style="font-weight:bold;color:#18a689">{{totalItems1}}</span>
+              </div>
+            </div>
+            <center>
+              <pagination boundary-links="true" total-items="totalItems1" ng-model="vm.currentPage1" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged1()" class="pagination-sm" max-size="maxSize1" items-per-page="itemsPerPage1"></pagination>
+            </center>
+            <div class="ibox-content">
+              <div class="project-list">
+                <table class="table table-hover" ng-hide="users.length === 0">
+                  <thead>
+                    <tr>
+                      <td class="project-status cat-table-titles">From</td>
+                      <td class="project-title cat-table-titles">Action</td>
+                      <td class="project-completion cat-table-titles">Email</td>
+                      <td class="project-actions cat-table-titles">Time</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="user in usageDetails">
+                      <td class="project-status">
+                        <span ng-class="user.device.indexOf('Web') > -1 ? 'label label-success' : 'label label-primary'">{{user.device}}</span>
+                      </td>
+                      <td class="project-title">
+                        <a>{{user.action}}</a>
+                      </td>
+                      <td class="project-completion">
+                        <a>{{user.email}}</a>
+                      </td>
+                      <td class="project-actions">
+                        <a>{{user.time.date}}</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div ng-show="usageDetails.length === 0">
+                  <center>
+                    <h3>There is no Users Usage collection in ReciFlix.</h3>
+                  </center>
+                </div>
+              </div>
+            </div>
+
+          </tab>
+          <tab heading="Suggestions" ng-click="getUsersSuggestions(1)">
+            <div class="ibox-title">
+              <div style="text-align:center;font-size:18px;">Suggestions Count: <span style="font-weight:bold;color:#18a689">{{totalItems2}}</span>
+              </div>
+            </div>
+            <center>
+              <pagination boundary-links="true" total-items="totalItems2" ng-model="vm.currentPage2" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged2()" class="pagination-sm" max-size="maxSize2" items-per-page="itemsPerPage2"></pagination>
+            </center>
+            <div class="ibox-content">
+              <div class="project-list">
+                <table class="table table-hover" ng-hide="suggestions.length === 0">
+                  <thead>
+                    <tr>
+                      <td class="project-completion cat-table-titles">Email</td>
+                      <td class="project-title cat-table-titles">Suggestion</td>
+                      <td class="project-actions cat-table-titles">Time</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="suggest in suggestions">
+                      <td class="project-completion">
+                        <a>{{suggest.email}}</a>
+                      </td>
+                      <td class="project-title">
+                        <a>{{suggest.suggestions}}</a>
+                      </td>
+                      <td class="project-actions">
+                        <a>{{suggest.time.date}}</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div ng-show="suggestions.length === 0">
+                  <center>
+                    <h3>There is no suggestions collection in ReciFlix.</h3>
+                  </center>
+                </div>
+              </div>
+            </div>
+          </tab>
+        </tabset>
+
+      </div>
+
     </div>
   </div>
-
 </div>

@@ -509,7 +509,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
     // Home state routing
     $stateProvider
       .state('reciflix', {
-        url: '/reciflix',
+        url: '',
         templateUrl: 'modules/categories/views/common/content.html',
         controller: 'ReciflixCtrl',
         data: {
@@ -543,7 +543,6 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
-
 'use strict';
 
 // Categories controller
@@ -828,6 +827,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 // Recipes Edit controller
@@ -915,6 +915,31 @@ angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state"
       $scope.error = errorResponse.data.message;
     });
   }
+
+
+  $scope.deleteRecipe = function (item) {
+
+    console.log('Recipe bedore state update : ' + JSON.stringify(item));
+    item.submitted.by = $localStorage.user.displayName;
+    item.state = 1111;
+    // console.log('Recipe after state update : ' + JSON.stringify(item));
+
+    Recipe.update({
+      vrecipeId: item.recipeId
+    }, item, function (res) {
+      console.log('Successfully updated Recipe' + JSON.stringify(res));
+      $scope.UpdateMsg = true;
+      //$state.go('faqs.dashboard', {});
+    }, function (errorResponse) {
+      $scope.error = errorResponse.data.message;
+    });
+  }
+
+
+
+
+
+
 
 }])
 'use strict';
@@ -1490,7 +1515,7 @@ angular.module('recipes').config(['$stateProvider',
     })
 
     .state('reciflix.recipes.subcats.recipes', {
-      url: "/:subCatId/recipes",
+      url: "/:subCatId",
       views: {
         'child-recipes-view': {
           templateUrl: "modules/recipes/views/subCatsRecipes.html",
@@ -1513,7 +1538,6 @@ angular.module('recipes').config(['$stateProvider',
 
  }
 ]);
-
 'use strict';
 
 // Recipes controller
@@ -1597,7 +1621,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     };
 }])
 
-.controller('RecipesCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory) {
+.controller('RecipesCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "UserSuggestion", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion) {
   $scope.categoryFun = function () {
     Categories.query({
       pageId: 999,
@@ -1633,6 +1657,43 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       $('#side-menu').removeAttr('style');
     }
   }
+
+
+
+  $scope.OpenCreateSuggest = function () {
+    //console.log('Successfullly fetched Open Model');
+
+    $scope.modalInstance = $modal.open({
+      templateUrl: 'modules/categories/views/modals/create-suggestion-modal.html',
+      controller: 'RecipesCtrl',
+      scope: $scope
+    });
+  };
+
+  $scope.cancel = function () {
+    $scope.modalInstance.dismiss('cancel');
+  };
+
+
+  $scope.createSuggest = function () {
+    UserSuggestion.save({
+      pageId: 0
+    }, $scope.suggest, function (res) {
+      //$scope.categories.push(res);
+      $scope.modalInstance.close();
+      //console.log('Successfullly Saved suggestion ' + JSON.stringify(res));
+    }, function (err) {
+      console.log('Error occured while creating suggestion, Error details are : ' + JSON.stringify(err));
+    });
+  };
+
+
+
+
+
+
+
+
 }])
 
 
@@ -1700,7 +1761,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   };
 }]);
 
-angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
+angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
   return {
     restrict: 'EA',
     scope: {
@@ -1718,7 +1779,6 @@ angular.module('articles').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
-
 'use strict';
 
 // Recipes Filter
@@ -1847,9 +1907,9 @@ angular.module('recipes')
 
 
 
-/*app.factory('VideoService', function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + 'vRecipes/:vId', {
-    vId: '@vId'
+.factory('UserSuggestion', ["$resource", "API_HOST", function ($resource, API_HOST) {
+  return $resource(API_HOST + '/users/suggestions/:pageId', {
+    pageId: '@pageId'
   }, {
     'get': {
       method: 'GET'
@@ -1871,8 +1931,7 @@ angular.module('recipes')
       method: 'DELETE'
     }
   });
-});*/
-
+}]);
 'use strict';
 
 // Config HTTP Error Handling
@@ -2144,65 +2203,112 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 
 angular.module('users')
 
-.controller('UsersCtrl', ['$scope', '$state', 'Users', '$rootScope', function ($scope, $state, Users, $rootScope) {
+.controller('UsersCtrl', ['$scope', '$state', 'Users', '$rootScope', function ($scope, $state, Users, $rootScope, $localStorage) {
 
-  $scope.getAllUsers = function () {
-    Users.AllUsers.query().$promise.then(function (res) {
-      $scope.users = res;
+  var usageCount = 'UC';
+  var totalUsersCount = 'TUC';
+  var userSuggestions = 'US';
+
+
+  $scope.getAllUsers = function (pageNum) {
+    Users.AllUsers.query({
+      pageId: (pageNum - 1) + totalUsersCount
+    }).$promise.then(function (res) {
+      $scope.users = res.users;
       $scope.itemsPerPage = 5;
       $scope.maxSize = 5;
-      $scope.totalItems = res.length;
+      $scope.totalItems = res.count;
+      if (totalUsersCount === 'TUC')
+        totalUsersCount = totalUsersCount + res.count;
       if ($rootScope.pageNumStore > 1) {
-        $scope.currentPage = $rootScope.pageNumStore;
+        $scope.vm.currentPage = $rootScope.pageNumStore;
         $rootScope.pageNumStore = 1;
       } else {
-        $scope.currentPage = 1;
+        $scope.vm = {
+          currentPage: 1
+        };
       }
     }).catch(function (err) {});
   };
 
 
   $scope.getUsageDetails = function (pageNum) {
-    $scope.getAllUsers();
-    //console.log('Successfullly fetched getUsageDetails :' + pageNum)
     Users.UsageDetails.query({
-      pageId: (pageNum - 1)
+      pageId: (pageNum - 1) + usageCount
     }).$promise.then(function (res) {
-      //console.log('Successfullly fetched getUsageDetails :' + JSON.stringify(res))
       $scope.usageDetails = res.details;
       $scope.totalItems1 = res.count;
+      if (usageCount === 'UC')
+        usageCount = usageCount + res.count;
       $scope.itemsPerPage1 = 5;
       $scope.maxSize1 = 5;
       if ($rootScope.pageNumStore1 > 1) {
-        $scope.currentPage1 = $rootScope.pageNumStore1;
+        $scope.vm.currentPage1 = $rootScope.pageNumStore1;
         $rootScope.pageNumStore1 = 1;
       } else {
-        $scope.currentPage1 = 1;
+        $scope.vm = {
+          currentPage1: 1
+        };
       }
     }).catch(function (err) {
-      //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
 
   $scope.pageChanged1 = function () {
-    //console.log('Page changed console and current page is : ' + $scope.currentPage1);
-    if ($scope.currentPage1 === 1) {
-      $scope.getUsageDetails($scope.currentPage1);
+    if ($scope.vm.currentPage1 === 1) {
+      $scope.getUsageDetails($scope.vm.currentPage1);
     } else {
-      $rootScope.pageNumStore1 = $scope.currentPage1;
-      //console.log('Page changed console and current page is : ' + $scope.currentPage1);
-      $scope.getUsageDetails($scope.currentPage1);
+      $rootScope.pageNumStore1 = $scope.vm.currentPage1;
+      $scope.getUsageDetails($scope.vm.currentPage1);
     }
   }
 
   $scope.pageChanged = function () {
-    if ($scope.currentPage === 1) return;
-    $rootScope.pageNumStore = $scope.currentPage;
+    if ($scope.vm.currentPage === 1) {
+      $scope.getAllUsers($scope.vm.currentPage);
+    } else {
+      $rootScope.pageNumStore = $scope.vm.currentPage;
+      $scope.getAllUsers($scope.vm.currentPage);
+    }
   };
 
-}])
 
+
+
+  $scope.getUsersSuggestions = function (pageNum) {
+    Users.UsersSuggestion.query({
+      pageId: (pageNum - 1) + userSuggestions
+    }).$promise.then(function (res) {
+      $scope.suggestions = res.suggestions;
+      $scope.totalItems2 = res.count;
+      if (userSuggestions === 'US')
+        userSuggestions = userSuggestions + res.count;
+      $scope.itemsPerPage2 = 5;
+      $scope.maxSize2 = 5;
+      if ($rootScope.pageNumStore2 > 1) {
+        $scope.vm.currentPage2 = $rootScope.pageNumStore2;
+        $rootScope.pageNumStore2 = 1;
+      } else {
+        $scope.vm = {
+          currentPage2: 1
+        };
+      }
+    }).catch(function (err) {
+      alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+
+  };
+
+  $scope.pageChanged2 = function () {
+    if ($scope.vm.currentPage2 === 1) {
+      $scope.getUsersSuggestions($scope.vm.currentPage2);
+    } else {
+      $rootScope.pageNumStore2 = $scope.vm.currentPage2;
+      $scope.getUsersSuggestions($scope.vm.currentPage2);
+    }
+  }
+}])
 'use strict';
 
 // Authentication service for user variables
@@ -2244,14 +2350,23 @@ angular.module('users').factory('Users', ['$resource',
         timeout: 20000
       }
     }),
-    AllUsers: $resource(API_HOST + '/users/totalUsers', {}, {
+    AllUsers: $resource(API_HOST + '/users/totalUsers/:pageId', {
+      pageId: '@pageId'
+    }, {
       query: {
         method: 'GET',
-        isArray: true,
         timeout: 20000
       }
     }),
     UsageDetails: $resource(API_HOST + '/users/usage-details-collection/:pageId', {
+      pageId: '@pageId'
+    }, {
+      query: {
+        method: 'GET',
+        timeout: 20000
+      }
+    }),
+    UsersSuggestion: $resource(API_HOST + '/users/suggestions/:pageId', {
       pageId: '@pageId'
     }, {
       query: {

@@ -104,14 +104,56 @@ exports.checkAdmin = function (req, res, next) {
 
 
 
-exports.totalUsers = function (req, res) {
-  User.find().sort('-created').exec(function (err, users) {
+exports.totalUsers = function (req, res, next) {
+
+  var CollectionObj = {};
+  CollectionObj.users = [];
+
+
+
+  var bearer = req.params.pageId.split('TUC');
+  if (bearer[1] === '') {
+    User.find().exec(function (err, users) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        CollectionObj.count = users.length;
+        req.UsersCollectionObj = CollectionObj;
+        console.log('### usersCount is total collection : ' + JSON.stringify(req.UsersCollectionObj));
+        next();
+        //res.json(users);
+      }
+    });
+  } else {
+    CollectionObj.count = bearer[1];
+    req.UsersCollectionObj = CollectionObj;
+    console.log('### usersCount is total collection : ' + JSON.stringify(req.UsersCollectionObj));
+    next();
+  };
+
+
+
+
+
+};
+
+
+exports.totalUsersByPageId = function (req, res) {
+  var bearer = req.params.pageId.split('TUC');
+  User.find().skip(bearer[0] * 5).limit(5).sort('-created').exec(function (err, users) {
     if (err) {
+      // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(users);
+      console.log('@@@@@@@@@ Before details list  successfully fetched and req obj also : ' + JSON.stringify(req.UsersCollectionObj));
+      var CollectionObj = req.UsersCollectionObj;
+      CollectionObj.users = users;
+      console.log('@@@@@@@@@ After details list  successfully fetched and req obj also : ' + JSON.stringify(CollectionObj));
+      res.json(CollectionObj);
     }
   });
 };
