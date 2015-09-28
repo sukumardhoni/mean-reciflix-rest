@@ -11,8 +11,9 @@ angular.module('users').factory('Users', ['$resource',
  }
 ])
 
+//API_HOST is taken from single spot category.client.services.js
 //.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+//.constant('API_HOST', 'http://www.reciflix.com')
 
 .factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
   return {
