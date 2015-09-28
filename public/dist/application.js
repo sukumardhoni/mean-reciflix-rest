@@ -32,7 +32,8 @@ angular.module(ApplicationConfiguration.applicationModuleName, ApplicationConfig
 // Setting HTML5 Location Mode
 angular.module(ApplicationConfiguration.applicationModuleName).config(['$locationProvider',
  function ($locationProvider) {
-    $locationProvider.hashPrefix('!');
+   // $locationProvider.hashPrefix('!');
+   $locationProvider.html5Mode(true);
  }
 ]).run(["$rootScope", "$state", "$localStorage", "$http", function ($rootScope, $state, $localStorage, $http) {
   var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
@@ -85,7 +86,8 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 //Then define the init function for starting up the application
 angular.element(document).ready(function () {
   //Fixing facebook bug with redirect
-  if (window.location.hash === '#_=_') window.location.hash = '#!';
+  //if (window.location.hash === '#_=_') window.location.hash = '#!';
+ // if (window.location.hash === '#_=_') window.location.hash = '#';
 
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
@@ -543,6 +545,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 }]);
+
 'use strict';
 
 // Categories controller
@@ -942,6 +945,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state"
 
 
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -1078,6 +1082,7 @@ angular
 //Categories service used for communicating with the categories REST endpoints
 angular.module('categories')
 
+//.constant('API_HOST', 'http://192.168.1.248:3000')
 //.constant('API_HOST', 'http://localhost:3000')
 .constant('API_HOST', 'http://www.reciflix.com')
 
@@ -1538,6 +1543,7 @@ angular.module('recipes').config(['$stateProvider',
 
  }
 ]);
+
 'use strict';
 
 // Recipes controller
@@ -1779,6 +1785,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 // Recipes Filter
@@ -1813,8 +1820,9 @@ angular.module('recipes')
 //Articles service used for communicating with the articles REST endpoints
 angular.module('recipes')
 
-//.constant('API_HOST', 'http://192.168.0.100:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+//.constant('API_HOST', 'http://192.168.1.248:3000')
+//.constant('API_HOST', 'http://localhost:3000')
+//.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Vrecipes', ['$resource',
@@ -1932,6 +1940,7 @@ angular.module('recipes')
     }
   });
 }]);
+
 'use strict';
 
 // Config HTTP Error Handling
@@ -2309,6 +2318,7 @@ angular.module('users')
     }
   }
 }])
+
 'use strict';
 
 // Authentication service for user variables
@@ -2333,8 +2343,9 @@ angular.module('users').factory('Users', ['$resource',
  }
 ])
 
+//API_HOST is taken from single spot category.client.services.js
 //.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+//.constant('API_HOST', 'http://www.reciflix.com')
 
 .factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
   return {
