@@ -511,7 +511,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
     // Home state routing
     $stateProvider
       .state('reciflix', {
-        url: '',
+        url: '/',
         templateUrl: 'modules/categories/views/common/content.html',
         controller: 'ReciflixCtrl',
         data: {
@@ -519,12 +519,12 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
         }
       })
       .state('reciflix.recipesUpdate', {
-        url: "/recipes/update",
+        url: "recipes/update",
         templateUrl: "modules/categories/views/recipesUpdate.html",
         controller: 'RecipesUpdateCtrl'
       })
       .state('reciflix.categories', {
-        url: "/categories",
+        url: "categories",
         templateUrl: "modules/categories/views/categories.html",
         controller: 'CategoryCtrl',
         module: 'private'
@@ -1186,12 +1186,12 @@ angular.module('categories')
 angular.module('core').config(['$stateProvider', '$urlRouterProvider',
  function ($stateProvider, $urlRouterProvider) {
     // Redirect to home view when route not found
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('');
 
     // Home state routing
     $stateProvider.
     state('home', {
-        url: '/',
+        url: '',
         templateUrl: 'modules/core/views/home.client.view.html',
         module: 'public',
         data: {
@@ -1502,7 +1502,7 @@ angular.module('recipes').config(['$stateProvider',
     // Recipes state routing
     $stateProvider.
     state('reciflix.recipes', {
-      url: '/category',
+      url: 'category',
       templateUrl: 'modules/recipes/views/recipes.html',
       controller: 'RecipesCtrl',
       module: ''
@@ -1995,7 +1995,7 @@ angular.module('users').config(['$stateProvider',
       templateUrl: 'modules/users/views/authentication/signup.client.view.html'
     }).
     state('signin', {
-      url: '/signin',
+      url: '/login',
       templateUrl: 'modules/users/views/authentication/signin.client.view.html',
       module: 'public',
       data: {
@@ -2028,7 +2028,7 @@ angular.module('users').config(['$stateProvider',
 
 
     .state('reciflix.users', {
-      url: "/users",
+      url: "users",
       templateUrl: "modules/users/views/users.html",
       controller: 'UsersCtrl',
       module: 'private'

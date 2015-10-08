@@ -22,7 +22,7 @@ angular.module('users').config(['$stateProvider',
       templateUrl: 'modules/users/views/authentication/signup.client.view.html'
     }).
     state('signin', {
-      url: '/signin',
+      url: '/login',
       templateUrl: 'modules/users/views/authentication/signin.client.view.html',
       module: 'public',
       data: {
@@ -55,7 +55,7 @@ angular.module('users').config(['$stateProvider',
 
 
     .state('reciflix.users', {
-      url: "/users",
+      url: "users",
       templateUrl: "modules/users/views/users.html",
       controller: 'UsersCtrl',
       module: 'private'

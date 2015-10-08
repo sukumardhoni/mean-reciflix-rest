@@ -6,7 +6,7 @@ angular.module('recipes').config(['$stateProvider',
     // Recipes state routing
     $stateProvider.
     state('reciflix.recipes', {
-      url: '/category',
+      url: 'category',
       templateUrl: 'modules/recipes/views/recipes.html',
       controller: 'RecipesCtrl',
       module: ''
