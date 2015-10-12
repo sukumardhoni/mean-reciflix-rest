@@ -43,7 +43,9 @@ module.exports = {
     'public/lib/toastr/toastr.js',
     'public/lib/jquery-ui/jquery-ui.min.js',
     'public/lib/slimScroll/jquery.slimscroll.min.js',
-    'public/lib/numeral/min/numeral.min.js'
+    'public/lib/numeral/min/numeral.min.js',
+    'public/lib/ng-file-upload/ng-file-upload-shim.min.js',
+    'public/lib/ng-file-upload/ng-file-upload.min.js'
    ]
     },
     css: 'public/dist/application.min.css',

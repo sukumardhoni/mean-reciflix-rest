@@ -4,7 +4,9 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller'),
-  categories = require('../../app/controllers/newcats.server.controller');
+  categories = require('../../app/controllers/newcats.server.controller'),
+  multiparty = require('connect-multiparty'),
+  multipartyMiddleware = multiparty();
 
 module.exports = function (app) {
 
@@ -31,7 +33,7 @@ module.exports = function (app) {
       .get(categories.catslist);*/
 
   app.route('/newcats')
-    .post(users.ensureAuthenticated, users.checkAdmin, categories.createCat);
+    .post(users.ensureAuthenticated, users.checkAdmin, multipartyMiddleware, categories.createCat);
 
   /* app.route('/newcategories')
      .post(categories.createnewcategory);*/

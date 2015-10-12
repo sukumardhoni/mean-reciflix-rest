@@ -19,25 +19,31 @@ var mongoose = require('mongoose'),
 exports.createCat = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-  // console.log("reached the create received: " + JSON.stringify(req.body));
+  console.log("reached the create received: " + JSON.stringify(req.body));
   var category = new Category(req.body);
   category.user = req.user;
 
-  category.save(function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      //user is successfully created cat save action into user usage details collection
-      agenda.now('User_Usage_Details', {
-        email: emailInfo,
-        device: deviceInfo,
-        action: 'createCat : ' + category.displayName
-      });
-      res.json(category);
-    }
-  });
+
+  var file = req.files.file;
+  console.log("Image Name is : " + file.name);
+  console.log("Image type is : " + file.type);
+  console.log("Image details: " + JSON.stringify(file));
+
+  /*  category.save(function (err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        //user is successfully created cat save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'createCat : ' + category.displayName
+        });
+        res.json(category);
+      }
+    });*/
 };
 
 exports.singleCatByRank = function (req, res) {

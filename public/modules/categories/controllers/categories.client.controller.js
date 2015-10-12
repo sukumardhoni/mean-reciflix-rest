@@ -52,7 +52,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory) {
+.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -110,12 +110,34 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
   $scope.createCat = function () {
-    SingleCat.save($scope.cat, function (res) {
-      $scope.categories.push(res);
-      $scope.modalInstance.close();
-    }, function (err) {
-      //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
+
+    console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
+
+
+    Upload.upload({
+      url: 'http://localhost:3000/newcats',
+      file: $scope.cat.picFile,
+      data: $scope.cat
+    }).then(function (resp) {
+      console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
+
+
+
+
+
+
+    /*   SingleCat.save($scope.cat, function (res) {
+         $scope.categories.push(res);
+         $scope.modalInstance.close();
+       }, function (err) {
+         //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
+       });*/
   };
 
   $scope.cancel = function () {

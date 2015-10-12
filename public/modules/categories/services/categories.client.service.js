@@ -4,8 +4,8 @@
 angular.module('categories')
 
 //.constant('API_HOST', 'http://192.168.1.248:3000')
-//.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
 
 
 .factory('Categories', function ($resource, API_HOST) {
