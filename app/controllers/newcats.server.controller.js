@@ -10,6 +10,8 @@ var mongoose = require('mongoose'),
   config = require('../../config/config'),
   agenda = require('../../schedules/job-schedule.js')(config.db),
   User = mongoose.model('User'),
+  AWS = require('aws-sdk'),
+  fs = require('fs'),
   _ = require('lodash');
 
 
@@ -24,10 +26,61 @@ exports.createCat = function (req, res) {
   category.user = req.user;
 
 
+  console.log('THe Config AWS ID : ' + config.AWS_ACCESS_KEY_ID + ' Secret Key is :  ' + config.AWS_SECRET_ACCESS_KEY);
+
   var file = req.files.file;
   console.log("Image Name is : " + file.name);
   console.log("Image type is : " + file.type);
   console.log("Image details: " + JSON.stringify(file));
+
+  AWS.config = new AWS.Config();
+  AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
+  AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
+  AWS.config.region = 'us-east-1';
+
+  // Create a bucket using bound parameters and put something in it.
+  // Make sure to change the bucket name from "myBucket" to something unique.
+  /*  var s3bucket = new AWS.S3({
+      params: {
+        Bucket: 'NewRF'
+      }
+    });
+    s3bucket.createBucket(function () {
+      var params = {
+        Key: file.name,
+        Body: file
+      };
+      s3bucket.upload(params, function (err, data) {
+        if (err) {
+          console.log("Error uploading data: ", err);
+        } else {
+          console.log("Successfully uploaded data to myBucket/myKey");
+        }
+      });
+    });*/
+
+
+
+  var s3 = new AWS.S3();
+
+  var path = file.path;
+  fs.readFile(path, function (err, file_buffer) {
+    var params = {
+      Bucket: 'NewRF',
+      Key: file.name,
+      Body: file_buffer
+    };
+
+    s3.putObject(params, function (perr, pres) {
+      if (perr) {
+        console.log("Error uploading data: ", perr);
+      } else {
+        console.log("Successfully uploaded data to NewRF");
+      }
+    });
+  });
+
+
 
   /*  category.save(function (err) {
       if (err) {
