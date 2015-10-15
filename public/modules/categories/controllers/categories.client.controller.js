@@ -52,7 +52,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload) {
+.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, AWSService, $http) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -106,28 +106,70 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
 
+  $scope.setFile = function (element) {
+    $scope.$apply(function ($scope) {
+      $scope.theFile = element.files[0];
+      console.log('Successfully fetched the image file ' + JSON.stringify($scope.theFile));
 
+    });
+  };
 
 
   $scope.createCat = function () {
 
     console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
+    console.log('Successfully fetched the image file ' + $scope.cat.picFile.name);
+    console.log('Successfully fetched the image file ' + $scope.cat.picFile.type);
+
+    /*
+        Upload.upload({
+          url: 'http://localhost:3000/newcats',
+          file: $scope.cat.picFile,
+          data: $scope.cat
+        }).then(function (resp) {
+          console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        }, function (resp) {
+          console.log('Error status: ' + resp.status);
+        }, function (evt) {
+          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+          console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });*/
 
 
-    Upload.upload({
-      url: 'http://localhost:3000/newcats',
-      file: $scope.cat.picFile,
-      data: $scope.cat
-    }).then(function (resp) {
-      console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-    }, function (resp) {
-      console.log('Error status: ' + resp.status);
-    }, function (evt) {
-      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-    });
+
+    AWSService.getSignedURL({
+      fName: $scope.cat.picFile.name,
+      fType: $scope.cat.picFile.type,
+    }, function (res) {
+      console.log('Successfully fetched the signed url RES :' + JSON.stringify(res));
 
 
+      $http.put(res.url, $scope.cat.picFile)
+        .success(function (data) {
+
+          console.log('$HTTP suucesfully res :' + data);
+          //custom.document = s3FileName;
+          // customProvider.save(custom, function(){
+          //..do something here
+        });
+
+
+      /*Upload.upload({
+        url: 'https://testrf2.s3-us-east-1.amazonaws.com/', //S3 upload url including bucket name
+        method: 'POST',
+        data: {
+          key: $scope.cat.picFile.name, // the key to store the file on S3, could be file name or customized
+          AWSAccessKeyId: 'AKIAJFMJAAAMJM4A62RA',
+          acl: 'public-read', // sets the access to the uploaded file in the bucket: private, public-read, ...
+          //success_action_redirect: 'http://localhost:3000/#/categories',
+          policy: res.s3Policy, // base64-encoded json policy (see article below)
+          signature: res.s3Signature, // base64-encoded signature based on policy string (see article below)
+          "Content-Type": $scope.cat.picFile.type, // content type of the file (NotEmpty)
+          filename: $scope.cat.picFile.name, // this is needed for Flash polyfill IE8-9
+          file: $scope.cat.picFile
+        }
+      })*/
+    })
 
 
 

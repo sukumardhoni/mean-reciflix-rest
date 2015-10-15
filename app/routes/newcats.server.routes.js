@@ -35,8 +35,8 @@ module.exports = function (app) {
   app.route('/newcats')
     .post(users.ensureAuthenticated, users.checkAdmin, multipartyMiddleware, categories.createCat);
 
-  /* app.route('/newcategories')
-     .post(categories.createnewcategory);*/
+  app.route('/getSignedURL/:fName/:fType')
+    .post(users.ensureAuthenticated, users.checkAdmin, categories.getSignedURL);
 
 
   app.route('/newcats/:newCatId')

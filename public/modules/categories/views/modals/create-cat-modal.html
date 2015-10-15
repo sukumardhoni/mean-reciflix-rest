@@ -37,11 +37,11 @@
       <div class="row">
         <div class="form-group col-md-6 col-xs-6">
           <label>Select Image</label>
-          <input type="file" ngf-select ng-model="cat.picFile" name="picFile" accept="image/*" ngf-max-size="2MB" required>
+          <input id="file_input" type="file" ngf-select ng-model="cat.picFile" name="picFile" accept="image/*" ngf-max-size="1MB" required>
           <i ng-show="cat_form.picFile.$error.required">*required</i>
           <br>
           <i ng-show="cat_form.picFile.$error.maxSize">File too large
-          {{picFile.size / 1000000|number:1}}MB: max 2M</i>
+          {{picFile.size / 1000000|number:1}}MB: max 1M</i>
         </div>
         <div class="form-group col-md-6 col-xs-6">
           <img ng-show="cat_form.picFile.$valid" ngf-thumbnail="cat.picFile" class="thumb">

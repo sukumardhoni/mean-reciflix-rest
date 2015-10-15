@@ -9,7 +9,6 @@ angular.module('categories')
 
 
 .factory('Categories', function ($resource, API_HOST) {
-    //console.log('service Categories -------------- ++++++ ');
     return $resource(API_HOST + '/newcats/page/:pageId/:activeFilter', {
       pageId: '@pageId',
       activeFilter: '@activeFilter'
@@ -40,6 +39,17 @@ angular.module('categories')
     });
   })
 
+
+.factory('AWSService', function ($resource, API_HOST) {
+  return $resource(API_HOST + '/getSignedURL/:fName/:fType', {
+    fName: '@fName',
+    fType: '@fType'
+  }, {
+    'getSignedURL': {
+      method: 'POST'
+    }
+  });
+})
 
 
 .factory('SubCategories', function ($resource, API_HOST) {

@@ -12,6 +12,7 @@ var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   AWS = require('aws-sdk'),
   fs = require('fs'),
+  crypto = require('crypto'),
   _ = require('lodash');
 
 
@@ -98,6 +99,92 @@ exports.createCat = function (req, res) {
       }
     });*/
 };
+
+
+
+
+exports.getSignedURL = function (req, res) {
+
+  AWS.config = new AWS.Config();
+  AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
+  AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
+  AWS.config.region = 'us-east-1';
+
+  var s3 = new AWS.S3();
+  var s3_params = {
+    Bucket: 'testrf2',
+    Key: req.params.fName,
+    Expires: 60,
+    ContentType: req.params.fType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3_params, function (err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      var return_data = {
+        signed_request: data,
+        url: 'https://' + s3_params.Bucket + '.s3-us-east-1.amazonaws.com/' + req.params.fName
+      };
+      console.log('Callback data of SIGNEDURL : ' + JSON.stringify(return_data));
+      res.send(return_data);
+    }
+  });
+
+
+
+  /*
+    var date = new Date();
+
+    var s3Policy = {
+      "expiration": "2050-01-01T12:00:00.000Z", // hard coded for testing
+      "conditions": [
+        {
+          "bucket": "testrf2"
+        },
+        {
+          "acl": "public-read"
+        },
+        ["starts-with", "$Content-Type", "image/*"],
+        ["content-length-range", 0, 524288000]
+      ]
+    };
+
+    // stringify and encode the policy
+    var stringPolicy = JSON.stringify(s3Policy);
+    var base64Policy = Buffer(stringPolicy, "utf-8").toString("base64");
+
+    // sign the base64 encoded policy
+    var signature = crypto.createHmac("sha1", AWS.config.secretAccessKey).update(new Buffer(base64Policy, "utf-8")).digest("base64");
+
+    // build the results object
+    var s3Credentials = {
+      s3Policy: base64Policy,
+      s3Signature: signature
+    };
+
+    // send it back
+    //callback(s3Credentials);
+    res.send(s3Credentials);*/
+
+
+
+
+
+
+
+
+
+};
+
+
+
+
+
+
+
+
 
 exports.singleCatByRank = function (req, res) {
   var deviceInfo = req.headers.device;
