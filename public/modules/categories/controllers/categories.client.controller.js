@@ -110,34 +110,25 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
   $scope.createCat = function () {
-
-    console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
-
-
-    Upload.upload({
-      url: 'http://localhost:3000/newcats',
-      file: $scope.cat.picFile,
-      data: $scope.cat
-    }).then(function (resp) {
-      console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-    }, function (resp) {
-      console.log('Error status: ' + resp.status);
-    }, function (evt) {
-      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+    // console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
+    SingleCat.save($scope.cat, function (res) {
+      $scope.categories.push(res);
+      $scope.modalInstance.close();
+      Upload.upload({
+        url: 'http://localhost:3000/uploadImageToAWS',
+        file: $scope.cat.picFile,
+        data: $scope.cat
+      }).then(function (resp) {
+        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      }, function (resp) {
+        console.log('Error status: ' + resp.status);
+      }, function (evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      });
+    }, function (err) {
+      //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
     });
-
-
-
-
-
-
-    /*   SingleCat.save($scope.cat, function (res) {
-         $scope.categories.push(res);
-         $scope.modalInstance.close();
-       }, function (err) {
-         //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
-       });*/
   };
 
   $scope.cancel = function () {

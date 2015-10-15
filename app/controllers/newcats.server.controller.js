@@ -21,46 +21,47 @@ var mongoose = require('mongoose'),
 exports.createCat = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-  console.log("reached the create received: " + JSON.stringify(req.body));
+  //console.log("reached the create received: " + JSON.stringify(req.body));
   var category = new Category(req.body);
   category.user = req.user;
 
 
-  console.log('THe Config AWS ID : ' + config.AWS_ACCESS_KEY_ID + ' Secret Key is :  ' + config.AWS_SECRET_ACCESS_KEY);
+  //console.log('THe Config AWS ID : ' + config.AWS_ACCESS_KEY_ID + ' Secret Key is :  ' + config.AWS_SECRET_ACCESS_KEY);
 
-  var file = req.files.file;
-  console.log("Image Name is : " + file.name);
-  console.log("Image type is : " + file.type);
-  console.log("Image details: " + JSON.stringify(file));
+
+  //console.log("Image Name is : " + file.name);
+  //console.log("Image type is : " + file.type);
+  //console.log("Image details: " + JSON.stringify(file));
+
+
+
+  category.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      //user is successfully created cat save action into user usage details collection
+      agenda.now('User_Usage_Details', {
+        email: emailInfo,
+        device: deviceInfo,
+        action: 'createCat : ' + category.displayName
+      });
+      res.json(category);
+    }
+  });
+};
+
+
+
+exports.uploadImage = function (req, res) {
 
   AWS.config = new AWS.Config();
   AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
   AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
   AWS.config.region = 'us-east-1';
-
-  // Create a bucket using bound parameters and put something in it.
-  // Make sure to change the bucket name from "myBucket" to something unique.
-  /*  var s3bucket = new AWS.S3({
-      params: {
-        Bucket: 'NewRF'
-      }
-    });
-    s3bucket.createBucket(function () {
-      var params = {
-        Key: file.name,
-        Body: file
-      };
-      s3bucket.upload(params, function (err, data) {
-        if (err) {
-          console.log("Error uploading data: ", err);
-        } else {
-          console.log("Successfully uploaded data to myBucket/myKey");
-        }
-      });
-    });*/
-
-
-
+  //upload the image into AWS
+  var file = req.files.file;
   var s3 = new AWS.S3();
 
   var path = file.path;
@@ -70,7 +71,6 @@ exports.createCat = function (req, res) {
       Key: file.name,
       Body: file_buffer
     };
-
     s3.putObject(params, function (perr, pres) {
       if (perr) {
         console.log("Error uploading data: ", perr);
@@ -80,24 +80,10 @@ exports.createCat = function (req, res) {
     });
   });
 
-
-
-  /*  category.save(function (err) {
-      if (err) {
-        return res.status(400).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        //user is successfully created cat save action into user usage details collection
-        agenda.now('User_Usage_Details', {
-          email: emailInfo,
-          device: deviceInfo,
-          action: 'createCat : ' + category.displayName
-        });
-        res.json(category);
-      }
-    });*/
 };
+
+
+
 
 exports.singleCatByRank = function (req, res) {
   var deviceInfo = req.headers.device;
