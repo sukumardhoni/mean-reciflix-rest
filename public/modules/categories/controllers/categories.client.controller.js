@@ -111,24 +111,49 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.createCat = function () {
     // console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
-    SingleCat.save($scope.cat, function (res) {
-      $scope.categories.push(res);
+    Upload.upload({
+      url: 'http://localhost:3000/newcats',
+      file: $scope.cat.picFile,
+      data: $scope.cat
+    }).then(function (resp) {
+      $scope.categories.unshift(resp.data);
       $scope.modalInstance.close();
-      Upload.upload({
-        url: 'http://localhost:3000/uploadImageToAWS',
-        file: $scope.cat.picFile,
-        data: $scope.cat
-      }).then(function (resp) {
-        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-      }, function (resp) {
-        console.log('Error status: ' + resp.status);
-      }, function (evt) {
-        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-      });
-    }, function (err) {
-      //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
+      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
+
+
+
+
+
+
+    /*    SingleCat.save($scope.cat, function (res) {
+
+          Upload.upload({
+            url: 'http://localhost:3000/uploadImageToAWS',
+            file: $scope.cat.picFile,
+            data: $scope.cat
+          }).then(function (resp) {
+            $scope.categories.push(res);
+            $scope.modalInstance.close();
+            console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+          }, function (resp) {
+            console.log('Error status: ' + resp.status);
+          }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+          });
+
+
+
+        }, function (err) {
+          //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
+        });*/
   };
 
   $scope.cancel = function () {
@@ -137,16 +162,44 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.updateCat = function () {
     var indexVal = $localStorage.indexVal;
-    SingleCat.update({
-      newCatId: $scope.cat.catId
-    }, $scope.cat, function (res) {
+    /*    SingleCat.update({
+          newCatId: $scope.cat.catId
+        }, $scope.cat, function (res) {
+          $scope.categories.splice(indexVal, 1);
+          $scope.categories.splice(indexVal, 0, res);
+          delete $localStorage.indexVal;
+          $scope.modalInstance.close();
+        }, function (err) {
+          //console.log('Error occured while Updating category, Error details are : ' + JSON.stringify(err));
+        });*/
+
+
+    Upload.upload({
+      url: 'http://localhost:3000/newcats/' + $scope.cat.catId,
+      file: $scope.cat.picFile,
+      data: $scope.cat
+    }).then(function (resp) {
       $scope.categories.splice(indexVal, 1);
-      $scope.categories.splice(indexVal, 0, res);
+      $scope.categories.splice(indexVal, 0, resp.data);
       delete $localStorage.indexVal;
       $scope.modalInstance.close();
-    }, function (err) {
-      //console.log('Error occured while Updating category, Error details are : ' + JSON.stringify(err));
+      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
+
+
+
+
+
+
+
+
+
   };
 
   $scope.deleteCat = function (cat) {

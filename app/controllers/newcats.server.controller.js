@@ -21,19 +21,22 @@ var mongoose = require('mongoose'),
 exports.createCat = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-  //console.log("reached the create received: " + JSON.stringify(req.body));
+  console.log("reached the create received: " + JSON.stringify(req.body));
   var category = new Category(req.body);
   category.user = req.user;
 
 
-  //console.log('THe Config AWS ID : ' + config.AWS_ACCESS_KEY_ID + ' Secret Key is :  ' + config.AWS_SECRET_ACCESS_KEY);
+  AWS.config = new AWS.Config();
+  AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
+  AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
+  AWS.config.region = 'us-east-1';
 
 
-  //console.log("Image Name is : " + file.name);
-  //console.log("Image type is : " + file.type);
-  //console.log("Image details: " + JSON.stringify(file));
 
-
+  var file = req.files.file;
+  console.log("Image Name is : " + file.name);
+  console.log("Image type is : " + file.type);
+  console.log("Image details: " + JSON.stringify(file));
 
   category.save(function (err) {
     if (err) {
@@ -41,13 +44,52 @@ exports.createCat = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+
+
+
+
+
+
+      //upload the image into AWS
+      var file = req.files.file;
+
+      //console.log("Image Name is : " + file.name);
+      //console.log("Image type is : " + file.type);
+      //console.log("Image details: " + JSON.stringify(file));
+
+      var s3 = new AWS.S3();
+
+      var path = file.path;
+      fs.readFile(path, function (err, file_buffer) {
+        var params = {
+          Bucket: 'NewRF',
+          Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+          Body: file_buffer,
+          ContentType: file.type,
+          ACL: 'public-read'
+        };
+        s3.putObject(params, function (perr, pres) {
+          if (perr) {
+            console.log("Error uploading data: ", perr);
+          } else {
+            res.json(category);
+            console.log("Successfully uploaded data to NewRF");
+          }
+        });
+      });
+
+
+
+
+
       //user is successfully created cat save action into user usage details collection
       agenda.now('User_Usage_Details', {
         email: emailInfo,
         device: deviceInfo,
         action: 'createCat : ' + category.displayName
       });
-      res.json(category);
+
+
     }
   });
 };
@@ -56,30 +98,44 @@ exports.createCat = function (req, res) {
 
 exports.uploadImage = function (req, res) {
 
+  console.log("reached the uploadImage received: " + JSON.stringify(req.body));
+  console.log('THe Config AWS ID : ' + config.AWS_ACCESS_KEY_ID + ' Secret Key is :  ' + config.AWS_SECRET_ACCESS_KEY);
+
+
+
   AWS.config = new AWS.Config();
   AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
   AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
   AWS.config.region = 'us-east-1';
+
+
   //upload the image into AWS
   var file = req.files.file;
+
+  //console.log("Image Name is : " + file.name);
+  //console.log("Image type is : " + file.type);
+  //console.log("Image details: " + JSON.stringify(file));
+
   var s3 = new AWS.S3();
 
   var path = file.path;
   fs.readFile(path, function (err, file_buffer) {
     var params = {
       Bucket: 'NewRF',
-      Key: file.name,
-      Body: file_buffer
+      Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+      Body: file_buffer,
+      ContentType: file.type,
+      ACL: 'public-read'
     };
     s3.putObject(params, function (perr, pres) {
       if (perr) {
         console.log("Error uploading data: ", perr);
       } else {
+        res.json(pres);
         console.log("Successfully uploaded data to NewRF");
       }
     });
   });
-
 };
 
 
@@ -146,6 +202,13 @@ exports.updateCat = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
   var category = req.category;
+
+  AWS.config = new AWS.Config();
+  AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
+  AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
+  AWS.config.region = 'us-east-1';
+  var s3 = new AWS.S3();
+  var file = req.files.file;
   category = _.extend(category, req.body);
   category.save(function (err) {
     if (err) {
@@ -159,7 +222,79 @@ exports.updateCat = function (req, res) {
         device: deviceInfo,
         action: 'updateCat : ' + category.displayName
       });
-      res.json(category);
+
+      var params = {
+        Bucket: 'NewRF',
+        Key: req.body.imageName + '.jpg'
+      }
+      s3.getObject(params, function (err, data) {
+        if (err) {
+          console.log(err, err.stack);
+          var path = file.path;
+          fs.readFile(path, function (err, file_buffer) {
+            var params = {
+              Bucket: 'NewRF',
+              Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+              Body: file_buffer,
+              ContentType: file.type,
+              ACL: 'public-read'
+            };
+            s3.putObject(params, function (perr, pres) {
+              if (perr) {
+                console.log("Error uploading data: ", perr);
+              } else {
+                res.json(category);
+                console.log("Successfully uploaded data to NewRF");
+              }
+            });
+          });
+
+        } else {
+          console.log('Image exists in AWS : ' + data); // successful response
+          console.log('Copy source is  : ** :' + 'NewRF' + '/' + req.body.imageName + '.jpg' + ' : **'); // successful response
+          var copyParams = {
+            CopySource: '/NewRF/' + req.body.imageName + '.jpg',
+            Bucket: 'archiverf',
+            Key: req.body.imageName + Date.now() + '.jpg',
+            ContentType: file.type,
+            ACL: 'public-read'
+          }
+          s3.copyObject(copyParams, function (err, data) {
+            if (err) console.log(err, err.stack); // an error occurred
+            else {
+              console.log('Success fully copied image :' + data);
+              var delParams = {
+                Bucket: 'NewRF',
+                Key: req.body.imageName + '.jpg'
+              }
+              s3.deleteObject(delParams, function (err, data) {
+                if (err) console.log(err, err.stack); // an error occurred
+                else {
+                  //upload the image into AWS
+                  var path = file.path;
+                  fs.readFile(path, function (err, file_buffer) {
+                    var params = {
+                      Bucket: 'NewRF',
+                      Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+                      Body: file_buffer,
+                      ContentType: file.type,
+                      ACL: 'public-read'
+                    };
+                    s3.putObject(params, function (perr, pres) {
+                      if (perr) {
+                        console.log("Error uploading data: ", perr);
+                      } else {
+                        res.json(category);
+                        console.log("Successfully uploaded data to NewRF");
+                      }
+                    });
+                  });
+                }
+              })
+            }
+          })
+        }
+      });
     }
   });
 };

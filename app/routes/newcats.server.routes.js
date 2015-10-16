@@ -35,7 +35,7 @@ module.exports = function (app) {
       .get(categories.catslist);*/
 
   app.route('/newcats')
-    .post(users.ensureAuthenticated, users.checkAdmin, categories.createCat);
+    .post(users.ensureAuthenticated, users.checkAdmin, multipartyMiddleware, categories.createCat);
 
   /* app.route('/newcategories')
      .post(categories.createnewcategory);*/
@@ -43,7 +43,7 @@ module.exports = function (app) {
 
   app.route('/newcats/:newCatId')
     .get(categories.read)
-    .put(users.ensureAuthenticated, categories.updateCat)
+    .post(users.ensureAuthenticated, multipartyMiddleware, categories.updateCat)
     .delete(users.ensureAuthenticated, categories.deleteCat);
 
   /*	app.route('/categories/page/:pageId')

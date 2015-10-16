@@ -36,7 +36,8 @@
                       <a ng-click="displayCat(cat)">{{cat.displayName}}</a>
                     </td>
                     <td class="project-completion">
-                      <img class="img-thumbnail m-t-xs img-responsive" ng-src="modules/recipes/img/v2/cats-img/{{cat.imageName}}.jpg" alt="Category Image" style="height:60px"> {{cat.catId}}.jpg
+                      <<!--img class="img-thumbnail m-t-xs img-responsive" ng-src="modules/recipes/img/v2/cats-img/{{cat.imageName}}.jpg" alt="Category Image" style="height:60px"> {{cat.catId}}.jpg-->
+                        <img class="img-thumbnail m-t-xs img-responsive" ng-src="https://s3.amazonaws.com/NewRF/{{cat.imageName}}.jpg" alt="Category Image" style="height:60px"> {{cat.catId}}.jpg
 
                     </td>
                     <td class="project-people" style="text-align:center">
