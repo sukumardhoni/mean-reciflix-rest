@@ -666,7 +666,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.createCat = function () {
     // console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
     Upload.upload({
-      url: 'http://localhost:3000/newcats',
+      url: 'http://www.reciflix.com/newcats',
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -724,7 +724,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
     Upload.upload({
-      url: 'http://localhost:3000/newcats/' + $scope.cat.catId,
+      url: 'http://www.reciflix.com/newcats/' + $scope.cat.catId,
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -897,7 +897,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
