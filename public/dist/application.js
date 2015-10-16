@@ -897,6 +897,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 // Recipes Edit controller
@@ -1242,6 +1243,7 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
