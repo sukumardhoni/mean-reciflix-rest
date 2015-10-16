@@ -37,10 +37,6 @@ module.exports = function (app) {
   app.route('/newcats')
     .post(users.ensureAuthenticated, users.checkAdmin, multipartyMiddleware, categories.createCat);
 
-  /* app.route('/newcategories')
-     .post(categories.createnewcategory);*/
-
-
   app.route('/newcats/:newCatId')
     .get(categories.read)
     .post(users.ensureAuthenticated, multipartyMiddleware, categories.updateCat)

@@ -52,7 +52,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload) {
+.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, AWSService, $http) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -106,7 +106,13 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
 
+  $scope.setFile = function (element) {
+    $scope.$apply(function ($scope) {
+      $scope.theFile = element.files[0];
+      console.log('Successfully fetched the image file ' + JSON.stringify($scope.theFile));
 
+    });
+  };
 
 
   $scope.createCat = function () {
@@ -126,11 +132,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
       console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
-
-
-
-
-
 
     /*    SingleCat.save($scope.cat, function (res) {
 

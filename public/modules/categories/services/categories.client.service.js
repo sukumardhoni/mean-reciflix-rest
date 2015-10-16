@@ -9,7 +9,6 @@ angular.module('categories')
 
 
 .factory('Categories', function ($resource, API_HOST) {
-    //console.log('service Categories -------------- ++++++ ');
     return $resource(API_HOST + '/newcats/page/:pageId/:activeFilter', {
       pageId: '@pageId',
       activeFilter: '@activeFilter'
@@ -39,8 +38,6 @@ angular.module('categories')
       }
     });
   })
-
-
 
 .factory('SubCategories', function ($resource, API_HOST) {
   return $resource(API_HOST + '/subCats/:catId/:pageId/:activeFilter', {

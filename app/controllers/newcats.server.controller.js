@@ -140,7 +140,6 @@ exports.uploadImage = function (req, res) {
 
 
 
-
 exports.singleCatByRank = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
