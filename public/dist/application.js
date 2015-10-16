@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'reciflixApp';
-  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage'];
+  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage', 'ngFileUpload'];
 
   //['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage']
 
@@ -600,7 +600,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory) {
+.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -654,16 +654,55 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
 
+  $scope.setFile = function (element) {
+    $scope.$apply(function ($scope) {
+      $scope.theFile = element.files[0];
+      console.log('Successfully fetched the image file ' + JSON.stringify($scope.theFile));
 
+    });
+  };
 
 
   $scope.createCat = function () {
-    SingleCat.save($scope.cat, function (res) {
-      $scope.categories.push(res);
+    // console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
+    Upload.upload({
+      url: 'http://localhost:3000/newcats',
+      file: $scope.cat.picFile,
+      data: $scope.cat
+    }).then(function (resp) {
+      $scope.categories.unshift(resp.data);
       $scope.modalInstance.close();
-    }, function (err) {
-      //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
+      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
+
+    /*    SingleCat.save($scope.cat, function (res) {
+
+          Upload.upload({
+            url: 'http://localhost:3000/uploadImageToAWS',
+            file: $scope.cat.picFile,
+            data: $scope.cat
+          }).then(function (resp) {
+            $scope.categories.push(res);
+            $scope.modalInstance.close();
+            console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+          }, function (resp) {
+            console.log('Error status: ' + resp.status);
+          }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+          });
+
+
+
+        }, function (err) {
+          //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
+        });*/
   };
 
   $scope.cancel = function () {
@@ -672,16 +711,44 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.updateCat = function () {
     var indexVal = $localStorage.indexVal;
-    SingleCat.update({
-      newCatId: $scope.cat.catId
-    }, $scope.cat, function (res) {
+    /*    SingleCat.update({
+          newCatId: $scope.cat.catId
+        }, $scope.cat, function (res) {
+          $scope.categories.splice(indexVal, 1);
+          $scope.categories.splice(indexVal, 0, res);
+          delete $localStorage.indexVal;
+          $scope.modalInstance.close();
+        }, function (err) {
+          //console.log('Error occured while Updating category, Error details are : ' + JSON.stringify(err));
+        });*/
+
+
+    Upload.upload({
+      url: 'http://localhost:3000/newcats/' + $scope.cat.catId,
+      file: $scope.cat.picFile,
+      data: $scope.cat
+    }).then(function (resp) {
       $scope.categories.splice(indexVal, 1);
-      $scope.categories.splice(indexVal, 0, res);
+      $scope.categories.splice(indexVal, 0, resp.data);
       delete $localStorage.indexVal;
       $scope.modalInstance.close();
-    }, function (err) {
-      //console.log('Error occured while Updating category, Error details are : ' + JSON.stringify(err));
+      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
+
+
+
+
+
+
+
+
+
   };
 
   $scope.deleteCat = function (cat) {
@@ -830,7 +897,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
@@ -1088,7 +1154,6 @@ angular.module('categories')
 
 
 .factory('Categories', ["$resource", "API_HOST", function ($resource, API_HOST) {
-    //console.log('service Categories -------------- ++++++ ');
     return $resource(API_HOST + '/newcats/page/:pageId/:activeFilter', {
       pageId: '@pageId',
       activeFilter: '@activeFilter'
@@ -1118,8 +1183,6 @@ angular.module('categories')
       }
     });
   }])
-
-
 
 .factory('SubCategories', ["$resource", "API_HOST", function ($resource, API_HOST) {
   return $resource(API_HOST + '/subCats/:catId/:pageId/:activeFilter', {
@@ -1179,7 +1242,6 @@ angular.module('categories')
     }
   };
 })
-
 'use strict';
 
 // Setting up route

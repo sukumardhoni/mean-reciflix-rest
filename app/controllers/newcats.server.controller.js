@@ -30,13 +30,11 @@ exports.createCat = function (req, res) {
   AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
   AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
   AWS.config.region = 'us-east-1';
-
-
-
+  var s3 = new AWS.S3();
   var file = req.files.file;
-  console.log("Image Name is : " + file.name);
-  console.log("Image type is : " + file.type);
-  console.log("Image details: " + JSON.stringify(file));
+  //console.log("Image Name is : " + file.name);
+  //console.log("Image type is : " + file.type);
+  //console.log("Image details: " + JSON.stringify(file));
 
   category.save(function (err) {
     if (err) {
@@ -44,20 +42,8 @@ exports.createCat = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-
-
-
-
-
-
       //upload the image into AWS
-      var file = req.files.file;
 
-      //console.log("Image Name is : " + file.name);
-      //console.log("Image type is : " + file.type);
-      //console.log("Image details: " + JSON.stringify(file));
-
-      var s3 = new AWS.S3();
 
       var path = file.path;
       fs.readFile(path, function (err, file_buffer) {

@@ -52,7 +52,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, AWSService, $http) {
+.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
