@@ -52,7 +52,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload) {
+.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -119,6 +119,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     // console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
     Upload.upload({
       url: 'http://www.reciflix.com/newcats',
+      //url: 'http://192.168.0.100:3000/newcats',
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -177,6 +178,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
     Upload.upload({
       url: 'http://www.reciflix.com/newcats/' + $scope.cat.catId,
+      //url: 'http://192.168.0.100:3000/newcats/' + $scope.cat.catId,
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -184,23 +186,22 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.categories.splice(indexVal, 0, resp.data);
       delete $localStorage.indexVal;
       $scope.modalInstance.close();
-      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+      if (resp.config.data.file) {
+        console.log('Checking response when file on callback');
+        $timeout(function () {
+          $state.go($state.current, {}, {
+            reload: true
+          });
+        }, 2000);
+      }
     }, function (resp) {
       console.log('Error status: ' + resp.status);
     }, function (evt) {
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
       console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
-
-
-
-
-
-
-
-
-
   };
 
   $scope.deleteCat = function (cat) {
@@ -235,7 +236,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 })
 
-.controller('SubCatCtrl', function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage) {
+.controller('SubCatCtrl', function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage, Upload, $timeout, $state) {
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
@@ -250,6 +251,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.openCreateSubCatModal = function () {
+    $scope.catName = '';
     $scope.subCat = '';
     $scope.modalName = "Create Sub-Category";
     $scope.modalInstance = $modal.open({
@@ -260,7 +262,25 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.createSubCat = function () {
-    SubCategories.save({
+
+    Upload.upload({
+      url: 'http://www.reciflix.com/subCats/' + $stateParams.catId + '/999/3',
+      //url: 'http://192.168.0.100:3000/subCats/' + $stateParams.catId + '/999/3',
+      file: $scope.subCat.picFile,
+      data: $scope.subCat
+    }).then(function (resp) {
+      $scope.CatObjWithSubCats.subCats.unshift(resp.data);
+      $scope.modalInstance.close();
+      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+    });
+
+    /*SubCategories.save({
       catId: $stateParams.catId,
       pageId: 999,
       activeFilter: 3
@@ -269,7 +289,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.modalInstance.close();
     }, function (err) {
       //console.log('Error occured while SubCategories creating , Error details are : ' + JSON.stringify(err));
-    });
+    });*/
   };
   $scope.cancel = function () {
     $scope.modalInstance.dismiss('cancel');
@@ -284,6 +304,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
   $scope.editSubCat = function (subCat, index) {
     $scope.modalName = "Update Sub-Category";
+    $scope.catName = subCat.displayName;
     $localStorage.indexVal = index;
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-sub-cat-modal.html',
@@ -306,7 +327,38 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.updateSubCat = function () {
     var indexVal = $localStorage.indexVal;
-    SubCat.update({
+
+
+    Upload.upload({
+      url: 'http://www.reciflix.com/singleSubCat/' + $scope.subCat._id,
+      //url: 'http://192.168.0.100:3000/singleSubCat/' + $scope.subCat._id,
+      file: $scope.subCat.picFile,
+      data: $scope.subCat
+    }).then(function (resp) {
+      $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
+      $scope.CatObjWithSubCats.subCats.splice(indexVal, 0, resp.data);
+      delete $localStorage.indexVal;
+      $scope.modalInstance.close();
+      //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+      if (resp.config.data.file) {
+        console.log('Checking response when file on callback');
+        $timeout(function () {
+          $state.go($state.current, {}, {
+            reload: true
+          });
+        }, 2000);
+      }
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+    });
+
+
+
+    /*SubCat.update({
       subCatId: $scope.subCat._id
     }, $scope.subCat, function (res) {
       $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
@@ -315,7 +367,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.modalInstance.close();
     }, function (err) {
       //console.log('Error occured while updating sub category, Error details are : ' + JSON.stringify(err));
-    });
+    });*/
   };
   $scope.deleteSubCat = function (subCat) {
     //console.log('Want to del sub cat details are :' + JSON.stringify(subCat));

@@ -9,6 +9,8 @@ var mongoose = require('mongoose'),
   agenda = require('../../schedules/job-schedule.js')(config.db),
   SubCats = mongoose.model('SubCats'),
   Vrecipe = mongoose.model('Vrecipe'),
+  AWS = require('aws-sdk'),
+  fs = require('fs'),
   _ = require('lodash');
 
 
@@ -22,6 +24,19 @@ exports.subCatCreate = function (req, res) {
   var subcat = new SubCats(req.body);
   subcat.catId = req.params.newCatId;
 
+
+
+
+  AWS.config = new AWS.Config();
+  AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
+  AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
+  AWS.config.region = 'us-east-1';
+  var s3 = new AWS.S3();
+  var file = req.files.file;
+
+
+
+
   subcat.save(function (err) {
     if (err) {
       console.log('ERROR while saving subcat details : ' + err);
@@ -29,13 +44,31 @@ exports.subCatCreate = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      var path = file.path;
+      fs.readFile(path, function (err, file_buffer) {
+        var params = {
+          Bucket: 'NewRFSubCats',
+          Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+          Body: file_buffer,
+          ContentType: file.type,
+          ACL: 'public-read'
+        };
+        s3.putObject(params, function (perr, pres) {
+          if (perr) {
+            console.log("Error uploading data: ", perr);
+          } else {
+            res.json(subcat);
+            console.log("Successfully uploaded data to NewRFSubCats");
+          }
+        });
+      });
       //user is successfully created sub cat save action into user usage details collection
       agenda.now('User_Usage_Details', {
         email: emailInfo,
         device: deviceInfo,
         action: 'subCatCreate : ' + subcat.displayName
       });
-      res.json(subcat);
+      //res.json(subcat);
     }
   });
 };
@@ -137,12 +170,23 @@ exports.updateSubCat = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
   var subcat = req.subcat;
+  console.log('Updated func in rest : ' + JSON.stringify(req.body));
 
   subcat = _.extend(subcat, req.body);
 
+  AWS.config = new AWS.Config();
+  AWS.config.accessKeyId = config.AWS_ACCESS_KEY_ID;
+  AWS.config.secretAccessKey = config.AWS_SECRET_ACCESS_KEY;
+  AWS.config.region = 'us-east-1';
+  var s3 = new AWS.S3();
+  var file = req.files.file;
+
+
   subcat.save(function (err) {
     if (err) {
+      console.log('Err Updated func in rest : ' + JSON.stringify(err));
       return res.status(400).send({
+
         message: errorHandler.getErrorMessage(err)
       });
     } else {
@@ -152,7 +196,89 @@ exports.updateSubCat = function (req, res) {
         device: deviceInfo,
         action: 'updateSubCat : ' + subcat.displayName
       });
-      res.json(subcat);
+      //res.json(subcat);
+
+
+      if (file) {
+        //console.log("uploaded data to NewRF");
+        var params = {
+          Bucket: 'NewRFSubCats',
+          Key: req.body.imageName + '.jpg'
+        }
+        s3.getObject(params, function (err, data) {
+          if (err) {
+            console.log(err, err.stack);
+            var path = file.path;
+            fs.readFile(path, function (err, file_buffer) {
+              var params = {
+                Bucket: 'NewRFSubCats',
+                Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+                Body: file_buffer,
+                ContentType: file.type,
+                ACL: 'public-read'
+              };
+              s3.putObject(params, function (perr, pres) {
+                if (perr) {
+                  console.log("Error uploading data: ", perr);
+                } else {
+                  res.json(subcat);
+                  console.log("Successfully uploaded data to NewRFSubCats");
+                }
+              });
+            });
+
+          } else {
+            console.log('Image exists in AWS : ' + data); // successful response
+            console.log('Copy source is  : ** :' + 'NewRFSubCats' + '/' + req.body.imageName + '.jpg' + ' : **'); // successful response
+            var copyParams = {
+              CopySource: '/NewRFSubCats/' + req.body.imageName + '.jpg',
+              Bucket: 'archiverf',
+              Key: req.body.imageName + Date.now() + '.jpg',
+              ContentType: file.type,
+              ACL: 'public-read'
+            }
+            s3.copyObject(copyParams, function (err, data) {
+              if (err) console.log(err, err.stack); // an error occurred
+              else {
+                console.log('Success fully copied image :' + data);
+                var delParams = {
+                  Bucket: 'NewRFSubCats',
+                  Key: req.body.imageName + '.jpg'
+                }
+                s3.deleteObject(delParams, function (err, data) {
+                  if (err) console.log(err, err.stack); // an error occurred
+                  else {
+                    //upload the image into AWS
+                    var path = file.path;
+                    fs.readFile(path, function (err, file_buffer) {
+                      var params = {
+                        Bucket: 'NewRFSubCats',
+                        Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+                        Body: file_buffer,
+                        ContentType: file.type,
+                        ACL: 'public-read'
+                      };
+                      s3.putObject(params, function (perr, pres) {
+                        if (perr) {
+                          console.log("Error uploading data: ", perr);
+                        } else {
+                          res.json(subcat);
+                          console.log("Successfully uploaded data to NewRFSubCats");
+                        }
+                      });
+                    });
+                  }
+                })
+              }
+            })
+          }
+        });
+      } else {
+        res.json(subcat);
+      }
+
+
+
     }
   });
 };

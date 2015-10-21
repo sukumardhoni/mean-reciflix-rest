@@ -24,11 +24,6 @@ module.exports = function (app) {
   app.route('/newCatAndSubCats/:rank')
     .get(categories.singleCatByRank);
 
-
-  app.route('/uploadImageToAWS')
-    .post(users.ensureAuthenticated, users.checkAdmin, multipartyMiddleware, categories.uploadImage);
-
-
   //admin functions are shown here //
 
   /*  app.route('/categories/admincats')

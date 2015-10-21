@@ -4,17 +4,19 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller'),
-  subcats = require('../../app/controllers/subcats.server.controller');
+  subcats = require('../../app/controllers/subcats.server.controller'),
+  multiparty = require('connect-multiparty'),
+  multipartyMiddleware = multiparty();
 
 module.exports = function (app) {
   // SubCats Routes
   app.route('/subCats/:newCatId/:pageId/:activeFilter')
     .get(subcats.listOfSubCats)
-    .post(users.ensureAuthenticated, subcats.subCatCreate);
+    .post(users.ensureAuthenticated, multipartyMiddleware, subcats.subCatCreate);
 
   app.route('/singleSubCat/:subCatId')
     .get(users.ensureAuthenticated, subcats.getSubCat)
-    .put(users.ensureAuthenticated, subcats.updateSubCat)
+    .post(users.ensureAuthenticated, multipartyMiddleware, subcats.updateSubCat)
     .delete(users.ensureAuthenticated, subcats.deleteSubCat);
 
   // Finish by binding the subcats middleware
