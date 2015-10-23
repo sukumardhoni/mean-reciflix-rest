@@ -600,7 +600,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", "$timeout", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout) {
+.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", "$timeout", "API_HOST", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, API_HOST) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -664,9 +664,9 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
   $scope.createCat = function () {
-    // console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
+    //console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
     Upload.upload({
-      url: 'http://www.reciflix.com/newcats',
+      url: API_HOST + '/newcats',
       //url: 'http://192.168.0.100:3000/newcats',
       file: $scope.cat.picFile,
       data: $scope.cat
@@ -725,7 +725,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
     Upload.upload({
-      url: 'http://www.reciflix.com/newcats/' + $scope.cat.catId,
+      url: API_HOST + '/newcats/' + $scope.cat.catId,
       //url: 'http://192.168.0.100:3000/newcats/' + $scope.cat.catId,
       file: $scope.cat.picFile,
       data: $scope.cat
@@ -784,7 +784,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 }])
 
-.controller('SubCatCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "SubCat", "$localStorage", "Upload", "$timeout", "$state", function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage, Upload, $timeout, $state) {
+.controller('SubCatCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "SubCat", "$localStorage", "Upload", "$timeout", "$state", "API_HOST", function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage, Upload, $timeout, $state, API_HOST) {
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
@@ -812,7 +812,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.createSubCat = function () {
 
     Upload.upload({
-      url: 'http://www.reciflix.com/subCats/' + $stateParams.catId + '/999/3',
+      url: API_HOST + '/subCats/' + $stateParams.catId + '/999/3',
       //url: 'http://192.168.0.100:3000/subCats/' + $stateParams.catId + '/999/3',
       file: $scope.subCat.picFile,
       data: $scope.subCat
@@ -878,7 +878,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 
     Upload.upload({
-      url: 'http://www.reciflix.com/singleSubCat/' + $scope.subCat._id,
+      url: API_HOST + '/singleSubCat/' + $scope.subCat._id,
       //url: 'http://192.168.0.100:3000/singleSubCat/' + $scope.subCat._id,
       file: $scope.subCat.picFile,
       data: $scope.subCat
@@ -949,7 +949,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
@@ -1295,7 +1294,6 @@ angular.module('categories')
     }
   };
 })
-
 'use strict';
 
 // Setting up route

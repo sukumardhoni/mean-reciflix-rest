@@ -26,22 +26,22 @@
         </div>
         <div class="form-group col-md-4 col-xs-4">
           <label>Image Name</label>
-          <input type="text" class="form-control" placeholder="without extension" ng-model="subCat.imageName">
+          <input type="text" class="form-control" placeholder="without extension" ng-model="subCat.imageName" required>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-md-6 col-xs-6">
           <label>Select Image</label>
-          <input type="file" ngf-select ng-model="subCat.picFile" name="picFile" accept="image/jpeg" ngf-max-size="2MB" required>
+          <input type="file" ngf-select ng-change="subCat.imageName = subCat.picFile.name" ng-model="subCat.picFile" name="picFile" accept="image/jpeg" ngf-max-size="1MB" required>
           <i ng-show="cat_form.picFile.$error.required">*required</i>
           <br>
           <i ng-show="cat_form.picFile.$error.maxSize">File too large
           {{picFile.size / 1000000|number:1}}MB: max 1M</i>
         </div>
         <div class="form-group col-md-6 col-xs-6">
-          <img ng-show="subCat.imageName && subCat.picFile == null" ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subCat.imageName}}.jpg" class="thumb">
+          <img ng-show="subCat.imageName && subCat.picFile == null && modalName == 'Update Sub-Category'" ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subCat.imageName}}" class="thumb">
           <img ng-show="cat_form.picFile.$valid" ngf-thumbnail="subCat.picFile" class="thumb">
-          <button ng-click="subCat.picFile = null" ng-show="subCat.picFile">Remove</button>
+          <button ng-click="subCat.picFile = null;subCat.imageName = null" ng-show="subCat.picFile">Remove</button>
         </div>
       </div>
       <div class="form-group">

@@ -49,7 +49,8 @@ exports.createCat = function (req, res) {
       fs.readFile(path, function (err, file_buffer) {
         var params = {
           Bucket: 'NewRF',
-          Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+          //Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+          Key: req.body.imageName,
           Body: file_buffer,
           ContentType: file.type,
           ACL: 'public-read'
@@ -63,10 +64,6 @@ exports.createCat = function (req, res) {
           }
         });
       });
-
-
-
-
 
       //user is successfully created cat save action into user usage details collection
       agenda.now('User_Usage_Details', {
@@ -177,7 +174,8 @@ exports.updateCat = function (req, res) {
             fs.readFile(path, function (err, file_buffer) {
               var params = {
                 Bucket: 'NewRF',
-                Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+                //Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+                Key: req.body.imageName,
                 Body: file_buffer,
                 ContentType: file.type,
                 ACL: 'public-read'
@@ -194,11 +192,11 @@ exports.updateCat = function (req, res) {
 
           } else {
             console.log('Image exists in AWS : ' + data); // successful response
-            console.log('Copy source is  : ** :' + 'NewRF' + '/' + req.body.imageName + '.jpg' + ' : **'); // successful response
+            console.log('Copy source is  : ** :' + 'NewRF' + '/' + req.body.imageName + ' : **'); // successful response
             var copyParams = {
-              CopySource: '/NewRF/' + req.body.imageName + '.jpg',
+              CopySource: '/NewRF/' + req.body.imageName,
               Bucket: 'archiverf',
-              Key: req.body.imageName + Date.now() + '.jpg',
+              Key: req.body.imageName + Date.now(),
               ContentType: file.type,
               ACL: 'public-read'
             }
@@ -208,7 +206,7 @@ exports.updateCat = function (req, res) {
                 console.log('Success fully copied image :' + data);
                 var delParams = {
                   Bucket: 'NewRF',
-                  Key: req.body.imageName + '.jpg'
+                  Key: req.body.imageName
                 }
                 s3.deleteObject(delParams, function (err, data) {
                   if (err) console.log(err, err.stack); // an error occurred
@@ -218,7 +216,8 @@ exports.updateCat = function (req, res) {
                     fs.readFile(path, function (err, file_buffer) {
                       var params = {
                         Bucket: 'NewRF',
-                        Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+                        //Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+                        Key: req.body.imageName,
                         Body: file_buffer,
                         ContentType: file.type,
                         ACL: 'public-read'
