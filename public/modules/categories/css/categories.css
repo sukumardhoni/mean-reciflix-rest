@@ -12,3 +12,14 @@
   width: 200px;
   height: 100px;
 }
+
+.rf-updating-icon {
+  background: url('../../../modules/core/img/loaders/328.GIF') no-repeat;
+  display: block;
+  height: 100px;
+  position: absolute;
+  left: 239px;
+  top: 345px;
+  width: 200px;
+  z-index: 1000;
+}

@@ -615,10 +615,12 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.openModal = function () {
     $scope.cat = '';
+    $scope.catName = '';
     $scope.modalName = "Create Category";
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-cat-modal.html',
       controller: 'CategoryCtrl',
+      backdrop: "static",
       scope: $scope
     });
   };
@@ -626,18 +628,20 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.editCat = function (cat, index) {
     $scope.modalName = "Update Category";
     $localStorage.indexVal = index;
+
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-cat-modal.html',
+      backdrop: "static",
       scope: $scope,
       controller: 'CategoryCtrl'
     });
     $scope.getCatDetails(cat);
-
   };
 
   $scope.displayCat = function (cat) {
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/view-cat-modal.html',
+      backdrop: "static",
       scope: $scope,
       controller: 'CategoryCtrl'
     });
@@ -649,6 +653,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       newCatId: cat.catId
     }, function (res) {
       $scope.cat = res;
+      $scope.catName = res.displayName;
     }, function (err) {
       //console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
     });
@@ -658,13 +663,13 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.$apply(function ($scope) {
       $scope.theFile = element.files[0];
       console.log('Successfully fetched the image file ' + JSON.stringify($scope.theFile));
-
     });
   };
 
-
   $scope.createCat = function () {
     //console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
+    $scope.updatingLogo = true;
+
     Upload.upload({
       url: API_HOST + '/newcats',
       //url: 'http://192.168.0.100:3000/newcats',
@@ -672,6 +677,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       data: $scope.cat
     }).then(function (resp) {
       $scope.categories.unshift(resp.data);
+      $scope.updatingLogo = false;
       $scope.modalInstance.close();
       console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       console.log('Success uploaded. Response: ' + JSON.stringify(resp));
@@ -683,7 +689,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
 
     /*    SingleCat.save($scope.cat, function (res) {
-
           Upload.upload({
             url: 'http://localhost:3000/uploadImageToAWS',
             file: $scope.cat.picFile,
@@ -698,9 +703,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
           });
-
-
-
         }, function (err) {
           //console.log('Error occured while creating category, Error details are : ' + JSON.stringify(err));
         });*/
@@ -712,6 +714,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.updateCat = function () {
     var indexVal = $localStorage.indexVal;
+    $scope.updatingLogo = true;
     /*    SingleCat.update({
           newCatId: $scope.cat.catId
         }, $scope.cat, function (res) {
@@ -723,7 +726,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
           //console.log('Error occured while Updating category, Error details are : ' + JSON.stringify(err));
         });*/
 
-
     Upload.upload({
       url: API_HOST + '/newcats/' + $scope.cat.catId,
       //url: 'http://192.168.0.100:3000/newcats/' + $scope.cat.catId,
@@ -733,6 +735,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.categories.splice(indexVal, 1);
       $scope.categories.splice(indexVal, 0, resp.data);
       delete $localStorage.indexVal;
+      $scope.updatingLogo = false;
       $scope.modalInstance.close();
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       console.log('Success uploaded. Response: ' + JSON.stringify(resp));
@@ -755,6 +758,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.deleteCat = function (cat) {
     var modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/del-cat-modal.html',
+      backdrop: "static",
       scope: $scope,
       controller: 'DelCatCtrl'
     });
@@ -804,13 +808,14 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.modalName = "Create Sub-Category";
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-sub-cat-modal.html',
+      backdrop: "static",
       scope: $scope,
       controller: 'SubCatCtrl'
     });
   };
 
   $scope.createSubCat = function () {
-
+    $scope.updatingLogo = true;
     Upload.upload({
       url: API_HOST + '/subCats/' + $stateParams.catId + '/999/3',
       //url: 'http://192.168.0.100:3000/subCats/' + $stateParams.catId + '/999/3',
@@ -818,6 +823,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       data: $scope.subCat
     }).then(function (resp) {
       $scope.CatObjWithSubCats.subCats.unshift(resp.data);
+      $scope.updatingLogo = false;
       $scope.modalInstance.close();
       console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       console.log('Success uploaded. Response: ' + JSON.stringify(resp));
@@ -845,6 +851,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.displaySubCat = function (subCat) {
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/view-sub-cat-modal.html',
+      backdrop: "static",
       scope: $scope,
       controller: 'SubCatCtrl'
     });
@@ -852,10 +859,11 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
   $scope.editSubCat = function (subCat, index) {
     $scope.modalName = "Update Sub-Category";
-    $scope.catName = subCat.displayName;
+    $scope.subCatName = subCat.displayName;
     $localStorage.indexVal = index;
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-sub-cat-modal.html',
+      backdrop: "static",
       scope: $scope,
       controller: 'SubCatCtrl'
     });
@@ -874,9 +882,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 
   $scope.updateSubCat = function () {
+    $scope.updatingLogo = true;
     var indexVal = $localStorage.indexVal;
-
-
     Upload.upload({
       url: API_HOST + '/singleSubCat/' + $scope.subCat._id,
       //url: 'http://192.168.0.100:3000/singleSubCat/' + $scope.subCat._id,
@@ -886,6 +893,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
       $scope.CatObjWithSubCats.subCats.splice(indexVal, 0, resp.data);
       delete $localStorage.indexVal;
+      $scope.updatingLogo = false;
       $scope.modalInstance.close();
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       console.log('Success uploaded. Response: ' + JSON.stringify(resp));
@@ -921,6 +929,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     //console.log('Want to del sub cat details are :' + JSON.stringify(subCat));
     var modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/del-sub-cat-modal.html',
+      backdrop: "static",
       scope: $scope,
       controller: 'DelSubCatCtrl'
     });
@@ -1294,6 +1303,7 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
