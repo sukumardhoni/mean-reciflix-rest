@@ -18,7 +18,7 @@
 
           <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="cat in categories">
             <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats({catId:cat.catId})" ng-click="minimalize()">
-              <img ng-src="modules/recipes/img/v2/cats-img/{{cat.imageName}}.jpg" alt="Sample Image" class="img-responsive">
+              <img ng-src="modules/recipes/img/v2/cats-img/{{cat.imageName}}" alt="Sample Image" class="img-responsive">
               <hr>
               <h3 class="h3-styles media-heading"><a>{{cat.displayName}}</a></h3>
             </div>

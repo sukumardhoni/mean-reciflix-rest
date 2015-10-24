@@ -21,7 +21,7 @@ var mongoose = require('mongoose'),
 exports.createCat = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-  console.log("reached the create received: " + JSON.stringify(req.body));
+  //console.log("reached the create received: " + JSON.stringify(req.body));
   var category = new Category(req.body);
   category.user = req.user;
 
@@ -60,7 +60,7 @@ exports.createCat = function (req, res) {
             console.log("Error uploading data: ", perr);
           } else {
             res.json(category);
-            console.log("Successfully uploaded data to NewRF");
+           // console.log("Successfully uploaded data to NewRF");
           }
         });
       });
@@ -81,7 +81,7 @@ exports.createCat = function (req, res) {
 exports.singleCatByRank = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-  console.log('Successfully called the singleCatByRank fun. in server and RANK is : ' + req.params.rank);
+  //console.log('Successfully called the singleCatByRank fun. in server and RANK is : ' + req.params.rank);
 
   Category.findOne({
     rank: req.params.rank
@@ -94,7 +94,7 @@ exports.singleCatByRank = function (req, res) {
     var catResult = category.toObject();
     catResult.subCats = [];
     //next();
-    console.log('Successfully fetched cat details is  : ' + JSON.stringify(category));
+   // console.log('Successfully fetched cat details is  : ' + JSON.stringify(category));
 
     SubCats.find({
       catId: category._id
@@ -185,14 +185,14 @@ exports.updateCat = function (req, res) {
                   console.log("Error uploading data: ", perr);
                 } else {
                   res.json(category);
-                  console.log("Successfully uploaded data to NewRF");
+               //   console.log("Successfully uploaded data to NewRF");
                 }
               });
             });
 
           } else {
-            console.log('Image exists in AWS : ' + data); // successful response
-            console.log('Copy source is  : ** :' + 'NewRF' + '/' + req.body.imageName + ' : **'); // successful response
+          //  console.log('Image exists in AWS : ' + data); // successful response
+          //  console.log('Copy source is  : ** :' + 'NewRF' + '/' + req.body.imageName + ' : **'); // successful response
             var copyParams = {
               CopySource: '/NewRF/' + req.body.imageName,
               Bucket: 'archiverf',
@@ -203,7 +203,7 @@ exports.updateCat = function (req, res) {
             s3.copyObject(copyParams, function (err, data) {
               if (err) console.log(err, err.stack); // an error occurred
               else {
-                console.log('Success fully copied image :' + data);
+            //    console.log('Success fully copied image :' + data);
                 var delParams = {
                   Bucket: 'NewRF',
                   Key: req.body.imageName
@@ -227,7 +227,7 @@ exports.updateCat = function (req, res) {
                           console.log("Error uploading data: ", perr);
                         } else {
                           res.json(category);
-                          console.log("Successfully uploaded data to NewRF");
+                      //    console.log("Successfully uploaded data to NewRF");
                         }
                       });
                     });

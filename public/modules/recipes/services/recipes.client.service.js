@@ -51,8 +51,8 @@ angular.module('recipes')
  }
 ])
 
-.factory('SubCategoryRecipes', function ($resource, API_HOST) {
-  return $resource(API_HOST + '/newrecipes/:subCatId/:pageId', {
+.factory('SubCategoryRecipes', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/newrecipes/:subCatId/:pageId', {
     subCatId: '@subCatId',
     pageId: '@pageId'
   }, {
@@ -65,8 +65,8 @@ angular.module('recipes')
 })
 
 
-.factory('Recipe', function ($resource, API_HOST) {
-  return $resource(API_HOST + '/nVRecipes/:vrecipeId', {
+.factory('Recipe', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/nVRecipes/:vrecipeId', {
     vrecipeId: '@vrecipeId'
   }, {
     'get': {
@@ -98,8 +98,8 @@ angular.module('recipes')
 
 
 
-.factory('UserSuggestion', function ($resource, API_HOST) {
-  return $resource(API_HOST + '/users/suggestions/:pageId', {
+.factory('UserSuggestion', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/users/suggestions/:pageId', {
     pageId: '@pageId'
   }, {
     'get': {

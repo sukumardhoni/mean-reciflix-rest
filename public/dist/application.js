@@ -600,7 +600,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", "$timeout", "API_HOST", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, API_HOST) {
+.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", "$timeout", "ConfigService", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -671,8 +671,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.updatingLogo = true;
 
     Upload.upload({
-      url: API_HOST + '/newcats',
-      //url: 'http://192.168.0.100:3000/newcats',
+      url: ConfigService.API_URL + '/newcats',
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -727,8 +726,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
         });*/
 
     Upload.upload({
-      url: API_HOST + '/newcats/' + $scope.cat.catId,
-      //url: 'http://192.168.0.100:3000/newcats/' + $scope.cat.catId,
+      url: ConfigService.API_URL + '/newcats/' + $scope.cat.catId,
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -788,7 +786,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 }])
 
-.controller('SubCatCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "SubCat", "$localStorage", "Upload", "$timeout", "$state", "API_HOST", function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage, Upload, $timeout, $state, API_HOST) {
+.controller('SubCatCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "SubCat", "$localStorage", "Upload", "$timeout", "$state", "ConfigService", function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage, Upload, $timeout, $state, ConfigService) {
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
@@ -817,8 +815,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.createSubCat = function () {
     $scope.updatingLogo = true;
     Upload.upload({
-      url: API_HOST + '/subCats/' + $stateParams.catId + '/999/3',
-      //url: 'http://192.168.0.100:3000/subCats/' + $stateParams.catId + '/999/3',
+      url: ConfigService.API_URL + '/subCats/' + $stateParams.catId + '/999/3',
       file: $scope.subCat.picFile,
       data: $scope.subCat
     }).then(function (resp) {
@@ -885,8 +882,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.updatingLogo = true;
     var indexVal = $localStorage.indexVal;
     Upload.upload({
-      url: API_HOST + '/singleSubCat/' + $scope.subCat._id,
-      //url: 'http://192.168.0.100:3000/singleSubCat/' + $scope.subCat._id,
+      url: ConfigService.API_URL + '/singleSubCat/' + $scope.subCat._id,
       file: $scope.subCat.picFile,
       data: $scope.subCat
     }).then(function (resp) {
@@ -958,6 +954,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 // Recipes Edit controller
@@ -1209,13 +1206,31 @@ angular
 //Categories service used for communicating with the categories REST endpoints
 angular.module('categories')
 
+
+/*provides environment specific API url */
+.service('ConfigService', ["$window", function ($window) {
+  if ($window.location.host.match(/reciflix\.com/)) {
+    console.log('its prod: ' + $window.location.host);
+    this.API_URL = 'http://www.reciflix.com';
+		return this.API_URL;
+  } else {
+    console.log('its dev: ' + $window.location.host);
+    this.API_URL = 'http://localhost:3000';
+		return this.API_URL;
+  }
+}])
+
+
+
+//.constant('API_HOST', ConfigService.API_URL)
 //.constant('API_HOST', 'http://192.168.0.100:3000')
 //.constant('API_HOST', 'http://localhost:3000')
-.constant('API_HOST', 'http://www.reciflix.com')
+//.constant('API_HOST', 'http://www.reciflix.com')
 
 
-.factory('Categories', ["$resource", "API_HOST", function ($resource, API_HOST) {
-    return $resource(API_HOST + '/newcats/page/:pageId/:activeFilter', {
+//.factory('Categories', function ($resource, API_HOST) {
+.factory('Categories', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/newcats/page/:pageId/:activeFilter', {
       pageId: '@pageId',
       activeFilter: '@activeFilter'
     }, {
@@ -1226,8 +1241,8 @@ angular.module('categories')
       }
     });
   }])
-  .factory('SingleCat', ["$resource", "API_HOST", function ($resource, API_HOST) {
-    return $resource(API_HOST + '/newcats/:newCatId', {
+  .factory('SingleCat', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/newcats/:newCatId', {
       newCatId: '@newCatId'
     }, {
       'save': {
@@ -1245,8 +1260,8 @@ angular.module('categories')
     });
   }])
 
-.factory('SubCategories', ["$resource", "API_HOST", function ($resource, API_HOST) {
-  return $resource(API_HOST + '/subCats/:catId/:pageId/:activeFilter', {
+.factory('SubCategories', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/subCats/:catId/:pageId/:activeFilter', {
     catId: '@catId',
     pageId: '@pageId',
     activeFilter: '@activeFilter'
@@ -1262,8 +1277,8 @@ angular.module('categories')
 }])
 
 
-.factory('SubCat', ["$resource", "API_HOST", function ($resource, API_HOST) {
-  return $resource(API_HOST + '/singleSubCat/:subCatId', {
+.factory('SubCat', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/singleSubCat/:subCatId', {
     subCatId: '@subCatId'
   }, {
     'update': {
@@ -1992,8 +2007,8 @@ angular.module('recipes')
  }
 ])
 
-.factory('SubCategoryRecipes', ["$resource", "API_HOST", function ($resource, API_HOST) {
-  return $resource(API_HOST + '/newrecipes/:subCatId/:pageId', {
+.factory('SubCategoryRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/newrecipes/:subCatId/:pageId', {
     subCatId: '@subCatId',
     pageId: '@pageId'
   }, {
@@ -2006,8 +2021,8 @@ angular.module('recipes')
 }])
 
 
-.factory('Recipe', ["$resource", "API_HOST", function ($resource, API_HOST) {
-  return $resource(API_HOST + '/nVRecipes/:vrecipeId', {
+.factory('Recipe', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/nVRecipes/:vrecipeId', {
     vrecipeId: '@vrecipeId'
   }, {
     'get': {
@@ -2039,8 +2054,8 @@ angular.module('recipes')
 
 
 
-.factory('UserSuggestion', ["$resource", "API_HOST", function ($resource, API_HOST) {
-  return $resource(API_HOST + '/users/suggestions/:pageId', {
+.factory('UserSuggestion', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/users/suggestions/:pageId', {
     pageId: '@pageId'
   }, {
     'get': {
@@ -2471,21 +2486,21 @@ angular.module('users').factory('Users', ['$resource',
 //.constant('API_HOST', 'http://localhost:3000')
 //.constant('API_HOST', 'http://www.reciflix.com')
 
-.factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
+.factory('Users', ['$resource', 'ConfigService', function ($resource, ConfigService, $localStorage) {
   return {
-    Signup: $resource(API_HOST + '/users/signup', {}, {
+    Signup: $resource(ConfigService.API_URL + '/users/signup', {}, {
       create: {
         method: 'POST',
         timeout: 30000
       }
     }),
-    Login: $resource(API_HOST + '/users/signin', {}, {
+    Login: $resource(ConfigService.API_URL + '/users/signin', {}, {
       create: {
         method: 'POST',
         timeout: 20000
       }
     }),
-    AllUsers: $resource(API_HOST + '/users/totalUsers/:pageId', {
+    AllUsers: $resource(ConfigService.API_URL + '/users/totalUsers/:pageId', {
       pageId: '@pageId'
     }, {
       query: {
@@ -2493,7 +2508,7 @@ angular.module('users').factory('Users', ['$resource',
         timeout: 20000
       }
     }),
-    UsageDetails: $resource(API_HOST + '/users/usage-details-collection/:pageId', {
+    UsageDetails: $resource(ConfigService.API_URL + '/users/usage-details-collection/:pageId', {
       pageId: '@pageId'
     }, {
       query: {
@@ -2501,7 +2516,7 @@ angular.module('users').factory('Users', ['$resource',
         timeout: 20000
       }
     }),
-    UsersSuggestion: $resource(API_HOST + '/users/suggestions/:pageId', {
+    UsersSuggestion: $resource(ConfigService.API_URL + '/users/suggestions/:pageId', {
       pageId: '@pageId'
     }, {
       query: {

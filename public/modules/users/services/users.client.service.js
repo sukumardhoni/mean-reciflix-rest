@@ -15,21 +15,21 @@ angular.module('users').factory('Users', ['$resource',
 //.constant('API_HOST', 'http://localhost:3000')
 //.constant('API_HOST', 'http://www.reciflix.com')
 
-.factory('Users', ['$resource', 'API_HOST', function ($resource, API_HOST, $localStorage) {
+.factory('Users', ['$resource', 'ConfigService', function ($resource, ConfigService, $localStorage) {
   return {
-    Signup: $resource(API_HOST + '/users/signup', {}, {
+    Signup: $resource(ConfigService.API_URL + '/users/signup', {}, {
       create: {
         method: 'POST',
         timeout: 30000
       }
     }),
-    Login: $resource(API_HOST + '/users/signin', {}, {
+    Login: $resource(ConfigService.API_URL + '/users/signin', {}, {
       create: {
         method: 'POST',
         timeout: 20000
       }
     }),
-    AllUsers: $resource(API_HOST + '/users/totalUsers/:pageId', {
+    AllUsers: $resource(ConfigService.API_URL + '/users/totalUsers/:pageId', {
       pageId: '@pageId'
     }, {
       query: {
@@ -37,7 +37,7 @@ angular.module('users').factory('Users', ['$resource',
         timeout: 20000
       }
     }),
-    UsageDetails: $resource(API_HOST + '/users/usage-details-collection/:pageId', {
+    UsageDetails: $resource(ConfigService.API_URL + '/users/usage-details-collection/:pageId', {
       pageId: '@pageId'
     }, {
       query: {
@@ -45,7 +45,7 @@ angular.module('users').factory('Users', ['$resource',
         timeout: 20000
       }
     }),
-    UsersSuggestion: $resource(API_HOST + '/users/suggestions/:pageId', {
+    UsersSuggestion: $resource(ConfigService.API_URL + '/users/suggestions/:pageId', {
       pageId: '@pageId'
     }, {
       query: {

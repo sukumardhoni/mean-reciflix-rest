@@ -52,7 +52,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
 }])
 
-.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, API_HOST) {
+.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -123,8 +123,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.updatingLogo = true;
 
     Upload.upload({
-      url: API_HOST + '/newcats',
-      //url: 'http://192.168.0.100:3000/newcats',
+      url: ConfigService.API_URL + '/newcats',
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -179,8 +178,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
         });*/
 
     Upload.upload({
-      url: API_HOST + '/newcats/' + $scope.cat.catId,
-      //url: 'http://192.168.0.100:3000/newcats/' + $scope.cat.catId,
+      url: ConfigService.API_URL + '/newcats/' + $scope.cat.catId,
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
@@ -240,7 +238,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   };
 })
 
-.controller('SubCatCtrl', function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage, Upload, $timeout, $state, API_HOST) {
+.controller('SubCatCtrl', function ($scope, $stateParams, SubCategories, $modal, SubCat, $localStorage, Upload, $timeout, $state, ConfigService) {
   $scope.subCatFun = function () {
     SubCategories.query({
       catId: $stateParams.catId,
@@ -269,8 +267,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.createSubCat = function () {
     $scope.updatingLogo = true;
     Upload.upload({
-      url: API_HOST + '/subCats/' + $stateParams.catId + '/999/3',
-      //url: 'http://192.168.0.100:3000/subCats/' + $stateParams.catId + '/999/3',
+      url: ConfigService.API_URL + '/subCats/' + $stateParams.catId + '/999/3',
       file: $scope.subCat.picFile,
       data: $scope.subCat
     }).then(function (resp) {
@@ -337,8 +334,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.updatingLogo = true;
     var indexVal = $localStorage.indexVal;
     Upload.upload({
-      url: API_HOST + '/singleSubCat/' + $scope.subCat._id,
-      //url: 'http://192.168.0.100:3000/singleSubCat/' + $scope.subCat._id,
+      url: ConfigService.API_URL + '/singleSubCat/' + $scope.subCat._id,
       file: $scope.subCat.picFile,
       data: $scope.subCat
     }).then(function (resp) {
