@@ -290,12 +290,19 @@ exports.getRecipesBySubCats = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
 
-  console.log('Recipes under getRecipesBySubCats is called , SubCatName is : ' + req.params.SubCatName);
-  console.log('Recipes under getRecipesBySubCats is called , PageId is : ' + req.params.pageId);
+  //console.log('Recipes under getRecipesBySubCats is called , subCatId is : ' + req.params.subCatId);
+  //console.log('Recipes under getRecipesBySubCats is called , PageId is : ' + req.params.pageId);
+
+  //console.log('listOfSubCats called and CAt model is : --------------- ' + JSON.stringify(req.subcat));
+
+  var subCatResult = req.subcat.toObject();
+  subCatResult.recipeCount = 462;
+  subCatResult.recipes = [];
+
   if (req.params.pageId == 999) {
     Vrecipe.find({
       subcats: {
-        $in: [req.params.SubCatName]
+        $in: [req.params.subCatId]
       }
     }).sort({
       rank: -1
@@ -310,8 +317,10 @@ exports.getRecipesBySubCats = function (req, res) {
           agenda.now('User_Usage_Details', {
             email: emailInfo,
             device: deviceInfo,
-            action: 'getRecipesBySubCats : ' + req.params.SubCatName
+            action: 'getRecipesBySubCats : ' + req.params.subCatId
           });
+          //subCatResult.recipes = recipes;
+
           //console.log('Recipes length is : ' + recipes.length);
           res.send(recipes);
         }
@@ -324,7 +333,7 @@ exports.getRecipesBySubCats = function (req, res) {
 
     Vrecipe.find({
       subcats: {
-        $in: [req.params.SubCatName]
+        $in: [req.params.subCatId]
       }
     }).sort({
       rank: -1
@@ -339,10 +348,11 @@ exports.getRecipesBySubCats = function (req, res) {
           agenda.now('User_Usage_Details', {
             email: emailInfo,
             device: deviceInfo,
-            action: 'getRecipesBySubCats : ' + req.params.SubCatName
+            action: 'getRecipesBySubCats : ' + req.params.subCatId
           });
+          subCatResult.recipes = recipes;
           //console.log('Recipes length is : ' + recipes.length);
-          res.send(recipes);
+          res.send(subCatResult);
         }
       } else {
         return console.log(err);

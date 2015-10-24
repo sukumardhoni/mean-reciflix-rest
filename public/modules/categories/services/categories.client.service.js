@@ -7,13 +7,13 @@ angular.module('categories')
 /*provides environment specific API url */
 .service('ConfigService', function ($window) {
   if ($window.location.host.match(/reciflix\.com/)) {
-    console.log('its prod: ' + $window.location.host);
+    //console.log('its prod: ' + $window.location.host);
     this.API_URL = 'http://www.reciflix.com';
-		return this.API_URL;
+    return this.API_URL;
   } else {
-    console.log('its dev: ' + $window.location.host);
+    //console.log('its dev: ' + $window.location.host);
     this.API_URL = 'http://localhost:3000';
-		return this.API_URL;
+    return this.API_URL;
   }
 })
 

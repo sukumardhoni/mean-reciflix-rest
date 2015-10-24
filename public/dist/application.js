@@ -1210,13 +1210,13 @@ angular.module('categories')
 /*provides environment specific API url */
 .service('ConfigService', ["$window", function ($window) {
   if ($window.location.host.match(/reciflix\.com/)) {
-    console.log('its prod: ' + $window.location.host);
+    //console.log('its prod: ' + $window.location.host);
     this.API_URL = 'http://www.reciflix.com';
-		return this.API_URL;
+    return this.API_URL;
   } else {
-    console.log('its dev: ' + $window.location.host);
+    //console.log('its dev: ' + $window.location.host);
     this.API_URL = 'http://localhost:3000';
-		return this.API_URL;
+    return this.API_URL;
   }
 }])
 
@@ -1318,7 +1318,6 @@ angular.module('categories')
     }
   };
 })
-
 'use strict';
 
 // Setting up route
@@ -1877,7 +1876,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       pageId: (pageNum - 1)
     }).$promise.then(function (res) {
       //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
-      $scope.subCatRecipes = res;
+      $scope.subCatRecipesObj = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
@@ -1924,7 +1923,6 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
-
 'use strict';
 
 // Recipes Filter
@@ -2014,7 +2012,7 @@ angular.module('recipes')
   }, {
     'query': {
       method: 'GET',
-      isArray: true,
+      //isArray: true,
       timeout: 20000
     }
   });
@@ -2079,7 +2077,6 @@ angular.module('recipes')
     }
   });
 }]);
-
 'use strict';
 
 // Config HTTP Error Handling

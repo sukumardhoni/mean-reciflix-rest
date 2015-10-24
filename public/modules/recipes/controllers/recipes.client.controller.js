@@ -192,7 +192,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       pageId: (pageNum - 1)
     }).$promise.then(function (res) {
       //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
-      $scope.subCatRecipes = res;
+      $scope.subCatRecipesObj = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');

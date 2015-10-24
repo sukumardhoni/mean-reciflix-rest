@@ -12,7 +12,7 @@
               <a ui-sref="reciflix.recipes.subcats">{{catId}}</a>
             </li>
             <li class="active">
-              <strong>{{subCatId}}</strong>
+              <strong>{{subCatRecipesObj.displayName}}</strong>
             </li>
           </ol>
         </div>
@@ -20,11 +20,13 @@
           <div class="project-list">
             <div class="row">
               <div class="col-md-6 border-style">
-                <img ng-src="modules/recipes/img/v2/subcats-img/{{subCatId}}" alt="Sample Image" class="thumbnail img-responsive img-rounded img-class">
+                <!--<img ng-src="modules/recipes/img/v2/subcats-img/{{subCatRecipesObj.imageName}}" alt="Sample Image" class="thumbnail img-responsive img-rounded img-class">-->
+                <img ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subCatRecipesObj.imageName}}" alt="Sample Image" class="thumbnail img-responsive img-rounded img-class">
+
               </div>
               <hr class="hidden-lg hidden-md">
               <div class="col-md-6">
-                <h1 class="page-header text-capitalize text-center">{{subCatId}}</small></h1>
+                <h1 class="page-header text-capitalize text-center">{{subCatRecipesObj.displayName}}</small></h1>
                 <table class="table">
                   <tbody>
                     <tr>
@@ -43,7 +45,7 @@
             </div>
             <div class="row" ng-init="recipesUnderSubCat(1)">
 
-              <div class="col-lg-4" ng-repeat="recipe in subCatRecipes">
+              <div class="col-lg-4" ng-repeat="recipe in subCatRecipesObj.recipes">
                 <div class="contact-box items-box">
                   <div class="m-t-xs font-bold post-label" style="width:92%"><span>{{recipe.title}}</span>
                   </div>

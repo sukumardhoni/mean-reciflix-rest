@@ -58,7 +58,7 @@ angular.module('recipes')
   }, {
     'query': {
       method: 'GET',
-      isArray: true,
+      //isArray: true,
       timeout: 20000
     }
   });

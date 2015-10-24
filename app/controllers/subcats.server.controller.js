@@ -20,7 +20,7 @@ var mongoose = require('mongoose'),
 exports.subCatCreate = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
- // console.log('create subCatsCreate calling--------------- : ' + JSON.stringify(req.body));
+  // console.log('create subCatsCreate calling--------------- : ' + JSON.stringify(req.body));
   var subcat = new SubCats(req.body);
   subcat.catId = req.params.newCatId;
 
@@ -58,7 +58,7 @@ exports.subCatCreate = function (req, res) {
             console.log("Error uploading data: ", perr);
           } else {
             res.json(subcat);
-         //   console.log("Successfully uploaded data to NewRFSubCats");
+            //   console.log("Successfully uploaded data to NewRFSubCats");
           }
         });
       });
@@ -81,8 +81,8 @@ exports.subCatCreate = function (req, res) {
 exports.listOfSubCats = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
- // console.log('listOfSubCats calling---------------');
-//  console.log('listOfSubCats called and CAt model is : --------------- ' + JSON.stringify(req.category));
+  // console.log('listOfSubCats calling---------------');
+  //  console.log('listOfSubCats called and CAt model is : --------------- ' + JSON.stringify(req.category));
   var catResult = req.category.toObject();
   catResult.recipeCount = 462;
   catResult.subCats = [];
@@ -123,7 +123,7 @@ exports.listOfSubCats = function (req, res) {
     })
 
   } else {
-  //  console.log('listOfSubCats calling-------PageId-------- : ' + req.params.pageId);
+    //  console.log('listOfSubCats calling-------PageId-------- : ' + req.params.pageId);
 
     SubCats.find({
       catId: req.params.newCatId,
@@ -170,7 +170,7 @@ exports.updateSubCat = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
   var subcat = req.subcat;
- // console.log('Updated func in rest : ' + JSON.stringify(req.body));
+  // console.log('Updated func in rest : ' + JSON.stringify(req.body));
 
   subcat = _.extend(subcat, req.body);
 
@@ -222,14 +222,14 @@ exports.updateSubCat = function (req, res) {
                   console.log("Error uploading data: ", perr);
                 } else {
                   res.json(subcat);
-             //     console.log("Successfully uploaded data to NewRFSubCats");
+                  //     console.log("Successfully uploaded data to NewRFSubCats");
                 }
               });
             });
 
           } else {
-          //  console.log('Image exists in AWS : ' + data); // successful response
-          //  console.log('Copy source is  : ** :' + 'NewRFSubCats' + '/' + req.body.imageName + '.jpg' + ' : **'); // successful response
+            //  console.log('Image exists in AWS : ' + data); // successful response
+            //  console.log('Copy source is  : ** :' + 'NewRFSubCats' + '/' + req.body.imageName + '.jpg' + ' : **'); // successful response
             var copyParams = {
               CopySource: '/NewRFSubCats/' + req.body.imageName,
               Bucket: 'archiverf',
@@ -240,7 +240,7 @@ exports.updateSubCat = function (req, res) {
             s3.copyObject(copyParams, function (err, data) {
               if (err) console.log(err, err.stack); // an error occurred
               else {
-               // console.log('Success fully copied image :' + data);
+                // console.log('Success fully copied image :' + data);
                 var delParams = {
                   Bucket: 'NewRFSubCats',
                   Key: req.body.imageName
@@ -263,7 +263,7 @@ exports.updateSubCat = function (req, res) {
                           console.log("Error uploading data: ", perr);
                         } else {
                           res.json(subcat);
-                   //       console.log("Successfully uploaded data to NewRFSubCats");
+                          //       console.log("Successfully uploaded data to NewRFSubCats");
                         }
                       });
                     });
@@ -317,22 +317,44 @@ exports.deleteSubCat = function (req, res) {
  * SubCats middleware
  */
 exports.subCatByID = function (req, res, next, id) {
+
+  //console.log('SubcatID is called : ' + id);
+
+
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
   //console.log('read single SubCat by id');
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'SubCat is invalid'
-    });
-  }
-  SubCats.findById(id).exec(function (err, subcat) {
+  /*  if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send({
+        message: 'SubCat is invalid'
+      });
+    }*/
+  /*  SubCats.findById(id).exec(function (err, subcat) {
+      if (err) return next(err);
+      if (!subcat) {
+        return res.status(404).send({
+          message: 'SubCats not found'
+        });
+      }
+      //user is successfully fetched single sub cat save action into user usage details collection
+      agenda.now('User_Usage_Details', {
+        email: emailInfo,
+        device: deviceInfo,
+        action: 'subCatByID : ' + subcat.displayName
+      });
+      req.subcat = subcat;
+      next();
+    });*/
+  SubCats.findOne({
+    subCatId: id
+  }).exec(function (err, subcat) {
     if (err) return next(err);
     if (!subcat) {
       return res.status(404).send({
-        message: 'SubCats not found'
+        message: 'subcat not found'
       });
     }
-    //user is successfully fetched single sub cat save action into user usage details collection
+    //user is successfully Single cat save action into user usage details collection
     agenda.now('User_Usage_Details', {
       email: emailInfo,
       device: deviceInfo,
@@ -341,4 +363,8 @@ exports.subCatByID = function (req, res, next, id) {
     req.subcat = subcat;
     next();
   });
+
+
+
+
 };
