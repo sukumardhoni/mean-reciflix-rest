@@ -27,7 +27,7 @@ exports.sendUserInfoToReciFlixTeam = function (agenda) {
     mailData.subject = 'New User To ReciFlix';
     mailData.userData = job.attrs.data.userData;
     mailData.appEnv = config.app.title;
-    console.log('Before sending to reciemail User_Info_To_ReciFlix_Team mailData: ' + JSON.stringify(mailData));
+   // console.log('Before sending to reciemail User_Info_To_ReciFlix_Team mailData: ' + JSON.stringify(mailData));
     reci_emailer.sendMail(mailData);
     done();
   })
@@ -88,7 +88,7 @@ exports.saveUserUsageDetails = function (agenda) {
         // done();
       } else {
         //res.json(category);
-        console.log('Successfully saved user usage details in agenda : ' + JSON.stringify(usageDetails));
+       // console.log('Successfully saved user usage details in agenda : ' + JSON.stringify(usageDetails));
         done();
       }
     });
