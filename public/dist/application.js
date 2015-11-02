@@ -1318,6 +1318,7 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
@@ -1923,6 +1924,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 // Recipes Filter
@@ -2077,6 +2079,7 @@ angular.module('recipes')
     }
   });
 }]);
+
 'use strict';
 
 // Config HTTP Error Handling
