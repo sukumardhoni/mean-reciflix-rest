@@ -6,9 +6,9 @@
 var _ = require('lodash'),
   errorHandler = require('./errors.server.controller'),
   mongoose = require('mongoose'),
-  ProspectiveEmail = mongoose.model('ProspectiveEmail');
-
-
+  ProspectiveEmail = mongoose.model('ProspectiveEmail'),
+  config = require('../../config/config'),
+  agenda = require('../../schedules/job-schedule.js')(config.db);
 
 
 /**
@@ -26,6 +26,24 @@ exports.create = function (req, res) {
     }
   });
 };
+
+
+exports.gtmEmail = function (req, res) {
+
+  console.log('Email from gtm site');
+  console.log('Email form details : ' + JSON.stringify(req.body));
+  var clientInfo = req.body;
+
+  agenda.now('Client_Info_To_GTM', {
+    userData: '\n Email: ' + clientInfo.email + '\n Name: ' + clientInfo.name + '\n Phone No :' + clientInfo.phone + '\n Message :' + clientInfo.message + '\n'
+  });
+
+
+  res.json(req.body);
+
+
+};
+
 
 exports.list = function (req, res) {
   ProspectiveEmail.find({}).exec(function (err, emails) {

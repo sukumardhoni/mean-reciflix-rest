@@ -34,6 +34,22 @@ exports.sendUserInfoToReciFlixTeam = function (agenda) {
 }
 
 
+exports.sendClientInfoToGTM = function (agenda) {
+  agenda.define('Client_Info_To_GTM', function (job, done) {
+    console.log('###user Client_Info_To_GTM to the app, email: ' + JSON.stringify(job.attrs.data.userData));
+    var mailData = {};
+    mailData.templateName = 'emailtemplates/email-to-gtm';
+    mailData.to = 'info@globaltechminds.com';
+    mailData.subject = 'Client from GTM';
+    mailData.userData = job.attrs.data.userData;
+    mailData.appEnv = 'GTM';
+    console.log('Before sending to reciemail Client_Info_To_GTM mailData: ' + JSON.stringify(mailData));
+    reci_emailer.sendMail(mailData);
+    done();
+  })
+}
+
+
 exports.sendUserSignin = function (agenda) {
   agenda.define('User_Signedin', function (job, done) {
     console.log('###user SIGNIN to the app, email: ' + JSON.stringify(job.attrs.data));
