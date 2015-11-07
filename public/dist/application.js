@@ -510,14 +510,6 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
  function ($stateProvider, $urlRouterProvider) {
     // Home state routing
     $stateProvider
-      .state('reciflix', {
-        url: '/',
-        templateUrl: 'modules/categories/views/common/content.html',
-        controller: 'ReciflixCtrl',
-        data: {
-          bodyClass: ''
-        }
-      })
       .state('reciflix.recipesUpdate', {
         url: "recipes/update",
         templateUrl: "modules/categories/views/recipesUpdate.html",
@@ -552,17 +544,18 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
 angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
   $scope.authentication = Authentication;
 
-  var currentUser = $localStorage.user;
 
-  var userDisplayName = 'Guest';
-  if (currentUser) {
-    userDisplayName = $localStorage.user.displayName;
+  $scope.getLocalUser = function () {
+    //console.log('getLocalUser is called')
+    var currentUser = $localStorage.user;
+    var userDisplayName = 'Guest';
+    if (currentUser) {
+      userDisplayName = $localStorage.user.displayName;
+    }
+    $scope.userName = userDisplayName;
+    $scope.localUser = $localStorage.user;
   }
 
-
-
-  $scope.userName = userDisplayName;
-  $scope.localUser = $localStorage.user;
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
   $scope.signout = function () {
@@ -571,23 +564,20 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.authentication = '';
       delete $localStorage.token;
       delete $localStorage.user;
-      $state.go('signin');
+      $state.go('reciflix.signin');
+      $scope.getLocalUser();
     });
   };
-
   $scope.minimalize = function () {
     $("body").toggleClass("mini-navbar");
-    if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+    if ($('body').hasClass('mini-navbar')) {
 
-      // Hide menu in order to smoothly turn on when maximize menu
-      $('#side-menu').hide();
-      // For smoothly turn on menu
-      setTimeout(
-        function () {
-          $('#side-menu').fadeIn(500);
-        }, 100);
+      $("body").addClass('fixed-sidebar');
+      $('.sidebar-collapse').slimScroll({
+        height: '100%',
+        railOpacity: 0.9,
+      });
     } else if ($('body').hasClass('fixed-sidebar')) {
-
       $('#side-menu').hide();
       setTimeout(
         function () {
@@ -598,6 +588,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $('#side-menu').removeAttr('style');
     }
   }
+
 }])
 
 .controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", "$timeout", "ConfigService", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
@@ -870,7 +861,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.getSingleSubCat = function (subCat, index) {
     SubCat.get({
-      subCatId: subCat._id
+      subCatId: subCat.subCatId
     }, function (res) {
       $scope.subCat = res;
     }, function (err) {
@@ -882,7 +873,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.updatingLogo = true;
     var indexVal = $localStorage.indexVal;
     Upload.upload({
-      url: ConfigService.API_URL + '/singleSubCat/' + $scope.subCat._id,
+      url: ConfigService.API_URL + '/singleSubCat/' + $scope.subCat.subCatId,
       file: $scope.subCat.picFile,
       data: $scope.subCat
     }).then(function (resp) {
@@ -1162,6 +1153,25 @@ function minimalizaSidebar($timeout) {
     controller: ["$scope", "$element", function ($scope, $element) {
       $scope.minimalize = function () {
         $("body").toggleClass("mini-navbar");
+        if ($('body').hasClass('mini-navbar')|| $('body').hasClass('body-small')) {
+
+          $("body").addClass('fixed-sidebar');
+          $('.sidebar-collapse').slimScroll({
+            height: '100%',
+            railOpacity: 0.9,
+          });
+        } else if ($('body').hasClass('fixed-sidebar')) {
+          $('#side-menu').hide();
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(500);
+            }, 300);
+        } else {
+          // Remove all inline style from jquery fadeIn function to reset menu state
+          $('#side-menu').removeAttr('style');
+        }
+
+        /*$("body").toggleClass("mini-navbar");
         if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
 
           // Hide menu in order to smoothly turn on when maximize menu
@@ -1181,7 +1191,7 @@ function minimalizaSidebar($timeout) {
         } else {
           // Remove all inline style from jquery fadeIn function to reset menu state
           $('#side-menu').removeAttr('style');
-        }
+        }*/
       }
     }]
   };
@@ -1318,31 +1328,34 @@ angular.module('categories')
     }
   };
 })
+
 'use strict';
 
 // Setting up route
 angular.module('core').config(['$stateProvider', '$urlRouterProvider',
  function ($stateProvider, $urlRouterProvider) {
     // Redirect to home view when route not found
-    $urlRouterProvider.otherwise('');
+    $urlRouterProvider.otherwise('/home');
 
     // Home state routing
     $stateProvider.
-    state('home', {
-        url: '',
-        templateUrl: 'modules/core/views/home.client.view.html',
-        module: 'public',
-        data: {
-          bodyClass: 'bg-body'
-        }
+    state('reciflix', {
+        abstract: true,
+        url: '/',
+        templateUrl: 'modules/categories/views/common/content.html',
+        controller: 'ReciflixCtrl',
       })
-      .state('terms', {
-        url: '/terms',
+      .state('reciflix.home', {
+        url: 'home',
+       templateUrl: 'modules/core/views/home.client.view.html'
+      })
+      .state('reciflix.terms', {
+        url: 'terms',
         templateUrl: 'modules/core/views/terms.client.view.html',
         module: 'public'
       })
-      .state('privacy', {
-        url: '/privacy',
+      .state('reciflix.privacy', {
+        url: 'privacy',
         templateUrl: 'modules/core/views/privacy.client.view.html',
         module: 'public'
       });
@@ -1678,7 +1691,6 @@ angular.module('recipes').config(['$stateProvider',
       },
       module: 'private'
     })
-
  }
 ]);
 
@@ -1875,7 +1887,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       subCatId: $stateParams.subCatId,
       pageId: (pageNum - 1)
     }).$promise.then(function (res) {
-      //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+      console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
       $scope.subCatRecipesObj = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
@@ -1923,6 +1935,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 // Recipes Filter
@@ -2077,6 +2090,7 @@ angular.module('recipes')
     }
   });
 }]);
+
 'use strict';
 
 // Config HTTP Error Handling
@@ -2130,16 +2144,16 @@ angular.module('users').config(['$stateProvider',
       url: '/signup',
       templateUrl: 'modules/users/views/authentication/signup.client.view.html'
     }).
-    state('signin', {
-      url: '/login',
+    state('reciflix.signin', {
+      url: 'login',
       templateUrl: 'modules/users/views/authentication/signin.client.view.html',
       module: 'public',
       data: {
         bodyClass: 'bg-body'
       }
     }).
-    state('forgot', {
-      url: '/password/forgot',
+    state('reciflix.forgot', {
+      url: 'password/forgot',
       templateUrl: 'modules/users/views/password/forgot-password.client.view.html',
       module: 'public',
       data: {
@@ -2215,6 +2229,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
           //console.log('User details after login: ' + JSON.stringify(res));
           $localStorage.user = res;
           $localStorage.token = res.token;
+          $scope.getLocalUser();
           $state.go('reciflix.recipes');
           $scope.loading = false;
         }
