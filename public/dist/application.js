@@ -618,6 +618,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.editCat = function (cat, index) {
     $scope.modalName = "Update Category";
+    $scope.updatingLogo = true;
     $localStorage.indexVal = index;
 
     $scope.modalInstance = $modal.open({
@@ -643,6 +644,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     SingleCat.get({
       newCatId: cat.catId
     }, function (res) {
+      $scope.updatingLogo = false;
       $scope.cat = res;
       $scope.catName = res.displayName;
     }, function (err) {
@@ -847,6 +849,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   }
   $scope.editSubCat = function (subCat, index) {
     $scope.modalName = "Update Sub-Category";
+    $scope.updatingLogo = true;
     $scope.subCatName = subCat.displayName;
     $localStorage.indexVal = index;
     $scope.modalInstance = $modal.open({
@@ -863,6 +866,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     SubCat.get({
       subCatId: subCat.subCatId
     }, function (res) {
+      $scope.updatingLogo = false;
       $scope.subCat = res;
     }, function (err) {
       //console.log('Error occured while fetching category, Error details are : ' + JSON.stringify(err));
@@ -1669,7 +1673,6 @@ angular.module('recipes').config(['$stateProvider',
       },
       module: 'private'
     })
-
     .state('reciflix.recipes.subcats.recipes', {
       url: "/:subCatId",
       views: {
@@ -1680,7 +1683,6 @@ angular.module('recipes').config(['$stateProvider',
       },
       module: 'private'
     })
-
     .state('reciflix.recipes.subcats.recipes.singlerecipes', {
       url: "/:recipeId",
       views: {

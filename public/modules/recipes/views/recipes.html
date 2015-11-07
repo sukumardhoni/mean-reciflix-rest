@@ -3,23 +3,12 @@
     <div class="well well-lg">
       <div class="row" ng-init="categoryFun()">
         <div ng-hide="categories.length === 0">
-          <!--
-          <div class="ibox-title">
-            <div class="header-page">Categories</div>
-            <div class="ibox-tools" style="margin-top:-25px">
-              <a class="btn btn-primary btn-sm" ng-click="openModal()">Create new Category</a>
-            </div>
-          </div>-->
-
-
           <div class="header-page">Categories<a class="btn btn-primary btn-sm" ng-click="OpenCreateSuggest()" style="float:right" tooltip-placement="bottom" tooltip="Suggest a new category and Sub categories under this category.">Suggest Category</a>
             </span>
           </div>
-
           <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="cat in categories">
             <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats({catId:cat.catId})" ng-click="minimalize()">
               <img ng-src="https://s3.amazonaws.com/NewRF/{{cat.imageName}}" alt="Sample Image" class="img-responsive">
-              <!--<img ng-src="modules/recipes/img/v2/cats-img/{{cat.imageName}}" alt="Sample Image" class="img-responsive">-->
               <hr>
               <h3 class="h3-styles media-heading"><a>{{cat.displayName}}</a></h3>
             </div>
@@ -32,16 +21,3 @@
     </div>
   </center>
 </div>
-
-
-
-<!--
-  <script>
-    $(document).ready(function () {
-      $("body").addClass('fixed-sidebar');
-      $('.sidebar-collapse').slimScroll({
-        height: '100%',
-        railOpacity: 0.9,
-      });
-    });
-  </script>-->

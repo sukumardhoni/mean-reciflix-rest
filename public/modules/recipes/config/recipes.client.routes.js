@@ -22,7 +22,6 @@ angular.module('recipes').config(['$stateProvider',
       },
       module: 'private'
     })
-
     .state('reciflix.recipes.subcats.recipes', {
       url: "/:subCatId",
       views: {
@@ -33,7 +32,6 @@ angular.module('recipes').config(['$stateProvider',
       },
       module: 'private'
     })
-
     .state('reciflix.recipes.subcats.recipes.singlerecipes', {
       url: "/:recipeId",
       views: {

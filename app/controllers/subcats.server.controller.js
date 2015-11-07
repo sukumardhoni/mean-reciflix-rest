@@ -84,7 +84,7 @@ exports.listOfSubCats = function (req, res) {
   // console.log('listOfSubCats calling---------------');
   //  console.log('listOfSubCats called and CAt model is : --------------- ' + JSON.stringify(req.category));
   var catResult = req.category.toObject();
-  catResult.recipeCount = 462;
+  //catResult.recipeCount = 462;
   catResult.subCats = [];
 
   var activeFltrFlgs = [];
