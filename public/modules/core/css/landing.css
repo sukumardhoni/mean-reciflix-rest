@@ -1,16 +1,14 @@
-.bg-body #wrapper{
-  background-image: url('../../../modules/core/img/brand/landing-model.jpg') !important;
+.bg-body{
+  background-image: url('../../../modules/core/img/brand/landing-model.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   background-color: #f8f8f8;
-  #height:899px;
-
 }
 
-.bg-body{
+/*.bg-body{
 background-color: #f8f8f8;;
-}
+}*/
 
 #public-landing-page .container {
   font-family: 'Open Sans', sans-serif !important;

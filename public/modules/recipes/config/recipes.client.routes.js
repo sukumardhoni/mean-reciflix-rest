@@ -44,6 +44,5 @@ angular.module('recipes').config(['$stateProvider',
       },
       module: 'private'
     })
-
  }
 ]);

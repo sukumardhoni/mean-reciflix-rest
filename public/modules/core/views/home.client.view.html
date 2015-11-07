@@ -23,7 +23,6 @@
     opacity: 2;
     z-index: 1;
   }
-  /* Safari Fix */
 
   @media all and (transform-3d),
   (-webkit-transform-3d) {
@@ -62,7 +61,7 @@
   });
 </script>
 
-<section data-ng-controller="HomeController">
+<div data-ng-controller="HomeController" class="bg-body">
   <div class="wrapper wrapper-content container" data-ng-controller="HomeController">
     <div class="row">
       <div class="col-sm-5 col-xs-12 text-center">
@@ -112,4 +111,4 @@
       </div>
     </div>
   </div>
-</section>
+</div>

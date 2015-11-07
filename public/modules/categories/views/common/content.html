@@ -2,25 +2,20 @@
 <div id="wrapper">
 
   <!-- Navigation -->
-  <div ng-include="'modules/categories/views/common/navigation.html'"></div>
-
+  <div data-ng-include="'/modules/core/views/navigation.client.view.html'"></div>
+<p ui-view="hint" class="navbar-text" style="color:#FFF"></p>
   <!-- Page wraper -->
-  <!-- ng-class with current state name give you the ability to extended customization your view -->
-  <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+  <div id="page-wrapper" class="gray-bg">
 
     <!-- Page wrapper -->
-    <!--<div ng-include="'modules/categories/views/common/topnavbar.html'"></div>-->
+    <div ng-include="'/modules/core/views/header.client.view.html'"></div>
 
     <!-- Main view  -->
     <div ui-view></div>
-
     <!-- Footer -->
-    <div ng-include="'modules/categories/views/common/footer.html'"></div>
-
+    <div ng-include="'/modules/core/views/footer.client.view.html'"></div>
 
   </div>
   <!-- End page wrapper-->
 
 </div>
-<!--<div ng-include="'/modules/core/views/footer.client.view.html'"></div>-->
-<!-- End wrapper-->

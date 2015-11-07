@@ -1,34 +1,17 @@
-<div data-ng-controller="HeaderController">
-  <div class="navbar-header" ng-show="$state.includes('reciflix') ">
-    <span minimaliza-sidebar></span>
-    <div style="float:left;">
-      <a ui-sref="home" ><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
-      </a>
-    </div>
-  </div>
-  <div ng-hide="$state.includes('reciflix')" class="container">
+  <nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
     <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar fa fa-align-justify"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="/#!/" style="padding-left: 50px;"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
-      </a>
+      <span minimaliza-sidebar></span>
+      <div style="float:left;">
+        <a ui-sref="reciflix.home"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
+        </a>
+      </div>
+      <form role="search" class="navbar-form-custom" method="post" action="">
+        <div class="form-group">
+          <input type="text" placeholder="Search for a recipe..." class="form-control" name="top-search" id="top-search">
+        </div>
+      </form>
     </div>
-    <nav class="collapse navbar-collapse in" collapse="!isCollapsed" role="navigation">
-      <ul class="nav navbar-nav navbar-right header-nav" style="text-align:center">
-        <li ui-sref-active="active"><a ui-sref="home">About</a>
-        </li>
-        <!--<li ui-sref-active="active" data-ng-show="authentication.user.roles.indexOf('admin') > -1">-->
-        <li ui-sref-active="active" >
-          <a ui-sref="reciflix.recipes">Recipes</a>
-        </li>
-        <li class="divider-vertical"></li>
-        <li ui-sref-active="active" ui-sref="signin"><a href="/#!/signin">Log In</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</div>
+    <ul class="nav navbar-top-links navbar-right">
+      <li class="divider-vertical"></li>
+    </ul>
+  </nav>

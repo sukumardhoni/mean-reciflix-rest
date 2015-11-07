@@ -191,7 +191,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       subCatId: $stateParams.subCatId,
       pageId: (pageNum - 1)
     }).$promise.then(function (res) {
-      //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+      console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
       $scope.subCatRecipesObj = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));

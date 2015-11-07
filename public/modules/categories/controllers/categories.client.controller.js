@@ -4,17 +4,18 @@
 angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
   $scope.authentication = Authentication;
 
-  var currentUser = $localStorage.user;
 
-  var userDisplayName = 'Guest';
-  if (currentUser) {
-    userDisplayName = $localStorage.user.displayName;
+  $scope.getLocalUser = function () {
+    //console.log('getLocalUser is called')
+    var currentUser = $localStorage.user;
+    var userDisplayName = 'Guest';
+    if (currentUser) {
+      userDisplayName = $localStorage.user.displayName;
+    }
+    $scope.userName = userDisplayName;
+    $scope.localUser = $localStorage.user;
   }
 
-
-
-  $scope.userName = userDisplayName;
-  $scope.localUser = $localStorage.user;
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
   $scope.signout = function () {
@@ -23,23 +24,20 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.authentication = '';
       delete $localStorage.token;
       delete $localStorage.user;
-      $state.go('signin');
+      $state.go('reciflix.signin');
+      $scope.getLocalUser();
     });
   };
-
   $scope.minimalize = function () {
     $("body").toggleClass("mini-navbar");
-    if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+    if ($('body').hasClass('mini-navbar')) {
 
-      // Hide menu in order to smoothly turn on when maximize menu
-      $('#side-menu').hide();
-      // For smoothly turn on menu
-      setTimeout(
-        function () {
-          $('#side-menu').fadeIn(500);
-        }, 100);
+      $("body").addClass('fixed-sidebar');
+      $('.sidebar-collapse').slimScroll({
+        height: '100%',
+        railOpacity: 0.9,
+      });
     } else if ($('body').hasClass('fixed-sidebar')) {
-
       $('#side-menu').hide();
       setTimeout(
         function () {
@@ -50,6 +48,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $('#side-menu').removeAttr('style');
     }
   }
+
 }])
 
 .controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
@@ -322,7 +321,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.getSingleSubCat = function (subCat, index) {
     SubCat.get({
-      subCatId: subCat._id
+      subCatId: subCat.subCatId
     }, function (res) {
       $scope.subCat = res;
     }, function (err) {
@@ -334,7 +333,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.updatingLogo = true;
     var indexVal = $localStorage.indexVal;
     Upload.upload({
-      url: ConfigService.API_URL + '/singleSubCat/' + $scope.subCat._id,
+      url: ConfigService.API_URL + '/singleSubCat/' + $scope.subCat.subCatId,
       file: $scope.subCat.picFile,
       data: $scope.subCat
     }).then(function (resp) {

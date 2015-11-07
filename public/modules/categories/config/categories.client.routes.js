@@ -5,14 +5,6 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
  function ($stateProvider, $urlRouterProvider) {
     // Home state routing
     $stateProvider
-      .state('reciflix', {
-        url: '/',
-        templateUrl: 'modules/categories/views/common/content.html',
-        controller: 'ReciflixCtrl',
-        data: {
-          bodyClass: ''
-        }
-      })
       .state('reciflix.recipesUpdate', {
         url: "recipes/update",
         templateUrl: "modules/categories/views/recipesUpdate.html",

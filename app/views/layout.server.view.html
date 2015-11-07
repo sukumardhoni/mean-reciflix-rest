@@ -46,71 +46,44 @@
   <script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
 </head>
 
-<body class="ng-cloak" ng-class="$state.current.data.bodyClass">
+<!--<body class="ng-cloak" ng-class="$state.current.data.bodyClass">-->
+
+<body class="ng-cloak">
 
 
-
-
-  <!-- Wrapper-->
-  <div id="wrapper">
-
-    <!-- Navigation -->
-    <!-- <div data-ng-include="'/modules/core/views/navigation.client.view.html'"></div>-->
-
-    <!-- Page wraper -->
-    <!-- Page wrapper -->
-    <div ng-include="'/modules/core/views/header.client.view.html'"></div>
-
-    <!-- Main view  -->
+<!-- Main view  -->
     {% block content %}{% endblock %}
-
-    <!-- Footer -->
-    <div ng-include="'/modules/core/views/footer.client.view.html'" ng-hide="$state.includes('reciflix')"></div>
-
-    <!-- End page wrapper-->
-
-  </div>
-
-
 
   <!--Embedding The User Object-->
   <script type="text/javascript">
     var user = {{ user | json | safe }};
   </script>
+
   <!--Application JavaScript Files-->
   {% for jsFile in jsFiles %}
-  <script type="text/javascript" src="{{jsFile}}"></script>
-  {% endfor %} {% if process.env.NODE_ENV === 'development' %}
+  <script type="text/javascript" src="{{jsFile}}"></script>{% endfor %} {% if process.env.NODE_ENV === 'development' %}
   <!--Livereload script rendered -->
   <script type="text/javascript" src="http://{{request.hostname}}:35729/livereload.js"></script>
   {% endif %}
-
-  <!--[if lt IE 9]>
-	<section class="browsehappy jumbotron hide">
-		<h1>Hello there!</h1>
-		<p>You are using an old browser which we unfortunately do not support.</p>
-		<p>Please <a href="http://browsehappy.com/">click here</a> to update your browser before using the website.</p>
-		<p><a href="http://browsehappy.com" class="btn btn-primary btn-lg" role="button">Yes, upgrade my browser!</a></p>
-	</section>
-	<![endif]-->
 
   <script src="//static.getclicky.com/js" type="text/javascript"></script>
   <script type="text/javascript">
     try {
       clicky.init(100861627);
     } catch (e) {}
-
-	/*console.log("Your location Country Name is: " + geoplugin_countryName() + ", Region Name :" + geoplugin_region() + ", City Name :" + geoplugin_city());
-	console.log(" Area Name is: " +geoplugin_areaCode());
-	console.log(" Reuest Name is: " +geoplugin_request());*/
-
-
   </script>
   <noscript>
     <p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100861627ns.gif" />
     </p>
   </noscript>
 
+    <script>
+$(document).ready(function () {
+$("body").removeClass('boxed-layout');
+            $("body").addClass('fixed-nav');
+            $('#boxedlayout').prop('checked', false);
+});
+</script>
 
 </body>
 

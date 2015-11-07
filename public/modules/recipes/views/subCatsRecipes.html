@@ -1,7 +1,7 @@
 <div ui-view="child-singlerecipes-view">
   <div class="row">
     <div class="col-lg-12">
-      <div class="wrapper wrapper-content animated fadeInUp">
+      <div class="wrapper animated fadeInUp">
         <div class="ibox">
           <ol class="breadcrumb breadcrumb-style">
             <!--<div class="text-center header-page1">Recipes</div>-->
@@ -16,6 +16,7 @@
             </li>
           </ol>
         </div>
+
         <div class="ibox-content">
           <div class="project-list">
             <div class="row">
@@ -43,6 +44,9 @@
                 </table>
               </div>
             </div>
+          <center ng-hide="subCatRecipesObj.recipes.length==0">
+                <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+              </center>
             <div class="row" ng-init="recipesUnderSubCat(1)">
 
               <div class="col-lg-4" ng-repeat="recipe in subCatRecipesObj.recipes">
@@ -68,8 +72,12 @@
                   </a>
                 </div>
               </div>
+              <div class="text-center" ng-show="subCatRecipesObj.recipes.length==0">
+                <center>Currently no recipes exist for this sub category.</center>
+              </div>
+
               <div class="clearfix"></div>
-              <center>
+              <center ng-hide="subCatRecipesObj.recipes.length==0">
                 <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
               </center>
             </div>

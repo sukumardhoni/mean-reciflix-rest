@@ -290,16 +290,19 @@ exports.getRecipesBySubCats = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
 
-  //console.log('Recipes under getRecipesBySubCats is called , subCatId is : ' + req.params.subCatId);
-  //console.log('Recipes under getRecipesBySubCats is called , PageId is : ' + req.params.pageId);
+  console.log('Recipes under getRecipesBySubCats is called , subCatId is : ' + req.params.subCatId);
+  console.log('Recipes under getRecipesBySubCats is called , PageId is : ' + req.params.pageId);
 
-  //console.log('listOfSubCats called and CAt model is : --------------- ' + JSON.stringify(req.subcat));
+  console.log('listOfSubCats called and Subcat model is : --------------- ' + JSON.stringify(req.subcat));
 
   var subCatResult = req.subcat.toObject();
   subCatResult.recipeCount = 462;
   subCatResult.recipes = [];
 
   if (req.params.pageId == 999) {
+
+    console.log('listOfSubCats IFFFFFFFFFFFFFFFFFFFFFF');
+
     Vrecipe.find({
       subcats: {
         $in: [req.params.subCatId]
@@ -321,7 +324,7 @@ exports.getRecipesBySubCats = function (req, res) {
           });
           //subCatResult.recipes = recipes;
 
-          //console.log('Recipes length is : ' + recipes.length);
+          console.log('Recipes length is : ' + recipes.length);
           res.send(recipes);
         }
       } else {
@@ -330,6 +333,7 @@ exports.getRecipesBySubCats = function (req, res) {
     });
 
   } else {
+    console.log('listOfSubCats ElsEEEEEEEEEEEEEEEEEE');
 
     Vrecipe.find({
       subcats: {
@@ -340,9 +344,10 @@ exports.getRecipesBySubCats = function (req, res) {
     }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
       if (!err) {
         if ((recipes.length === 0)) {
-          res.status(204).send({
-            'message': 'There are no recipe items available'
-          });
+          res.send(subCatResult);
+          /*res.status(204).send({
+  'message': 'There are no recipe items available'
+});*/
         } else {
           //user is successfully fetched list of recipes based on subcats save action into user usage details collection
           agenda.now('User_Usage_Details', {
@@ -353,6 +358,8 @@ exports.getRecipesBySubCats = function (req, res) {
           subCatResult.recipes = recipes;
           //console.log('Recipes length is : ' + recipes.length);
           res.send(subCatResult);
+
+          //console.log('listOfSubCats called and Subcat model is 111111111 : --------------- ' + JSON.stringify(subCatResult));
         }
       } else {
         return console.log(err);
