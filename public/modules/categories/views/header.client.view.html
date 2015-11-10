@@ -10,11 +10,11 @@
         </div>
         <ul class="nav navbar-top-links navbar-right" data-ng-hide="authentication.user">
             <li ui-route="/signup">
-                <a href="/#!/signup">Sign Up</a>
+                <a href="/#/signup">Sign Up</a>
             </li>
             <li class="divider-vertical"></li>
             <li ui-route="/signin">
-                <a href="/#!/signin">Sign In</a>
+                <a href="/#/signin">Sign In</a>
             </li>
         </ul>
         <ul class="nav navbar-top-links navbar-right" data-ng-show="authentication.user">
@@ -24,13 +24,13 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="/#!/settings/profile">Edit Profile</a>
+                        <a href="/#/settings/profile">Edit Profile</a>
                     </li>
                     <li>
-                        <a href="/#!/settings/accounts">Manage Social Accounts</a>
+                        <a href="/#/settings/accounts">Manage Social Accounts</a>
                     </li>
                     <li data-ng-show="authentication.user.provider === 'local'">
-                        <a href="/#!/settings/password">Change Password</a>
+                        <a href="/#/settings/password">Change Password</a>
                     </li>
                     <li class="divider"></li>
                     <li>

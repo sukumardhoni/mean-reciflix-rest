@@ -22,13 +22,13 @@
                 </div>
             </li>
             <li ng-class="{active: $uiRoute}" ui-route="/" >
-                <a href="/#!/home"><i class="fa fa-laptop"></i> <span class="nav-label">Index</span></a>
+                <a href="/#/home"><i class="fa fa-laptop"></i> <span class="nav-label">Index</span></a>
             </li>
             <li data-ng-repeat="item in menu.items | orderBy: 'position'" data-ng-if="item.shouldRender(authentication.user);" ng-switch="item.menuItemType" ui-route="{{item.uiRoute}}" ng-class="{active: ($uiRoute)}">
                 <a href=""><i class="fa {{item.iconClass}}"></i> <span class="nav-label">{{item.title}} </span> <span ng-show="item.items" class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: ($uiRoute)}">
                     <li role="presentation" data-ng-repeat="subitem in item.items | orderBy: 'position'" data-ng-if="subitem.shouldRender(authentication.user);" ui-route="{{subitem.uiRoute}}" ng-class="{active: $uiRoute}">
-                        <a role="menuitem" tabindex="-1" href="/#!/{{subitem.link}}" data-ng-bind="subitem.title"></a>
+                        <a role="menuitem" tabindex="-1" href="/#/{{subitem.link}}" data-ng-bind="subitem.title"></a>
                     </li>
                 </ul>
             </li>

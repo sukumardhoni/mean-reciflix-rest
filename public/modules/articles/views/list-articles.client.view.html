@@ -11,9 +11,9 @@
       <ul class="nav nav-pills text-center menu-text-black">
         <li ng-class=" {active:$state.includes('home.users')} " class="navpills"><a data-ng-show="authentication.user.roles.indexOf('admin')!=-1" ui-sref="listArticles.users">USERS</a>
         </li>
-        <li ng-class="{active:$state.includes('home.listWorks')} " class="navpills"><a data-ng-show="authentication.user.roles.indexOf('admin')!=-1" data-ng-href="#!/articles/categories">Categories</a>
+        <li ng-class="{active:$state.includes('home.listWorks')} " class="navpills"><a data-ng-show="authentication.user.roles.indexOf('admin')!=-1" data-ng-href="#/articles/categories">Categories</a>
         </li>
-        <li ng-class="{active:$state.includes('home.listpermissions')} " class="navpills"><a data-ng-show="authentication.user.roles.indexOf('admin')!=-1" data-ng-href="#!/articles/recipes">Recipes</a>
+        <li ng-class="{active:$state.includes('home.listpermissions')} " class="navpills"><a data-ng-show="authentication.user.roles.indexOf('admin')!=-1" data-ng-href="#/articles/recipes">Recipes</a>
         </li>
       </ul>
     </div>
