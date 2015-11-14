@@ -20,12 +20,11 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.signout = function () {
     $http.post('/users/signout').success(function (response) {
-      //console.log(response.data);
-      $scope.authentication = '';
       delete $localStorage.token;
       delete $localStorage.user;
-      $state.go('reciflix.signin');
+      $scope.authentication = '';
       $scope.getLocalUser();
+      $state.go('reciflix.signin');
     });
   };
   $scope.minimalize = function () {

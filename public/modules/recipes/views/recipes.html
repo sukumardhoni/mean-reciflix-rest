@@ -3,7 +3,7 @@
     <div class="well well-lg">
       <div class="row" ng-init="categoryFun()">
         <div ng-hide="categories.length === 0">
-          <div class="header-page">Categories<a class="btn btn-primary btn-sm" ng-click="OpenCreateSuggest()" style="float:right" tooltip-placement="bottom" tooltip="Suggest a new category and Sub categories under this category.">Suggest Category</a>
+          <div class="header-page">Categories<a class="btn btn-primary btn-sm" ng-click="OpenCreateSuggest()" style="float:right" tooltip-placement="bottom" tooltip="Suggest a new category and Sub categories under this category." data-ng-show="localUser.roles.indexOf('superuser') > -1 || localUser.roles.indexOf('admin') > -1">Suggest Category</a>
             </span>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="cat in categories">
