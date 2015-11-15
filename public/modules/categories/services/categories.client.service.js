@@ -12,17 +12,10 @@ angular.module('categories')
     return this.API_URL;
   } else {
     //console.log('its dev: ' + $window.location.host);
-    this.API_URL = 'http://localhost:3000';
+    this.API_URL = 'http://202.83.31.92:3000';
     return this.API_URL;
   }
 })
-
-
-
-//.constant('API_HOST', ConfigService.API_URL)
-//.constant('API_HOST', 'http://192.168.0.100:3000')
-//.constant('API_HOST', 'http://localhost:3000')
-//.constant('API_HOST', 'http://www.reciflix.com')
 
 
 //.factory('Categories', function ($resource, API_HOST) {

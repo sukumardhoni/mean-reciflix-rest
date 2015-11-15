@@ -113,3 +113,9 @@ ul.list-inline a {
   font-size: 20px;
   color: #2F4050;
 }
+
+
+.img-loader {
+  background: url('../../../modules/core/img/loaders/img-loader.GIF') no-repeat;
+  background-position: center center;
+}

@@ -1,14 +1,11 @@
-.bg-body{
-  background-image: url('../../../modules/core/img/brand/landing-model.jpg');
+.bg-body {
+  background-image: url('../../../modules/core/img/brand/image3.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   background-color: #f8f8f8;
+  height: 700px;
 }
-
-/*.bg-body{
-background-color: #f8f8f8;;
-}*/
 
 #public-landing-page .container {
   font-family: 'Open Sans', sans-serif !important;
@@ -104,7 +101,8 @@ img {
   margin: 0 0 20px 0;
   font-family: 'Open Sans', sans-serif !important;
   line-height: 1.1;
-  color: #fff
+  color: #fff;
+  text-shadow: 1px 1px 1px #333;
 }
 
 .about-p {
@@ -112,7 +110,8 @@ img {
   font-size: 22px;
   font-weight: 300;
   font-family: 'Open Sans', sans-serif !important;
-  color: #fff
+  color: #fff;
+  text-shadow: 1px 1px 1px #333;
 }
 
 footer {
@@ -123,7 +122,7 @@ footer {
   left: 0;
   right: 0;
   display: block;
-  #position:absolute;
+  #position: absolute;
 }
 
 #public-landing-page footer a {
@@ -139,9 +138,9 @@ ul>li>a {
 }
 
 #reciflix-desc {
-  background: rgba(0, 0, 0, 0.3);
+  #background: rgba(0, 0, 0, 0.3);
   padding-bottom: 20px;
-  padding-top: 95px;
+  padding-top: 250px;
 }
 
 @media screen and (max-width: 767px) {
@@ -149,7 +148,7 @@ ul>li>a {
     background: rgba(0, 0, 0, 0.3);
   }
   #reciflix-desc {
-    background: rgba(0, 0, 0, 0.3);
+    #background: rgba(0, 0, 0, 0.3);
   }
   #public-landing-page .hero .container {
     width: 95% !important;

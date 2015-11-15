@@ -15,9 +15,8 @@
           <div class="ibox-content">
             <div class="project-list">
               <div class="row">
-                <div class="col-md-6 border-style">
-                  <img ng-src="https://s3.amazonaws.com/NewRF/{{CatObjWithSubCats.imageName}}" alt="Category Image" class="img-responsive img-rounded img-class thumbnail">
-                  <!-- <img ng-src="../modules/recipes/img/v2/cats-img/{{CatObjWithSubCats.imageName}}" alt="Category Image" class="img-responsive img-rounded img-class thumbnail">-->
+                <div class="thumbnail col-md-6 border-style">
+                  <img ng-src="https://s3.amazonaws.com/NewRF/{{CatObjWithSubCats.imageName}}" alt=" " class="img-responsive img-rounded img-class  img-loader">
                 </div>
                 <hr class="hidden-lg hidden-md">
                 <div class="col-md-6">
@@ -41,10 +40,11 @@
               <hr>
               <div class="text-center header-page1">Sub-Categories</div>
               <hr>
+              <center><img ng-src="modules/core/img/loaders/sub-cats-loader.GIF" ng-show="loading"></center>
               <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="subcat in CatObjWithSubCats.subCats">
                   <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats.recipes({subCatId:subcat.subCatId})">
-                    <img ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subcat.imageName}}" alt="Sample Image" class="img-responsive">
+                    <img ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subcat.imageName}}" alt=" " class="img-responsive img-loader">
                     <hr>
                     <h3 class="h3-styles media-heading text-center"><a>{{subcat.displayName}}</a></h3>
                   </div>

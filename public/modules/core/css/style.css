@@ -233,7 +233,6 @@ h5 {
   float: left;
   height: 50px;
   padding: 0;
-  width: 200px;
   display: inline-table;
 }
 
@@ -408,7 +407,6 @@ body.mini-navbar .navbar-default .nav li a span {
   display: block;
 }
 
-
 body:not(.fixed-sidebar).mini-navbar .nav-second-level {
   display: none;
 }
@@ -501,6 +499,8 @@ body.fixed-sidebar.mini-navbar .navbar-default .nav li a span {
 .fixed-sidebar.mini-navbar .nav-second-level {
   left: 0px;
 }
+
+
 /* Horizontal Top navigation */
 
 .top-navigation #page-wrapper {
@@ -1210,6 +1210,8 @@ button.dim:active:before {
   background-color: #2A2E36;
   color: #8B91A0;
 }
+
+
 /* TOOGLE SWICH */
 
 .onoffswitch {
@@ -1295,6 +1297,8 @@ button.dim:active:before {
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
   right: 0px;
 }
+
+
 /* CHOSEN PLUGIN */
 
 .chosen-container-single .chosen-single {
@@ -1326,6 +1330,8 @@ button.dim:active:before {
   padding: 3px 20px 3px 5px;
   position: relative;
 }
+
+
 /* PAGINATIN */
 
 .pagination > .active > a,
@@ -1353,6 +1359,8 @@ button.dim:active:before {
   position: relative;
   text-decoration: none;
 }
+
+
 /* TOOLTIPS */
 
 .tooltip-inner {
@@ -1374,6 +1382,8 @@ button.dim:active:before {
 .tooltip.left .tooltip-arrow {
   border-left-color: #2F4050;
 }
+
+
 /* EASY PIE CHART*/
 
 .easypiechart {
@@ -1409,6 +1419,8 @@ button.dim:active:before {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
+
+
 /* FULLCALENDAR */
 
 .fc-state-default {
@@ -1481,7 +1493,6 @@ button.dim:active:before {
   padding: 4px 6px;
   background-color: #1ab394;
   /* background color */
-
   border-color: #1ab394;
   /* border color */
 }
@@ -1496,6 +1507,8 @@ button.dim:active:before {
 .ui-calendar .fc-event-title {
   color: #fff;
 }
+
+
 /* Chat */
 
 .chat-activity-list .chat-element {
@@ -1598,6 +1611,8 @@ button.dim:active:before {
   height: 350px;
   overflow-y: scroll;
 }
+
+
 /* LIST GROUP */
 
 a.list-group-item.active,
@@ -1645,6 +1660,8 @@ a.list-group-item.active:focus {
   padding: 10px 15px;
   position: relative;
 }
+
+
 /* FLOT CHART  */
 
 .flot-chart {
@@ -1723,6 +1740,8 @@ a.list-group-item.active:focus {
   margin-top: 15px;
   position: relative;
 }
+
+
 /* DATATABLES */
 
 table.dataTable thead .sorting,
@@ -1754,6 +1773,8 @@ table.dataTable thead .sorting:after {
 .dataTables_wrapper {
   padding-bottom: 30px;
 }
+
+
 /* CIRCLE */
 
 .img-circle {
@@ -1798,6 +1819,8 @@ table.dataTable thead .sorting:after {
 .show-grid {
   margin: 15px 0;
 }
+
+
 /* ANIMATION */
 
 .css-animation-box h1 {
@@ -1844,6 +1867,8 @@ table.dataTable thead .sorting:after {
   font-size: 12px;
   text-transform: uppercase;
 }
+
+
 /* PEACE */
 
 .pace .pace-progress {
@@ -1866,6 +1891,8 @@ table.dataTable thead .sorting:after {
 .pace-inactive {
   display: none;
 }
+
+
 /* WIDGETS */
 
 .widget {
@@ -1977,6 +2004,8 @@ table.dataTable thead .sorting:after {
 .glyphicon.fa {
   font-family: "FontAwesome";
 }
+
+
 /* INPUTS */
 
 .inline {
@@ -2071,6 +2100,8 @@ table.dataTable thead .sorting:after {
   background: none repeat scroll 0 0 #ed5565;
   box-shadow: none;
 }
+
+
 /* UI Sortable */
 
 .ui-sortable .ibox-title {
@@ -2086,6 +2117,8 @@ table.dataTable thead .sorting:after {
 .ibox.ui-sortable-placeholder {
   margin: 0px 0px 23px !important;
 }
+
+
 /* SWITCHES */
 
 .onoffswitch {
@@ -2174,6 +2207,8 @@ table.dataTable thead .sorting:after {
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
   right: 0px;
 }
+
+
 /* jqGrid */
 
 .ui-jqgrid {
@@ -2398,6 +2433,8 @@ table.dataTable thead .sorting:after {
 .ui-jqdialog > .ui-resizable-se {
   position: absolute;
 }
+
+
 /* Nestable list */
 
 .dd {
@@ -2546,6 +2583,8 @@ table.dataTable thead .sorting:after {
   -webkit-box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.1);
 }
+
+
 /**
 * Nestable Extras
 */
@@ -2598,6 +2637,8 @@ table.dataTable thead .sorting:after {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
+
+
 /* CodeMirror */
 
 .CodeMirror {
@@ -2609,11 +2650,15 @@ table.dataTable thead .sorting:after {
   overflow-y: hidden;
   overflow-x: auto;
 }
+
+
 /* Google Maps */
 
 .google-map {
   height: 300px;
 }
+
+
 /* Validation */
 
 label.error {
@@ -2625,6 +2670,8 @@ label.error {
 .form-control.error {
   border: 1px dotted #cc5965;
 }
+
+
 /* ngGrid */
 
 .gridStyle {
@@ -2671,6 +2718,8 @@ label.error {
 .ngHeaderCell {
   border-right: none;
 }
+
+
 /* Toastr custom style */
 
 #toast-container > .toast {
@@ -2750,6 +2799,8 @@ label.error {
 .toast-bottom-full-width {
   margin-bottom: 20px;
 }
+
+
 /* Notifie */
 
 .cg-notify-message.inspinia-notify {
@@ -2778,6 +2829,8 @@ label.error {
 .inspinia-notify.alert-info {
   border-left: 6px solid #1ab394;
 }
+
+
 /* Image cropper style */
 
 .img-container,
@@ -2791,6 +2844,8 @@ label.error {
   height: 130px;
   width: 200px;
 }
+
+
 /* Forum styles  */
 
 .forum-post-container .media {
@@ -2927,18 +2982,18 @@ a.forum-item-title:hover {
   .forum-info {
     margin: 15px 0 10px 0px;
     /* Comment this is you want to show forum info in small devices */
-
     display: none;
   }
   .forum-desc {
     float: none !important;
   }
 }
+
+
 /* New Timeline style */
 
 .vertical-container {
   /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width */
-
   width: 90%;
   max-width: 1170px;
   margin: 0 auto;
@@ -2946,7 +3001,6 @@ a.forum-item-title:hover {
 
 .vertical-container::after {
   /* clearfix */
-
   content: '';
   display: table;
   clear: both;
@@ -3312,6 +3366,8 @@ video {
   width: 100% !important;
   height: auto !important;
 }
+
+
 /* GALLERY */
 
 .gallery > .row > div {
@@ -3321,15 +3377,18 @@ video {
 .fancybox img {
   margin-bottom: 5px;
   /* Only for demo */
-
   width: 24%;
 }
+
+
 /* Summernote text editor  */
 
 .note-editor {
   height: auto;
   min-height: 300px;
 }
+
+
 /* MODAL */
 
 .modal-content {
@@ -3378,6 +3437,8 @@ video {
 .modal-footer {
   margin-top: 0;
 }
+
+
 /* WRAPPERS */
 
 #wrapper {
@@ -3436,6 +3497,8 @@ ol.unstyled {
   font-size: 160px;
   color: #e5e6e7;
 }
+
+
 /* FOOTER */
 
 .footer {
@@ -3483,6 +3546,8 @@ body.fixed-sidebar.body-small.mini-navbar .footer.fixed {
 body.body-small .footer.fixed {
   margin-left: 0px;
 }
+
+
 /* PANELS */
 
 .page-heading {
@@ -3494,6 +3559,8 @@ body.body-small .footer.fixed {
 .panel-heading h2 {
   margin-bottom: 5px;
 }
+
+
 /* TABLES */
 
 .table-bordered {
@@ -3531,6 +3598,8 @@ body.body-small .footer.fixed {
   padding: 8px;
   vertical-align: top;
 }
+
+
 /* PANELS */
 
 .panel.blank-panel {
@@ -3579,6 +3648,8 @@ body.body-small .footer.fixed {
 .ui-tab .tab-content {
   padding: 20px 0px;
 }
+
+
 /* GLOBAL  */
 
 .no-padding {
@@ -3824,6 +3895,8 @@ table.table-mail tr td {
   left: auto;
   right: 0;
 }
+
+
 /* BACKGROUNDS */
 
 .gray-bg {
@@ -3964,6 +4037,8 @@ table.table-mail tr td {
 .jumbotron h1 {
   margin-top: 0;
 }
+
+
 /* COLORS */
 
 .text-navy {
@@ -4011,6 +4086,8 @@ table.table-mail tr td {
   -moz-box-shadow: 0px 0px 3px 0px #919191;
   box-shadow: 0px 0px 3px 0px #919191;
 }
+
+
 /* For handle diferent bg color in AngularJS version */
 
 .dashboards\.dashboard_2 nav.navbar,
@@ -4021,6 +4098,8 @@ table.table-mail tr td {
 .dashboards\.dashboard_4_1 nav.navbar {
   background: #fff;
 }
+
+
 /* For handle diferent bg color in MVC version */
 
 .Dashboard_2 .navbar.navbar-static-top,
@@ -4030,6 +4109,8 @@ table.table-mail tr td {
 .Inbox .navbar.navbar-static-top {
   background: #fff;
 }
+
+
 /* MARGINS & PADDINGS */
 
 .p-xxs {
@@ -4347,6 +4428,8 @@ table.table-mail tr td {
 body.modal-open {
   padding-right: inherit !important;
 }
+
+
 /* SEARCH PAGE */
 
 .search-form {
@@ -4366,6 +4449,8 @@ body.modal-open {
   font-size: 12px;
   margin-top: 5px;
 }
+
+
 /* CONTACTS */
 
 .contact-box {
@@ -4378,6 +4463,8 @@ body.modal-open {
 .contact-box a {
   color: inherit;
 }
+
+
 /* INVOICE */
 
 .invoice-table tbody > tr > td:last-child,
@@ -4407,6 +4494,8 @@ body.modal-open {
   text-align: right;
   width: 15%;
 }
+
+
 /* ERROR & LOGIN & LOCKSCREEN*/
 
 .middle-box {
@@ -4467,6 +4556,8 @@ body.modal-open {
 .lock-word .first-word {
   margin-right: 160px;
 }
+
+
 /* DASBOARD */
 
 .dashboard-header {
@@ -4502,6 +4593,8 @@ body.modal-open {
 ul.clear-list:first-child {
   border-top: none !important;
 }
+
+
 /* Intimeline */
 
 .timeline-item .date i {
@@ -4534,6 +4627,8 @@ ul.clear-list:first-child {
 .timeline-item .content:hover {
   background: #f6f6f6;
 }
+
+
 /* PIN BOARD */
 
 ul.notes li,
@@ -4589,13 +4684,10 @@ ul.notes li div {
   width: 140px;
   padding: 1em;
   /* Firefox */
-
   -moz-box-shadow: 5px 5px 2px #212121;
   /* Safari+Chrome */
-
   -webkit-box-shadow: 5px 5px 2px rgba(33, 33, 33, 0.7);
   /* Opera */
-
   box-shadow: 5px 5px 2px rgba(33, 33, 33, 0.7);
 }
 
@@ -4653,6 +4745,8 @@ ul.notes li div {
   -o-transition: -o-transform 0.15s linear;
   -webkit-transition: -webkit-transform 0.15s linear;
 }
+
+
 /* FILE MANAGER */
 
 .file-box {
@@ -4810,6 +4904,8 @@ a.compose-mail {
 .mail-search {
   max-width: 300px;
 }
+
+
 /* PROFILE */
 
 .profile-content {
@@ -4873,6 +4969,8 @@ a.compose-mail {
   margin-right: 10px;
   margin-bottom: 10px;
 }
+
+
 /* MAILBOX */
 
 .mail-box {
@@ -4934,6 +5032,8 @@ a.compose-mail {
 .mail-ontact {
   width: 23%;
 }
+
+
 /* PROJECTS */
 
 .project-people,
@@ -4983,6 +5083,8 @@ dd.project-people {
   margin-left: 10px;
   line-height: 22px;
 }
+
+
 /* FAQ */
 
 .faq-item {
@@ -5016,6 +5118,8 @@ dd.project-people {
   font-size: 10px;
   text-transform: uppercase;
 }
+
+
 /* Chat view */
 
 .message-input {
@@ -5041,6 +5145,8 @@ dd.project-people {
 .chat-user a {
   color: inherit;
 }
+
+
 /*------------------------*/
 
 .chat-view .ibox-content {
@@ -5407,6 +5513,8 @@ body.rtls.top-navigation .footer.fixed {
 .rtls .ltr-support {
   direction: ltr;
 }
+
+
 /*
  *
  *   This is style for skin config
@@ -5523,6 +5631,8 @@ body.rtls.top-navigation .footer.fixed {
 .ultra-skin:hover {
   background: #1a2d40;
 }
+
+
 /*
  *
  *   SKIN 1 - INSPINIA - Responsive Admin Theme
@@ -5655,6 +5765,8 @@ body.skin-1 {
 .skin-1 .nav.nav-tabs > li.active {
   background: transparent;
 }
+
+
 /*
  *
  *   SKIN 2 - INSPINIA - Responsive Admin Theme
@@ -5841,6 +5953,8 @@ body.skin-2 #wrapper {
 .skin-2 .nav.nav-tabs > li.active {
   background: transparent;
 }
+
+
 /*
  *
  *   SKIN 3 - INSPINIA - Responsive Admin Theme
@@ -6069,6 +6183,8 @@ body.skin-3 {
     display: none;
   }
 }
+
+
 /* Only demo */
 
 @media (max-width: 1000px) {

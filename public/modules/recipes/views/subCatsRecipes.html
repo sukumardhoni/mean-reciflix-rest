@@ -20,10 +20,8 @@
         <div class="ibox-content">
           <div class="project-list">
             <div class="row">
-              <div class="col-md-6 border-style">
-                <!--<img ng-src="modules/recipes/img/v2/subcats-img/{{subCatRecipesObj.imageName}}" alt="Sample Image" class="thumbnail img-responsive img-rounded img-class">-->
-                <img ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subCatRecipesObj.imageName}}" alt="Sample Image" class="thumbnail img-responsive img-rounded img-class">
-
+              <div class="thumbnail col-md-6 border-style">
+                <img ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subCatRecipesObj.imageName}}" alt=" " class="img-responsive img-rounded img-class img-loader">
               </div>
               <hr class="hidden-lg hidden-md">
               <div class="col-md-6">
@@ -44,11 +42,13 @@
                 </table>
               </div>
             </div>
-          <center ng-hide="subCatRecipesObj.recipes.length==0">
-                <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
-              </center>
+            <center ng-hide="subCatRecipesObj.recipes.length==0">
+              <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+            </center>
             <div class="row" ng-init="recipesUnderSubCat(1)">
-
+              <center>
+                <img ng-src="modules/core/img/loaders/recipes-loader.GIF" ng-show="loading">
+              </center>
               <div class="col-lg-4" ng-repeat="recipe in subCatRecipesObj.recipes">
                 <div class="contact-box items-box">
                   <div class="m-t-xs font-bold post-label" style="width:92%"><span>{{recipe.title}}</span>
@@ -57,7 +57,7 @@
                   <a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">
                     <div>
                       <div class="text-center">
-                        <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive" height="180px" />
+                        <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive img-loader" height="180px" />
                         <div class="m-t-xs font-bold"><strong><i class="fa fa-user"></i> <span class=""><mark >{{recipe.author}}</mark></span></strong>
                         </div>
                       </div>

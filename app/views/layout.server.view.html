@@ -48,8 +48,7 @@
 
 <!--<body class="ng-cloak" ng-class="$state.current.data.bodyClass">-->
 
-<body class="ng-cloak">
-
+<body class="ng-cloak fixed-nav">
 
 <!-- Main view  -->
     {% block content %}{% endblock %}
@@ -79,9 +78,7 @@
 
     <script>
 $(document).ready(function () {
-$("body").removeClass('boxed-layout');
-            $("body").addClass('fixed-nav');
-            $('#boxedlayout').prop('checked', false);
+
 });
 </script>
 

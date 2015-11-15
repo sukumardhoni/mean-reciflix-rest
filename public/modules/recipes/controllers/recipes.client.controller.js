@@ -83,10 +83,12 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
 .controller('RecipesCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion) {
   $scope.categoryFun = function () {
+    $scope.loading = true;
     Categories.query({
       pageId: 999,
       activeFilter: 1 // get only active cats
     }).$promise.then(function (res) {
+      $scope.loading = false;
       $scope.categories = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
@@ -94,7 +96,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     });
   };
 
-  $scope.minimalize = function () {
+/*  $scope.minimalize = function () {
     $("body").addClass("mini-navbar");
     if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
 
@@ -116,7 +118,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       // Remove all inline style from jquery fadeIn function to reset menu state
       $('#side-menu').removeAttr('style');
     }
-  }
+  }*/
 
 
 
@@ -147,13 +149,6 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     });
   };
 
-
-
-
-
-
-
-
 })
 
 
@@ -162,12 +157,14 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.catId = $stateParams.catId;
   //$scope.SubCatName = $stateParams.SubCatName;
   $scope.subCatFun = function () {
+    $scope.loading = true;
     SubCategories.query({
       catId: $stateParams.catId,
       pageId: 999,
       activeFilter: 1 // get only active sub cats
     }).$promise.then(function (res) {
       //console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
+      $scope.loading = false;
       $scope.CatObjWithSubCats = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
@@ -187,11 +184,13 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.itemsPerPage = 5;
   $scope.maxSize = 5;
   $scope.recipesUnderSubCat = function (pageNum) {
+    $scope.loading = true;
     SubCategoryRecipes.query({
       subCatId: $stateParams.subCatId,
       pageId: (pageNum - 1)
     }).$promise.then(function (res) {
-      console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+      //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+      $scope.loading = false;
       $scope.subCatRecipesObj = res;
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));

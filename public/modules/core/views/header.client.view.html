@@ -1,17 +1,17 @@
-  <nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
-    <div class="navbar-header">
-      <span minimaliza-sidebar></span>
-      <div style="float:left;">
-        <a ui-sref="reciflix.home"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
-        </a>
-      </div>
-      <form role="search" class="navbar-form-custom" method="post" action="">
-        <div class="form-group">
-          <input type="text" placeholder="Search for a recipe..." class="form-control" name="top-search" id="top-search">
-        </div>
-      </form>
+<nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+  <div class="navbar-header">
+    <span minimaliza-sidebar></span>
+    <div style="float:left;">
+      <a ui-sref="reciflix.home"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
+      </a>
     </div>
-    <ul class="nav navbar-top-links navbar-right">
-      <li class="divider-vertical"></li>
-    </ul>
-  </nav>
+    <form role="search" class="navbar-form-custom" method="post" action="">
+      <div class="form-group search-bar">
+        <input type="text" placeholder="Search for a recipe..." size="45" class="top-search" name="top-search" id="top-search"><span class="fa fa-search search-icon" ng-click="searchRecipes()"></span>
+      </div>
+    </form>
+  </div>
+  <ul class="nav navbar-top-links navbar-right">
+    <li class="divider-vertical"></li>
+  </ul>
+</nav>

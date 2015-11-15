@@ -29,7 +29,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
   $scope.minimalize = function () {
-    $("body").toggleClass("mini-navbar");
+    /*$("body").addClass("mini-navbar");
     if ($('body').hasClass('mini-navbar')) {
 
       $("body").addClass('fixed-sidebar');
@@ -46,8 +46,25 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     } else {
       // Remove all inline style from jquery fadeIn function to reset menu state
       $('#side-menu').removeAttr('style');
-    }
+    }*/
+
+    $("body").addClass("mini-navbar");
+    $("body").addClass('fixed-sidebar');
+    $('.sidebar-collapse').slimScroll({
+      height: '100%',
+      railOpacity: 0.9,
+    });
+
+
   }
+
+
+  $scope.searchRecipes = function () {
+
+    console.log('searchRecipes function is called');
+  };
+
+
 
 }])
 
