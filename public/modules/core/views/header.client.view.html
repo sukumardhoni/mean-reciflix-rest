@@ -5,9 +5,9 @@
       <a ui-sref="reciflix.home"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
       </a>
     </div>
-    <form role="search" class="navbar-form-custom" method="post" action="">
+    <form role="search" class="navbar-form-custom" method="post" action="" ng-submit="goToSearchRecipes(inputQuery)">
       <div class="form-group search-bar">
-        <input type="text" placeholder="Search for a recipe..." size="45" class="top-search" name="top-search" id="top-search"><span class="fa fa-search search-icon" ng-click="searchRecipes()"></span>
+        <input type="text" placeholder="Search for a recipe..." size="45" class="top-search" name="top-search" id="top-search" ng-model="inputQuery"><span class="fa fa-search search-icon" ui-sref="reciflix.recipes.searchedrecipes({query:inputQuery})"></span>
       </div>
     </form>
   </div>

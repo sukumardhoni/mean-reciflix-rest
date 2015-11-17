@@ -1,5 +1,5 @@
 <div ui-view="child-singlerecipes-view">
-  <div class="row">
+  <div class="row" ng-click="minimalize()">
     <div class="col-lg-12">
       <div class="wrapper animated fadeInUp">
         <div class="ibox">
@@ -8,7 +8,7 @@
             <li>
               <a ui-sref="reciflix.recipes">Categories</a>
             </li>
-            <li>
+            <li ng-show="catId">
               <a ui-sref="reciflix.recipes.subcats">{{catId}}</a>
             </li>
             <li class="active">
@@ -21,7 +21,8 @@
           <div class="project-list">
             <div class="row">
               <div class="thumbnail col-md-6 border-style">
-                <img ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subCatRecipesObj.imageName}}" alt=" " class="img-responsive img-rounded img-class img-loader">
+                <img ng-src="https://s3.amazonaws.com/NewRF/{{subCatRecipesObj.imageName}}" alt=" " class="img-responsive img-rounded img-class img-loader" ng-hide="catId">
+                <img ng-src="https://s3.amazonaws.com/NewRFSubCats/{{subCatRecipesObj.imageName}}" alt=" " class="img-responsive img-rounded img-class img-loader" ng-show="catId">
               </div>
               <hr class="hidden-lg hidden-md">
               <div class="col-md-6">

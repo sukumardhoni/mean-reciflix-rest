@@ -51,8 +51,8 @@ angular.module('recipes')
  }
 ])
 
-.factory('SubCategoryRecipes', function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/newrecipes/:subCatId/:pageId', {
+.factory('CategoryRecipes', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/newRecipesForCatId/:subCatId/:pageId', {
     subCatId: '@subCatId',
     pageId: '@pageId'
   }, {
@@ -60,6 +60,34 @@ angular.module('recipes')
       method: 'GET',
       //isArray: true,
       timeout: 20000
+    }
+  });
+})
+
+
+.factory('SubCategoryRecipes', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/newRecipesForSubCatId/:subCatId/:pageId', {
+    subCatId: '@subCatId',
+    pageId: '@pageId'
+  }, {
+    'query': {
+      method: 'GET',
+      //isArray: true,
+      timeout: 20000
+    }
+  });
+})
+
+
+
+.factory('SearchedRecipes', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/searchedVRecipesByIndex/:searchQuery/:pageId', {
+    searchQuery: '@searchQuery',
+    pageId: '@pageId'
+  }, {
+    'query': {
+      method: 'GET',
+      isArray: true
     }
   });
 })

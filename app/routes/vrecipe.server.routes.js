@@ -90,7 +90,10 @@ module.exports = function (app) {
 
   /*New Cats & sub cats routes for recipes*/
 
-  app.route('/newrecipes/:subCatId/:pageId')
+  app.route('/newRecipesForCatId/:newCatId/:pageId')
+    .get(vrecipes.getRecipesByCats);
+
+  app.route('/newRecipesForSubCatId/:subCatId/:pageId')
     .get(vrecipes.getRecipesBySubCats);
 
   app.route('/initialize')

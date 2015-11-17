@@ -370,6 +370,58 @@ exports.getRecipesBySubCats = function (req, res) {
 };
 
 
+
+exports.getRecipesByCats = function (req, res) {
+
+
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
+
+  var catResult = req.category.toObject();
+  catResult.recipeCount = 462;
+  catResult.recipes = [];
+
+  Vrecipe.find({
+    cats: {
+      $in: [req.params.newCatId]
+    }
+  }).sort({
+    rank: -1
+  }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
+    if (!err) {
+      if ((recipes.length === 0)) {
+        res.send(catResult);
+        /*res.status(204).send({
+  'message': 'There are no recipe items available'
+});*/
+      } else {
+        //user is successfully fetched list of recipes based on subcats save action into user usage details collection
+        agenda.now('User_Usage_Details', {
+          email: emailInfo,
+          device: deviceInfo,
+          action: 'getRecipesBySubCats : ' + req.params.subCatId
+        });
+        catResult.recipes = recipes;
+        //console.log('Recipes length is : ' + recipes.length);
+        res.send(catResult);
+
+        //console.log('listOfSubCats called and Subcat model is 111111111 : --------------- ' + JSON.stringify(catResult));
+      }
+    } else {
+      return console.log(err);
+    }
+  });
+
+
+}
+
+
+
+
+
+
+
+
 exports.getVIdRecipesByCategories = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
@@ -582,7 +634,7 @@ exports.getAllSearchedVRecipesByIndex = function (req, res) {
     }
   }).sort({
     rank: -1
-  }).skip(req.params.pageId * 5).limit(5).exec(function (err, recipes) {
+  }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
     if (!err) {
       if (recipes.length === 0) {
         return res.status(204).send({

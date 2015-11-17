@@ -5,6 +5,14 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.authentication = Authentication;
 
 
+
+  $scope.goToSearchRecipes = function (params) {
+    console.log('DoWork is called : ' + params);
+    $state.go('reciflix.recipes.searchedrecipes', {
+      query: params
+    })
+  }
+
   $scope.getLocalUser = function () {
     //console.log('getLocalUser is called')
     var currentUser = $localStorage.user;
@@ -29,33 +37,22 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
   $scope.minimalize = function () {
-    /*$("body").addClass("mini-navbar");
-    if ($('body').hasClass('mini-navbar')) {
-
-      $("body").addClass('fixed-sidebar');
-      $('.sidebar-collapse').slimScroll({
-        height: '100%',
-        railOpacity: 0.9,
-      });
-    } else if ($('body').hasClass('fixed-sidebar')) {
+    if ($('body').hasClass('body-small') && $('body').hasClass('fixed-sidebar')) {
+      console.log('Body small class is called')
+        //$("body").removeClass("body-small");
       $('#side-menu').hide();
       setTimeout(
         function () {
           $('#side-menu').fadeIn(500);
         }, 300);
     } else {
-      // Remove all inline style from jquery fadeIn function to reset menu state
-      $('#side-menu').removeAttr('style');
-    }*/
-
-    $("body").addClass("mini-navbar");
-    $("body").addClass('fixed-sidebar');
-    $('.sidebar-collapse').slimScroll({
-      height: '100%',
-      railOpacity: 0.9,
-    });
-
-
+      $("body").addClass("mini-navbar");
+      $("body").addClass('fixed-sidebar');
+      $('.sidebar-collapse').slimScroll({
+        height: '100%',
+        railOpacity: 0.9,
+      });
+    }
   }
 
 

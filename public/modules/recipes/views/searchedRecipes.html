@@ -1,0 +1,48 @@
+<div ui-view="child-singlerecipes-view">
+  <div class="ibox-content">
+    <div class="project-list">
+      <div class="row" ng-click="minimalize()">
+        <div class="row" ng-init="recipesUnderSearchQuery(1)">
+
+          <center>
+            <img ng-src="modules/core/img/loaders/recipes-loader.GIF" ng-show="loading">
+          </center>
+          <center ng-hide="subCatRecipesObj.recipes.length==0">
+            <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+          </center>
+          <div class="col-lg-4" ng-repeat="recipe in recipes">
+            <div class="contact-box items-box">
+              <div class="m-t-xs font-bold post-label" style="width:92%"><span>{{recipe.title}}</span>
+              </div>
+              <hr>
+              <a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">
+                <div>
+                  <div class="text-center">
+                    <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive img-loader" height="180px" />
+                    <div class="m-t-xs font-bold"><strong><i class="fa fa-user"></i> <span class=""><mark >{{recipe.author}}</mark></span></strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button class="btn btn-white btn-sm"><i class="fa fa-eye"></i>{{recipe.views | numeral}}</button>
+                  <button class="btn btn-white btn-sm"><i class="fa fa-clock-o"></i>{{recipe.duration | durationFltr}}</button>
+                  <button class="btn btn-white btn-sm"><i class="fa fa-thumbs-o-up"></i>{{recipe.ytlikes + recipe.applikes | numeral}}</button>
+                  <button class="btn btn-white btn-sm"><i class="fa fa-heart"></i> </button>
+                </div>
+                <span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">More</span>
+              </a>
+            </div>
+          </div>
+          <div class="text-center" ng-show="subCatRecipesObj.recipes.length==0">
+            <center>Currently no recipes exist for this sub category.</center>
+          </div>
+
+          <div class="clearfix"></div>
+          <center ng-hide="subCatRecipesObj.recipes.length==0">
+            <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+          </center>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
