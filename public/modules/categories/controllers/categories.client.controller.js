@@ -37,14 +37,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     });
   };
   $scope.minimalize = function () {
-    if ($('body').hasClass('body-small') && $('body').hasClass('fixed-sidebar')) {
-      console.log('Body small class is called')
-        //$("body").removeClass("body-small");
-      $('#side-menu').hide();
-      setTimeout(
-        function () {
-          $('#side-menu').fadeIn(500);
-        }, 300);
+    if ($('body').hasClass('body-small')) {
+      $("body").removeClass("mini-navbar");
     } else {
       $("body").addClass("mini-navbar");
       $("body").addClass('fixed-sidebar');
