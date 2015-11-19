@@ -114,8 +114,17 @@ ul.list-inline a {
   color: #2F4050;
 }
 
-
 .img-loader {
   background: url('../../../modules/core/img/loaders/img-loader.GIF') no-repeat;
   background-position: center center;
+}
+
+.searchResultMsg {
+  padding: 5px;
+  font-size: 16px;
+}
+
+.searchedQuery {
+  font-size: 20px;
+  color: #18a689;
 }

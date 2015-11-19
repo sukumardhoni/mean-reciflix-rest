@@ -87,7 +87,8 @@ angular.module('recipes')
   }, {
     'query': {
       method: 'GET',
-      isArray: true
+      timeout: 20000
+        //isArray: true
     }
   });
 })

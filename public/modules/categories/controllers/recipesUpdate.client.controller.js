@@ -39,15 +39,16 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 
 
 
-
   $scope.getSubCatRecipes = function (pageNum) {
-    //console.log('Selected Sub cat for Recipes : ' + JSON.stringify($scope.subCatSelected));
+    $scope.loading = true;
+    // console.log('Selected Sub cat for Recipes : ' + JSON.stringify($scope.subCatSelected));
     SubCategoryRecipes.query({
       subCatId: $scope.subCatSelected.subCatId,
       pageId: 999
     }).$promise.then(function (res) {
-      //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
-      $scope.subCatRecipes = res;
+      //console.log('Successfullly fetched sub category Recipes in recipe update function :' + JSON.stringify(res))
+      $scope.subCatRecipes = res.recipes;
+      $scope.loading = false;
       $scope.itemsPerPage = 1;
       $scope.currentPage = 1;
       $scope.maxSize = 5;
@@ -64,6 +65,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
     });
 
   };
+
 
   $scope.pageChanged = function () {
     //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
@@ -89,7 +91,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 
   $scope.deleteRecipe = function (item) {
 
-    console.log('Recipe bedore state update : ' + JSON.stringify(item));
+    //console.log('Recipe bedore state update : ' + JSON.stringify(item));
     item.submitted.by = $localStorage.user.displayName;
     item.state = 1111;
     // console.log('Recipe after state update : ' + JSON.stringify(item));

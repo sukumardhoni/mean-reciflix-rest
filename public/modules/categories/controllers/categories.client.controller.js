@@ -4,10 +4,7 @@
 angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
   $scope.authentication = Authentication;
 
-
-
   $scope.goToSearchRecipes = function (params) {
-    console.log('DoWork is called : ' + params);
     $state.go('reciflix.recipes.searchedrecipes', {
       query: params
     })
@@ -48,15 +45,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       });
     }
   }
-
-
-  $scope.searchRecipes = function () {
-
-    console.log('searchRecipes function is called');
-  };
-
-
-
 }])
 
 .controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
@@ -123,7 +111,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.setFile = function (element) {
     $scope.$apply(function ($scope) {
       $scope.theFile = element.files[0];
-      console.log('Successfully fetched the image file ' + JSON.stringify($scope.theFile));
+      //console.log('Successfully fetched the image file ' + JSON.stringify($scope.theFile));
     });
   };
 
@@ -139,13 +127,13 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.categories.unshift(resp.data);
       $scope.updatingLogo = false;
       $scope.modalInstance.close();
-      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
-      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+      //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
     }, function (resp) {
       console.log('Error status: ' + resp.status);
     }, function (evt) {
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
 
     /*    SingleCat.save($scope.cat, function (res) {
@@ -197,7 +185,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.updatingLogo = false;
       $scope.modalInstance.close();
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
-      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+      //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
       if (resp.config.data.file) {
         console.log('Checking response when file on callback');
         $timeout(function () {
@@ -210,7 +198,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       console.log('Error status: ' + resp.status);
     }, function (evt) {
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
   };
 
@@ -283,13 +271,13 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.CatObjWithSubCats.subCats.unshift(resp.data);
       $scope.updatingLogo = false;
       $scope.modalInstance.close();
-      console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
-      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+      //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
+      //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
     }, function (resp) {
       console.log('Error status: ' + resp.status);
     }, function (evt) {
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
 
     /*SubCategories.save({
@@ -355,9 +343,9 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.updatingLogo = false;
       $scope.modalInstance.close();
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
-      console.log('Success uploaded. Response: ' + JSON.stringify(resp));
+      //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
       if (resp.config.data.file) {
-        console.log('Checking response when file on callback');
+        //console.log('Checking response when file on callback');
         $timeout(function () {
           $state.go($state.current, {}, {
             reload: true
@@ -368,7 +356,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       console.log('Error status: ' + resp.status);
     }, function (evt) {
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      //console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
 
 

@@ -290,18 +290,18 @@ exports.getRecipesBySubCats = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
 
-  console.log('Recipes under getRecipesBySubCats is called , subCatId is : ' + req.params.subCatId);
-  console.log('Recipes under getRecipesBySubCats is called , PageId is : ' + req.params.pageId);
+  //console.log('Recipes under getRecipesBySubCats is called , subCatId is : ' + req.params.subCatId);
+  //console.log('Recipes under getRecipesBySubCats is called , PageId is : ' + req.params.pageId);
 
-  console.log('listOfSubCats called and Subcat model is : --------------- ' + JSON.stringify(req.subcat));
+  //console.log('listOfSubCats called and Subcat model is : --------------- ' + JSON.stringify(req.subcat));
 
   var subCatResult = req.subcat.toObject();
-  subCatResult.recipeCount = 462;
+  //subCatResult.recipeCount = 462;
   subCatResult.recipes = [];
 
   if (req.params.pageId == 999) {
 
-    console.log('listOfSubCats IFFFFFFFFFFFFFFFFFFFFFF');
+    //console.log('listOfSubCats IFFFFFFFFFFFFFFFFFFFFFF');
 
     Vrecipe.find({
       subcats: {
@@ -322,10 +322,10 @@ exports.getRecipesBySubCats = function (req, res) {
             device: deviceInfo,
             action: 'getRecipesBySubCats : ' + req.params.subCatId
           });
-          //subCatResult.recipes = recipes;
-
-          console.log('Recipes length is : ' + recipes.length);
-          res.send(recipes);
+          subCatResult.recipes = recipes;
+          res.send(subCatResult);
+          //console.log('Recipes length is : ' + recipes.length);
+          //res.send(recipes);
         }
       } else {
         return console.log(err);
@@ -333,7 +333,7 @@ exports.getRecipesBySubCats = function (req, res) {
     });
 
   } else {
-    console.log('listOfSubCats ElsEEEEEEEEEEEEEEEEEE');
+    //console.log('listOfSubCats ElsEEEEEEEEEEEEEEEEEE');
 
     Vrecipe.find({
       subcats: {
@@ -378,7 +378,6 @@ exports.getRecipesByCats = function (req, res) {
   var emailInfo = req.headers.email;
 
   var catResult = req.category.toObject();
-  catResult.recipeCount = 462;
   catResult.recipes = [];
 
   Vrecipe.find({
@@ -625,37 +624,55 @@ exports.getAllSearchedVRecipes = function (req, res) {
 exports.getAllSearchedVRecipesByIndex = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-  var pageid = req.params.pageId;
-  var pagelength = 5;
-  //var queries = req.params.query.split(' ');
+
+  var searchedResObj = {};
+  searchedResObj.count = 0;
+  searchedResObj.recipes = [];
+
+
   Vrecipe.find({
     $text: {
       $search: req.params.query
     }
-  }).sort({
-    rank: -1
-  }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
-    if (!err) {
-      if (recipes.length === 0) {
-        return res.status(204).send({
-          message: 'No data found'
-        });
-      } else {
-        //user is successfully fetched searched recipes save action into user usage details collection
-        agenda.now('User_Usage_Details', {
-          email: emailInfo,
-          device: deviceInfo,
-          action: 'getAllSearchedVRecipes : ' + emailInfo
-        });
-        res.jsonp(recipes);
-      }
-    } else {
-      return res.send({
-        message: 'No data found'
-      });
-    }
-  });
+  }).exec(function (err, recipes) {
+    searchedResObj.count = recipes.length;
+    console.log('Searched result count is 1111111    : ' + searchedResObj.count)
 
+    if (recipes.length != 0) {
+      Vrecipe.find({
+        $text: {
+          $search: req.params.query
+        }
+      }).sort({
+        rank: -1
+      }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
+        if (!err) {
+          if (recipes.length === 0) {
+            return res.status(204).send({
+              message: 'No data found'
+            });
+          } else {
+            //user is successfully fetched searched recipes save action into user usage details collection
+            agenda.now('User_Usage_Details', {
+              email: emailInfo,
+              device: deviceInfo,
+              action: 'getAllSearchedVRecipes : ' + emailInfo
+            });
+            searchedResObj.recipes = recipes;
+            res.jsonp(searchedResObj);
+            //res.jsonp(recipes);
+          }
+        } else {
+          return res.send({
+            message: 'No data found'
+          });
+        }
+      });
+
+    }
+
+
+  })
 };
 
 

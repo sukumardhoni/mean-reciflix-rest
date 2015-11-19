@@ -3,12 +3,15 @@
     <div class="project-list">
       <div class="row" ng-click="minimalize()">
         <div class="row" ng-init="recipesUnderSearchQuery(1)">
+          <center ng-hide="recipes.length === 0">
+            <p class="searchResultMsg">Recipes matched for your search keyword <span class="searchedQuery">"{{searchedQuery}}"</span></p>
+          </center>
 
+          <center ng-hide="recipes.length === 0">
+            <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+          </center>
           <center>
             <img ng-src="modules/core/img/loaders/recipes-loader.GIF" ng-show="loading">
-          </center>
-          <center ng-hide="subCatRecipesObj.recipes.length==0">
-            <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
           </center>
           <div class="col-lg-4" ng-repeat="recipe in recipes">
             <div class="contact-box items-box">
@@ -33,12 +36,12 @@
               </a>
             </div>
           </div>
-          <div class="text-center" ng-show="subCatRecipesObj.recipes.length==0">
-            <center>Currently no recipes exist for this sub category.</center>
+          <div class="text-center" ng-show="recipes.length === 0">
+            <center>Sorry, no recipes matched for your search keyword <span class="searchedQuery">"{{searchedQuery}}"</span>, Please try again.</center>
           </div>
 
           <div class="clearfix"></div>
-          <center ng-hide="subCatRecipesObj.recipes.length==0">
+          <center ng-hide="recipes.length==0">
             <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
           </center>
         </div>

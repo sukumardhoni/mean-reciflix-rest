@@ -31,6 +31,9 @@
 .top-search {
   border-radius: 5px;
   font-size: 14px;
+  border: 1px solid #e5e6e7;
+  padding: 5px 5px 5px 10px;
+  border-color: #e5e6e7 !important;
 }
 
 .search-icon {
@@ -38,10 +41,10 @@
   padding-left: 5px;
 }
 
-.wrapper{
+.wrapper {
   padding: 0px !important;
 }
 
-#page-wrapper{
+#page-wrapper {
   padding: 0px !important;
 }

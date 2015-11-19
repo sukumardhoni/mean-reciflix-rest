@@ -84,7 +84,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 .controller('RecipesCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion) {
   $scope.categoryFun = function () {
     if ($state.current.name === 'reciflix.recipes') {
-      console.log('Category function in parent controller');
+      //console.log('Category function in parent controller');
       $scope.loading = true;
       Categories.query({
         pageId: 999,
@@ -162,18 +162,14 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 .controller('SubCatRecipesCtrl', function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state) {
   $scope.catId = $stateParams.catId;
   $scope.subCatId = $stateParams.subCatId;
-  //$scope.SubCatName = $stateParams.SubCatName;
-  $scope.totalItems = 500;
   $scope.vm = {
     currentPage: 1
   };
-  $scope.itemsPerPage = 5;
+  $scope.itemsPerPage = 6;
   $scope.maxSize = 5;
 
 
   if ($stateParams.subCatId && $state.current.name === 'reciflix.recipes.subcats.recipes') {
-
-    console.log('$stateParams.subCatId is called : ' + $stateParams.subCatId);
 
     $scope.recipesUnderSubCat = function (pageNum) {
       $scope.loading = true;
@@ -183,15 +179,16 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       }).$promise.then(function (res) {
         //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
         $scope.loading = false;
+        if (pageNum === 1)
+          $scope.totalItems = res.recipeCount;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
         //console.log('Error happened : ' + JSON.stringify(err));
         alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
       });
     };
-
-
   }
+
   $scope.pageChanged = function () {
     //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
     $scope.recipesUnderSubCat($scope.vm.currentPage);
@@ -205,7 +202,9 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
         subCatId: $stateParams.CatIdForRecipes,
         pageId: (pageNum - 1)
       }).$promise.then(function (res) {
-        //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+        //console.log('Successfullly fetched category Recipes :' + JSON.stringify(res))
+        if (pageNum === 1)
+          $scope.totalItems = res.recipeCount;
         $scope.loading = false;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
@@ -245,18 +244,16 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
 
 .controller('SearchedRecipesCtrl', function ($scope, $stateParams, SearchedRecipes) {
-  $scope.totalItems = 500;
+
   $scope.vm = {
     currentPage: 1
   };
-  $scope.itemsPerPage = 5;
+  $scope.itemsPerPage = 6;
   $scope.maxSize = 5;
-
-
-
+  $scope.searchedQuery = $stateParams.query;
 
   $scope.recipesUnderSearchQuery = function (pageNum) {
-    console.log('Searched query is : ' + $stateParams.query);
+    //console.log('Searched query is : ' + $stateParams.query);
 
     $scope.loading = true;
     SearchedRecipes.query({
@@ -265,7 +262,9 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     }, function (res) {
       $scope.loading = false;
       console.log('REsponse of searched query is : ' + JSON.stringify(res));
-      $scope.recipes = res;
+      if (pageNum === 1)
+        $scope.totalItems = res.count;
+      $scope.recipes = res.recipes;
     })
   }
 
