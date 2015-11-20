@@ -82,6 +82,9 @@ module.exports = function (app) {
   app.route('/searchedVRecipesByIndex/:query/:pageId')
     .get(vrecipes.getAllSearchedVRecipesByIndex);
 
+  app.route('/searchedVRecipesByIndexNew/:query/:pageId')
+    .get(vrecipes.getAllSearchedVRecipesByIndexNew);
+
 
 
   app.route('/recipesFavCount/:recipeId')

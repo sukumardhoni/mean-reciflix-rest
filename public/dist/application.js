@@ -2125,7 +2125,7 @@ angular.module('recipes')
 
 
 .factory('SearchedRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/searchedVRecipesByIndex/:searchQuery/:pageId', {
+  return $resource(ConfigService.API_URL + '/searchedVRecipesByIndexNew/:searchQuery/:pageId', {
     searchQuery: '@searchQuery',
     pageId: '@pageId'
   }, {
@@ -2196,7 +2196,6 @@ angular.module('recipes')
     }
   });
 }]);
-
 'use strict';
 
 // Config HTTP Error Handling

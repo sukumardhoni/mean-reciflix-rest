@@ -81,7 +81,7 @@ angular.module('recipes')
 
 
 .factory('SearchedRecipes', function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/searchedVRecipesByIndex/:searchQuery/:pageId', {
+  return $resource(ConfigService.API_URL + '/searchedVRecipesByIndexNew/:searchQuery/:pageId', {
     searchQuery: '@searchQuery',
     pageId: '@pageId'
   }, {
