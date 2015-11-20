@@ -8,10 +8,10 @@
             <li>
               <a ui-sref="reciflix.recipes">Categories</a>
             </li>
-            <li>
+            <li ng-show="catId">
               <a ui-sref="reciflix.recipes.subcats">{{catId}}</a>
             </li>
-            <li>
+            <li ng-show="subCatId">
               <a ui-sref="reciflix.recipes.subcats.recipes">{{subCatId}}</a>
             </li>
             <li class="active">

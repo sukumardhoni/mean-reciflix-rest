@@ -2196,6 +2196,7 @@ angular.module('recipes')
     }
   });
 }]);
+
 'use strict';
 
 // Config HTTP Error Handling

@@ -13,6 +13,7 @@ module.exports = function (agendaDb) {
   emailJob.sendPasswordChangedEmail(agenda);
   emailJob.sendUserSignin(agenda);
   emailJob.sendUserInfoToReciFlixTeam(agenda);
+  emailJob.sendUserSuggestionInfoToReciFlixTeam(agenda);
   emailJob.saveUserUsageDetails(agenda);
   emailJob.sendClientInfoToGTM(agenda);
   agenda.start();

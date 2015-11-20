@@ -6,7 +6,9 @@
 var _ = require('lodash'),
   errorHandler = require('../errors.server.controller.js'),
   mongoose = require('mongoose'),
-  UsersSuggestions = mongoose.model('Suggestions');
+  UsersSuggestions = mongoose.model('Suggestions'),
+  config = require('../../../config/config'),
+  agenda = require('../../../schedules/job-schedule.js')(config.db);
 
 
 
@@ -33,12 +35,15 @@ exports.CreateSuggestion = function (req, res) {
       });
     } else {
       //user is successfully created suggestion save action into user usage details collection
-      /* agenda.now('User_Usage_Details', {
-         email: emailInfo,
-         device: deviceInfo,
-         action: 'CreateSuggestion'
-       });*/
-      console.log("successfully created suggestion: " + JSON.stringify(suggestion));
+      agenda.now('User_Usage_Details', {
+        email: emailInfo,
+        device: deviceInfo,
+        action: 'CreateSuggestion'
+      });
+      agenda.now('User_Suggestion_Details', {
+        userData: '\n Email: ' + suggestion.email + '\n Suggestions: ' + suggestion.suggestions + '\n Came from :' + deviceInfo + '\n'
+      });
+      //console.log("successfully created suggestion: " + JSON.stringify(suggestion));
       res.json(suggestion);
     }
   });

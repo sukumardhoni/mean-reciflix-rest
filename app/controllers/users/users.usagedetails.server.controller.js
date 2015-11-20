@@ -22,10 +22,10 @@ exports.usersUsageDetails = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      console.log('@@@@@@@@@ Before details list  successfully fetched and req obj also : ' + JSON.stringify(req.collectionObj));
+      //console.log('@@@@@@@@@ Before details list  successfully fetched and req obj also : ' + JSON.stringify(req.collectionObj));
       var CollectionObj = req.collectionObj;
       CollectionObj.details = details;
-      console.log('@@@@@@@@@ After details list  successfully fetched and req obj also : ' + JSON.stringify(req.collectionObj));
+      //console.log('@@@@@@@@@ After details list  successfully fetched and req obj also : ' + JSON.stringify(req.collectionObj));
       res.json(CollectionObj);
     }
   });
@@ -38,12 +38,12 @@ exports.usersUsageDetails = function (req, res) {
 exports.usersUsageCount = function (req, res, next) {
   var CollectionObj = {};
   CollectionObj.details = [];
-  console.log('*************')
+  //console.log('*************')
 
-  console.log('PageId is   : ' + req.params.pageId);
+  //console.log('PageId is   : ' + req.params.pageId);
   var bearer = req.params.pageId.split('UC');
   if (bearer[1] === '') {
-    console.log('Users usage count for If part  : ' + bearer[1]);
+    //console.log('Users usage count for If part  : ' + bearer[1]);
     UsageDetails.find().exec(function (err, details) {
       if (err) {
         // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
@@ -60,7 +60,7 @@ exports.usersUsageCount = function (req, res, next) {
       }
     });
   } else {
-    console.log('Users usage count for  Else part : ' + bearer[1]);
+    //console.log('Users usage count for  Else part : ' + bearer[1]);
 
     CollectionObj.count = bearer[1];
     req.collectionObj = CollectionObj;

@@ -630,9 +630,6 @@ exports.getAllSearchedVRecipesByIndex = function (req, res) {
       $search: req.params.query
     }
   }).exec(function (err, recipes) {
-    searchedResObj.count = recipes.length;
-    console.log('Searched result count is 1111111    : ' + searchedResObj.count)
-
     if (recipes.length != 0) {
       Vrecipe.find({
         $text: {
@@ -653,8 +650,6 @@ exports.getAllSearchedVRecipesByIndex = function (req, res) {
               device: deviceInfo,
               action: 'getAllSearchedVRecipes : ' + emailInfo
             });
-            //searchedResObj.recipes = recipes;
-            //res.jsonp(searchedResObj);
             res.jsonp(recipes);
           }
         } else {
@@ -671,11 +666,9 @@ exports.getAllSearchedVRecipesByIndex = function (req, res) {
 exports.getAllSearchedVRecipesByIndexNew = function (req, res) {
   var deviceInfo = req.headers.device;
   var emailInfo = req.headers.email;
-
   var searchedResObj = {};
   searchedResObj.count = 0;
   searchedResObj.recipes = [];
-
 
   Vrecipe.find({
     $text: {
@@ -683,8 +676,6 @@ exports.getAllSearchedVRecipesByIndexNew = function (req, res) {
     }
   }).exec(function (err, recipes) {
     searchedResObj.count = recipes.length;
-    console.log('Searched result count is 1111111    : ' + searchedResObj.count)
-
     if (recipes.length != 0) {
       Vrecipe.find({
         $text: {
@@ -707,7 +698,6 @@ exports.getAllSearchedVRecipesByIndexNew = function (req, res) {
             });
             searchedResObj.recipes = recipes;
             res.jsonp(searchedResObj);
-            //res.jsonp(recipes);
           }
         } else {
           return res.send({
@@ -715,14 +705,9 @@ exports.getAllSearchedVRecipesByIndexNew = function (req, res) {
           });
         }
       });
-
     }
-
-
   })
 };
-
-
 
 exports.updateVRecipesFavCount = function (req, res) {
   //console.log('Console @ updateVRecipesFavCount');
