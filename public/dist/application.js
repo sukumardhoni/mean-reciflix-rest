@@ -944,6 +944,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 // Recipes Edit controller
@@ -1221,6 +1222,7 @@ angular
   .directive('sideNavigation', sideNavigation)
   .directive('iboxTools', iboxTools)
   .directive('minimalizaSidebar', minimalizaSidebar)
+
 'use strict';
 
 //Categories service used for communicating with the categories REST endpoints
@@ -2010,6 +2012,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 // Recipes Filter
@@ -2344,6 +2347,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
 
 }]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',
