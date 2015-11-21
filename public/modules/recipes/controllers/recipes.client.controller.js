@@ -172,6 +172,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   if ($stateParams.subCatId && $state.current.name === 'reciflix.recipes.subcats.recipes') {
 
     $scope.recipesUnderSubCat = function (pageNum) {
+      //console.log('recipesUnderSubCat is called ')
       $scope.loading = true;
       SubCategoryRecipes.query({
         subCatId: $stateParams.subCatId,
@@ -215,21 +216,13 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
   }
 
-
-
-
-
-
-
-
-
   $scope.getSingleRecipe = function () {
     Recipe.get({
       vrecipeId: $stateParams.recipeId
     }).$promise.then(function (res) {
       // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
       $scope.recipe = res;
-      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&amp;controls=1&amp;showinfo=0");
+      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&iv_load_policy=3&amp;controls=1&amp;showinfo=0");
 
       //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
     }).catch(function (err) {
@@ -238,9 +231,6 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     });
   };
 })
-
-
-
 
 
 .controller('SearchedRecipesCtrl', function ($scope, $stateParams, SearchedRecipes) {

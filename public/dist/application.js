@@ -553,7 +553,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.getLocalUser = function () {
     //console.log('getLocalUser is called')
     var currentUser = $localStorage.user;
-    var userDisplayName = 'Guest';
+    var userDisplayName = '';
     if (currentUser) {
       userDisplayName = $localStorage.user.displayName;
     }
@@ -565,7 +565,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.signout = function () {
     $http.post('/users/signout').success(function (response) {
-      //console.log(response.data);
       $scope.authentication = '';
       delete $localStorage.token;
       delete $localStorage.user;
@@ -945,7 +944,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
@@ -1155,13 +1153,24 @@ function minimalizaSidebar($timeout) {
     controller: ["$scope", "$element", function ($scope, $element) {
       $scope.minimalize = function () {
         $("body").toggleClass("mini-navbar");
-        if ($('body').hasClass('mini-navbar')|| $('body').hasClass('body-small')) {
-
+        if (!$('body').hasClass('mini-navbar')) {
+          $('#side-menu').hide();
+          // For smoothly turn on menu
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(500);
+            }, 100);
+        } else if ($('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
           $("body").addClass('fixed-sidebar');
           $('.sidebar-collapse').slimScroll({
             height: '100%',
             railOpacity: 0.9,
           });
+          $('#side-menu').hide();
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(900);
+            }, 100);
         } else if ($('body').hasClass('fixed-sidebar')) {
           $('#side-menu').hide();
           setTimeout(
@@ -1212,7 +1221,6 @@ angular
   .directive('sideNavigation', sideNavigation)
   .directive('iboxTools', iboxTools)
   .directive('minimalizaSidebar', minimalizaSidebar)
-
 'use strict';
 
 //Categories service used for communicating with the categories REST endpoints
@@ -1885,6 +1893,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   if ($stateParams.subCatId && $state.current.name === 'reciflix.recipes.subcats.recipes') {
 
     $scope.recipesUnderSubCat = function (pageNum) {
+      //console.log('recipesUnderSubCat is called ')
       $scope.loading = true;
       SubCategoryRecipes.query({
         subCatId: $stateParams.subCatId,
@@ -1928,21 +1937,13 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
   }
 
-
-
-
-
-
-
-
-
   $scope.getSingleRecipe = function () {
     Recipe.get({
       vrecipeId: $stateParams.recipeId
     }).$promise.then(function (res) {
       // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
       $scope.recipe = res;
-      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&amp;controls=1&amp;showinfo=0");
+      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&iv_load_policy=3&amp;controls=1&amp;showinfo=0");
 
       //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
     }).catch(function (err) {
@@ -1951,9 +1952,6 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     });
   };
 }])
-
-
-
 
 
 .controller('SearchedRecipesCtrl', ["$scope", "$stateParams", "SearchedRecipes", function ($scope, $stateParams, SearchedRecipes) {
@@ -2012,7 +2010,6 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
-
 'use strict';
 
 // Recipes Filter
@@ -2347,7 +2344,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
 
 }]);
-
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',

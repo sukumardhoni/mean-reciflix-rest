@@ -1,10 +1,9 @@
 <div ui-view="child-singlerecipes-view">
-  <div class="row" ng-click="minimalize()">
+  <div class="row" ng-init="recipesUnderSubCat(1)" ng-click="minimalize()">
     <div class="col-lg-12">
       <div class="wrapper animated fadeInUp">
         <div class="ibox">
           <ol class="breadcrumb breadcrumb-style">
-            <!--<div class="text-center header-page1">Recipes</div>-->
             <li>
               <a ui-sref="reciflix.recipes">Categories</a>
             </li>
@@ -16,7 +15,6 @@
             </li>
           </ol>
         </div>
-
         <div class="ibox-content">
           <div class="project-list">
             <div class="row">
@@ -46,7 +44,7 @@
             <center ng-hide="subCatRecipesObj.recipes.length==0">
               <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
             </center>
-            <div class="row" ng-init="recipesUnderSubCat(1)">
+            <div class="row">
               <center>
                 <img ng-src="modules/core/img/loaders/recipes-loader.GIF" ng-show="loading">
               </center>

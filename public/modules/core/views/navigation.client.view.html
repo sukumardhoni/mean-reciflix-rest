@@ -1,11 +1,11 @@
 <nav class="navbar-default navbar-static-side" role="navigation" ng-init="getLocalUser()">
   <div class="sidebar-collapse">
     <ul side-navigation class="nav" id="side-menu">
-      <li class="nav-header">
+      <li class="nav-header" ng-show="userName">
         <div class="dropdown profile-element">
           <!-- Picture of user -->
           <span>
-                            <img alt="image" class="img-circle" src="modules/core/img/brand/user.png" width="29%">
+                            <img alt="image" class="img-circle" src="modules/core/img/brand/user.png" width="29%" style="display:none">
                              </span>
           <a class="dropdown-toggle" href>
             <span class="clear">
@@ -25,7 +25,7 @@
           </ul>
         </div>
         <div class="logo-element">
-          <img alt="image" class="img-circle" src="modules/core/img/brand/user.png" width="41%">
+          <img alt="image" class="img-circle" src="modules/core/img/brand/user.png" width="41%" style="display:none">
         </div>
       </li>
       <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="localUser.roles.indexOf('admin') > -1">

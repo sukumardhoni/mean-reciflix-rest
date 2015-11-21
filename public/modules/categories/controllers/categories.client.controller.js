@@ -13,7 +13,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.getLocalUser = function () {
     //console.log('getLocalUser is called')
     var currentUser = $localStorage.user;
-    var userDisplayName = 'Guest';
+    var userDisplayName = '';
     if (currentUser) {
       userDisplayName = $localStorage.user.displayName;
     }
@@ -25,7 +25,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.signout = function () {
     $http.post('/users/signout').success(function (response) {
-      //console.log(response.data);
       $scope.authentication = '';
       delete $localStorage.token;
       delete $localStorage.user;

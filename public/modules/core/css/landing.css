@@ -1,14 +1,11 @@
 .bg-body {
-  background-image: url('../../../modules/core/img/brand/image3.jpg');
+  background-image: url('../../../modules/core/img/brand/image4.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  background-color: #f8f8f8;
+  #background-color: #f8f8f8;
+  background-color: #e0ccb1;
   height: 700px;
-}
-
-#public-landing-page .container {
-  font-family: 'Open Sans', sans-serif !important;
 }
 
 .wrapper-content {
@@ -96,6 +93,7 @@ img {
 }
 
 .about-h2 {
+  text-transform: capitalize;
   font-size: 30px;
   font-weight: 300;
   margin: 0 0 20px 0;
@@ -106,6 +104,7 @@ img {
 }
 
 .about-p {
+  display: none;
   margin: 30px 0;
   font-size: 22px;
   font-weight: 300;
@@ -122,13 +121,6 @@ footer {
   left: 0;
   right: 0;
   display: block;
-  #position: absolute;
-}
-
-#public-landing-page footer a {
-  color: inherit;
-  vertical-align: middle;
-  margin-left: 15px;
 }
 
 ul>li>a {
@@ -138,50 +130,18 @@ ul>li>a {
 }
 
 #reciflix-desc {
-  #background: rgba(0, 0, 0, 0.3);
   padding-bottom: 20px;
   padding-top: 250px;
 }
 
 @media screen and (max-width: 767px) {
+  #reciflix-desc {
+    padding-bottom: 20px;
+    padding-top: 50px;
+    font-size: 20px;
+  }
   .nav.navbar-right>li {
     background: rgba(0, 0, 0, 0.3);
-  }
-  #reciflix-desc {
-    #background: rgba(0, 0, 0, 0.3);
-  }
-  #public-landing-page .hero .container {
-    width: 95% !important;
-    padding-top: 40px;
-  }
-  #public-landing-page .hero section {
-    padding: 30px 0 !important;
-  }
-  #public-landing-page .hero {
-    text-align: center !important;
-  }
-  #public-landing-page .hero .container {
-    display: block !important;
-  }
-  #public-landing-page .hero .container .row {
-    display: block !important;
-  }
-  #public-landing-page .hero img.screenshot {
-    max-height: 600px !important;
-  }
-  #public-landing-page .hero h1 {
-    padding-top: 0 !important;
-    font-size: 40px !important;
-  }
-  #public-landing-page .hero h2 {
-    margin-top: 0 !important;
-    font-size: 20px !important;
-  }
-  #public-landing-page .hero p {
-    font-size: 14px !important;
-  }
-  #public-landing-page .hero img.app-icon {
-    max-height: 150px !important;
   }
   .container-fluid>.navbar-collapse,
   .container-fluid>.navbar-header,
@@ -201,14 +161,6 @@ ul>li>a {
   .navbar-toggle {
     margin-top: 16px !important;
     padding: 10px;
-  }
-  #public-landing-page footer .container {
-    padding: 15px 0;
-    color: inherit;
-    font-size: 14px !important;
-    font-weight: 00;
-    line-height: 20px;
-    vertical-align: middle;
   }
   .navbar-toggle {
     background-color: #ddd;
@@ -240,8 +192,19 @@ ul>li>a {
     .landing-main {
       text-align: center !important;
     }
+    .bg-body {
+      background-size: 150%;
+      height: 300px;
+      background-color: #e0ccb1;
+    }
+    .about-h2 {
+      font-size: 18px !important;
+      padding-top: 55px;
+      color: #19aa8d;
+    }
   }
   .about-p {
+    display: none;
     margin: 30px 0;
     font-size: 14px !important;
     font-weight: 300;
@@ -250,8 +213,15 @@ ul>li>a {
     color: #fff
   }
   .about-h2 {
-    margin-top: 0 !important;
-    font-size: 20px !important;
+    padding-top: 275px;
+    font-size: 30px;
+  }
+  .bg-body {
+    background-size: 150%;
+    #height: 800px;
+  }
+  .home-page {
+    min-height: 500px;
   }
 }
 
@@ -325,10 +295,6 @@ footer ul.icons a:hover {
   float: left;
   height: 0px !important;
   padding: 0px !important;
-}
-
-.wrapper-content {
-  padding: 20px 10px 15px;
 }
 
 .navbar-default {

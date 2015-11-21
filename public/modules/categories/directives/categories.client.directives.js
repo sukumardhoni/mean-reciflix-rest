@@ -87,13 +87,24 @@ function minimalizaSidebar($timeout) {
     controller: function ($scope, $element) {
       $scope.minimalize = function () {
         $("body").toggleClass("mini-navbar");
-        if ($('body').hasClass('mini-navbar')|| $('body').hasClass('body-small')) {
-
+        if (!$('body').hasClass('mini-navbar')) {
+          $('#side-menu').hide();
+          // For smoothly turn on menu
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(500);
+            }, 100);
+        } else if ($('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
           $("body").addClass('fixed-sidebar');
           $('.sidebar-collapse').slimScroll({
             height: '100%',
             railOpacity: 0.9,
           });
+          $('#side-menu').hide();
+          setTimeout(
+            function () {
+              $('#side-menu').fadeIn(900);
+            }, 100);
         } else if ($('body').hasClass('fixed-sidebar')) {
           $('#side-menu').hide();
           setTimeout(
