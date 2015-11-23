@@ -1,0 +1,171 @@
+.about-h2 {
+    padding-bottom: 20px;
+}
+
+.navbar {
+    min-height: 62px;
+}
+
+.bg-body {
+  background-image: url('../../../modules/core/img/brand/image4.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-color: #e0ccb1;
+  height: 700px;
+}
+
+#reciflix-desc {
+    padding-bottom: 20px;
+    padding-top: 325px;
+}
+
+
+#reciflix-desc {
+  padding-bottom: 20px;
+  padding-top: 250px;
+}
+
+@media screen and (max-width: 350px) {
+  .post-label {
+    display: inline-block;
+    background: #65CCE3;
+    position: absolute;
+    left: 7%;
+    width: 85%;
+    top: 1px;
+    z-index: 10;
+    padding: 7px 20px;
+  }
+}
+
+
+  @media screen and (min-width: 1201px) {
+    .bg-body {
+      height: 800px !important;
+    }
+  .about-h2 {
+    padding-top: 125px;
+
+  }
+  }
+
+@media screen and (max-width: 1724px) {
+  .border-style {
+    border-right: 1px solid #eee !important;
+  }
+}
+
+  @media screen and (max-width: 1200px) {
+    .bg-body {
+      height: 500px !important;
+    }
+  }
+
+
+@media screen and (max-width: 992px) {
+  .border-style {
+    border-right: none !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body.fixed-sidebar.mini-navbar .navbar-default .nav > li > a {
+    padding:20px;
+    font-size: 16px !important;
+  }
+  .about-h2 {
+    padding-top: 125px;
+    font-size: 30px;
+  }
+  .bg-body {
+    height: 400px;
+  }
+
+  #reciflix-desc {
+    padding-bottom: 20px;
+    padding-top: 50px;
+    font-size: 20px;
+  }
+  .nav.navbar-right>li {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .container-fluid>.navbar-collapse,
+  .container-fluid>.navbar-header,
+  .container>.navbar-collapse,
+  .container>.navbar-header {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+  }
+  .navbar-header {
+    width: 100%;
+  }
+  .navbar-brand {
+    float: left;
+    height: 0px !important;
+    padding: 0px !important;
+  }
+  .navbar-toggle {
+    margin-top: 16px !important;
+    padding: 10px;
+  }
+  .navbar-toggle {
+    background-color: #ddd;
+    color: #fff;
+  }
+  .copyrights {
+    text-align: center !important;
+  }
+  .footer-nav {
+    text-align: center !important;
+  }
+  .footer-socialicons {
+    text-align: center !important;
+  }
+  .app-logonav {
+    max-height: 55px;
+  }
+  #myCarousel {
+    display: none;
+  }
+  .bg-body {
+      height: 400px !important;
+    }
+
+  @media screen and (max-width: 400px) {
+    .app-logonav {
+      max-height: 38px;
+    }
+    .navbar-toggle {
+      margin-top: 10px !important;
+      padding: 5px;
+    }
+    .landing-main {
+      text-align: center !important;
+    }
+    .bg-body {
+      height: 500px !important;
+      background-color: #e0ccb1;
+    }
+    .about-h2 {
+      padding-top: 65px;
+      font-size: 18px !important;
+    }
+    #reciflix-desc {
+      padding-top:175px;
+    }
+  }
+  .about-p {
+    display: none;
+    margin: 30px 0;
+    font-size: 14px !important;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif !important;
+    text-align: center !important;
+    color: #fff
+  }
+
+  .home-page {
+    min-height: 500px;
+  }
+}

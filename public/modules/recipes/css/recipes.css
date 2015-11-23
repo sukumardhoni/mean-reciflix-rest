@@ -2,18 +2,6 @@
   color: #1ab394;
 }
 
-@media screen and (max-width: 1724px) {
-  .border-style {
-    border-right: 1px solid #eee !important;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .border-style {
-    border-right: none !important;
-  }
-}
-
 .img-class {
   height: 140px !important;
 }
@@ -96,18 +84,6 @@ ul.list-inline a {
   padding: 7px 20px;
 }
 
-@media screen and (max-width: 350px) {
-  .post-label {
-    display: inline-block;
-    background: #65CCE3;
-    position: absolute;
-    left: 7%;
-    width: 85%;
-    top: 1px;
-    z-index: 10;
-    padding: 7px 20px;
-  }
-}
 
 .recipe-title {
   font-size: 20px;
