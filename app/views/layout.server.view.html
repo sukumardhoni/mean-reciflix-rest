@@ -48,10 +48,28 @@
 
 <!--<body class="ng-cloak" ng-class="$state.current.data.bodyClass">-->
 
-<body class="ng-cloak fixed-nav">
+<body class="ng-cloak fixed-nav" ng-class="$state.current.data.bodyClass">
 
-<!-- Main view  -->
+
+   <!-- Wrapper-->
+  <div id="wrapper">
+
+    <!-- Navigation -->
+    <!-- <div data-ng-include="'/modules/core/views/navigation.client.view.html'"></div>-->
+
+    <!-- Page wraper -->
+    <!-- Page wrapper -->
+    <div ng-include="'/modules/core/views/header.client.view.html'"></div>
+
+    <!-- Main view  -->
     {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <div ng-include="'/modules/core/views/footer.client.view.html'" ng-hide="$state.includes('reciflix')"></div>
+
+    <!-- End page wrapper-->
+
+  </div>
 
   <!--Embedding The User Object-->
   <script type="text/javascript">

@@ -1,7 +1,7 @@
-<nav class="navbar-default navbar-static-side" role="navigation" ng-init="getLocalUser()">
+<nav class="navbar-default navbar-static-side" role="navigation">
   <div class="sidebar-collapse">
     <ul side-navigation class="nav" id="side-menu">
-      <li class="nav-header" ng-show="userName">
+      <li class="nav-header" ng-show="authentication.user.displayName">
         <div class="dropdown profile-element">
           <!-- Picture of user -->
           <span>
@@ -10,17 +10,18 @@
           <a class="dropdown-toggle" href>
             <span class="clear">
                                 <span class="block m-t-xs">
-                                    <strong class="font-bold">{{userName}}</strong>
+                                    <strong class="font-bold">{{authentication.user.displayName}}</strong>
                              </span>
-            <span class="text-muted text-xs block" data-ng-show="localUser">Options<b class="caret"></b></span>
+            <span class="text-muted text-xs block" data-ng-show="authentication.user">Options<b class="caret"></b></span>
             </span>
           </a>
           <ul class="dropdown-menu animated fadeInRight m-t-xs">
-            <li data-ng-show="localUser" ng-click="minimalize()">
+            <li data-ng-show="authentication.user" ng-click="minimalize()">
               <a ng-click="signout()"> Logout</a>
             </li>
-            <li data-ng-hide="localUser" ng-click="minimalize()">
-              <a ui-sref="reciflix.signin"> Log In</a>
+            <li data-ng-hide="authentication.user" ng-click="minimalize()">
+              <!--<a ui-sref="signin"> Log In</a>-->
+              <a ng-click="OpenSignIn()"> Log In</a>
             </li>
           </ul>
         </div>
@@ -28,26 +29,27 @@
           <img alt="image" class="img-circle" src="modules/core/img/brand/user.png" width="41%" style="display:none">
         </div>
       </li>
-      <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="localUser.roles.indexOf('admin') > -1">
+      <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="authentication.user.roles.indexOf('admin') > -1">
         <a ui-sref="reciflix.categories" title="Categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories</span></a>
       </li>
-      <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="localUser.roles.indexOf('admin') > -1">
+      <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="authentication.user.roles.indexOf('admin') > -1">
         <a ui-sref="reciflix.recipesUpdate" title="Recipes Update"><i class="fa fa-pencil-square-o"></i> <span class="nav-label">Recipes Update</span></a>
       </li>
 
       <li ui-sref-active="active" ng-click="minimalize()">
         <a ui-sref="reciflix.recipes" title="Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes</span></a>
       </li>
-      <li ui-sref-active="active" ng-click="minimalize()" data-ng-hide="localUser">
-        <a ui-sref="reciflix.signin"> Log In</a>
+      <li ui-sref-active="active" ng-click="minimalize()" data-ng-hide="authentication.user">
+        <!--<a ui-sref="signin"> Log In</a>-->
+<a ng-click="OpenSignIn()"> Log In</a>
       </li>
 
-      <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="localUser.roles.indexOf('admin') > -1">
+      <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="authentication.user.roles.indexOf('admin') > -1">
         <a ui-sref="reciflix.users" title="Users"><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
       </li>
 
       <li ng-click="minimalize()">
-        <a ng-click="signout()" title="Logout" data-ng-show="localUser"><i class="fa fa-sign-out"></i> <span class="nav-label">Logout</span></a>
+        <a ng-click="signout()" title="Logout" data-ng-show="authentication.user"><i class="fa fa-sign-out"></i> <span class="nav-label">Logout</span></a>
       </li>
     </ul>
     <p ui-view="hint" class="navbar-text"></p>

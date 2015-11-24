@@ -26,6 +26,7 @@
   padding-top: 250px;
 }
 
+
 @media screen and (max-width: 350px) {
   .post-label {
     display: inline-block;
@@ -69,6 +70,21 @@
   }
 }
 
+
+@media screen and (min-width: 768px){
+
+.navbar-right {
+    float: right !important;
+    margin-right: -93px !important;
+}
+
+  .search-bar input[type=text] {
+        width:100%;
+    }
+}
+
+
+
 @media screen and (max-width: 768px) {
   body.fixed-sidebar.mini-navbar .navbar-default .nav > li > a {
     padding:20px;
@@ -96,9 +112,6 @@
   .container>.navbar-header {
     margin-right: 0px !important;
     margin-left: 0px !important;
-  }
-  .navbar-header {
-    width: 100%;
   }
   .navbar-brand {
     float: left;
@@ -129,7 +142,7 @@
     display: none;
   }
   .bg-body {
-      height: 400px !important;
+      height: 450px !important;
     }
 
   @media screen and (max-width: 400px) {

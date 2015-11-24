@@ -38,7 +38,7 @@
 
 .search-icon {
   font-size: 20px;
-  padding-left: 5px;
+  margin-left: -25px !important;
 }
 
 .wrapper {

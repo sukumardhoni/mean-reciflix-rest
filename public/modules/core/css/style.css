@@ -230,7 +230,7 @@ h5 {
 }
 
 .navbar-form-custom {
-  float: left;
+  #float: left;
   height: 50px;
   padding: 0;
   display: inline-table;
@@ -324,6 +324,7 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
 .mini-navbar li.active .nav-second-level {
   left: 65px;
 }
+
 
 .navbar-default .special_link a {
   background: #1ab394;
@@ -6133,7 +6134,7 @@ body.skin-3 {
   }
   .navbar-header {
     display: inline;
-    float: left;
+    #float: left;
   }
   .sidebard-panel {
     z-index: 2;

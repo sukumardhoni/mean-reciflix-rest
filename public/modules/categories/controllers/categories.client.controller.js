@@ -1,7 +1,7 @@
 'use strict';
 
 // Categories controller
-angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
+angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication','$modal', function ($scope, $state, $localStorage, $location, $http, Authentication,$modal) {
   $scope.authentication = Authentication;
 
   $scope.goToSearchRecipes = function (params) {
@@ -10,7 +10,8 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     })
   }
 
-  $scope.getLocalUser = function () {
+  /*$scope.getLocalUser= function(){
+
     //console.log('getLocalUser is called')
     var currentUser = $localStorage.user;
     var userDisplayName = '';
@@ -19,17 +20,19 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     }
     $scope.userName = userDisplayName;
     $scope.localUser = $localStorage.user;
-  }
+
+  } */
 
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
 
   $scope.signout = function () {
     $http.post('/users/signout').success(function (response) {
-      $scope.authentication = '';
+      console.log('Signout callback : ' + JSON.stringify(response));
+      $scope.authentication.user = '';
       delete $localStorage.token;
       delete $localStorage.user;
-      $state.go('reciflix.signin');
-      $scope.getLocalUser();
+      //$state.go('signin');
+      $state.go('reciflix.recipes');
     });
   };
   $scope.minimalize = function () {
@@ -44,6 +47,23 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       });
     }
   }
+
+  $scope.OpenSignIn = function(){
+     $scope.signFun = true;
+     console.log('Sign In function is called');
+     $scope.modalInstance = $modal.open({
+      templateUrl: 'modules/categories/views/modals/signIn-modal.html',
+      controller: 'AuthenticationController',
+      backdrop: "static",
+      scope: $scope
+    });
+   }
+
+   $scope.cancel = function () {
+    $scope.modalInstance.dismiss('cancel');
+  };
+
+
 }])
 
 .controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {

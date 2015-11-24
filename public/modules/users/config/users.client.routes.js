@@ -21,16 +21,16 @@ angular.module('users').config(['$stateProvider',
       url: '/signup',
       templateUrl: 'modules/users/views/authentication/signup.client.view.html'
     }).
-    state('reciflix.signin', {
-      url: 'login',
+    state('signin', {
+      url: '/login',
       templateUrl: 'modules/users/views/authentication/signin.client.view.html',
       module: 'public',
       data: {
         bodyClass: 'bg-body'
       }
     }).
-    state('reciflix.forgot', {
-      url: 'password/forgot',
+    state('forgot', {
+      url: '/password/forgot',
       templateUrl: 'modules/users/views/password/forgot-password.client.view.html',
       module: 'public',
       data: {

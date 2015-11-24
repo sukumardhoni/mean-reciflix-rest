@@ -7,23 +7,20 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
     $urlRouterProvider.otherwise('/home');
 
     // Home state routing
-    $stateProvider.
-    state('reciflix', {
-        abstract: true,
-        url: '/',
-        templateUrl: 'modules/categories/views/common/content.html',
-        controller: 'ReciflixCtrl',
+    $stateProvider
+      .state('home', {
+        url: '/home',
+       templateUrl: 'modules/core/views/home.client.view.html',
+        data: {
+          bodyClass: 'bg-body'
+        }
       })
-      .state('reciflix.home', {
-        url: 'home',
-       templateUrl: 'modules/core/views/home.client.view.html'
-      })
-      .state('reciflix.terms', {
-        url: 'terms',
+      .state('terms', {
+        url: '/terms',
         templateUrl: 'modules/core/views/terms.client.view.html',
         module: 'public'
       })
-      .state('reciflix.privacy', {
+      .state('privacy', {
         url: 'privacy',
         templateUrl: 'modules/core/views/privacy.client.view.html',
         module: 'public'
