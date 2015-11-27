@@ -246,6 +246,9 @@ exports.jwtSignout = function (req, res, next) {
     var bearer = bearerHeader.split(' ');
     if (bearer[1] === 'undefined') {
       res.sendStatus(401);
+      //req.logout();
+      //res.redirect('/');
+      console.log('Error while sign out in rest ');
     } else {
       bearerToken = bearer[1];
       User.findOne({
@@ -279,7 +282,9 @@ exports.jwtSignout = function (req, res, next) {
       });
     }
   } else {
-    res.sendStatus(401);
+    //res.sendStatus(401);
+    req.logout();
+    res.redirect('/');
   }
 };
 

@@ -325,7 +325,6 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
   left: 65px;
 }
 
-
 .navbar-default .special_link a {
   background: #1ab394;
   color: white;
@@ -387,7 +386,7 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
 }
 
 .fixed-nav #wrapper {
-  margin-top: 60px;
+  margin-top: 54px;
 }
 
 .fixed-nav .minimalize-styl-2 {

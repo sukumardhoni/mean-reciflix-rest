@@ -78,7 +78,4 @@ module.exports = function (app) {
   app.route('/users/suggestions/:pageId')
     .get(users.totalSuggestions, users.ListOfSuggestions)
     .post(users.CreateSuggestion);
-
-
-
 };

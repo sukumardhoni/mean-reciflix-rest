@@ -1,9 +1,18 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', '$http', '$location', '$localStorage','$modal','$timeout',
- function ($scope, Authentication, Menus, $http, $location, $localStorage,$modal,$timeout) {
+angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', '$http', '$location', '$localStorage', '$modal', '$timeout', '$state',
+ function ($scope, Authentication, Menus, $http, $location, $localStorage, $modal, $timeout, $state) {
     $scope.authentication = Authentication;
     $scope.authentication.user = $localStorage.user;
+
+    $scope.gotoState = function () {
+      if ($scope.authentication.user) {
+        $state.go("reciflix.recipes");
+      } else {
+        $state.go("home");
+      }
+    }
+
     $scope.isCollapsed = false;
     $scope.menu = Menus.getMenu('topbar');
 
@@ -18,23 +27,23 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
     });
 
 
-   $scope.OpenSignIn = function(){
-     $scope.signFun = true;
-     console.log('Sign In function is called');
-     $scope.modalInstance = $modal.open({
-      templateUrl: 'modules/categories/views/modals/signIn-modal.html',
-      controller: 'AuthenticationController',
-      backdrop: "static",
-      scope: $scope
-    });
-     $timeout(function () {
-       $scope.signFun = false;
-        }, 20000);
-   }
+    $scope.OpenSignIn = function () {
+      $scope.signFun = true;
+      //console.log('Sign In function is called');
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'modules/categories/views/modals/signIn-modal.html',
+        controller: 'AuthenticationController',
+        backdrop: "static",
+        scope: $scope
+      });
+      $timeout(function () {
+        $scope.signFun = false;
+      }, 3000);
+    }
 
-   $scope.cancel = function () {
-    $scope.modalInstance.dismiss('cancel');
-  };
+    $scope.cancel = function () {
+      $scope.modalInstance.dismiss('cancel');
+    };
 
  }
 ]);

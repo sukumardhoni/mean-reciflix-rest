@@ -1,9 +1,9 @@
 .about-h2 {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .navbar {
-    min-height: 62px;
+  min-height: 62px;
 }
 
 .bg-body {
@@ -16,16 +16,14 @@
 }
 
 #reciflix-desc {
-    padding-bottom: 20px;
-    padding-top: 325px;
+  padding-bottom: 20px;
+  padding-top: 325px;
 }
-
 
 #reciflix-desc {
   padding-bottom: 20px;
   padding-top: 250px;
 }
-
 
 @media screen and (max-width: 350px) {
   .post-label {
@@ -40,16 +38,11 @@
   }
 }
 
-
-  @media screen and (min-width: 1201px) {
-    .bg-body {
-      height: 800px !important;
-    }
+@media screen and (min-width: 1201px) {
   .about-h2 {
     padding-top: 125px;
-
   }
-  }
+}
 
 @media screen and (max-width: 1724px) {
   .border-style {
@@ -57,12 +50,11 @@
   }
 }
 
-  @media screen and (max-width: 1200px) {
-    .bg-body {
-      height: 500px !important;
-    }
+@media screen and (max-width: 1100px) {
+  .bg-body {
+    height: 510px !important;
   }
-
+}
 
 @media screen and (max-width: 992px) {
   .border-style {
@@ -70,24 +62,19 @@
   }
 }
 
-
-@media screen and (min-width: 768px){
-
-.navbar-right {
+@media screen and (min-width: 768px) {
+  .navbar-right {
     float: right !important;
     margin-right: -93px !important;
-}
-
+  }
   .search-bar input[type=text] {
-        width:100%;
-    }
+    width: 100%;
+  }
 }
-
-
 
 @media screen and (max-width: 768px) {
   body.fixed-sidebar.mini-navbar .navbar-default .nav > li > a {
-    padding:20px;
+    padding: 20px;
     font-size: 16px !important;
   }
   .about-h2 {
@@ -97,7 +84,6 @@
   .bg-body {
     height: 400px;
   }
-
   #reciflix-desc {
     padding-bottom: 20px;
     padding-top: 50px;
@@ -141,10 +127,6 @@
   #myCarousel {
     display: none;
   }
-  .bg-body {
-      height: 450px !important;
-    }
-
   @media screen and (max-width: 400px) {
     .app-logonav {
       max-height: 38px;
@@ -165,7 +147,7 @@
       font-size: 18px !important;
     }
     #reciflix-desc {
-      padding-top:175px;
+      padding-top: 175px;
     }
   }
   .about-p {
@@ -177,7 +159,6 @@
     text-align: center !important;
     color: #fff
   }
-
   .home-page {
     min-height: 500px;
   }

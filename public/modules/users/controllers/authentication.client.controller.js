@@ -3,52 +3,134 @@
 angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state',
  function ($scope, $http, $location, Authentication, $localStorage, Users, $state) {
     $scope.authentication = Authentication;
-    // If user is signed in then redirect back home
-    //if ($scope.authentication.user) $location.path('/');
+    if ($scope.authentication.user) $state.go('reciflix.recipes');
 
-    $scope.signup = function () {
-      $http.post('/users/signup', $scope.credentials).success(function (response) {
-        //console.log('signup client side response ' + JSON.stringify(response));
-        if (response.type === false) {
-          $scope.error = response.data;
-        } else {
-          $scope.authentication.user = response;
-          $localStorage.token = response.token;
-          $location.path('/welcomePage');
-        }
-      });
-    };
     if (navigator.userAgent.match(/Android/i)) {
-      //console.log('Android user came');
-      //alert('Android user came');
       $scope.androidUser = true;
     } else if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
       $scope.iosUser = true;
-    }
+    };
+
     $scope.Login = function () {
       $scope.loading = true;
-      //console.log('Login Function is Triggred: ' + JSON.stringify($scope.credentials));
       Users.Login.create($scope.credentials).$promise.then(function (res) {
-        //console.log('Res after login : ' + JSON.stringify(res));
         if (res.type === false) {
           $scope.errMsg = res.data;
           $scope.loading = false;
         } else {
           $scope.errMsg = false;
-          //console.log('User details after login: ' + JSON.stringify(res));
-          $localStorage.user = res;
-          $localStorage.token = res.token;
-          $scope.authentication.user = res;
-          //$scope.getLocalUser();
-          $scope.modalInstance.close();
-          $state.go('reciflix.recipes');
-          $scope.loading = false;
+          $scope.populateUserLocally(res);
         }
       }).catch(function (err) {
-        //console.log('Error happened: ' + JSON.stringify(err));
-        //console.log('Looks like there is an issue with your connectivity, Please try after sometime!');
+        alert('Looks like there is an issue with your connectivity, Please try after sometime!');
       });
     };
 
+    $scope.SignUp = function () {
+      console.log('SignUp Function is Triggred: ' + JSON.stringify($scope.user));
+      $scope.loading = true;
+      Users.Signup.create($scope.user).$promise.then(function (res) {
+        if (res.type === false) {
+          $scope.errMsg = res.data;
+          $scope.loading = false;
+        } else {
+          $scope.errMsg = false;
+          $scope.populateUserLocally(res);
+        }
+      }).catch(function (err) {
+        alert('Looks like there is an issue with your connectivity, Please try after sometime!');
+      });
+    };
 
+    hello.init({
+      google: '512199517355-keu3sicfllh719ghbveivg6ic40lq4dr.apps.googleusercontent.com',
+      facebook: '1607966326154856'
+    }, {
+      scope: 'email'
+    });
+
+    $scope.populateUserLocally = function (respUser) {
+
+      console.log('Populate local user function , user details : ' + JSON.stringify(respUser));
+
+      $scope.loading = false;
+      $scope.authentication.user = respUser;
+      $localStorage.user = respUser;
+      $localStorage.token = respUser.token;
+      $scope.modalInstance.close();
+      $state.go('reciflix.recipes');
+    };
+
+    $scope.googleAuthLogIn = function () {
+      hello('google').login({
+        scope: 'email',
+        force: false
+      }).then(function (gRes) {
+        $http({
+            method: "GET",
+            url: 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + gRes.authResponse.access_token,
+            data: null,
+            dataType: 'json',
+          })
+          .success(function (data) {
+            console.log('User Profile2222222 is : ' + JSON.stringify(data));
+            $scope.gUser = {
+              firstName: data.given_name,
+              lastName: data.family_name,
+              email: data.email,
+              provider: 'gmail'
+            };
+            Users.Signup.create($scope.gUser).$promise.then(function (res) {
+              if (res.type === false) {
+                $scope.errMsg = res.data;
+                $scope.populateUserLocally(res.user);
+              } else {
+                $scope.errMsg = false;
+                $scope.populateUserLocally(res);
+              }
+            }).catch(function (err) {
+              alert('Looks like there is an issue with your connectivity, Please try after sometime!');
+            });
+          })
+          .error(function (data, status) {
+            $scope.errMsg = 'This seems to be Google login error. We willl look into it and let you know';
+          });
+      })
+    };
+
+    $scope.fbAuthLogIn = function () {
+      hello('facebook').login().then(function (fbRes) {
+        $http({
+            method: "GET",
+            url: 'https://graph.facebook.com/me?access_token=' + fbRes.authResponse.access_token,
+            data: null,
+            dataType: 'json',
+          })
+          .success(function (data) {
+            console.log('User Profile2222222 is : ' + JSON.stringify(data));
+            $scope.fUser = {
+              firstName: data.first_name,
+              lastName: data.last_name,
+              email: data.email,
+              provider: 'fb'
+            };
+            Users.Signup.create($scope.fUser).$promise.then(function (res) {
+              if (res.type === false) {
+                $scope.errMsg = res.data;
+                $scope.populateUserLocally(res.user);
+              } else {
+                $scope.errMsg = false;
+                $scope.populateUserLocally(res);
+              }
+            }).catch(function (err) {
+              alert('Looks like there is an issue with your connectivity, Please try after sometime!');
+            });
+          })
+          .error(function (data, status) {
+            $scope.errMsg = 'This seems to be Google login error. We willl look into it and let you know';
+          });
+      }, function (e) {
+        console.log('Signin error: ' + e.error.message);
+      });
+    };
 }]);
