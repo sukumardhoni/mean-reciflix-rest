@@ -6,6 +6,11 @@
   min-height: 62px;
 }
 
+.word-brk {
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
 .bg-body {
   background-image: url('../../../modules/core/img/brand/image4.png');
   background-repeat: no-repeat;
@@ -161,5 +166,11 @@
   }
   .home-page {
     min-height: 500px;
+  }
+  #page-wrapper {
+    width: 100%;
+  }
+  .fixed-nav #wrapper {
+    margin-top: 48px !important;
   }
 }

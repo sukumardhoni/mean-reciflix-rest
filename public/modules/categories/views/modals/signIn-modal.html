@@ -14,6 +14,7 @@
       <div class="form-group">
         <input type="password" class="form-control" placeholder="Password" name="password" ng-model="credentials.password" required="">
       </div>
+      <button type="submit" class="btn btn-primary block full-width m-b" ng-click="Login()" ng-disabled="(login_form.email.$invalid || login_form.password.$invalid)">Log In</button>
       <p class="text-center">
         <a ui-sref="forgot" ng-click="$dismiss()"><small style="color:#0080ff">Forgot password?</small></a>
       </p>
@@ -22,7 +23,7 @@
       <strong data-ng-bind="errMsg"></strong>
     </div>
     <div class="col-md-12 text-center">
-      <h5>Log In with</h5>
+      <h5>or Connect with</h5>
       <a ng-click="googleAuthLogIn()" class="undecorated-link">
         <img src="/modules/core/img/buttons/google-plus-4-64.png">
       </a>
@@ -54,6 +55,7 @@
       <div class="form-group">
         <input type="password" class="form-control" placeholder="Password" name="password" ng-model="user.password" required>
       </div>
+      <button type="submit" class="btn btn-primary block full-width m-b" ng-click="SignUp()" ng-disabled="signup_form.$invalid">Sign up</button>
     </form>
     <div data-ng-show="errMsg" class="text-center text-danger">
       <strong data-ng-bind="errMsg"></strong>
@@ -61,9 +63,9 @@
   </div>
   <div class="modal-footer">
     <span ng-hide="condition1" style="font-size:14px;float:left">New to Reciflix? <a style="color:#0080ff" ng-click="condition1 = !condition1" > Sign up now.</a></span>
-    <span ng-show="condition1" style="font-size:14px;float:left">Already account? <a style="color:#0080ff" ng-click="condition1 = !condition1" > Log In.</a></span>
+    <span ng-show="condition1" style="font-size:14px;float:left">Already have an account? <a style="color:#0080ff" ng-click="condition1 = !condition1" > Log In.</a></span>
     <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
-    <button type="button" class="btn btn-primary" ng-hide="condition1" ng-click="Login()" ng-disabled="(login_form.email.$invalid || login_form.password.$invalid)">Log In</button>
-    <button type="button" class="btn btn-primary" ng-show="condition1" ng-click="SignUp()" ng-disabled="signup_form.$invalid">Sign up</button>
+    <!--<button type="button" class="btn btn-primary" ng-hide="condition1" ng-click="Login()" ng-disabled="(login_form.email.$invalid || login_form.password.$invalid)">Log In</button>-->
+    <!--<button type="button" class="btn btn-primary" ng-show="condition1" ng-click="SignUp()" ng-disabled="signup_form.$invalid">Sign up</button>-->
   </div>
 </div>

@@ -138,7 +138,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.subCatFun = function () {
 
     if ($stateParams.catId && $state.current.name === 'reciflix.recipes.subcats') {
-      console.log('$stateParams.catId is called : ' + $stateParams.catId);
+      //console.log('$stateParams.catId is called : ' + $stateParams.catId);
       $scope.loading = true;
       SubCategories.query({
         catId: $stateParams.catId,
