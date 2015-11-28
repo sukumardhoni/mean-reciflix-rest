@@ -53,7 +53,7 @@
                   <div class="m-t-xs font-bold post-label" style="width:92%"><span>{{recipe.title}}</span>
                   </div>
                   <hr>
-                  <a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">
+                  <!--<a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">-->
                     <div>
                       <div class="text-center">
                         <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive img-loader" height="180px" />
@@ -64,11 +64,11 @@
                     <div class="btn-group">
                       <button class="btn btn-white btn-sm"><i class="fa fa-eye"></i>{{recipe.views | numeral}}</button>
                       <button class="btn btn-white btn-sm"><i class="fa fa-clock-o"></i>{{recipe.duration | durationFltr}}</button>
-                      <button class="btn btn-white btn-sm"><i class="fa fa-thumbs-o-up"></i>{{recipe.ytlikes + recipe.applikes | numeral}}</button>
-                      <button class="btn btn-white btn-sm"><i class="fa fa-heart"></i> </button>
+                      <button class="btn btn-white btn-sm"><span my-like-icon likes=recipe></span><!--<i class="fa fa-thumbs-o-up"></i>-->{{recipe.ytlikes + recipe.applikes | numeral}}</button>
+                      <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=recipe></span><!--<i class="fa fa-heart"></i>--> </button>
                     </div>
                     <span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">More</span>
-                  </a>
+                  <!--</a>-->
                 </div>
               </div>
               <div class="text-center" ng-show="subCatRecipesObj.recipes.length==0">

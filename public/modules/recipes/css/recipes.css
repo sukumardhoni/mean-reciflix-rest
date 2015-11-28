@@ -84,10 +84,8 @@ ul.list-inline a {
   padding: 7px 20px;
 }
 
-
 .recipe-title {
-  font-size: 20px;
-  color: #2F4050;
+  padding: 5px;
 }
 
 .img-loader {
@@ -103,4 +101,61 @@ ul.list-inline a {
 .searchedQuery {
   font-size: 20px;
   color: #18a689;
+}
+
+.product-detail >.ibox-content {
+  padding: 0px !important;
+}
+
+
+/*Bounce animations for heart icon*/
+
+.animated {
+  #-webkit-color: #FF6666;
+  #color: #FF6666;
+  -webkit-animation-duration: 2s;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes bounceIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1.4);
+  }
+  75% {
+    -webkit-transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+  75% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounceIn {
+  -webkit-animation-name: bounceIn;
+  animation-name: bounceIn;
 }

@@ -81,7 +81,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     };
 }])
 
-.controller('RecipesCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion) {
+.controller('RecipesCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion, Authentication) {
+  $scope.authentication = Authentication;
   $scope.categoryFun = function () {
     if ($state.current.name === 'reciflix.recipes') {
       //console.log('Category function in parent controller');
@@ -131,7 +132,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 })
 
 
-.controller('SubCategoriesCtrl', function ($scope, $stateParams, SubCategories, $modal, $localStorage, $state) {
+.controller('SubCategoriesCtrl', function ($scope, $stateParams, SubCategories, $modal, $localStorage, $state, Authentication) {
+  $scope.authentication = Authentication;
   //$scope.catName = $stateParams.catName;
   $scope.catId = $stateParams.catId;
   //$scope.SubCatName = $stateParams.SubCatName;
@@ -159,7 +161,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   };
 })
 
-.controller('SubCatRecipesCtrl', function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state) {
+.controller('SubCatRecipesCtrl', function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state, Authentication) {
+  $scope.authentication = Authentication;
   $scope.catId = $stateParams.catId;
   $scope.subCatId = $stateParams.subCatId;
   $scope.vm = {
@@ -221,7 +224,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       vrecipeId: $stateParams.recipeId
     }).$promise.then(function (res) {
       // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
-      $scope.recipe = res;
+      $scope.singleRecipe = res;
       $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&iv_load_policy=3&amp;controls=1&amp;showinfo=0");
 
       //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
@@ -233,8 +236,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 })
 
 
-.controller('SearchedRecipesCtrl', function ($scope, $stateParams, SearchedRecipes) {
-
+.controller('SearchedRecipesCtrl', function ($scope, $stateParams, SearchedRecipes, Authentication) {
+  $scope.authentication = Authentication;
   $scope.vm = {
     currentPage: 1
   };

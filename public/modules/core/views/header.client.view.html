@@ -27,16 +27,20 @@
     </button>
     <a style="padding-left: 3px;" ng-click="gotoState()"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
     </a>
-    <form role="search" class="navbar-form-custom" method="post" action="" ng-submit="goToSearchRecipes(inputQuery)" autocomplete="off">
+    <form id="demo-b" role="search" method="post" action="" class="top-search-bar" ng-submit="goToSearchRecipes(inputQuery)">
+      <input type="search" placeholder="Search for a recipe..." class="search-bar-mobile" ng-model="inputQuery">
+      <input type="search" placeholder="Search for a recipe..." class="search-bar-web" ng-model="inputQuery">
+    </form>
+    <!--<form role="search" class="navbar-form-custom" method="post" action="" ng-submit="goToSearchRecipes(inputQuery)" autocomplete="off">
       <div class="form-group search-bar">
         <input type="text" placeholder="Search for a recipe..." size="30" class="top-search" name="top-search" id="top-search" ng-model="inputQuery"><span class="fa fa-search search-icon" ui-sref="reciflix.recipes.searchedrecipes({query:inputQuery})"></span>
       </div>
-    </form>
+    </form>-->
   </div>
-  <div style="float:left;" ng-hide="!isCollapsed? true : true">
-    <a style="padding-left: 3px;" ng-click="gotoState()"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
-    </a>
-  </div>
+  <!--<div style="float:left;" ng-hide="!isCollapsed? true : true">
+  <a style="padding-left: 3px;" ng-click="gotoState()"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
+  </a>
+</div>-->
   <div class="container">
     <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
       <ul class="nav navbar-nav navbar-right navbar-top-links" data-ng-hide="authentication.user">

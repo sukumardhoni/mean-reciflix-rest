@@ -16,29 +16,29 @@
           <strong>Single Recipe</strong>
         </li>
       </ol>
-      <div class="font-bold recipe-title m-b-xs">
-        RECIPE: {{recipe.title}}
-        <span class="product-main-price" style="padding-left:20px;font-size:16px">
-                                        <i class="fa fa-user"></i> <span class=""><mark >{{recipe.author}}</mark></span>
-        </span>
-      </div>
       <div class="col-lg-12">
         <div class="ibox product-detail">
           <div class="ibox-content">
             <div class="row">
               <div class="col-md-10 col-xs-12 col-lg-10 col-sm-12">
-                <div class="embed-responsive embed-responsive-16by9">
+                <div class="font-bold label-primary recipe-title m-b-xs ">
+                  {{singleRecipe.title}}
+                  <span class="product-main-price" style="padding-left:20px;font-size:16px">
+                                        <i class="fa fa-user"></i> <span class="">{{singleRecipe.author}}</span>
+                  </span>
+                </div>
+                <div class="embed-responsive embed-responsive-16by9 video-frame">
                   <iframe width="750" height="422" ng-src="{{youTubeRecipeURL}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                 </div>
                 <div class="btn-group">
-                  <button class="btn btn-white btn-sm"><i class="fa fa-eye"></i>{{recipe.views | numeral}}</button>
-                  <button class="btn btn-white btn-sm"><i class="fa fa-clock-o"></i>{{recipe.duration | durationFltr}}</button>
-                  <button class="btn btn-white btn-sm"><i class="fa fa-thumbs-o-up"></i>{{recipe.ytlikes + recipe.applikes | numeral}}</button>
-                  <button class="btn btn-white btn-sm"><i class="fa fa-heart"></i> </button>
+                  <button class="btn btn-white btn-sm"><i class="fa fa-eye"></i>{{singleRecipe.views | numeral}}</button>
+                  <button class="btn btn-white btn-sm"><i class="fa fa-clock-o"></i>{{singleRecipe.duration | durationFltr}}</button>
+                  <button class="btn btn-white btn-sm"><span my-like-icon likes=singleRecipe></span>{{singleRecipe.ytlikes + singleRecipe.applikes | numeral}}</button>
+                  <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=singleRecipe></span></button>
                 </div>
-                <h3><span class="label-primary" style="padding:5px">Description &amp; Way of making:</span></h3>
+                <div class="label-primary" style="padding:5px">Description &amp; Way of making:</div>
                 <div class="small text-muted">
-                  <pre style="font-family:verdana">{{recipe.description}}</pre>
+                  <pre style="font-family:verdana">{{singleRecipe.description}}</pre>
 
                 </div>
               </div>
