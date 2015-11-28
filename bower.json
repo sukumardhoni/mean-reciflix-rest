@@ -23,7 +23,8 @@
     "toastr": "~2.1.1",
     "PACE": "https://github.com/HubSpot/pace.git#~0.5.7",
     "numeral": "1.5.3",
-    "ng-file-upload": "~9.0.8"
+    "ng-file-upload": "~9.0.8",
+    "hello":"~1.9.8"
   },
   "resolutions": {
     "angular": "~1.2.x"
