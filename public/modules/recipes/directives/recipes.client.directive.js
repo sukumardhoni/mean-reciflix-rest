@@ -10,7 +10,7 @@ angular.module('recipes')
         favorite: '='
       },
       replace: true,
-      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animated bounceIn\'" style="font-size:16px"></i>',
+      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:16px"></i>',
       link: function (scope, elem, attrs) {
         elem.on('click', function () {
           console.log('Recipe favorite dir is called');
@@ -91,7 +91,7 @@ angular.module('recipes')
       likes: '='
     },
     replace: true,
-    template: '<i ng-class=" emptyIcon ? \'fa fa-thumbs-o-up\' : \'fa fa-thumbs-up animated bounceIn\'" style="font-size:16px"></i>',
+    template: '<i ng-class=" emptyIcon ? \'fa fa-thumbs-o-up\' : \'fa fa-thumbs-up animatedIcon bounceIn\'" style="font-size:16px"></i>',
     link: function (scope, elem, attrs) {
       elem.on('click', function () {
 

@@ -110,9 +110,9 @@ ul.list-inline a {
 
 /*Bounce animations for heart icon*/
 
-.animated {
-  #-webkit-color: #FF6666;
-  #color: #FF6666;
+.animatedIcon {
+  -webkit-color: #FF6666;
+  color: #FF6666;
   -webkit-animation-duration: 2s;
   animation-duration: 2s;
   -webkit-animation-fill-mode: both;

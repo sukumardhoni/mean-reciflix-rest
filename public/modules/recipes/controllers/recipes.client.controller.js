@@ -185,6 +185,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
         $scope.loading = false;
         if (pageNum === 1)
           $scope.totalItems = res.recipeCount;
+        res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRF/" + res.imageName : "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
         //console.log('Error happened : ' + JSON.stringify(err));
@@ -210,6 +211,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
         if (pageNum === 1)
           $scope.totalItems = res.recipeCount;
         $scope.loading = false;
+        res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName : "https://s3.amazonaws.com/NewRF/" + res.imageName;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
         //console.log('Error happened : ' + JSON.stringify(err));
