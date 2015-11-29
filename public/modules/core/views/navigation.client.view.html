@@ -32,10 +32,10 @@
       <li ui-sref-active="active" ng-click="minimalize()">
         <a ui-sref="reciflix.recipes" title="Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes</span></a>
       </li>
-      <li ui-sref-active="active" ng-click="minimalize()">
+      <li ui-sref-active="active" data-ng-show="authentication.user" ng-click="minimalize()">
         <a ui-sref="reciflix.recipes.favRecipes" title="Favorite Recipes"><i class="fa fa-heart"></i> <span class="nav-label">Favorite Recipes</span></a>
       </li>
-      <hr>
+      <hr data-ng-show="authentication.user">
       <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="authentication.user.roles.indexOf('admin') > -1">
         <a ui-sref="reciflix.categories" title="Categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories</span></a>
       </li>

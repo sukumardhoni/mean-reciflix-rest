@@ -30,12 +30,16 @@
                 <div class="embed-responsive embed-responsive-16by9 video-frame">
                   <iframe width="750" height="422" ng-src="{{youTubeRecipeURL}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                 </div>
-                <div class="btn-group">
-                  <button class="btn btn-white btn-sm"><i class="fa fa-eye"></i>{{singleRecipe.views | numeral}}</button>
-                  <button class="btn btn-white btn-sm"><i class="fa fa-clock-o"></i>{{singleRecipe.duration | durationFltr}}</button>
-                  <button class="btn btn-white btn-sm"><span my-like-icon likes=singleRecipe></span>{{singleRecipe.ytlikes + singleRecipe.applikes | numeral}}</button>
-                  <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=singleRecipe></span></button>
-                </div>
+                <center>
+                  <div class="m-t-xs">
+                    <i class="fa fa-eye space-right">{{singleRecipe.views | numeral}}</i>
+                    <i class="fa fa-clock-o space-right">{{singleRecipe.duration | durationFltr}}</i>
+                  </div>
+                  <div class="btn-group">
+                    <button class="btn btn-white btn-sm"><span my-like-icon likes=singleRecipe></span>{{singleRecipe.ytlikes + singleRecipe.applikes | numeral}}</button>
+                    <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=singleRecipe></span></button>
+                  </div>
+                </center>
                 <div class="label-primary" style="padding:5px">Description &amp; Way of making:</div>
                 <div class="small text-muted">
                   <pre style="font-family:verdana">{{singleRecipe.description}}</pre>

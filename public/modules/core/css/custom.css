@@ -250,3 +250,18 @@ input[type=search] {
 ::-webkit-input-placeholder {
   color: transparent;
 }
+
+.ibox-content {
+  min-height: 500px;
+}
+
+.rf-play-icon {
+  background: url('../../../modules/core/img/buttons/play.png') no-repeat 0;
+  display: block;
+  height: 32px;
+  position: absolute;
+  left: 48%;
+  top: 45%;
+  width: 32px;
+  z-index: 1000;
+}

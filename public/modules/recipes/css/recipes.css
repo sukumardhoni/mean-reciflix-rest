@@ -89,7 +89,7 @@ ul.list-inline a {
 }
 
 .img-loader {
-  background: url('../../../modules/core/img/loaders/img-loader.GIF') no-repeat;
+  background: url('../../../modules/core/img/loaders/290.GIF') no-repeat;
   background-position: center center;
 }
 
@@ -158,4 +158,8 @@ ul.list-inline a {
 .bounceIn {
   -webkit-animation-name: bounceIn;
   animation-name: bounceIn;
+}
+
+.space-right {
+  padding-right: 5px;
 }

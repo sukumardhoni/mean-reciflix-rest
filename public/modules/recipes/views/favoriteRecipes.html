@@ -19,18 +19,23 @@
               <hr>
               <div>
                 <div class="text-center">
-                  <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive img-loader" height="180px" />
-                  <div class="m-t-xs font-bold"><strong><i class="fa fa-user"></i> <span class=""><mark >{{recipe.author}}</mark></span></strong>
+                  <div ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">
+                    <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive img-loader" height="180px" />
+                    <div class="rf-play-icon"></div>
+                  </div>
+                  <div class="m-t-xs">
+                    <i class="fa fa-eye space-right">{{recipe.views | numeral}}</i>
+                    <i class="fa fa-clock-o space-right">{{recipe.duration | durationFltr}}</i>
+                    <i class="fa fa-user">{{recipe.author}}</i>
                   </div>
                 </div>
               </div>
-              <div class="btn-group">
-                <button class="btn btn-white btn-sm"><i class="fa fa-eye"></i>{{recipe.views | numeral}}</button>
-                <button class="btn btn-white btn-sm"><i class="fa fa-clock-o"></i>{{recipe.duration | durationFltr}}</button>
-                <button class="btn btn-white btn-sm"><span my-like-icon likes=recipe></span>{{recipe.ytlikes + recipe.applikes | numeral}}</button>
-                <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=recipe> </button>
+              <center>
+                <div class="btn-group">
+                  <button class="btn btn-white btn-sm"><span my-like-icon likes=recipe></span>{{recipe.ytlikes + recipe.applikes | numeral}}</button>
+                  <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=recipe> </button>
                 </div>
-                <span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">More</span>
+                 </center>
               </div>
             </div>
             <div class="text-center" ng-show="recipes.length === 0">

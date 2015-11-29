@@ -10,7 +10,7 @@ angular.module('recipes')
         favorite: '='
       },
       replace: true,
-      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:16px"></i>',
+      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px"></i>',
       link: function (scope, elem, attrs) {
         elem.on('click', function () {
           //console.log('Recipe favorite dir is called');
@@ -64,7 +64,8 @@ angular.module('recipes')
               }
             } else {
               //$state.go('');
-              console.log('User is not logged in')
+              console.log('User is not logged in');
+              alert('Signup/Login to add this recipe to your favorites');
             }
           })
         });
@@ -93,7 +94,7 @@ angular.module('recipes')
       likes: '='
     },
     replace: true,
-    template: '<i ng-class=" emptyIcon ? \'fa fa-thumbs-o-up\' : \'fa fa-thumbs-up animatedIcon bounceIn\'" style="font-size:16px"></i>',
+    template: '<i ng-class=" emptyIcon ? \'fa fa-thumbs-o-up\' : \'fa fa-thumbs-up animatedIcon bounceIn\'" style="font-size:20px"></i>',
     link: function (scope, elem, attrs) {
       elem.on('click', function () {
 
@@ -143,7 +144,8 @@ angular.module('recipes')
             } else {}
           } else {
             //$state.go('app.userNotLoggedIn');
-            console.log('User is not logged in')
+            console.log('User is not logged in');
+            alert('Signup/Login to Like this recipe');
           }
         })
       });

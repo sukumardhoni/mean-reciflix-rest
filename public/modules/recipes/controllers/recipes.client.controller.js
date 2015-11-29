@@ -260,6 +260,9 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       if (pageNum === 1)
         $scope.totalItems = res.count;
       $scope.recipes = res.recipes;
+    }, function (err) {
+      $scope.loading = false;
+      $scope.recipes = [];
     })
   }
 
