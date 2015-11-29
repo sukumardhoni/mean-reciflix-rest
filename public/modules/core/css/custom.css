@@ -210,6 +210,15 @@
   cursor: pointer;
 }
 
+@-moz-document url-prefix() {
+  #demo-b input[type=search] {
+    width: 36px;
+    padding-left: 10px;
+    color: transparent;
+    cursor: pointer;
+  }
+}
+
 #demo-b input[type=search]:hover {
   background-color: #fff;
 }
