@@ -10,9 +10,13 @@ angular.module('categories')
     //console.log('its prod: ' + $window.location.host);
     this.API_URL = 'http://www.reciflix.com';
     return this.API_URL;
-  } else {
-    //console.log('its dev: ' + $window.location.host);
+  } else if ($window.location.host.match(/202.83.31.92\:3000/)) {
+    //console.log('its test: ' + $window.location.host);
     this.API_URL = 'http://202.83.31.92:3000';
+    return this.API_URL;
+  } else {
+    console.log('its dev: ' + $window.location.host);
+    this.API_URL = 'http://'+$window.location.host;
     return this.API_URL;
   }
 })
