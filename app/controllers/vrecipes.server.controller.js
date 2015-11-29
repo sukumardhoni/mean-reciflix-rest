@@ -577,6 +577,73 @@ exports.getAllMyFavorites = function (req, res) {
   });
 };
 
+
+
+exports.getAllWebFavorites = function (req, res) {
+
+  var deviceInfo = req.headers.device;
+  var emailInfo = req.headers.email;
+  var pageid = req.params.pageId;
+  var pagelength = 6;
+  var favResObj = {};
+  favResObj.count = 0;
+  favResObj.recipes = [];
+
+  User.findOne({
+    _id: req.params.uId
+  }, function (err, user) {
+
+    if (user.favorites.length != 0) {
+      if (!err) {
+        console.log(' User: ' + user.email + ', fav video ids length is : ' + user.favorites.length);
+        favResObj.count = user.favorites.length;
+        var currentFavVideoids = user.favorites.slice(pageid * pagelength, (pageid * pagelength) + pagelength);
+        var foundRecipes = [];
+        if (currentFavVideoids.length === 0) {
+          return res.status(204).send({
+            message: 'No data found'
+          });
+        } else {
+          for (var i = 0; i < currentFavVideoids.length; i++) {
+            Vrecipe.findOne({
+              videoId: currentFavVideoids[i]
+            }, function (err, recipe) {
+              if (!err) {
+                foundRecipes.push(recipe);
+                if (foundRecipes.length === currentFavVideoids.length) {
+                  //user is successfully fetched MyFav recipes save action into user usage details collection
+                  agenda.now('User_Usage_Details', {
+                    email: emailInfo,
+                    device: deviceInfo,
+                    action: 'getAllMyFavorites : ' + user.displayName
+                  });
+                  //res.jsonp(foundRecipes);
+                  favResObj.recipes = foundRecipes;
+                  res.jsonp(favResObj);
+                }
+              } else {
+                return res.status(204).send({
+                  message: 'No data found'
+                });
+              }
+            });
+          }
+        }
+      } else {
+        return res.status(204).send({
+          message: 'No data found'
+        });
+      }
+    } else {
+      return res.status(204).send({
+        message: 'No data found'
+      });
+    }
+
+
+  });
+}
+
 //TODO to bs deleted after testing
 exports.getAllSearchedVRecipes = function (req, res) {
   var deviceInfo = req.headers.device;

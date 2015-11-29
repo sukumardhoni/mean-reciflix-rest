@@ -123,7 +123,37 @@ angular.module('recipes')
 
 
 
+.factory('RecipesFavCount', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/recipesFavCount/:recipeId', {
+    recipeId: '@_id'
+  }, {
+    'update': {
+      method: 'PUT'
+    }
+  });
+})
 
+
+.factory('UserFavorites', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/userFavorites/:userId', {
+    userId: '@_id'
+  }, {
+    'update': {
+      method: 'PUT'
+    }
+  });
+})
+
+.factory('MyFavRecipes', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/WebFavRecipes/:uId/:pageId', {
+    uId: '@uId',
+    pageId: '@pageId'
+  }, {
+    'query': {
+      method: 'GET'
+    }
+  });
+})
 
 
 

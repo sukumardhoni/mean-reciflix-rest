@@ -13,6 +13,15 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
       }
     }
 
+
+    $scope.goToSearchRecipes = function (inputQuery) {
+      //console.log('goToSearchRecipes is called : ' + inputQuery);
+      $state.go("reciflix.recipes.searchedrecipes", {
+        query: inputQuery
+      });
+    }
+
+
     $scope.isCollapsed = false;
     $scope.menu = Menus.getMenu('topbar');
 
@@ -45,5 +54,4 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
       $scope.modalInstance.dismiss('cancel');
     };
 
- }
-]);
+}]);

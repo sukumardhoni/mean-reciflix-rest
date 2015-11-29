@@ -33,6 +33,16 @@ angular.module('recipes').config(['$stateProvider',
       }
     })
 
+    .state('reciflix.recipes.favRecipes', {
+      url: "/favorite/recipes",
+      views: {
+        'child-view@reciflix.recipes': {
+          templateUrl: "modules/recipes/views/favoriteRecipes.html",
+          controller: 'myFavoritesCtrl',
+        }
+      }
+    })
+
 
     .state('reciflix.recipes.catrecipes', {
       url: "/:CatIdForRecipes/recipes",

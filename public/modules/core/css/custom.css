@@ -75,9 +75,6 @@
   .search-bar input[type=text] {
     width: 100%;
   }
-  .search-bar-mobile {
-    display: none;
-  }
   #demo-b input[type=search]:focus {
     width: 450px;
     padding-left: 32px;
@@ -187,9 +184,6 @@
   .pagination-sm > li > a,
   .pagination-sm > li > span {
     font-size: 18px;
-  }
-  .search-bar-web {
-    display: none;
   }
   #demo-b input[type=search]:focus {
     width: 130px;

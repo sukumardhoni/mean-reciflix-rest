@@ -75,6 +75,9 @@ module.exports = function (app) {
   app.route('/myFavorites/:uId/:pageId')
     .get(users.ensureAuthenticated, vrecipes.getAllMyFavorites);
 
+  app.route('/WebFavRecipes/:uId/:pageId')
+    .get(users.ensureAuthenticated, vrecipes.getAllWebFavorites);
+
   app.route('/searchedVRecipes/:query/:pageId')
     .get(vrecipes.getAllSearchedVRecipes);
 
