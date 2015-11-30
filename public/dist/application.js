@@ -971,6 +971,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 // Recipes Edit controller
@@ -1087,6 +1088,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state"
 
 
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -1453,11 +1455,12 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
     };
 
 }]);
+
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$state', 'ProspectiveEmail',
- function ($scope, Authentication, $state, ProspectiveEmail) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$state', 'ProspectiveEmail', '$modal', '$timeout',
+ function ($scope, Authentication, $state, ProspectiveEmail, $modal, $timeout) {
 
     $scope.authentication = Authentication;
 
@@ -1468,8 +1471,26 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     } else if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
       $scope.iosUser = true;
     }
- }]);
 
+
+    $scope.OpenSignIn = function () {
+      $scope.signFun = true;
+      //console.log('Sign In function is called');
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'modules/categories/views/modals/signIn-modal.html',
+        controller: 'AuthenticationController',
+        backdrop: "static",
+        scope: $scope
+      });
+      $timeout(function () {
+        $scope.signFun = false;
+      }, 3000);
+    }
+
+    $scope.cancel = function () {
+      $scope.modalInstance.dismiss('cancel');
+    };
+ }]);
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2124,6 +2145,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 //Directive used to set Favorite and Like button
@@ -2742,6 +2764,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',

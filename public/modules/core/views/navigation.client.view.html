@@ -29,13 +29,14 @@
           <img alt="image" class="img-circle" src="modules/core/img/brand/user.png" width="41%" style="display:none">
         </div>
       </li>
-      <li ui-sref-active="active" ng-click="minimalize()">
+      <hr data-ng-show="authentication.user" style="margin:0px">
+      <li ng-class="{active: ($state.current.name == 'reciflix.recipes') }" ng-click="minimalize()">
         <a ui-sref="reciflix.recipes" title="Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Recipes</span></a>
       </li>
       <li ui-sref-active="active" data-ng-show="authentication.user" ng-click="minimalize()">
         <a ui-sref="reciflix.recipes.favRecipes" title="Favorite Recipes"><i class="fa fa-heart"></i> <span class="nav-label">Favorite Recipes</span></a>
       </li>
-      <hr data-ng-show="authentication.user">
+      <hr data-ng-show="authentication.user.roles.indexOf('admin') > -1" style="margin:0px">
       <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="authentication.user.roles.indexOf('admin') > -1">
         <a ui-sref="reciflix.categories" title="Categories"><i class="fa fa-cubes"></i> <span class="nav-label">Categories</span></a>
       </li>
@@ -45,6 +46,7 @@
       <li ui-sref-active="active" ng-click="minimalize()" data-ng-show="authentication.user.roles.indexOf('admin') > -1">
         <a ui-sref="reciflix.users" title="Users"><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
       </li>
+      <hr data-ng-show="authentication.user" style="margin:0px">
       <li ui-sref-active="active" ng-click="minimalize()" data-ng-hide="authentication.user">
         <!--<a ui-sref="signin"> Log In</a>-->
         <a ng-click="OpenSignIn()"> Log In</a>
