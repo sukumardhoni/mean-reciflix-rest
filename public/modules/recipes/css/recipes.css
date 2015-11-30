@@ -163,3 +163,7 @@ ul.list-inline a {
 .space-right {
   padding-right: 5px;
 }
+
+.recipe-img:hover {
+  cursor: pointer;
+}

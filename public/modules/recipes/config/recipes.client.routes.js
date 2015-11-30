@@ -76,5 +76,15 @@ angular.module('recipes').config(['$stateProvider',
         }
       }
     })
+
+    .state('reciflix.recipes.catrecipes.singlerecipes', {
+      url: "/:recipeId",
+      views: {
+        'child-singlerecipes-view': {
+          templateUrl: "modules/recipes/views/singleRecipe.html",
+          controller: 'SubCatRecipesCtrl',
+        }
+      }
+    })
  }
 ]);

@@ -976,6 +976,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 // Recipes Edit controller
@@ -1816,9 +1817,18 @@ angular.module('recipes').config(['$stateProvider',
         }
       }
     })
+
+    .state('reciflix.recipes.catrecipes.singlerecipes', {
+      url: "/:recipeId",
+      views: {
+        'child-singlerecipes-view': {
+          templateUrl: "modules/recipes/views/singleRecipe.html",
+          controller: 'SubCatRecipesCtrl',
+        }
+      }
+    })
  }
 ]);
-
 angular.module('recipes')
 
 .controller('myFavoritesCtrl', ["$scope", "$stateParams", "$http", "MyFavRecipes", "$localStorage", "Authentication", function ($scope, $stateParams, $http, MyFavRecipes, $localStorage, Authentication) {
@@ -2018,6 +2028,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.authentication = Authentication;
   $scope.catId = $stateParams.catId;
   $scope.subCatId = $stateParams.subCatId;
+  $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
+
   $scope.vm = {
     currentPage: 1
   };
@@ -2025,7 +2037,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.maxSize = 5;
 
 
-  if ($stateParams.subCatId && $state.current.name === 'reciflix.recipes.subcats.recipes') {
+  if ($stateParams.subCatId) {
 
     $scope.recipesUnderSubCat = function (pageNum) {
       //console.log('recipesUnderSubCat is called ')
@@ -2053,7 +2065,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   }
 
 
-  if ($stateParams.CatIdForRecipes && $state.current.name === 'reciflix.recipes.catrecipes') {
+  if ($stateParams.CatIdForRecipes) {
     $scope.recipesUnderSubCat = function (pageNum) {
       $scope.loading = true;
       CategoryRecipes.query({
@@ -2150,7 +2162,6 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
-
 'use strict';
 
 //Directive used to set Favorite and Like button
@@ -2698,7 +2709,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $localStorage.user = respUser;
       $localStorage.token = respUser.token;
       $scope.modalInstance.close();
-      $state.go('reciflix.recipes');
+      //$state.go('reciflix.recipes');
+      $state.go($state.current)
     };
 
     $scope.googleAuthLogIn = function () {

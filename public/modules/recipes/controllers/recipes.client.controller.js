@@ -165,6 +165,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.authentication = Authentication;
   $scope.catId = $stateParams.catId;
   $scope.subCatId = $stateParams.subCatId;
+  $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
+
   $scope.vm = {
     currentPage: 1
   };
@@ -172,7 +174,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.maxSize = 5;
 
 
-  if ($stateParams.subCatId && $state.current.name === 'reciflix.recipes.subcats.recipes') {
+  if ($stateParams.subCatId) {
 
     $scope.recipesUnderSubCat = function (pageNum) {
       //console.log('recipesUnderSubCat is called ')
@@ -200,7 +202,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   }
 
 
-  if ($stateParams.CatIdForRecipes && $state.current.name === 'reciflix.recipes.catrecipes') {
+  if ($stateParams.CatIdForRecipes) {
     $scope.recipesUnderSubCat = function (pageNum) {
       $scope.loading = true;
       CategoryRecipes.query({

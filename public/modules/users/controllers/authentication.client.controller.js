@@ -63,7 +63,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $localStorage.user = respUser;
       $localStorage.token = respUser.token;
       $scope.modalInstance.close();
-      $state.go('reciflix.recipes');
+      //$state.go('reciflix.recipes');
+      $state.go($state.current)
     };
 
     $scope.googleAuthLogIn = function () {

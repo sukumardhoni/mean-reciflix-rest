@@ -1,4 +1,4 @@
-<div class="row" ng-init="getSingleRecipe()">
+<div class="row" ng-init="getSingleRecipe()" ng-click="minimalize()">
   <div class="col-lg-12">
     <div class="ibox">
       <ol class="breadcrumb breadcrumb-style">
@@ -7,10 +7,13 @@
           <a ui-sref="reciflix.recipes">Categories</a>
         </li>
         <li ng-show="catId">
-          <a ui-sref="reciflix.recipes.subcats">{{catId}}</a>
+          <a ui-sref="reciflix.recipes.subcats({catId:catId})">{{catId}}</a>
+        </li>
+        <li ng-show="CatIdForRecipes">
+          <a ui-sref="reciflix.recipes.catrecipes({CatIdForRecipes:CatIdForRecipes})">{{CatIdForRecipes}}</a>
         </li>
         <li ng-show="subCatId">
-          <a ui-sref="reciflix.recipes.subcats.recipes">{{subCatId}}</a>
+          <a ui-sref="reciflix.recipes.subcats.recipes({subCatId:subCatId})">{{subCatId}}</a>
         </li>
         <li class="active">
           <strong>Single Recipe</strong>

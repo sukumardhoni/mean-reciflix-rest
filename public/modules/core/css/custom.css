@@ -223,7 +223,7 @@
 
 @-moz-document url-prefix() {
   #demo-b input[type=search] {
-    width: 36px;
+    width: 130px;
     padding-left: 10px;
     color: transparent;
     cursor: pointer;
@@ -309,4 +309,12 @@ input[type=search] {
 .landLinks-login:hover,
 .landLinks-browse:hover {
   cursor: pointer;
+}
+
+.fixed-nav #wrapper {
+  margin-top: 48px !important;
+}
+
+body.mini-navbar .nav-header {
+  background-color: transparent !important;
 }

@@ -65,8 +65,12 @@
   <div class="wrapper wrapper-content container" data-ng-controller="HomeController">
     <div class="row">
 
-      <div class="landLinks-browse" ui-sref="reciflix.recipes">BROWSE RECIPES</div>
-      <div class="landLinks-login" ng-click="OpenSignIn()">LOGIN</div>
+      <div class="landLinks-browse" ui-sref="reciflix.recipes">
+        <button type="submit" class="btn btn-primary btn-rounded">BROWSE RECIPES</button>
+      </div>
+      <div class="landLinks-login" ng-click="OpenSignIn()">
+        <button type="submit" class="btn btn-success btn-rounded">LOGIN</button>
+      </div>
 
       <!--<div class="col-sm-5 col-xs-12 text-center">
         <div class="carousel slide carousel-fade" data-ride="carousel" data-interval="1000" id="myCarousel">
