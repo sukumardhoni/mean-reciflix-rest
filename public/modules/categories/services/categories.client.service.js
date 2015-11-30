@@ -15,8 +15,8 @@ angular.module('categories')
     this.API_URL = 'http://202.83.31.92:3000';
     return this.API_URL;
   } else {
-    console.log('its dev: ' + $window.location.host);
-    this.API_URL = 'http://'+$window.location.host;
+    //console.log('its dev: ' + $window.location.host);
+    this.API_URL = 'http://' + $window.location.host;
     return this.API_URL;
   }
 })
