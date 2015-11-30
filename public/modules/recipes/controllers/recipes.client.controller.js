@@ -256,7 +256,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       searchQuery: $stateParams.query
     }, function (res) {
       $scope.loading = false;
-      console.log('REsponse of searched query is : ' + JSON.stringify(res));
+      //console.log('REsponse of searched query is : ' + JSON.stringify(res));
       if (pageNum === 1)
         $scope.totalItems = res.count;
       $scope.recipes = res.recipes;

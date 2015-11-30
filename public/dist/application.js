@@ -510,6 +510,14 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
  function ($stateProvider, $urlRouterProvider) {
     // Home state routing
     $stateProvider
+      .state('reciflix', {
+        url: '/',
+        templateUrl: 'modules/categories/views/common/content.html',
+        controller: 'ReciflixCtrl',
+        data: {
+          bodyClass: ''
+        }
+      })
       .state('reciflix.recipesUpdate', {
         url: "recipes/update",
         templateUrl: "modules/categories/views/recipesUpdate.html",
@@ -541,35 +549,37 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
 'use strict';
 
 // Categories controller
-angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', function ($scope, $state, $localStorage, $location, $http, Authentication) {
+angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', '$modal', function ($scope, $state, $localStorage, $location, $http, Authentication, $modal) {
   $scope.authentication = Authentication;
+  $scope.authentication.user = $localStorage.user;
 
+  $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
   $scope.goToSearchRecipes = function (params) {
     $state.go('reciflix.recipes.searchedrecipes', {
       query: params
     })
   }
 
-  $scope.getLocalUser = function () {
-    //console.log('getLocalUser is called')
-    var currentUser = $localStorage.user;
-    var userDisplayName = '';
-    if (currentUser) {
-      userDisplayName = $localStorage.user.displayName;
-    }
-    $scope.userName = userDisplayName;
-    $scope.localUser = $localStorage.user;
-  }
 
-  $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+  //console.log('getLocalUser is called')
+  var currentUser = $localStorage.user;
+  var userDisplayName = '';
+  if (currentUser) {
+    userDisplayName = $localStorage.user.displayName;
+  }
+  $scope.userName = userDisplayName;
+  $scope.localUser = $localStorage.user;
+
+
 
   $scope.signout = function () {
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
     $http.post('/users/signout').success(function (response) {
-      $scope.authentication = '';
+      //console.log('Signout callback : ' + JSON.stringify(response));
+      $scope.authentication.user = '';
       delete $localStorage.token;
       delete $localStorage.user;
-      $state.go('reciflix.signin');
-      $scope.getLocalUser();
+      $state.go('reciflix.recipes');
     });
   };
   $scope.minimalize = function () {
@@ -584,6 +594,23 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       });
     }
   }
+
+  $scope.OpenSignIn = function () {
+    $scope.signFun = true;
+    //console.log('Sign In function is called');
+    $scope.modalInstance = $modal.open({
+      templateUrl: 'modules/categories/views/modals/signIn-modal.html',
+      controller: 'AuthenticationController',
+      backdrop: "static",
+      scope: $scope
+    });
+  }
+
+  $scope.cancel = function () {
+    $scope.modalInstance.dismiss('cancel');
+  };
+
+
 }])
 
 .controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", "$timeout", "ConfigService", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
@@ -726,7 +753,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
       if (resp.config.data.file) {
-        console.log('Checking response when file on callback');
+        //console.log('Checking response when file on callback');
         $timeout(function () {
           $state.go($state.current, {}, {
             reload: true
@@ -944,7 +971,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
@@ -1046,7 +1072,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state"
     Recipe.update({
       vrecipeId: item.recipeId
     }, item, function (res) {
-      console.log('Successfully updated Recipe' + JSON.stringify(res));
+      //console.log('Successfully updated Recipe' + JSON.stringify(res));
       $scope.UpdateMsg = true;
       //$state.go('faqs.dashboard', {});
     }, function (errorResponse) {
@@ -1061,7 +1087,6 @@ angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state"
 
 
 }])
-
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -1235,9 +1260,13 @@ angular.module('categories')
     //console.log('its prod: ' + $window.location.host);
     this.API_URL = 'http://www.reciflix.com';
     return this.API_URL;
+  } else if ($window.location.host.match(/202.83.31.92\:3000/)) {
+    //console.log('its test: ' + $window.location.host);
+    this.API_URL = 'http://202.83.31.92:3000';
+    return this.API_URL;
   } else {
     //console.log('its dev: ' + $window.location.host);
-    this.API_URL = 'http://202.83.31.92:3000';
+    this.API_URL = 'http://' + $window.location.host;
     return this.API_URL;
   }
 }])
@@ -1343,23 +1372,20 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
     $urlRouterProvider.otherwise('/home');
 
     // Home state routing
-    $stateProvider.
-    state('reciflix', {
-        abstract: true,
-        url: '/',
-        templateUrl: 'modules/categories/views/common/content.html',
-        controller: 'ReciflixCtrl',
+    $stateProvider
+      .state('home', {
+        url: '/home',
+       templateUrl: 'modules/core/views/home.client.view.html',
+        data: {
+          bodyClass: 'bg-body'
+        }
       })
-      .state('reciflix.home', {
-        url: 'home',
-       templateUrl: 'modules/core/views/home.client.view.html'
-      })
-      .state('reciflix.terms', {
-        url: 'terms',
+      .state('terms', {
+        url: '/terms',
         templateUrl: 'modules/core/views/terms.client.view.html',
         module: 'public'
       })
-      .state('reciflix.privacy', {
+      .state('privacy', {
         url: 'privacy',
         templateUrl: 'modules/core/views/privacy.client.view.html',
         module: 'public'
@@ -1372,14 +1398,33 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', '$http', '$location', '$localStorage',
- function ($scope, Authentication, Menus, $http, $location, $localStorage) {
+angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus', '$http', '$location', '$localStorage', '$modal', '$timeout', '$state',
+ function ($scope, Authentication, Menus, $http, $location, $localStorage, $modal, $timeout, $state) {
     $scope.authentication = Authentication;
+    $scope.authentication.user = $localStorage.user;
+
+    $scope.gotoState = function () {
+      if ($scope.authentication.user) {
+        $state.go("reciflix.recipes");
+      } else {
+        $state.go("home");
+      }
+    }
+
+
+    $scope.goToSearchRecipes = function (inputQuery) {
+      //console.log('goToSearchRecipes is called : ' + inputQuery);
+      $state.go("reciflix.recipes.searchedrecipes", {
+        query: inputQuery
+      });
+    }
+
+
     $scope.isCollapsed = false;
     $scope.menu = Menus.getMenu('topbar');
 
     $scope.toggleCollapsibleMenu = function () {
-      console.log('Checking toggleCollapsibleMenu ');
+      //console.log('Checking toggleCollapsibleMenu ');
       $scope.isCollapsed = !$scope.isCollapsed;
     };
 
@@ -1388,9 +1433,26 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
       $scope.isCollapsed = false;
     });
 
- }
-]);
 
+    $scope.OpenSignIn = function () {
+      $scope.signFun = true;
+      //console.log('Sign In function is called');
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'modules/categories/views/modals/signIn-modal.html',
+        controller: 'AuthenticationController',
+        backdrop: "static",
+        scope: $scope
+      });
+      $timeout(function () {
+        $scope.signFun = false;
+      }, 3000);
+    }
+
+    $scope.cancel = function () {
+      $scope.modalInstance.dismiss('cancel');
+    };
+
+}]);
 'use strict';
 
 
@@ -1685,6 +1747,16 @@ angular.module('recipes').config(['$stateProvider',
       }
     })
 
+    .state('reciflix.recipes.favRecipes', {
+      url: "/favorite/recipes",
+      views: {
+        'child-view@reciflix.recipes': {
+          templateUrl: "modules/recipes/views/favoriteRecipes.html",
+          controller: 'myFavoritesCtrl',
+        }
+      }
+    })
+
 
     .state('reciflix.recipes.catrecipes', {
       url: "/:CatIdForRecipes/recipes",
@@ -1720,6 +1792,38 @@ angular.module('recipes').config(['$stateProvider',
     })
  }
 ]);
+
+angular.module('recipes')
+
+.controller('myFavoritesCtrl', ["$scope", "$stateParams", "$http", "MyFavRecipes", "$localStorage", "Authentication", function ($scope, $stateParams, $http, MyFavRecipes, $localStorage, Authentication) {
+  $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+  $scope.authentication = Authentication;
+  $scope.vm = {
+    currentPage: 1
+  };
+  $scope.itemsPerPage = 6;
+  $scope.maxSize = 5;
+
+  $scope.recipesUnderFavorite = function (pageNum) {
+    //$scope.recipes = [];
+    $scope.loading = true;
+    MyFavRecipes.query({
+      pageId: (pageNum - 1),
+      uId: Authentication.user._id
+    }, function (res) {
+      $scope.loading = false;
+      //console.log('REsponse of recipesUnderFavorite query is : ' + JSON.stringify(res));
+      if (pageNum === 1)
+        $scope.totalItems = res.count;
+      $scope.recipes = res.recipes;
+    })
+  }
+
+  $scope.pageChanged = function () {
+    $scope.recipesUnderFavorite($scope.vm.currentPage);
+  }
+
+}]);
 
 'use strict';
 
@@ -1804,7 +1908,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
     };
 }])
 
-.controller('RecipesCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "UserSuggestion", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion) {
+.controller('RecipesCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "UserSuggestion", "Authentication", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion, Authentication) {
+  $scope.authentication = Authentication;
   $scope.categoryFun = function () {
     if ($state.current.name === 'reciflix.recipes') {
       //console.log('Category function in parent controller');
@@ -1854,14 +1959,15 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 }])
 
 
-.controller('SubCategoriesCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "$localStorage", "$state", function ($scope, $stateParams, SubCategories, $modal, $localStorage, $state) {
+.controller('SubCategoriesCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "$localStorage", "$state", "Authentication", function ($scope, $stateParams, SubCategories, $modal, $localStorage, $state, Authentication) {
+  $scope.authentication = Authentication;
   //$scope.catName = $stateParams.catName;
   $scope.catId = $stateParams.catId;
   //$scope.SubCatName = $stateParams.SubCatName;
   $scope.subCatFun = function () {
 
     if ($stateParams.catId && $state.current.name === 'reciflix.recipes.subcats') {
-      console.log('$stateParams.catId is called : ' + $stateParams.catId);
+      //console.log('$stateParams.catId is called : ' + $stateParams.catId);
       $scope.loading = true;
       SubCategories.query({
         catId: $stateParams.catId,
@@ -1882,7 +1988,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   };
 }])
 
-.controller('SubCatRecipesCtrl', ["$scope", "$stateParams", "SubCategoryRecipes", "$rootScope", "Recipe", "$sce", "CategoryRecipes", "$state", function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state) {
+.controller('SubCatRecipesCtrl', ["$scope", "$stateParams", "SubCategoryRecipes", "$rootScope", "Recipe", "$sce", "CategoryRecipes", "$state", "Authentication", function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state, Authentication) {
+  $scope.authentication = Authentication;
   $scope.catId = $stateParams.catId;
   $scope.subCatId = $stateParams.subCatId;
   $scope.vm = {
@@ -1905,6 +2012,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
         $scope.loading = false;
         if (pageNum === 1)
           $scope.totalItems = res.recipeCount;
+        res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRF/" + res.imageName : "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
         //console.log('Error happened : ' + JSON.stringify(err));
@@ -1930,6 +2038,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
         if (pageNum === 1)
           $scope.totalItems = res.recipeCount;
         $scope.loading = false;
+        res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName : "https://s3.amazonaws.com/NewRF/" + res.imageName;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
         //console.log('Error happened : ' + JSON.stringify(err));
@@ -1944,7 +2053,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       vrecipeId: $stateParams.recipeId
     }).$promise.then(function (res) {
       // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
-      $scope.recipe = res;
+      $scope.singleRecipe = res;
       $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&iv_load_policy=3&amp;controls=1&amp;showinfo=0");
 
       //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
@@ -1956,8 +2065,8 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 }])
 
 
-.controller('SearchedRecipesCtrl', ["$scope", "$stateParams", "SearchedRecipes", function ($scope, $stateParams, SearchedRecipes) {
-
+.controller('SearchedRecipesCtrl', ["$scope", "$stateParams", "SearchedRecipes", "Authentication", function ($scope, $stateParams, SearchedRecipes, Authentication) {
+  $scope.authentication = Authentication;
   $scope.vm = {
     currentPage: 1
   };
@@ -1974,10 +2083,13 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       searchQuery: $stateParams.query
     }, function (res) {
       $scope.loading = false;
-      console.log('REsponse of searched query is : ' + JSON.stringify(res));
+      //console.log('REsponse of searched query is : ' + JSON.stringify(res));
       if (pageNum === 1)
         $scope.totalItems = res.count;
       $scope.recipes = res.recipes;
+    }, function (err) {
+      $scope.loading = false;
+      $scope.recipes = [];
     })
   }
 
@@ -2012,6 +2124,175 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+'use strict';
+
+//Directive used to set Favorite and Like button
+
+angular.module('recipes')
+  .directive('myFavoriteIcon', ["$sce", "Authentication", "$state", "$http", "$localStorage", "RecipesFavCount", "UserFavorites", function ($sce, Authentication, $state, $http, $localStorage, RecipesFavCount, UserFavorites) {
+    return {
+      restrict: 'A',
+      scope: {
+        favorite: '='
+      },
+      replace: true,
+      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px"></i>',
+      link: function (scope, elem, attrs) {
+        elem.on('click', function () {
+          //console.log('Recipe favorite dir is called');
+          scope.$apply(function () {
+            if (Authentication.user) {
+              //console.log('Recipe favorite dir is called under Authentication ');
+              $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+              if (scope.favorite) {
+                //console.log('Scope .fav Recipe favorite dir is called under Authentication ');
+                if (scope.emptyIcon) {
+                  //console.log('Scope .emptyIcon Recipe favorite dir is called under Authentication ');
+                  scope.emptyIcon = false;
+                  Authentication.user.favorites.push(scope.favorite.videoId);
+                  var favRecipe = scope.favorite;
+                  favRecipe.favoritesCount = scope.favorite.favoritesCount + 1;
+                  RecipesFavCount.update({
+                    recipeId: favRecipe._id
+                  }, favRecipe, function (res) {
+                    //console.log('Recipe favorite cb');
+                  }, function (err) {
+                    scope.emptyIcon = true;
+                  });
+                } else {
+                  scope.emptyIcon = true;
+                  var favRecipe = scope.favorite;
+                  Authentication.user.favorites.splice(Authentication.user.favorites.indexOf(scope.favorite.videoId), 1);
+                  favRecipe.favoritesCount = scope.favorite.favoritesCount - 1;
+                  RecipesFavCount.update({
+                    recipeId: favRecipe._id
+                  }, favRecipe, function (res) {
+                    //console.log('Recipe Unfavorite cb');
+                  }, function (err) {
+                    scope.emptyIcon = false;
+                  });
+                }
+                var user = {
+                  firstName: Authentication.user.firstName,
+                  lastName: Authentication.user.lastName,
+                  favorites: scope.favorite.videoId,
+                  provider: Authentication.user.provider
+                }
+                UserFavorites.update({
+                  userId: Authentication.user._id
+                }, user, function (res) {
+                  //console.log('Details User Update fav  Service cb ');
+                }, function (err) {
+                  //scope.emptyIcon = true;
+                });
+              } else {
+                console.log('It is off!');
+              }
+            } else {
+              //$state.go('');
+              console.log('User is not logged in');
+              alert('Signup/Login to add this recipe to your favorites');
+            }
+          })
+        });
+        scope.$watch('favorite', function (newVal) {
+          if (newVal) {
+            var user = Authentication.user;
+            if (user) {
+              if (user.favorites.indexOf(newVal.videoId) == -1) {
+                scope.emptyIcon = true;
+              } else {
+                scope.emptyIcon = false;
+              }
+            } else {
+              scope.emptyIcon = true;
+            }
+          }
+        });
+      }
+    };
+  }])
+
+.directive('myLikeIcon', ["$sce", "Authentication", "$state", "$http", "$localStorage", "RecipesFavCount", "UserFavorites", function ($sce, Authentication, $state, $http, $localStorage, RecipesFavCount, UserFavorites) {
+  return {
+    restrict: 'A',
+    scope: {
+      likes: '='
+    },
+    replace: true,
+    template: '<i ng-class=" emptyIcon ? \'fa fa-thumbs-o-up\' : \'fa fa-thumbs-up animatedIcon bounceIn\'" style="font-size:20px"></i>',
+    link: function (scope, elem, attrs) {
+      elem.on('click', function () {
+
+        // console.log('Recipe likes dir is called');
+        scope.$apply(function () {
+          if (Authentication.user) {
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+            if (scope.likes) {
+              if (scope.emptyIcon) {
+                scope.emptyIcon = false;
+                Authentication.user.likes.push(scope.likes.videoId);
+                var favRecipe = scope.likes;
+                favRecipe.applikes = scope.likes.applikes + 1;
+                RecipesFavCount.update({
+                  recipeId: favRecipe._id
+                }, favRecipe, function (res) {
+                  //console.log('Recipe Liked cb ');
+                }, function (err) {
+                  scope.emptyIcon = true;
+                });
+              } else {
+                scope.emptyIcon = true;
+                var favRecipe = scope.likes;
+                Authentication.user.likes.splice(Authentication.user.likes.indexOf(scope.likes.videoId), 1);
+                favRecipe.applikes = scope.likes.applikes - 1;
+                RecipesFavCount.update({
+                  recipeId: favRecipe._id
+                }, favRecipe, function (res) {
+                  // console.log('Recipe UnLike cb');
+                }, function (err) {
+                  scope.emptyIcon = false;
+                });
+              }
+              var user = {
+                firstName: Authentication.user.firstName,
+                lastName: Authentication.user.lastName,
+                likes: scope.likes.videoId,
+                provider: Authentication.user.provider
+              }
+              UserFavorites.update({
+                userId: Authentication.user._id
+              }, user, function (res) {
+                //console.log('Details User Update Likes Service cb ');
+              }, function (err) {
+                scope.emptyIcon = true;
+              });
+            } else {}
+          } else {
+            //$state.go('app.userNotLoggedIn');
+            console.log('User is not logged in');
+            alert('Signup/Login to Like this recipe');
+          }
+        })
+      });
+
+      scope.$watch('likes', function (newVal) {
+        if (newVal) {
+          var user = Authentication.user;
+          if (user) {
+            if (user.likes.indexOf(newVal.videoId) == -1) {
+              scope.emptyIcon = true;
+            } else {
+              scope.emptyIcon = false;
+            }
+          } else {
+            scope.emptyIcon = true;
+          }
+        }
+      });
+    }
+  };
+}])
 
 'use strict';
 
@@ -2167,7 +2448,37 @@ angular.module('recipes')
 
 
 
+.factory('RecipesFavCount', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/recipesFavCount/:recipeId', {
+    recipeId: '@_id'
+  }, {
+    'update': {
+      method: 'PUT'
+    }
+  });
+}])
 
+
+.factory('UserFavorites', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/userFavorites/:userId', {
+    userId: '@_id'
+  }, {
+    'update': {
+      method: 'PUT'
+    }
+  });
+}])
+
+.factory('MyFavRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/WebFavRecipes/:uId/:pageId', {
+    uId: '@uId',
+    pageId: '@pageId'
+  }, {
+    'query': {
+      method: 'GET'
+    }
+  });
+}])
 
 
 
@@ -2250,16 +2561,16 @@ angular.module('users').config(['$stateProvider',
       url: '/signup',
       templateUrl: 'modules/users/views/authentication/signup.client.view.html'
     }).
-    state('reciflix.signin', {
-      url: 'login',
+    state('signin', {
+      url: '/login',
       templateUrl: 'modules/users/views/authentication/signin.client.view.html',
       module: 'public',
       data: {
         bodyClass: 'bg-body'
       }
     }).
-    state('reciflix.forgot', {
-      url: 'password/forgot',
+    state('forgot', {
+      url: '/password/forgot',
       templateUrl: 'modules/users/views/password/forgot-password.client.view.html',
       module: 'public',
       data: {
@@ -2300,54 +2611,137 @@ angular.module('users').config(['$stateProvider',
 angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state',
  function ($scope, $http, $location, Authentication, $localStorage, Users, $state) {
     $scope.authentication = Authentication;
-    // If user is signed in then redirect back home
-    //if ($scope.authentication.user) $location.path('/');
+    if ($scope.authentication.user) $state.go('reciflix.recipes');
 
-    $scope.signup = function () {
-      $http.post('/users/signup', $scope.credentials).success(function (response) {
-        //console.log('signup client side response ' + JSON.stringify(response));
-        if (response.type === false) {
-          $scope.error = response.data;
-        } else {
-          $scope.authentication.user = response;
-          $localStorage.token = response.token;
-          $location.path('/welcomePage');
-        }
-      });
-    };
     if (navigator.userAgent.match(/Android/i)) {
-      //console.log('Android user came');
-      //alert('Android user came');
       $scope.androidUser = true;
     } else if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
       $scope.iosUser = true;
-    }
+    };
+
     $scope.Login = function () {
-      $scope.loading = true;
-      //console.log('Login Function is Triggred: ' + JSON.stringify($scope.credentials));
+      $scope.updatingLogo = true;
       Users.Login.create($scope.credentials).$promise.then(function (res) {
-        //console.log('Res after login : ' + JSON.stringify(res));
         if (res.type === false) {
           $scope.errMsg = res.data;
-          $scope.loading = false;
+          $scope.updatingLogo = false;
         } else {
           $scope.errMsg = false;
-          //console.log('User details after login: ' + JSON.stringify(res));
-          $localStorage.user = res;
-          $localStorage.token = res.token;
-          $scope.getLocalUser();
-          $state.go('reciflix.recipes');
-          $scope.loading = false;
+          $scope.populateUserLocally(res);
         }
       }).catch(function (err) {
-        //console.log('Error happened: ' + JSON.stringify(err));
-        //console.log('Looks like there is an issue with your connectivity, Please try after sometime!');
+        alert('Looks like there is an issue with your connectivity, Please try after sometime!');
       });
     };
 
+    $scope.SignUp = function () {
+      //console.log('SignUp Function is Triggred: ' + JSON.stringify($scope.user));
+      $scope.updatingLogo = true;
+      Users.Signup.create($scope.user).$promise.then(function (res) {
+        if (res.type === false) {
+          $scope.errMsg = res.data;
+          $scope.updatingLogo = false;
+        } else {
+          $scope.errMsg = false;
+          $scope.populateUserLocally(res);
+        }
+      }).catch(function (err) {
+        alert('Looks like there is an issue with your connectivity, Please try after sometime!');
+      });
+    };
 
+    hello.init({
+      google: '512199517355-keu3sicfllh719ghbveivg6ic40lq4dr.apps.googleusercontent.com',
+      facebook: '1607966326154856'
+    }, {
+      scope: 'email'
+    });
+
+    $scope.populateUserLocally = function (respUser) {
+
+      // console.log('Populate local user function , user details : ' + JSON.stringify(respUser));
+
+      $scope.updatingLogo = false;
+      $scope.authentication.user = respUser;
+      $localStorage.user = respUser;
+      $localStorage.token = respUser.token;
+      $scope.modalInstance.close();
+      $state.go('reciflix.recipes');
+    };
+
+    $scope.googleAuthLogIn = function () {
+      hello('google').login({
+        scope: 'email',
+        force: false
+      }).then(function (gRes) {
+        $http({
+            method: "GET",
+            url: 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' + gRes.authResponse.access_token,
+            data: null,
+            dataType: 'json',
+          })
+          .success(function (data) {
+            //console.log('User Profile2222222 is : ' + JSON.stringify(data));
+            $scope.gUser = {
+              firstName: data.given_name,
+              lastName: data.family_name,
+              email: data.email,
+              provider: 'gmail'
+            };
+            Users.Signup.create($scope.gUser).$promise.then(function (res) {
+              if (res.type === false) {
+                $scope.errMsg = res.data;
+                $scope.populateUserLocally(res.user);
+              } else {
+                $scope.errMsg = false;
+                $scope.populateUserLocally(res);
+              }
+            }).catch(function (err) {
+              alert('Looks like there is an issue with your connectivity, Please try after sometime!');
+            });
+          })
+          .error(function (data, status) {
+            $scope.errMsg = 'This seems to be Google login error. We willl look into it and let you know';
+          });
+      })
+    };
+
+    $scope.fbAuthLogIn = function () {
+      hello('facebook').login().then(function (fbRes) {
+        $http({
+            method: "GET",
+            url: 'https://graph.facebook.com/me?access_token=' + fbRes.authResponse.access_token,
+            data: null,
+            dataType: 'json',
+          })
+          .success(function (data) {
+            //console.log('User Profile2222222 is : ' + JSON.stringify(data));
+            $scope.fUser = {
+              firstName: data.first_name,
+              lastName: data.last_name,
+              email: data.email,
+              provider: 'fb'
+            };
+            Users.Signup.create($scope.fUser).$promise.then(function (res) {
+              if (res.type === false) {
+                $scope.errMsg = res.data;
+                $scope.populateUserLocally(res.user);
+              } else {
+                $scope.errMsg = false;
+                $scope.populateUserLocally(res);
+              }
+            }).catch(function (err) {
+              alert('Looks like there is an issue with your connectivity, Please try after sometime!');
+            });
+          })
+          .error(function (data, status) {
+            $scope.errMsg = 'This seems to be Google login error. We willl look into it and let you know';
+          });
+      }, function (e) {
+        console.log('Signin error: ' + e.error.message);
+      });
+    };
 }]);
-
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',

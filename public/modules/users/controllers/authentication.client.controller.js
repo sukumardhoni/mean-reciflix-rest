@@ -27,7 +27,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
     };
 
     $scope.SignUp = function () {
-      console.log('SignUp Function is Triggred: ' + JSON.stringify($scope.user));
+      //console.log('SignUp Function is Triggred: ' + JSON.stringify($scope.user));
       $scope.updatingLogo = true;
       Users.Signup.create($scope.user).$promise.then(function (res) {
         if (res.type === false) {
@@ -73,7 +73,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
             dataType: 'json',
           })
           .success(function (data) {
-            console.log('User Profile2222222 is : ' + JSON.stringify(data));
+            //console.log('User Profile2222222 is : ' + JSON.stringify(data));
             $scope.gUser = {
               firstName: data.given_name,
               lastName: data.family_name,
@@ -107,7 +107,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
             dataType: 'json',
           })
           .success(function (data) {
-            console.log('User Profile2222222 is : ' + JSON.stringify(data));
+            //console.log('User Profile2222222 is : ' + JSON.stringify(data));
             $scope.fUser = {
               firstName: data.first_name,
               lastName: data.last_name,

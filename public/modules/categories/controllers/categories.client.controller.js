@@ -27,7 +27,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
   $scope.signout = function () {
     $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
     $http.post('/users/signout').success(function (response) {
-      console.log('Signout callback : ' + JSON.stringify(response));
+      //console.log('Signout callback : ' + JSON.stringify(response));
       $scope.authentication.user = '';
       delete $localStorage.token;
       delete $localStorage.user;
@@ -205,7 +205,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
       if (resp.config.data.file) {
-        console.log('Checking response when file on callback');
+        //console.log('Checking response when file on callback');
         $timeout(function () {
           $state.go($state.current, {}, {
             reload: true

@@ -99,7 +99,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
     Recipe.update({
       vrecipeId: item.recipeId
     }, item, function (res) {
-      console.log('Successfully updated Recipe' + JSON.stringify(res));
+      //console.log('Successfully updated Recipe' + JSON.stringify(res));
       $scope.UpdateMsg = true;
       //$state.go('faqs.dashboard', {});
     }, function (errorResponse) {
