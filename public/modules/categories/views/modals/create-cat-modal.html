@@ -59,11 +59,11 @@
       </div>
     </form>
   </div>
-  <span class="rf-updating-icon" ng-show="updatingLogo"></span>
+  <!--<span class="rf-updating-icon" ng-show="updatingLogo"></span>-->
   <div class="modal-footer">
     <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
-    <button type="button" class="btn btn-primary" ng-click="createCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid)" ng-show="modalName === 'Create Category'">{{modalName}}</button>
+    <button type="button" class="btn btn-primary" ng-click="createCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid || isDisabled )" ng-show="modalName === 'Create Category'">{{modalBtnName}}</button>
     <a ng-click="deleteCat(cat,$index)" title="Delete this category"><i class="fa fa-times" style="color:red;font-size:20px;float:left" ng-show="modalName === 'Update Category'"></i></a>
-    <button type="button" class="btn btn-primary" ng-click="updateCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid)" ng-show="modalName === 'Update Category'">{{modalName}}</button>
+    <button type="button" class="btn btn-primary" ng-click="updateCat()" ng-disabled="(cat_form.displayName.$invalid || login_form.catId.$invalid || isDisabled )" ng-show="modalName === 'Update Category'">{{modalBtnName}}</button>
   </div>
 </div>

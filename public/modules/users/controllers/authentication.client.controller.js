@@ -11,12 +11,17 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $scope.iosUser = true;
     };
 
+
+    $scope.buttonTextLogIn = 'Log In';
+    $scope.buttonTextSignUp = 'Sign Up';
+
     $scope.Login = function () {
-      $scope.updatingLogo = true;
+      $scope.isDisabled = true;
+      $scope.buttonTextLogIn = 'Logging In...';
       Users.Login.create($scope.credentials).$promise.then(function (res) {
         if (res.type === false) {
           $scope.errMsg = res.data;
-          $scope.updatingLogo = false;
+          //$scope.updatingLogo = false;
         } else {
           $scope.errMsg = false;
           $scope.populateUserLocally(res);
@@ -27,12 +32,12 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
     };
 
     $scope.SignUp = function () {
-      //console.log('SignUp Function is Triggred: ' + JSON.stringify($scope.user));
-      $scope.updatingLogo = true;
+      $scope.buttonTextSignUp = 'Signing Up...';
+      $scope.isDisabled = true;
       Users.Signup.create($scope.user).$promise.then(function (res) {
         if (res.type === false) {
           $scope.errMsg = res.data;
-          $scope.updatingLogo = false;
+          //$scope.updatingLogo = false;
         } else {
           $scope.errMsg = false;
           $scope.populateUserLocally(res);
@@ -53,7 +58,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
       // console.log('Populate local user function , user details : ' + JSON.stringify(respUser));
 
-      $scope.updatingLogo = false;
+      //$scope.updatingLogo = false;
       $scope.authentication.user = respUser;
       $localStorage.user = respUser;
       $localStorage.token = respUser.token;

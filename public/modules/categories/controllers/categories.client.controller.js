@@ -82,6 +82,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $scope.cat = '';
     $scope.catName = '';
     $scope.modalName = "Create Category";
+    $scope.modalBtnName = "Create Category";
     $scope.modalInstance = $modal.open({
       templateUrl: 'modules/categories/views/modals/create-cat-modal.html',
       controller: 'CategoryCtrl',
@@ -92,6 +93,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.editCat = function (cat, index) {
     $scope.modalName = "Update Category";
+    $scope.modalBtnName = "Update Category";
     $scope.updatingLogo = true;
     $localStorage.indexVal = index;
 
@@ -135,15 +137,16 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.createCat = function () {
     //console.log('Successfully fetched the image file ' + JSON.stringify($scope.cat));
-    $scope.updatingLogo = true;
-
+    //$scope.updatingLogo = true;
+    $scope.isDisabled = true;
+    $scope.modalBtnName = "Creating...";
     Upload.upload({
       url: ConfigService.API_URL + '/newcats',
       file: $scope.cat.picFile,
       data: $scope.cat
     }).then(function (resp) {
       $scope.categories.unshift(resp.data);
-      $scope.updatingLogo = false;
+      //$scope.updatingLogo = false;
       $scope.modalInstance.close();
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
@@ -180,7 +183,9 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
   $scope.updateCat = function () {
     var indexVal = $localStorage.indexVal;
-    $scope.updatingLogo = true;
+    $scope.modalBtnName = "Updating...";
+    $scope.isDisabled = true;
+    //$scope.updatingLogo = true;
     /*    SingleCat.update({
           newCatId: $scope.cat.catId
         }, $scope.cat, function (res) {
@@ -200,7 +205,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.categories.splice(indexVal, 1);
       $scope.categories.splice(indexVal, 0, resp.data);
       delete $localStorage.indexVal;
-      $scope.updatingLogo = false;
+      //$scope.updatingLogo = false;
       $scope.modalInstance.close();
       //console.log('Success ' + resp.config.data.file.name + ', uploaded. Response: ' + JSON.stringify(resp.data));
       //console.log('Success uploaded. Response: ' + JSON.stringify(resp));
