@@ -1459,6 +1459,18 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
       $scope.modalInstance.dismiss('cancel');
     };
 
+
+    $scope.signout = function () {
+      $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+      $http.post('/users/signout').success(function (response) {
+        //console.log('Signout callback : ' + JSON.stringify(response));
+        $scope.authentication.user = '';
+        delete $localStorage.token;
+        delete $localStorage.user;
+        $state.go('reciflix.recipes');
+      });
+    };
+
 }]);
 'use strict';
 
@@ -2168,7 +2180,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
 //Directive used to set Favorite and Like button
 
 angular.module('recipes')
-  .directive('myFavoriteIcon', ["$sce", "Authentication", "$state", "$http", "$localStorage", "RecipesFavCount", "UserFavorites", function ($sce, Authentication, $state, $http, $localStorage, RecipesFavCount, UserFavorites) {
+  .directive('myFavoriteIcon', ["$sce", "Authentication", "$state", "$http", "$localStorage", "RecipesFavCount", "UserFavorites", "$modal", function ($sce, Authentication, $state, $http, $localStorage, RecipesFavCount, UserFavorites, $modal) {
     return {
       restrict: 'A',
       scope: {
@@ -2228,9 +2240,28 @@ angular.module('recipes')
                 console.log('It is off!');
               }
             } else {
-              //$state.go('');
-              console.log('User is not logged in');
-              alert('Signup/Login to add this recipe to your favorites');
+              var modalInstance = $modal.open({
+                templateUrl: 'modules/categories/views/modals/userNotLoggedIn-modal.html',
+                backdrop: "static",
+                scope: scope,
+                controller: 'LoginSignUpModalCtrl'
+              });
+              modalInstance.result.then(function (booleanValue) {
+                scope.modalInstance = $modal.open({
+                  templateUrl: 'modules/categories/views/modals/signIn-modal.html',
+                  controller: 'AuthenticationController',
+                  backdrop: "static",
+                  scope: scope,
+                  resolve: {
+                    SignUpCondition: function () {
+                      return booleanValue;
+                    }
+                  }
+                });
+              }, function () {});
+
+
+
             }
           })
         });
@@ -2252,7 +2283,23 @@ angular.module('recipes')
     };
   }])
 
-.directive('myLikeIcon', ["$sce", "Authentication", "$state", "$http", "$localStorage", "RecipesFavCount", "UserFavorites", function ($sce, Authentication, $state, $http, $localStorage, RecipesFavCount, UserFavorites) {
+
+.controller('LoginSignUpModalCtrl', ["$scope", "$modalInstance", "$modal", function ($scope, $modalInstance, $modal) {
+  $scope.LogInModal = function () {
+    $scope.SignUpCondition = false;
+    $modalInstance.close();
+  };
+  $scope.SignUpModal = function () {
+    $scope.SignUpCondition = true;
+    $modalInstance.close($scope.SignUpCondition);
+  };
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}])
+
+
+.directive('myLikeIcon', ["$sce", "Authentication", "$state", "$http", "$localStorage", "RecipesFavCount", "UserFavorites", "$modal", function ($sce, Authentication, $state, $http, $localStorage, RecipesFavCount, UserFavorites, $modal) {
   return {
     restrict: 'A',
     scope: {
@@ -2308,9 +2355,26 @@ angular.module('recipes')
               });
             } else {}
           } else {
-            //$state.go('app.userNotLoggedIn');
-            console.log('User is not logged in');
-            alert('Signup/Login to Like this recipe');
+
+            var modalInstance = $modal.open({
+              templateUrl: 'modules/categories/views/modals/userNotLoggedIn-modal.html',
+              backdrop: "static",
+              scope: scope,
+              controller: 'LoginSignUpModalCtrl'
+            });
+            modalInstance.result.then(function (booleanValue) {
+              scope.modalInstance = $modal.open({
+                templateUrl: 'modules/categories/views/modals/signIn-modal.html',
+                controller: 'AuthenticationController',
+                backdrop: "static",
+                scope: scope,
+                resolve: {
+                  SignUpCondition: function () {
+                    return booleanValue;
+                  }
+                }
+              });
+            }, function () {});
           }
         })
       });
@@ -2332,7 +2396,6 @@ angular.module('recipes')
     }
   };
 }])
-
 'use strict';
 
 // Recipes Filter
@@ -2647,8 +2710,8 @@ angular.module('users').config(['$stateProvider',
 
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state',
- function ($scope, $http, $location, Authentication, $localStorage, Users, $state) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state', '$modalInstance', 'SignUpCondition',
+ function ($scope, $http, $location, Authentication, $localStorage, Users, $state, $modalInstance, SignUpCondition) {
     $scope.authentication = Authentication;
     if ($scope.authentication.user) $state.go('reciflix.recipes');
 
@@ -2661,6 +2724,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
     $scope.buttonTextLogIn = 'Log In';
     $scope.buttonTextSignUp = 'Sign Up';
+    $scope.condition1 = SignUpCondition;
 
     $scope.Login = function () {
       $scope.isDisabled = true;
@@ -2668,6 +2732,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       Users.Login.create($scope.credentials).$promise.then(function (res) {
         if (res.type === false) {
           $scope.errMsg = res.data;
+          $scope.isDisabled = false;
+          $scope.buttonTextLogIn = 'Log In';
           //$scope.updatingLogo = false;
         } else {
           $scope.errMsg = false;
@@ -2684,6 +2750,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       Users.Signup.create($scope.user).$promise.then(function (res) {
         if (res.type === false) {
           $scope.errMsg = res.data;
+          $scope.isDisabled = false;
+          $scope.buttonTextSignUp = 'Sign Up';
           //$scope.updatingLogo = false;
         } else {
           $scope.errMsg = false;
@@ -2711,7 +2779,16 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $localStorage.token = respUser.token;
       $scope.modalInstance.close();
       //$state.go('reciflix.recipes');
-      $state.go($state.current)
+      if ($state.current.name === 'home') {
+        $state.go('reciflix.recipes');
+      } else {
+        $state.go($state.current)
+      }
+    };
+
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
     };
 
     $scope.googleAuthLogIn = function () {
@@ -2787,7 +2864,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
-
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',

@@ -19,7 +19,7 @@
 <div data-ng-controller="HeaderController" class="navbar-fixed-top">
   <span minimaliza-sidebar ng-show="$state.includes('reciflix')"></span>
   <div class="navbar-header">
-   <!--<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()" ng-hide="$state.includes('reciflix')">
+    <!--<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()" ng-hide="$state.includes('reciflix')">
   <span class="sr-only">Toggle navigation</span>
   <span class="icon-bar fa fa-align-justify"></span>
   <span class="icon-bar"></span>
@@ -36,6 +36,18 @@
       </div>
     </form>-->
   </div>
+
+  <ul class="nav navbar-top-links navbar-right" data-ng-show="authentication.user">
+    <li>
+      <span class="m-r-sm text-muted welcome-message">Welcome to {{authentication.user.displayName}}.</span>
+    </li>
+    <li>
+      <a ng-click="signout()">
+        <i class="fa fa-sign-out"></i> Log out
+      </a>
+    </li>
+  </ul>
+
   <!--<div style="float:left;" ng-hide="!isCollapsed? true : true">
   <a style="padding-left: 3px;" ng-click="gotoState()"><img src="modules/core/img/brand/reciflix-logo.png" width="192px">
   </a>

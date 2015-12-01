@@ -70,7 +70,6 @@
 @media screen and (min-width: 768px) {
   .navbar-right {
     float: right !important;
-    margin-right: -93px !important;
   }
   .search-bar input[type=text] {
     width: 100%;

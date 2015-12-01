@@ -54,4 +54,16 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
       $scope.modalInstance.dismiss('cancel');
     };
 
+
+    $scope.signout = function () {
+      $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+      $http.post('/users/signout').success(function (response) {
+        //console.log('Signout callback : ' + JSON.stringify(response));
+        $scope.authentication.user = '';
+        delete $localStorage.token;
+        delete $localStorage.user;
+        $state.go('reciflix.recipes');
+      });
+    };
+
 }]);

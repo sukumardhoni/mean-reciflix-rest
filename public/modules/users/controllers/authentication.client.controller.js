@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state',
- function ($scope, $http, $location, Authentication, $localStorage, Users, $state) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state', '$modalInstance', 'SignUpCondition',
+ function ($scope, $http, $location, Authentication, $localStorage, Users, $state, $modalInstance, SignUpCondition) {
     $scope.authentication = Authentication;
     if ($scope.authentication.user) $state.go('reciflix.recipes');
 
@@ -14,6 +14,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
     $scope.buttonTextLogIn = 'Log In';
     $scope.buttonTextSignUp = 'Sign Up';
+    $scope.condition1 = SignUpCondition;
 
     $scope.Login = function () {
       $scope.isDisabled = true;
@@ -21,6 +22,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       Users.Login.create($scope.credentials).$promise.then(function (res) {
         if (res.type === false) {
           $scope.errMsg = res.data;
+          $scope.isDisabled = false;
+          $scope.buttonTextLogIn = 'Log In';
           //$scope.updatingLogo = false;
         } else {
           $scope.errMsg = false;
@@ -37,6 +40,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       Users.Signup.create($scope.user).$promise.then(function (res) {
         if (res.type === false) {
           $scope.errMsg = res.data;
+          $scope.isDisabled = false;
+          $scope.buttonTextSignUp = 'Sign Up';
           //$scope.updatingLogo = false;
         } else {
           $scope.errMsg = false;
@@ -64,7 +69,16 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $localStorage.token = respUser.token;
       $scope.modalInstance.close();
       //$state.go('reciflix.recipes');
-      $state.go($state.current)
+      if ($state.current.name === 'home') {
+        $state.go('reciflix.recipes');
+      } else {
+        $state.go($state.current)
+      }
+    };
+
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
     };
 
     $scope.googleAuthLogIn = function () {
