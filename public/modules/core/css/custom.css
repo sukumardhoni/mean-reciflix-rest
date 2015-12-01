@@ -214,6 +214,9 @@
   ::-webkit-input-placeholder {
     color: transparent;
   }
+  ::-moz-input-placeholder {
+    color: transparent;
+  }
 }
 
 .top-search-bar {

@@ -15,10 +15,10 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 
 
     $scope.goToSearchRecipes = function (inputQuery) {
-      //console.log('goToSearchRecipes is called : ' + inputQuery);
       $state.go("reciflix.recipes.searchedrecipes", {
         query: inputQuery
       });
+      $scope.inputQuery = '';
     }
 
 

@@ -1420,10 +1420,10 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 
 
     $scope.goToSearchRecipes = function (inputQuery) {
-      //console.log('goToSearchRecipes is called : ' + inputQuery);
       $state.go("reciflix.recipes.searchedrecipes", {
         query: inputQuery
       });
+      $scope.inputQuery = '';
     }
 
 
@@ -1460,7 +1460,6 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
     };
 
 }]);
-
 'use strict';
 
 
@@ -1829,6 +1828,7 @@ angular.module('recipes').config(['$stateProvider',
     })
  }
 ]);
+
 angular.module('recipes')
 
 .controller('myFavoritesCtrl', ["$scope", "$stateParams", "$http", "MyFavRecipes", "$localStorage", "Authentication", function ($scope, $stateParams, $http, MyFavRecipes, $localStorage, Authentication) {
@@ -2162,6 +2162,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 //Directive used to set Favorite and Like button
@@ -2786,6 +2787,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',
