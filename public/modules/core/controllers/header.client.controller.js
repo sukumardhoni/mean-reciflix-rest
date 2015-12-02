@@ -62,7 +62,8 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
         $scope.authentication.user = '';
         delete $localStorage.token;
         delete $localStorage.user;
-        $state.go('reciflix.recipes');
+        //$state.go('reciflix.recipes');
+        $state.go('home');
       });
     };
 

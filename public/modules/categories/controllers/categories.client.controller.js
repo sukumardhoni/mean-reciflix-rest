@@ -31,7 +31,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.authentication.user = '';
       delete $localStorage.token;
       delete $localStorage.user;
-      $state.go('reciflix.recipes');
+      $state.go('home');
     });
   };
   $scope.minimalize = function () {

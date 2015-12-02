@@ -579,7 +579,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
       $scope.authentication.user = '';
       delete $localStorage.token;
       delete $localStorage.user;
-      $state.go('reciflix.recipes');
+      $state.go('home');
     });
   };
   $scope.minimalize = function () {
@@ -976,7 +976,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
@@ -1467,12 +1466,12 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
         $scope.authentication.user = '';
         delete $localStorage.token;
         delete $localStorage.user;
-        $state.go('reciflix.recipes');
+        //$state.go('reciflix.recipes');
+        $state.go('home');
       });
     };
 
 }]);
-
 'use strict';
 
 
@@ -1508,7 +1507,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
  }]);
-
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2867,6 +2865,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',
