@@ -14,7 +14,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
     $scope.buttonTextLogIn = 'Log In';
     $scope.buttonTextSignUp = 'Sign Up';
-    $scope.condition1 = SignUpCondition;
+    if (SignUpCondition)
+      $scope.condition1 = SignUpCondition;
 
     $scope.Login = function () {
       $scope.isDisabled = true;

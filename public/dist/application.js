@@ -1472,6 +1472,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
     };
 
 }]);
+
 'use strict';
 
 
@@ -2396,6 +2397,7 @@ angular.module('recipes')
     }
   };
 }])
+
 'use strict';
 
 // Recipes Filter
@@ -2724,7 +2726,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
     $scope.buttonTextLogIn = 'Log In';
     $scope.buttonTextSignUp = 'Sign Up';
-    $scope.condition1 = SignUpCondition;
+    if (SignUpCondition)
+      $scope.condition1 = SignUpCondition;
 
     $scope.Login = function () {
       $scope.isDisabled = true;
@@ -3115,6 +3118,11 @@ angular.module('users').factory('Users', ['$resource',
     });
  }
 ])
+
+
+.factory('SignUpCondition', function () {
+  return false;
+})
 
 //API_HOST is taken from single spot category.client.services.js
 //.constant('API_HOST', 'http://localhost:3000')

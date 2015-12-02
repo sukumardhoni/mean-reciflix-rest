@@ -11,6 +11,11 @@ angular.module('users').factory('Users', ['$resource',
  }
 ])
 
+
+.factory('SignUpCondition', function () {
+  return false;
+})
+
 //API_HOST is taken from single spot category.client.services.js
 //.constant('API_HOST', 'http://localhost:3000')
 //.constant('API_HOST', 'http://www.reciflix.com')
