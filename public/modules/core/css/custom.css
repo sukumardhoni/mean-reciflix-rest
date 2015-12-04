@@ -216,6 +216,9 @@
   ::-moz-input-placeholder {
     color: transparent;
   }
+  .bg-body {
+    background-image: url('../../../modules/core/img/brand/image-4-min.png');
+  }
 }
 
 .top-search-bar {
