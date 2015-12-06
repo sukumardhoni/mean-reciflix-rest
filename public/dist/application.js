@@ -1843,6 +1843,7 @@ angular.module('recipes').config(['$stateProvider',
  }
 ]);
 
+'use strict';
 angular.module('recipes')
 
 .controller('myFavoritesCtrl', ["$scope", "$stateParams", "$http", "MyFavRecipes", "$localStorage", "Authentication", function ($scope, $stateParams, $http, MyFavRecipes, $localStorage, Authentication) {

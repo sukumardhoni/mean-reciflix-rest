@@ -48,7 +48,7 @@
 
 <!--<body class="ng-cloak" ng-class="$state.current.data.bodyClass">-->
 
-<body class="ng-cloak fixed-nav" ng-class="$state.current.data.bodyClass">
+<body class="ng-cloak fixed-nav" >
 
 
    <!-- Wrapper-->
@@ -65,7 +65,7 @@
     {% block content %}{% endblock %}
 
     <!-- Footer -->
-    <div ng-include="'/modules/core/views/footer.client.view.html'" ng-hide="$state.includes('reciflix')" style="position:fixed;width:100%;bottom: 0px;"></div>
+    <div ng-include="'/modules/core/views/footer.client.view.html'" ng-hide="$state.includes('reciflix')" style="width:100%;bottom: 0px;"></div>
 
     <!-- End page wrapper-->
 

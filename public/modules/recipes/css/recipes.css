@@ -89,7 +89,7 @@ ul.list-inline a {
 }
 
 .img-loader {
-  background: url('../../../modules/core/img/loaders/290.GIF') no-repeat;
+  background: url('../../../modules/core/img/loaders/spinner.GIF') no-repeat;
   background-position: center center;
 }
 
@@ -166,4 +166,52 @@ ul.list-inline a {
 
 .recipe-img:hover {
   cursor: pointer;
+}
+
+.animate.ng-animate {
+  -webkit-animation: none 0s;
+  -moz-animation: none 0s;
+  animation: none 0s;
+}
+
+.spin {
+  color: #18bc9c;
+  -webkit-animation: spin 2s infinite linear;
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  -ms-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  font-size: 1.5em;
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

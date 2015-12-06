@@ -104,7 +104,7 @@ img {
 }
 
 footer {
-  background-color: #F8F8F8;
+  background: #F8F8F8;
   color: #5C5C5C;
   z-index: 1000;
   bottom: 0;
@@ -115,7 +115,6 @@ footer {
 
 ul>li>a {
   font-size: 16px;
-  color: white;
   transition: all 0.2s ease-in-out;
 }
 
@@ -141,7 +140,7 @@ ul.icons a {
   border: 0;
   box-shadow: inset 0 0 0 1px #e6e6e6;
   border-radius: 100%;
-  color: #aaa;
+  color: #1ab394;
   font-size: 24px;
 }
 
@@ -185,6 +184,10 @@ footer ul.icons a:hover {
   text-align: center !important;
 }
 
+footer ul.list-inline a{
+  color: #1ab394 !important;
+}
+
 .navbar-brand {
   float: left;
   height: 0px !important;
@@ -212,13 +215,13 @@ ul.list-inline a {
   border: 0;
   box-shadow: inset 0 0 0 1px #e6e6e6;
   border-radius: 100%;
-  color: #aaa;
+  color: #1ab394;
   font-size: 24px;
 }
 
 footer ul.list-inline a:hover {
   box-shadow: inset 0 0 0 1px #00B88A;
-  color: #71dec3;
+  color: #1ab394;
 }
 
 ul.list-inline a:hover {
@@ -234,6 +237,6 @@ ul.list-inline a:hover {
   box-shadow: inset 0 0 0 1px #71dec3;
   background: #fff;
   border-radius: 100%;
-  color: #aaa;
+  color: #1ab394;
   font-size: 24px;
 }

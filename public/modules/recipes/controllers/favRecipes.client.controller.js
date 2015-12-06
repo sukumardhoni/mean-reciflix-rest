@@ -1,3 +1,4 @@
+'use strict';
 angular.module('recipes')
 
 .controller('myFavoritesCtrl', function ($scope, $stateParams, $http, MyFavRecipes, $localStorage, Authentication) {
