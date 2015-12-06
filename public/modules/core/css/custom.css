@@ -313,7 +313,7 @@ input[type=search] {
   display: block;
   height: 32px;
   position: absolute;
-  left: 48%;
+  left: 45%;
   top: 45%;
   width: 32px;
   z-index: 1000;

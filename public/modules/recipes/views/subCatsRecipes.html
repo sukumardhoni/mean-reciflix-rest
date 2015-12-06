@@ -55,7 +55,7 @@
                   <!--<a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">-->
                   <div class="text-center">
                     <!--<div ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})" class="recipe-img">-->
-                    <div ui-sref="{{ catId ?  'reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})' :  'reciflix.recipes.catrecipes.singlerecipes({recipeId:recipe.recipeId})' }}" class="recipe-img">
+                    <div ui-sref="{{ catId ?  'reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})' :  'reciflix.recipes.catrecipes.singlerecipes({recipeId:recipe.recipeId})' }}" class="recipe-img" style="position:relative">
                       <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive img-loader" height="180px" />
                       <div class="rf-play-icon"></div>
                     </div>
