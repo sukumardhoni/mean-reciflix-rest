@@ -37,15 +37,18 @@
         <input type="text" placeholder="Search for a recipe..." size="30" class="top-search" name="top-search" id="top-search" ng-model="inputQuery"><span class="fa fa-search search-icon" ui-sref="reciflix.recipes.searchedrecipes({query:inputQuery})"></span>
       </div>
     </form>-->
+    <a ng-click="signout()" class="signout-header"  data-ng-show="authentication.user">
+        <i class="fa fa-sign-out visible-xs"></i>
+      </a>
   </div>
 
   <ul class="nav navbar-top-links navbar-right hidden-xs" data-ng-show="authentication.user">
     <li>
       <span class="m-r-sm text-muted welcome-message">Welcome to {{authentication.user.displayName}}.</span>
     </li>
-    <li class="hidden-xs">
+    <li>
       <a ng-click="signout()">
-        <i class="fa fa-sign-out"></i> Log out
+        <i class="fa fa-sign-out"></i><span class="">Log out</span>
       </a>
     </li>
   </ul>

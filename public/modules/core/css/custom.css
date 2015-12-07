@@ -11,6 +11,15 @@
   word-break: break-word;
 }
 
+.signout-header{
+      float: right;
+    padding-top: 16px;
+    font-size: 20px;
+    color: dodgerblue !important;
+    padding-right: 15px;
+}
+
+
 .navbar-top-links li a {
     padding: 16px 10px !important;
     min-height: 50px;
@@ -246,7 +255,6 @@
 
 .top-search-bar {
   display: inline-block;
-  float: right;
   padding-top: 7px;
   padding-right: 3px;
   padding-left: 35px;
