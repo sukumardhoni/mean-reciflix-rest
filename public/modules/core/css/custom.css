@@ -367,3 +367,7 @@ input[type=search] {
 body.mini-navbar .nav-header {
   background-color: transparent !important;
 }
+
+#side-menu hr{
+  border-top: 1px solid #666 !important;
+}

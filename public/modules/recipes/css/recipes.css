@@ -215,3 +215,8 @@ ul.list-inline a {
     transform: rotate(360deg);
   }
 }
+
+.cat-img{
+  width: 400px;
+  height: 200px;
+}

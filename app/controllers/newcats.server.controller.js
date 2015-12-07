@@ -321,7 +321,7 @@ exports.listOfCats = function (req, res) {
       active: {
         $in: activeFltrFlgs
       }
-    }).sort('rank').populate('user', 'displayName').skip(req.params.pageId * 8).limit(8).exec(function (err, categories) {
+    }).sort('rank').populate('user', 'displayName').skip(req.params.pageId * 12).limit(12).exec(function (err, categories) {
       if (err) {
         // console.log('@@@@@@@@@ Error at categories list fetching : ' + err);
         return res.status(400).send({

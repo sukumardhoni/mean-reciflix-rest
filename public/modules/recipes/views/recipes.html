@@ -9,13 +9,13 @@
           <img ng-src="modules/core/img/loaders/cats-loader.GIF" ng-show="loading">
           <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="cat in categories">
             <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.subcats({catId:cat.catId})" ng-click="minimalize()" ng-show="cat.subCatsExist">
-              <img ng-src="https://s3.amazonaws.com/NewRF/{{cat.imageName}}" alt=" " class="img-responsive img-loader">
+              <img ng-src="https://s3.amazonaws.com/NewRF/{{cat.imageName}}" alt=" " class="img-responsive img-loader cat-img">
               <hr>
               <h3 class="h3-styles media-heading"><a>{{cat.displayName}}</a></h3>
             </div>
 
             <div class="thumbnail cursor-style" ui-sref="reciflix.recipes.catrecipes({CatIdForRecipes:cat.catId})" ng-hide="cat.subCatsExist" ng-click="minimalize()">
-              <img ng-src="https://s3.amazonaws.com/NewRF/{{cat.imageName}}" alt=" " class="img-responsive img-loader">
+              <img ng-src="https://s3.amazonaws.com/NewRF/{{cat.imageName}}" alt=" " class="img-responsive img-loader cat-img">
               <hr>
               <h3 class="h3-styles media-heading"><a>{{cat.displayName}}</a></h3>
             </div>
