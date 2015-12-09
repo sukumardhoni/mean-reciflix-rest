@@ -14,7 +14,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
         data: {
           bodyClass: 'bg-body'
         }
-      })
+      })/*
       .state('terms', {
         url: '/terms',
         templateUrl: 'modules/core/views/terms.client.view.html',
@@ -24,7 +24,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
         url: 'privacy',
         templateUrl: 'modules/core/views/privacy.client.view.html',
         module: 'public'
-      });
+      });*/
  }
 ]).run(function ($rootScope, $state, $stateParams) {
   $rootScope.$state = $state;

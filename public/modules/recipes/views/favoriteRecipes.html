@@ -31,23 +31,27 @@
                 </div>
               </div>
               <center>
-                <div class="btn-group">
+                <!--<div class="btn-group">
                   <button class="btn btn-white btn-sm"><span my-like-icon likes=recipe></span>{{recipe.ytlikes + recipe.applikes | numeral}}</button>
                   <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=recipe> </button>
-                </div>
-                 </center>
-              </div>
-            </div>
-            <div class="text-center" ng-show="recipes.length === 0">
-              <center>Sorry, no favorite recipes found, Please favorite recipe and try again.</center>
-            </div>
+                </div>-->
 
-            <div class="clearfix"></div>
-            <center ng-hide="recipes.length==0">
-              <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
-            </center>
+                <span my-like-icon likes=recipe class="favLikeIcon"></span>{{recipe.ytlikes + recipe.applikes | numeral}}
+                <span my-favorite-icon favorite=recipe class="favLikeIcon"></span>
+
+              </center>
+            </div>
           </div>
+          <div class="text-center" ng-show="recipes.length === 0">
+            <center>Sorry, no favorite recipes found, Please favorite recipe and try again.</center>
+          </div>
+
+          <div class="clearfix"></div>
+          <center ng-hide="recipes.length==0">
+            <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+          </center>
         </div>
       </div>
     </div>
   </div>
+</div>

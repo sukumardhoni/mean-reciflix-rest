@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state', '$modalInstance', 'SignUpCondition',
- function ($scope, $http, $location, Authentication, $localStorage, Users, $state, $modalInstance, SignUpCondition) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state', '$modalInstance', 'SignUpCondition', 'NotificationFactory',
+ function ($scope, $http, $location, Authentication, $localStorage, Users, $state, $modalInstance, SignUpCondition, NotificationFactory) {
     $scope.authentication = Authentication;
     if ($scope.authentication.user) $state.go('reciflix.recipes');
 
@@ -70,6 +70,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $localStorage.token = respUser.token;
       $scope.modalInstance.close();
       //$state.go('reciflix.recipes');
+      NotificationFactory.success('Hi ' + respUser.displayName, 'Authentication Success !');
       if ($state.current.name === 'home') {
         $state.go('reciflix.recipes');
       } else {

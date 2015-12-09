@@ -13,7 +13,7 @@ angular.module('recipes')
       template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px"></i>',
       link: function (scope, elem, attrs) {
         elem.on('click', function () {
-          //console.log('Recipe favorite dir is called');
+          console.log('Recipe favorite dir is called');
           scope.$apply(function () {
             if (Authentication.user) {
               //console.log('Recipe favorite dir is called under Authentication ');
@@ -21,7 +21,7 @@ angular.module('recipes')
               if (scope.favorite) {
                 //console.log('Scope .fav Recipe favorite dir is called under Authentication ');
                 if (scope.emptyIcon) {
-                  //console.log('Scope .emptyIcon Recipe favorite dir is called under Authentication ');
+                  console.log('Scope .emptyIcon Recipe favorite dir is called under Authentication ');
                   scope.emptyIcon = false;
                   Authentication.user.favorites.push(scope.favorite.videoId);
                   var favRecipe = scope.favorite;

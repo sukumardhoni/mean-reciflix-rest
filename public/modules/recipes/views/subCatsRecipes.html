@@ -66,13 +66,15 @@
                     </div>
                   </div>
                   <center>
-                    <div class="btn-group">
 
-                      <button class="btn btn-white btn-sm"><span my-like-icon likes=recipe></span>
-                        <!--<i class="fa fa-thumbs-o-up"></i>-->{{recipe.ytlikes + recipe.applikes | numeral}}</button>
+                    <!--<div class="btn-group">
+
+                      <button class="btn btn-white btn-sm"><span my-like-icon likes=recipe></span> {{recipe.ytlikes + recipe.applikes | numeral}}</button>
                       <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=recipe></span>
-                        <!--<i class="fa fa-heart"></i>--></button>
-                    </div>
+                      </button>
+                    </div>-->
+                    <span my-like-icon likes=recipe class="favLikeIcon"></span>{{recipe.ytlikes + recipe.applikes | numeral}}
+                    <span my-favorite-icon favorite=recipe class="favLikeIcon"></span>
                   </center>
                   <!--<span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">More</span>-->
                   <!--</a>-->

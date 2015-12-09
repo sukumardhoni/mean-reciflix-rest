@@ -1,8 +1,10 @@
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$state', 'ProspectiveEmail', '$modal', '$timeout',
- function ($scope, Authentication, $state, ProspectiveEmail, $modal, $timeout) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory',
+ function ($scope, Authentication,$modal, $timeout, NotificationFactory) {
+
+    NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
 
     $scope.authentication = Authentication;
 

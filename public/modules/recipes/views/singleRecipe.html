@@ -38,10 +38,12 @@
                     <i class="fa fa-eye space-right">{{singleRecipe.views | numeral}}</i>
                     <i class="fa fa-clock-o space-right">{{singleRecipe.duration | durationFltr}}</i>
                   </div>
-                  <div class="btn-group">
+                  <!--<div class="btn-group">
                     <button class="btn btn-white btn-sm"><span my-like-icon likes=singleRecipe></span>{{singleRecipe.ytlikes + singleRecipe.applikes | numeral}}</button>
                     <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=singleRecipe></span></button>
-                  </div>
+                  </div>-->
+                  <span my-like-icon likes=singleRecipe class="favLikeIcon"></span>{{singleRecipe.ytlikes + singleRecipe.applikes | numeral}}
+                  <span my-favorite-icon favorite=singleRecipe class="favLikeIcon"></span>
                 </center>
                 <div class="label-primary" style="padding:5px">Description &amp; Way of making:</div>
                 <div class="small text-muted">

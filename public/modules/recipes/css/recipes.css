@@ -216,7 +216,15 @@ ul.list-inline a {
   }
 }
 
-.cat-img{
+.cat-img {
   width: 400px;
   height: 200px !important;
+}
+
+.favLikeIcon {
+  padding: 5px;
+}
+
+.favLikeIcon:hover {
+  cursor: pointer;
 }

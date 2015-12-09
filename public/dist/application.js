@@ -549,9 +549,11 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
 'use strict';
 
 // Categories controller
-angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', '$modal', function ($scope, $state, $localStorage, $location, $http, Authentication, $modal) {
+angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', '$modal',  function ($scope, $state, $localStorage, $location, $http, Authentication, $modal) {
   $scope.authentication = Authentication;
   $scope.authentication.user = $localStorage.user;
+
+
 
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
   $scope.goToSearchRecipes = function (params) {
@@ -613,7 +615,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 }])
 
-.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "Upload", "$timeout", "ConfigService", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
+.controller('CategoryCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "Upload", "$timeout", "ConfigService", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, Upload, $timeout, ConfigService) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({
@@ -976,7 +978,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
@@ -1386,7 +1387,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
         data: {
           bodyClass: 'bg-body'
         }
-      })
+      })/*
       .state('terms', {
         url: '/terms',
         templateUrl: 'modules/core/views/terms.client.view.html',
@@ -1396,7 +1397,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
         url: 'privacy',
         templateUrl: 'modules/core/views/privacy.client.view.html',
         module: 'public'
-      });
+      });*/
  }
 ]).run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
   $rootScope.$state = $state;
@@ -1477,8 +1478,10 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$state', 'ProspectiveEmail', '$modal', '$timeout',
- function ($scope, Authentication, $state, ProspectiveEmail, $modal, $timeout) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory',
+ function ($scope, Authentication,$modal, $timeout, NotificationFactory) {
+
+    NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
 
     $scope.authentication = Authentication;
 
@@ -1509,7 +1512,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
  }]);
-
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2193,7 +2195,7 @@ angular.module('recipes')
       template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px"></i>',
       link: function (scope, elem, attrs) {
         elem.on('click', function () {
-          //console.log('Recipe favorite dir is called');
+          console.log('Recipe favorite dir is called');
           scope.$apply(function () {
             if (Authentication.user) {
               //console.log('Recipe favorite dir is called under Authentication ');
@@ -2201,7 +2203,7 @@ angular.module('recipes')
               if (scope.favorite) {
                 //console.log('Scope .fav Recipe favorite dir is called under Authentication ');
                 if (scope.emptyIcon) {
-                  //console.log('Scope .emptyIcon Recipe favorite dir is called under Authentication ');
+                  console.log('Scope .emptyIcon Recipe favorite dir is called under Authentication ');
                   scope.emptyIcon = false;
                   Authentication.user.favorites.push(scope.favorite.videoId);
                   var favRecipe = scope.favorite;
@@ -2399,7 +2401,6 @@ angular.module('recipes')
     }
   };
 }])
-
 'use strict';
 
 // Recipes Filter
@@ -2714,8 +2715,8 @@ angular.module('users').config(['$stateProvider',
 
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state', '$modalInstance', 'SignUpCondition',
- function ($scope, $http, $location, Authentication, $localStorage, Users, $state, $modalInstance, SignUpCondition) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication', '$localStorage', 'Users', '$state', '$modalInstance', 'SignUpCondition', 'NotificationFactory',
+ function ($scope, $http, $location, Authentication, $localStorage, Users, $state, $modalInstance, SignUpCondition, NotificationFactory) {
     $scope.authentication = Authentication;
     if ($scope.authentication.user) $state.go('reciflix.recipes');
 
@@ -2784,6 +2785,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       $localStorage.token = respUser.token;
       $scope.modalInstance.close();
       //$state.go('reciflix.recipes');
+      NotificationFactory.success('Hi ' + respUser.displayName, 'Authentication Success !');
       if ($state.current.name === 'home') {
         $state.go('reciflix.recipes');
       } else {
@@ -2869,7 +2871,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
-
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',

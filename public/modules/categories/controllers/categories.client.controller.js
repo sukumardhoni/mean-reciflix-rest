@@ -1,9 +1,11 @@
 'use strict';
 
 // Categories controller
-angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', '$modal', function ($scope, $state, $localStorage, $location, $http, Authentication, $modal) {
+angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', '$modal',  function ($scope, $state, $localStorage, $location, $http, Authentication, $modal) {
   $scope.authentication = Authentication;
   $scope.authentication.user = $localStorage.user;
+
+
 
   $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
   $scope.goToSearchRecipes = function (params) {
@@ -65,7 +67,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
 
 }])
 
-.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, Upload, $timeout, ConfigService) {
+.controller('CategoryCtrl', function ($scope, $localStorage, $state, Categories, $modal, SingleCat, Upload, $timeout, ConfigService) {
   //activeFilter 1= Active, 2=InActive, 3=All
   $scope.categoryFun = function () {
     Categories.query({

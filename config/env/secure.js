@@ -23,7 +23,8 @@ module.exports = {
       css: [
         'public/lib/bootstrap/dist/css/bootstrap.css',
     'public/lib/metisMenu/dist/metisMenu.min.css',
-    'public/lib/fontawesome/css/font-awesome.min.css'
+    'public/lib/fontawesome/css/font-awesome.min.css',
+        'public/lib/toastr/toastr.min.css'
    ],
       js: [
     'public/lib/jquery/dist/jquery.min.js',
