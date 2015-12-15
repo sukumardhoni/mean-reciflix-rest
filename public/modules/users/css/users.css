@@ -33,13 +33,13 @@
 
 .frgtpsdscreen {
   width: 400px;
-  margin-left: 100px;
+  margin-left: 5%;
   margin-top: 100px;
 }
 
 .frgtpsdscreen-success-msg {
   width: 400px;
-  margin-left: 100px;
+  margin-left: 5%;
   margin-top: -100px;
   margin-bottom: -75px;
   color: #0066FF;
@@ -54,10 +54,28 @@
 
 .resetPwd {
   width: 400px;
-  margin-left: 100px;
-  padding-top: 100px;
+  margin-left: 5%;
+  padding-top: 60px;
   border-radius: 5px;
   border: 1px solid #edeeee;
   -webkit-box-shadow: 1px 1px 10px 1px rgba(77, 82, 86, 0.91);
   -moz-box-shadow: 1px 1px 10px 1px rgba(77, 82, 86, 0.91)
+}
+
+@media screen and (max-width: 400px) {
+  .frgtpsdscreen {
+    width: 300px;
+    margin-left: 5%;
+    margin-top: 100px;
+  }
+  .frgtpsdscreen-success-msg {
+    width: 300px;
+    margin-left: 5%;
+    margin-top: 0px;
+  }
+  .resetPwd {
+    width: 300px;
+    margin-left: 5%;
+    margin-top: 100px;
+  }
 }

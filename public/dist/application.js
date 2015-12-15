@@ -978,6 +978,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
+
 'use strict';
 
 // Recipes Edit controller
@@ -1512,6 +1513,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
  }]);
+
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2401,6 +2403,7 @@ angular.module('recipes')
     }
   };
 }])
+
 'use strict';
 
 // Recipes Filter
@@ -2871,6 +2874,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',
