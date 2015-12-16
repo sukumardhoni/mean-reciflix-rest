@@ -1,14 +1,14 @@
 'use strict';
 
 // Recipes Edit controller
-angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $state, $localStorage, Recipe, $rootScope, Categories, SubCategories, SubCategoryRecipes) {
+angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $state, $localStorage, Recipe, $rootScope, Categories, SubCategories, SubCategoryRecipes, CategoryRecipes, $sce) {
 
 
 
   $scope.getAllCats = function () {
     Categories.query({
       pageId: 999,
-      activeFilter: 1 // get only active cats
+      activeFilter: 3 // get all cats
     }).$promise.then(function (res) {
       $scope.cats = res;
     }).catch(function (err) {
@@ -26,20 +26,58 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
     SubCategories.query({
       catId: $scope.catSelected.catId,
       pageId: 999,
-      activeFilter: 1 // get only active sub cats
+      activeFilter: 3 // get all sub cats
     }).$promise.then(function (res) {
       //console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
-      $scope.subCats = res.subCats;
+      if (res.subCatsExist) {
+        $scope.subCats = res.subCats;
+      } else {
+        $scope.getCatRecipes($scope.catSelected.catId);
+      }
+
     }).catch(function (err) {
       //console.log('Error happened : ' + JSON.stringify(err));
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
 
+  $scope.getCatRecipes = function (CatId) {
+    //console.log('$scope.getCatRecipes func is called : ' + CatId);
+
+    CategoryRecipes.query({
+      subCatId: CatId,
+      pageId: 999
+    }).$promise.then(function (res) {
+      //console.log('Successfullly fetched category Recipes :' + JSON.stringify(res))
+      $scope.subCatRecipes = res.recipes;
+      $scope.loading = false;
+      $scope.itemsPerPage = 1;
+      $scope.currentPage = 1;
+      $scope.maxSize = 5;
+      $scope.$watch('currentPage + itemsPerPage', function () {
+        $scope.faqSingle = '';
+        var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+          end = begin + $scope.itemsPerPage;
+        $scope.finalitems = $scope.subCatRecipes.slice(begin, end);
+      });
+    }).catch(function (err) {
+      //console.log('Error happened : ' + JSON.stringify(err));
+      alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+    });
+  }
 
 
+  $scope.getIframeSrc = function (videoId) {
+    return $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + videoId)
+  }
 
-  $scope.getSubCatRecipes = function (pageNum) {
+  $scope.availableTags = ['Chicken', 'Mutton', 'Veg', 'Non-veg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Soft Drinks', 'Indo chineese', 'South-Indian', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'Eggs', 'Fruits', 'Prawns'];
+
+  $scope.availableCats = ['Chicken', 'Mutton', 'Veg', 'Non-veg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Soft Drinks', 'Indo chineese', 'South-Indian', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'Eggs', 'Fruits', 'Prawns'];
+  $scope.availableSubCats = ['Chicken', 'Mutton', 'Veg', 'Non-veg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Soft Drinks', 'Indo chineese', 'South-Indian', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'Eggs', 'Fruits', 'Prawns'];
+
+
+  $scope.getSubCatRecipes = function () {
     $scope.loading = true;
     // console.log('Selected Sub cat for Recipes : ' + JSON.stringify($scope.subCatSelected));
     SubCategoryRecipes.query({
@@ -75,7 +113,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 
   $scope.updateRecipeItem = function (item) {
 
-    item.submitted.by = $localStorage.user.displayName
+    item.submitted.by = $localStorage.user.displayName;
 
     Recipe.update({
       vrecipeId: item.recipeId

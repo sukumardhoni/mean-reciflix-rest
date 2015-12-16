@@ -52,7 +52,9 @@ module.exports = {
     'public/lib/bootstrap/dist/css/bootstrap.css',
     'public/lib/metisMenu/dist/metisMenu.min.css',
     'public/lib/fontawesome/css/font-awesome.min.css',
-        'public/lib/toastr/toastr.min.css'
+    'public/lib/toastr/toastr.min.css',
+    'public/lib/angular-ui-select/dist/select.min.css',
+    'public/lib/select2/select2.css'
 
    ],
       js: [
@@ -87,7 +89,9 @@ module.exports = {
     'public/lib/numeral/min/numeral.min.js',
     'public/lib/hello/dist/hello.all.js',
     'public/lib/ng-file-upload/ng-file-upload-shim.min.js',
-    'public/lib/ng-file-upload/ng-file-upload.min.js'
+    'public/lib/ng-file-upload/ng-file-upload.min.js',
+    'public/lib/angular-ui-select/dist/select.min.js',
+    'public/lib/select2/select2.min.js'
    ]
     },
     css: [

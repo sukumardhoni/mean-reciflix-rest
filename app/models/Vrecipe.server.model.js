@@ -57,6 +57,7 @@ var VrecipeSchema = new Schema({
   active: String,
   tags: [],
   subcats: [],
+  cats: [],
   categories: [],
   images: {
     dft: String,

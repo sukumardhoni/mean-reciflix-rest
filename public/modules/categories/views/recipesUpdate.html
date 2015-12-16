@@ -15,14 +15,7 @@
 
   <center ng-hide="subCatRecipes.length === 0">
     <pagination total-items="subCatRecipes.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" boundary-links="true" rotate="false" ng-change="pageChanged()"></pagination>
-
-
   </center>
-
-
-  <!--<center ng-hide="subCatRecipes.recipes.length==0">
-  <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
-</center>-->
 
   <table class="table table-hover">
     <center>
@@ -41,10 +34,46 @@
               <label>Image :</label><img ng-src="{{item.images.dft}}" />
               </span>
         </div>
+        <iframe width="500" height="250" ng-src="{{getIframeSrc(item.videoId)}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
         <div class="col-md-12 col-xs-11">
           <label>Description :</label>
           <textarea rows="13" cols="15" class="form-control form-cust-size" ng-model="item.description"></textarea>
         </div>
+        <div class="form-group">
+          <div class="col-md-12 col-xs-11">
+            <h3>Enter Recipe Categories Here</h3>
+            <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="item.cats" theme="select2" sortable="true" ng-disabled="disabled" style="width: 600px;" title="Choose Recipe Category">
+              <ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="tag in availableCats  | filter:$select.search">
+                {{tag}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12 col-xs-11">
+            <h3>Enter Recipe Sub-Categories Here</h3>
+            <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="item.subcats" theme="select2" sortable="true" ng-disabled="disabled" style="width: 600px;" title="Choose Recipe Category">
+              <ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="tag in availableSubCats  | filter:$select.search">
+                {{tag}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12 col-xs-11">
+            <h3>Enter Recipe Tags Here</h3>
+            <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="item.tags" theme="select2" sortable="true" ng-disabled="disabled" style="width: 600px;" title="Choose Recipe Category">
+              <ui-select-match placeholder="Select Categories...">{{$item}}</ui-select-match>
+              <ui-select-choices repeat="tag in availableTags  | filter:$select.search">
+                {{tag}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
         <div class="form-group">
           <div class="col-md-12 col-xs-11">
             <label>Tags : {{item.tags}}</label>

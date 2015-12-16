@@ -380,38 +380,62 @@ exports.getRecipesByCats = function (req, res) {
   var catResult = req.category.toObject();
   catResult.recipes = [];
 
-  Vrecipe.find({
-    cats: {
-      $in: [req.params.newCatId]
-    }
-  }).sort({
-    rank: -1
-  }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
-    if (!err) {
-      if ((recipes.length === 0)) {
-        res.send(catResult);
-        /*res.status(204).send({
-  'message': 'There are no recipe items available'
-});*/
-      } else {
-        //user is successfully fetched list of recipes based on subcats save action into user usage details collection
-        agenda.now('User_Usage_Details', {
-          email: emailInfo,
-          device: deviceInfo,
-          action: 'getRecipesBySubCats : ' + req.params.subCatId
-        });
-        catResult.recipes = recipes;
-        //console.log('Recipes length is : ' + recipes.length);
-        res.send(catResult);
+  if (req.params.pageId == 999) {
 
-        //console.log('listOfSubCats called and Subcat model is 111111111 : --------------- ' + JSON.stringify(catResult));
+    //console.log('listOfSubCats IFFFFFFFFFFFFFFFFFFFFFF');
+
+    Vrecipe.find({
+      cats: {
+        $in: [req.params.newCatId]
       }
-    } else {
-      return console.log(err);
-    }
-  });
+    }).sort({
+      rank: -1
+    }).exec(function (err, recipes) {
+      if (!err) {
+        if ((recipes.length === 0)) {
+          res.send(catResult);
+        } else {
+          //user is successfully fetched list of recipes based on subcats save action into user usage details collection
+          agenda.now('User_Usage_Details', {
+            email: emailInfo,
+            device: deviceInfo,
+            action: 'getRecipesBySubCats : ' + req.params.subCatId
+          });
+          catResult.recipes = recipes;
+          res.send(catResult);
+        }
+      } else {
+        return console.log(err);
+      }
+    })
 
+  } else {
+    Vrecipe.find({
+      cats: {
+        $in: [req.params.newCatId]
+      }
+    }).sort({
+      rank: -1
+    }).skip(req.params.pageId * 6).limit(6).exec(function (err, recipes) {
+      if (!err) {
+        if ((recipes.length === 0)) {
+          res.send(catResult);
+        } else {
+          //user is successfully fetched list of recipes based on subcats save action into user usage details collection
+          agenda.now('User_Usage_Details', {
+            email: emailInfo,
+            device: deviceInfo,
+            action: 'getRecipesBySubCats : ' + req.params.subCatId
+          });
+          catResult.recipes = recipes;
+          res.send(catResult);
+        }
+      } else {
+        return console.log(err);
+      }
+    });
 
+  }
 }
 
 
