@@ -23,6 +23,7 @@ var ApplicationConfiguration = (function () {
     registerModule: registerModule
   };
 })();
+
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -1132,6 +1133,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state"
 
 
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button

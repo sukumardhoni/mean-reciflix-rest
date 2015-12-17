@@ -42,37 +42,36 @@ exports.createCat = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      //upload the image into AWS
-
-
-      var path = file.path;
-      fs.readFile(path, function (err, file_buffer) {
-        var params = {
-          Bucket: 'NewRF',
-          //Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
-          Key: req.body.imageName,
-          Body: file_buffer,
-          ContentType: file.type,
-          ACL: 'public-read'
-        };
-        s3.putObject(params, function (perr, pres) {
-          if (perr) {
-            console.log("Error uploading data: ", perr);
-          } else {
-            res.json(category);
-           // console.log("Successfully uploaded data to NewRF");
-          }
-        });
-      });
-
       //user is successfully created cat save action into user usage details collection
       agenda.now('User_Usage_Details', {
         email: emailInfo,
         device: deviceInfo,
         action: 'createCat : ' + category.displayName
       });
-
-
+      //upload the image into AWS
+      if (file) {
+        var path = file.path;
+        fs.readFile(path, function (err, file_buffer) {
+          var params = {
+            Bucket: 'NewRF',
+            //Key: req.body.imageName + file.name.substring(file.name.lastIndexOf(".")),
+            Key: req.body.imageName,
+            Body: file_buffer,
+            ContentType: file.type,
+            ACL: 'public-read'
+          };
+          s3.putObject(params, function (perr, pres) {
+            if (perr) {
+              console.log("Error uploading data: ", perr);
+            } else {
+              res.json(category);
+              // console.log("Successfully uploaded data to NewRF");
+            }
+          });
+        });
+      } else {
+        res.json(category);
+      }
     }
   });
 };
@@ -94,7 +93,7 @@ exports.singleCatByRank = function (req, res) {
     var catResult = category.toObject();
     catResult.subCats = [];
     //next();
-   // console.log('Successfully fetched cat details is  : ' + JSON.stringify(category));
+    // console.log('Successfully fetched cat details is  : ' + JSON.stringify(category));
 
     SubCats.find({
       catId: category._id
@@ -185,14 +184,14 @@ exports.updateCat = function (req, res) {
                   console.log("Error uploading data: ", perr);
                 } else {
                   res.json(category);
-               //   console.log("Successfully uploaded data to NewRF");
+                  //   console.log("Successfully uploaded data to NewRF");
                 }
               });
             });
 
           } else {
-          //  console.log('Image exists in AWS : ' + data); // successful response
-          //  console.log('Copy source is  : ** :' + 'NewRF' + '/' + req.body.imageName + ' : **'); // successful response
+            //  console.log('Image exists in AWS : ' + data); // successful response
+            //  console.log('Copy source is  : ** :' + 'NewRF' + '/' + req.body.imageName + ' : **'); // successful response
             var copyParams = {
               CopySource: '/NewRF/' + req.body.imageName,
               Bucket: 'archiverf',
@@ -203,7 +202,7 @@ exports.updateCat = function (req, res) {
             s3.copyObject(copyParams, function (err, data) {
               if (err) console.log(err, err.stack); // an error occurred
               else {
-            //    console.log('Success fully copied image :' + data);
+                //    console.log('Success fully copied image :' + data);
                 var delParams = {
                   Bucket: 'NewRF',
                   Key: req.body.imageName
@@ -227,7 +226,7 @@ exports.updateCat = function (req, res) {
                           console.log("Error uploading data: ", perr);
                         } else {
                           res.json(category);
-                      //    console.log("Successfully uploaded data to NewRF");
+                          //    console.log("Successfully uploaded data to NewRF");
                         }
                       });
                     });

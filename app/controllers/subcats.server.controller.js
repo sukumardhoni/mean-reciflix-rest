@@ -44,31 +44,33 @@ exports.subCatCreate = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      var path = file.path;
-      fs.readFile(path, function (err, file_buffer) {
-        var params = {
-          Bucket: 'NewRFSubCats',
-          Key: req.body.imageName,
-          Body: file_buffer,
-          ContentType: file.type,
-          ACL: 'public-read'
-        };
-        s3.putObject(params, function (perr, pres) {
-          if (perr) {
-            console.log("Error uploading data: ", perr);
-          } else {
-            res.json(subcat);
-            //   console.log("Successfully uploaded data to NewRFSubCats");
-          }
-        });
-      });
       //user is successfully created sub cat save action into user usage details collection
       agenda.now('User_Usage_Details', {
         email: emailInfo,
         device: deviceInfo,
         action: 'subCatCreate : ' + subcat.displayName
       });
-      //res.json(subcat);
+      if (file) {
+        var path = file.path;
+        fs.readFile(path, function (err, file_buffer) {
+          var params = {
+            Bucket: 'NewRFSubCats',
+            Key: req.body.imageName,
+            Body: file_buffer,
+            ContentType: file.type,
+            ACL: 'public-read'
+          };
+          s3.putObject(params, function (perr, pres) {
+            if (perr) {
+              console.log("Error uploading data: ", perr);
+            } else {
+              res.json(subcat);
+            }
+          });
+        });
+      } else {
+        res.json(subcat);
+      }
     }
   });
 };
