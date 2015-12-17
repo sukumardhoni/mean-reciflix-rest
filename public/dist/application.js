@@ -549,7 +549,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
 'use strict';
 
 // Categories controller
-angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', '$modal',  function ($scope, $state, $localStorage, $location, $http, Authentication, $modal) {
+angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$localStorage', '$location', '$http', 'Authentication', '$modal', function ($scope, $state, $localStorage, $location, $http, Authentication, $modal) {
   $scope.authentication = Authentication;
   $scope.authentication.user = $localStorage.user;
 
@@ -957,7 +957,7 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     modalInstance.result.then(function () {
       var indexVal = $localStorage.indexVal;
       SubCat.delete({
-        subCatId: subCat._id
+        subCatId: subCat.subCatId
       }, function (res) {
         $scope.CatObjWithSubCats.subCats.splice(indexVal, 1);
         delete $localStorage.indexVal;
@@ -978,7 +978,6 @@ angular.module('categories').controller('ReciflixCtrl', ['$scope', '$state', '$l
     $modalInstance.dismiss('cancel');
   };
 }])
-
 'use strict';
 
 // Recipes Edit controller
