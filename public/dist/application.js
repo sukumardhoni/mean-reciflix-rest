@@ -1133,6 +1133,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', ["$scope", "$state"
 
 
 }])
+
 'use strict';
 
 //Directive used to set metisMenu and minimalize button
@@ -1516,10 +1517,13 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory',
- function ($scope, Authentication,$modal, $timeout, NotificationFactory) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage',
+ function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage) {
 
-    NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+
+    if (!$localStorage.reciflix_visited) {
+      NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+    }
 
     $scope.authentication = Authentication;
 
@@ -1550,7 +1554,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
  }]);
-
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2820,9 +2823,11 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       // console.log('Populate local user function , user details : ' + JSON.stringify(respUser));
 
       //$scope.updatingLogo = false;
+
       $scope.authentication.user = respUser;
       $localStorage.user = respUser;
       $localStorage.token = respUser.token;
+      $localStorage.reciflix_visited = true;
       $scope.modalInstance.close();
       //$state.go('reciflix.recipes');
       NotificationFactory.success('Hi ' + respUser.displayName, 'Authentication Success !');
@@ -2911,7 +2916,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
-
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',

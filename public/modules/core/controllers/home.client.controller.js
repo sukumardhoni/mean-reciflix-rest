@@ -1,10 +1,13 @@
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory',
- function ($scope, Authentication,$modal, $timeout, NotificationFactory) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage',
+ function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage) {
 
-    NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+
+    if (!$localStorage.reciflix_visited) {
+      NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+    }
 
     $scope.authentication = Authentication;
 

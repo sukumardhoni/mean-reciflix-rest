@@ -65,9 +65,11 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       // console.log('Populate local user function , user details : ' + JSON.stringify(respUser));
 
       //$scope.updatingLogo = false;
+
       $scope.authentication.user = respUser;
       $localStorage.user = respUser;
       $localStorage.token = respUser.token;
+      $localStorage.reciflix_visited = true;
       $scope.modalInstance.close();
       //$state.go('reciflix.recipes');
       NotificationFactory.success('Hi ' + respUser.displayName, 'Authentication Success !');
