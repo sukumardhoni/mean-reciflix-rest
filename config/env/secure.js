@@ -51,7 +51,8 @@ module.exports = {
     'public/lib/ng-file-upload/ng-file-upload-shim.min.js',
     'public/lib/ng-file-upload/ng-file-upload.min.js',
     'public/lib/angular-ui-select/dist/select.min.js',
-    'public/lib/select2/select2.min.js'
+    'public/lib/select2/select2.min.js',
+    'public/lib/angular-update-meta/dist/update-meta.min.js'
    ]
     },
     css: 'public/dist/application.min.css',

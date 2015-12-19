@@ -7,6 +7,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
     if (!$localStorage.reciflix_visited) {
       NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+      $localStorage.reciflix_visited = true;
     }
 
     $scope.authentication = Authentication;

@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'reciflixApp';
-  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage', 'ngFileUpload', 'ui.select'];
+  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage', 'ngFileUpload', 'ui.select','updateMeta'];
 
   //['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage']
 
@@ -32,7 +32,7 @@ angular.module(ApplicationConfiguration.applicationModuleName, ApplicationConfig
 // Setting HTML5 Location Mode
 angular.module(ApplicationConfiguration.applicationModuleName).config(['$locationProvider',
  function ($locationProvider) {
-   // $locationProvider.hashPrefix('!');
+   //$locationProvider.hashPrefix('!');
    //$locationProvider.html5Mode(true);
  }
 ]).run(["$rootScope", "$state", "$localStorage", "$http", function ($rootScope, $state, $localStorage, $http) {
@@ -1523,6 +1523,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
     if (!$localStorage.reciflix_visited) {
       NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+      $localStorage.reciflix_visited = true;
     }
 
     $scope.authentication = Authentication;
@@ -1554,6 +1555,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
  }]);
+
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2916,6 +2918,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       });
     };
 }]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication', '$localStorage',

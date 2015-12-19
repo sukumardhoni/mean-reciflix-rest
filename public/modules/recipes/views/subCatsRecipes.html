@@ -1,4 +1,13 @@
 <div ui-view="child-singlerecipes-view">
+
+<update-title title="ReciFlix {{subCatRecipesObj.displayName}} Recipes"></update-title>
+<update-meta charset="ISO-8859-1"></update-meta>
+<update-meta http-equiv="Content-Language" content="es"></update-meta>
+<update-meta name="description" content="{{subCatRecipesObj.description}}"></update-meta>
+<update-meta property="og:title" content="ReciFlix {{subCatRecipesObj.displayName}} Recipes"></update-meta>
+<update-meta property="og:description" content="{{subCatRecipesObj.displayName}}"></update-meta>
+<update-meta property="og:image" content="{{subCatRecipesObj.catImageUrl}}"></update-meta>
+
   <div class="row" ng-init="recipesUnderSubCat(1)" ng-click="minimalize()">
     <div class="col-lg-12">
       <div class="wrapper animated fadeInUp">
@@ -11,7 +20,7 @@
               <a ui-sref="reciflix.recipes.subcats">{{catId}}</a>
             </li>
             <li class="active">
-              <strong>{{subCatRecipesObj.displayName}}</strong>
+              <strong update-title reqobject="subCatRecipesObj">{{subCatRecipesObj.displayName}}</strong>
             </li>
           </ol>
         </div>

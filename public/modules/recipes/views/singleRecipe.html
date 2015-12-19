@@ -1,4 +1,11 @@
 <div class="row" ng-init="getSingleRecipe()" ng-click="minimalize()">
+<update-title title="ReciFlix {{singleRecipe.title}} - Recipe"></update-title>
+<update-meta charset="ISO-8859-1"></update-meta>
+<update-meta http-equiv="Content-Language" content="es"></update-meta>
+<update-meta name="description" content="{{singleRecipe.description}}"></update-meta>
+<update-meta property="og:title" content="ReciFlix {{singleRecipe.title}} - Recipe"></update-meta>
+<update-meta property="og:description" content="{{singleRecipe.description}}"></update-meta>
+<update-meta property="og:image" content="{{singleRecipe.images.mq}}"></update-meta>
   <div class="col-lg-12">
     <div class="ibox">
       <ol class="breadcrumb breadcrumb-style">
