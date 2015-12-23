@@ -27,7 +27,8 @@
     "hello": "~1.9.8",
     "angular-ui-select": "latest",
     "select2": "~3.4.8",
-    "angular-update-meta": "~1.7.0"
+    "angular-update-meta": "~1.7.0",
+    "angularjs-socialshare": "~0.1.20"
   },
   "resolutions": {
     "angular": "~1.2.x"

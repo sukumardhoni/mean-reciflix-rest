@@ -10,7 +10,7 @@ angular.module('recipes')
         favorite: '='
       },
       replace: true,
-      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px"></i>',
+      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px;padding-left:18%"></i>',
       link: function (scope, elem, attrs) {
         elem.on('click', function () {
           console.log('Recipe favorite dir is called');
@@ -218,4 +218,24 @@ angular.module('recipes')
       });
     }
   };
+})
+
+.directive('popover', function ($compile) {
+  return {
+    restrict: 'A',
+    link: function (scope, elem) {
+
+      var content = $("#popover-content").html();
+      var compileContent = $compile(content)(scope);
+      var title = $("#popover-head").html();
+      var options = {
+        content: compileContent,
+        html: true,
+        title: title,
+        'placement': 'top'
+      };
+
+      $(elem).popover(options);
+    }
+  }
 })

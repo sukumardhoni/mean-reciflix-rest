@@ -1,12 +1,22 @@
 <div ui-view="child-singlerecipes-view">
 
-<update-title title="ReciFlix {{subCatRecipesObj.displayName}} Recipes"></update-title>
-<update-meta charset="ISO-8859-1"></update-meta>
-<update-meta http-equiv="Content-Language" content="es"></update-meta>
-<update-meta name="description" content="{{subCatRecipesObj.description}}"></update-meta>
-<update-meta property="og:title" content="ReciFlix {{subCatRecipesObj.displayName}} Recipes"></update-meta>
-<update-meta property="og:description" content="{{subCatRecipesObj.displayName}}"></update-meta>
-<update-meta property="og:image" content="{{subCatRecipesObj.catImageUrl}}"></update-meta>
+  <update-title title="ReciFlix {{subCatRecipesObj.displayName}} Recipes"></update-title>
+  <update-meta charset="ISO-8859-1"></update-meta>
+  <update-meta http-equiv="Content-Language" content="es"></update-meta>
+  <update-meta name="description" content="{{subCatRecipesObj.description}}"></update-meta>
+  <update-meta property="og:title" content="ReciFlix {{subCatRecipesObj.displayName}} Recipes"></update-meta>
+  <update-meta property="og:description" content="{{subCatRecipesObj.displayName}}"></update-meta>
+  <update-meta property="og:image" content="{{subCatRecipesObj.catImageUrl}}"></update-meta>
+  <update-meta property="og:url" content="{{location.path}}"></update-meta>
+
+
+  <update-meta property="twitter:title" content="ReciFlix {{subCatRecipesObj.displayName}} Recipes"></update-meta>
+  <update-meta property="twitter:description" content="{{subCatRecipesObj.displayName}}"></update-meta>
+  <update-meta property="twitter:url" content="{{subCatRecipesObj.catImageUrl}}"></update-meta>
+  <update-meta property="twitter:image" content="{{location.path}}"></update-meta>
+
+
+
 
   <div class="row" ng-init="recipesUnderSubCat(1)" ng-click="minimalize()">
     <div class="col-lg-12">
@@ -49,9 +59,9 @@
                 </table>
               </div>
             </div>
-            <center ng-hide="subCatRecipesObj.recipes.length==0">
+            <!--<center ng-hide="subCatRecipesObj.recipes.length==0">
               <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
-            </center>
+            </center>-->
             <div class="row">
               <center>
                 <img ng-src="modules/core/img/loaders/recipes-loader.GIF" ng-show="loading">
@@ -61,9 +71,7 @@
                   <div class="m-t-xs font-bold post-label" style="width:92%"><span>{{recipe.title}}</span>
                   </div>
                   <hr>
-                  <!--<a ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">-->
                   <div class="text-center">
-                    <!--<div ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})" class="recipe-img">-->
                     <div ui-sref="{{ catId ?  'reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})' :  'reciflix.recipes.catrecipes.singlerecipes({recipeId:recipe.recipeId})' }}" class="recipe-img" style="position:relative">
                       <img ng-src="{{recipe.images.mq}}" class="img-thumbnail m-t-xs img-responsive img-loader" height="180px" />
                       <div class="rf-play-icon"></div>
@@ -75,18 +83,26 @@
                     </div>
                   </div>
                   <center>
-
-                    <!--<div class="btn-group">
-
-                      <button class="btn btn-white btn-sm"><span my-like-icon likes=recipe></span> {{recipe.ytlikes + recipe.applikes | numeral}}</button>
-                      <button class="btn btn-white btn-sm"><span my-favorite-icon favorite=recipe></span>
-                      </button>
-                    </div>-->
                     <span my-like-icon likes=recipe class="favLikeIcon"></span>{{recipe.ytlikes + recipe.applikes | numeral}}
                     <span my-favorite-icon favorite=recipe class="favLikeIcon"></span>
+                    <span class="fa fa-share-alt shareIcon" popover></span>
+                    <!--<span class="fa fa-share-alt shareIcon" ng-click="socialShare = !socialShare " popover></span>-->
                   </center>
-                  <!--<span class="pull-right btn btn-default text-color" ui-sref="reciflix.recipes.subcats.recipes.singlerecipes({recipeId:recipe.recipeId})">More</span>-->
-                  <!--</a>-->
+                  <div popover-placement="top">
+                    <div id="popover-head" class="hide">Social Sharing</div>
+                    <div id="popover-content" class="hide">
+                      <center class="box-one">
+                        <span class="fa fa-facebook-square fbShare" socialshare socialshare-provider="facebook" socialshare-text="ReciFlix {{subCatRecipesObj.displayName}} Recipes" socialshare-url="{{location.path}}/{{recipe.title}}"></span>
+                        <span class="fa fa-google-plus gPlusShare" socialshare socialshare-provider="google+" socialshare-text="ReciFlix {{subCatRecipesObj.displayName}} Recipes" socialshare-url="{{location.path}}/{{recipe.title}}"></span>
+                        <!--<span class="fa fa-twitter twShare" socialshare socialshare-provider="twitter" socialshare-text="ReciFlix {{subCatRecipesObj.displayName}} Recipes" socialshare-url="{{location.path}}/{{recipe.title}}"></span>-->
+                      </center>
+                    </div>
+                  </div>
+                  <center ng-show="socialShare" class="box-one">
+                    <span class="fa fa-facebook-square fbShare"></span>
+                    <span class="fa fa-google-plus gPlusShare"></span>
+                    <span class="fa fa-twitter twShare"></span>
+                  </center>
                 </div>
               </div>
               <div class="text-center" ng-show="subCatRecipesObj.recipes.length==0">
@@ -95,7 +111,8 @@
 
               <div class="clearfix"></div>
               <center ng-hide="subCatRecipesObj.recipes.length==0">
-                <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
+                <button type="button" class="btn btn-w-m btn-primary" ng-click="LoadMoreRecipes()" ng-hide="noMoreRecipesAvailable || loading">Load more recipes</button>
+                <!--<strong ng-show="noMoreRecipesAvailable">There are no more recipes found.</strong>-->
               </center>
             </div>
           </div>
@@ -104,3 +121,23 @@
     </div>
   </div>
 </div>
+<a id='backTop'>Back To Top</a>
+<script>
+  $(document).ready(function () {
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > 100) {
+        $("#backTop").fadeIn();
+      } else {
+        $("#backTop").fadeOut();
+      }
+    });
+
+    // scroll body to 0px on click
+    $("#backTop").click(function () {
+      $("html, body").animate({
+        scrollTop: 0
+      }, 800);
+      return false;
+    })
+  });
+</script>

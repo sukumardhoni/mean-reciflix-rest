@@ -228,3 +228,66 @@ ul.list-inline a {
 .favLikeIcon:hover {
   cursor: pointer;
 }
+
+
+/*Back to TOP */
+
+#backTop {
+  width: 35px;
+  height: 35px;
+  padding: 10px;
+  border-radius: 4px;
+  text-indent: -9999px;
+  cursor: pointer;
+  z-index: 999999999;
+  display: none;
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  right: 18px;
+  bottom: 108px;
+  position: fixed;
+  background: url('../../../modules/core/img/buttons/uparr-48-w.png') no-repeat center center #1ab394;
+  border: 1px solid #fff;
+}
+
+.shareIcon {
+  color: #33ccff;
+  font-size: 20px;
+  margin-left: 20%;
+}
+
+.fbShare {
+  color: #3b5998;
+  font-size: 20px;
+}
+
+.gPlusShare {
+  color: #d34836;
+  font-size: 20px;
+  padding-left: 18%;
+}
+
+.twShare {
+  color: #00aced;
+  font-size: 20px;
+  padding-left: 20%;
+}
+
+
+/*Social Share hide show*/
+
+.box-one {
+  margin: 10px 0 20px 0;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #ddd;
+  border-radius: 4px;
+}
+
+.box-one:hover {
+  cursor: pointer;
+}
+
+.popover-content {
+  padding: 9px 0px !important;
+}

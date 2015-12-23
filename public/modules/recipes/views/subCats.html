@@ -1,13 +1,13 @@
 <div ui-view="child-recipes-view">
 
-<update-title title="ReciFlix {{CatObjWithSubCats.displayName}} Sub-categories"></update-title>
-<update-meta charset="ISO-8859-1"></update-meta>
-<update-meta http-equiv="Content-Language" content="es"></update-meta>
-<update-meta name="description" content="{{CatObjWithSubCats.description}}"></update-meta>
-<update-meta property="og:title" content="ReciFlix {{CatObjWithSubCats.displayName}} Sub-categories"></update-meta>
-<update-meta property="og:description" content="{{CatObjWithSubCats.displayName}}"></update-meta>
-<update-meta property="og:image" content="https://s3.amazonaws.com/NewRF/{{CatObjWithSubCats.imageName}}"></update-meta>
-
+  <update-title title="ReciFlix {{CatObjWithSubCats.displayName}} Sub-categories"></update-title>
+  <update-meta charset="ISO-8859-1"></update-meta>
+  <update-meta http-equiv="Content-Language" content="es"></update-meta>
+  <update-meta name="description" content="{{CatObjWithSubCats.description}}"></update-meta>
+  <update-meta property="og:title" content="ReciFlix {{CatObjWithSubCats.displayName}} Sub-categories"></update-meta>
+  <update-meta property="og:description" content="{{CatObjWithSubCats.displayName}}"></update-meta>
+  <update-meta property="og:image" content="https://s3.amazonaws.com/NewRF/{{CatObjWithSubCats.imageName}}"></update-meta>
+  <update-meta property="og:url" content="{{location.path}}"></update-meta>
 
   <div class="row" ng-init="subCatFun()" ng-click="minimalize()">
     <div class="col-lg-12">
@@ -19,7 +19,7 @@
               <a ui-sref="reciflix.recipes">Categories</a>
             </li>
             <li class="active">
-              <strong update-title reqobject="CatObjWithSubCats" >{{CatObjWithSubCats.displayName}}</strong>
+              <strong update-title reqobject="CatObjWithSubCats">{{CatObjWithSubCats.displayName}}</strong>
             </li>
           </ol>
           <div class="ibox-content">

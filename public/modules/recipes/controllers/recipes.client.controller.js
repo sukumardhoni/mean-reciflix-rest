@@ -167,26 +167,28 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.subCatId = $stateParams.subCatId;
   $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
 
-  $scope.vm = {
+/*  $scope.vm = {
     currentPage: 1
   };
   $scope.itemsPerPage = 6;
-  $scope.maxSize = 5;
-
+  $scope.maxSize = 5;*/
+var pageNumSubCat = 0;
+var pageNumCat = 0;
 
   if ($stateParams.subCatId) {
 
-    $scope.recipesUnderSubCat = function (pageNum) {
+    $scope.recipesUnderSubCat = function () {
       //console.log('recipesUnderSubCat is called ')
       $scope.loading = true;
       SubCategoryRecipes.query({
         subCatId: $stateParams.subCatId,
-        pageId: (pageNum - 1)
+        pageId: pageNumSubCat
       }).$promise.then(function (res) {
         //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
         $scope.loading = false;
-        if (pageNum === 1)
-          $scope.totalItems = res.recipeCount;
+        pageNumSubCat++;
+        /*if (pageNum === 1)
+          $scope.totalItems = res.recipeCount;*/
         res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRF/" + res.imageName : "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
@@ -203,15 +205,16 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
 
   if ($stateParams.CatIdForRecipes) {
-    $scope.recipesUnderSubCat = function (pageNum) {
+    $scope.recipesUnderSubCat = function () {
       $scope.loading = true;
       CategoryRecipes.query({
         subCatId: $stateParams.CatIdForRecipes,
-        pageId: (pageNum - 1)
+        pageId: pageNumCat
       }).$promise.then(function (res) {
         //console.log('Successfullly fetched category Recipes :' + JSON.stringify(res))
-        if (pageNum === 1)
-          $scope.totalItems = res.recipeCount;
+        pageNumCat++;
+        /*if (pageNum === 1)
+          $scope.totalItems = res.recipeCount;*/
         $scope.loading = false;
         res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName : "https://s3.amazonaws.com/NewRF/" + res.imageName;
         $scope.subCatRecipesObj = res;
@@ -237,6 +240,62 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
+
+
+  $scope.LoadMoreRecipes = function(){
+    //console.log('LoadMoreRecipes is called : ' );
+    var onScroll = {};
+
+
+    if ($stateParams.subCatId) {
+    SubCategoryRecipes.query({
+        subCatId: $stateParams.subCatId,
+        pageId: pageNumSubCat
+      }).$promise.then(function (res) {
+       // console.log('Successfullly fetched sub category Recipes on loadMore :' + JSON.stringify(res))
+        $scope.loading = false;
+        pageNumSubCat++;
+         onScroll = res.recipes;
+        if (res.recipes.length == 0) {
+          $scope.noMoreRecipesAvailable = true;
+        }
+        var oldRecipes = $scope.subCatRecipesObj.recipes;
+        $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+      }).catch(function (err) {
+        //console.log('Error happened : ' + JSON.stringify(err));
+        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+      });
+    }
+
+
+
+    if ($stateParams.CatIdForRecipes) {
+      CategoryRecipes.query({
+        subCatId: $stateParams.CatIdForRecipes,
+        pageId: pageNumCat
+      }).$promise.then(function (res) {
+        $scope.loading = false;
+        pageNumCat++;
+         onScroll = res.recipes;
+        if (res.recipes.length == 0) {
+          $scope.noMoreRecipesAvailable = true;
+          console.log('Recipes Fully fetched there is no more recipes')
+        }
+        var oldRecipes = $scope.subCatRecipesObj.recipes;
+        $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+      }).catch(function (err) {
+        //console.log('Error happened : ' + JSON.stringify(err));
+        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+      });
+    }
+
+
+  }
+
+
+
+
+
 })
 
 

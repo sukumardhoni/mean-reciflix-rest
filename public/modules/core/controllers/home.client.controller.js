@@ -6,7 +6,13 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
 
     if (!$localStorage.reciflix_visited) {
-      NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+      if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
+
+      } else {
+        NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+      }
+
+
       $localStorage.reciflix_visited = true;
     }
 

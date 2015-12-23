@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'reciflixApp';
-  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage', 'ngFileUpload', 'ui.select','updateMeta'];
+  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage', 'ngFileUpload', 'ui.select', 'updateMeta', '720kb.socialshare'];
 
   //['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage']
 
@@ -23,7 +23,6 @@ var ApplicationConfiguration = (function () {
     registerModule: registerModule
   };
 })();
-
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -32,8 +31,8 @@ angular.module(ApplicationConfiguration.applicationModuleName, ApplicationConfig
 // Setting HTML5 Location Mode
 angular.module(ApplicationConfiguration.applicationModuleName).config(['$locationProvider',
  function ($locationProvider) {
-   //$locationProvider.hashPrefix('!');
-   //$locationProvider.html5Mode(true);
+    $locationProvider.hashPrefix('!');
+    //$locationProvider.html5Mode(true);
  }
 ]).run(["$rootScope", "$state", "$localStorage", "$http", function ($rootScope, $state, $localStorage, $http) {
   var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
@@ -65,7 +64,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
   //console.log('$localStorage.user.email is : ' + userEmail);
 
   $http.defaults.headers.common['Device'] = 'Web,' + browser;
-  $http.defaults.headers.common['Email'] = userEmail + ', country :'+geoplugin_countryName();
+  $http.defaults.headers.common['Email'] = userEmail + ', country :' + geoplugin_countryName();
 
   $rootScope.$state = $state;
   /*$rootScope.$on('$stateChangeStart',
@@ -86,13 +85,12 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 //Then define the init function for starting up the application
 angular.element(document).ready(function () {
   //Fixing facebook bug with redirect
-  //if (window.location.hash === '#_=_') window.location.hash = '#!';
- // if (window.location.hash === '#_=_') window.location.hash = '#';
+  if (window.location.hash === '#_=_') window.location.hash = '#!';
+  // if (window.location.hash === '#_=_') window.location.hash = '#';
 
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
-
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -541,11 +539,11 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
       })
 }])
 
-.run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
+.run(["$rootScope", "$state", "$stateParams", "$location", function ($rootScope, $state, $stateParams, $location) {
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
+  $rootScope.location = $location;
 }]);
-
 'use strict';
 
 // Categories controller
@@ -1522,7 +1520,13 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
 
     if (!$localStorage.reciflix_visited) {
-      NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+      if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
+
+      } else {
+        NotificationFactory.success('Browse All Yummy Recipes here...', 'Welcome to ReciFlix');
+      }
+
+
       $localStorage.reciflix_visited = true;
     }
 
@@ -1555,7 +1559,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
  }]);
-
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2091,26 +2094,28 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.subCatId = $stateParams.subCatId;
   $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
 
-  $scope.vm = {
+/*  $scope.vm = {
     currentPage: 1
   };
   $scope.itemsPerPage = 6;
-  $scope.maxSize = 5;
-
+  $scope.maxSize = 5;*/
+var pageNumSubCat = 0;
+var pageNumCat = 0;
 
   if ($stateParams.subCatId) {
 
-    $scope.recipesUnderSubCat = function (pageNum) {
+    $scope.recipesUnderSubCat = function () {
       //console.log('recipesUnderSubCat is called ')
       $scope.loading = true;
       SubCategoryRecipes.query({
         subCatId: $stateParams.subCatId,
-        pageId: (pageNum - 1)
+        pageId: pageNumSubCat
       }).$promise.then(function (res) {
         //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
         $scope.loading = false;
-        if (pageNum === 1)
-          $scope.totalItems = res.recipeCount;
+        pageNumSubCat++;
+        /*if (pageNum === 1)
+          $scope.totalItems = res.recipeCount;*/
         res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRF/" + res.imageName : "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName;
         $scope.subCatRecipesObj = res;
       }).catch(function (err) {
@@ -2127,15 +2132,16 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
 
   if ($stateParams.CatIdForRecipes) {
-    $scope.recipesUnderSubCat = function (pageNum) {
+    $scope.recipesUnderSubCat = function () {
       $scope.loading = true;
       CategoryRecipes.query({
         subCatId: $stateParams.CatIdForRecipes,
-        pageId: (pageNum - 1)
+        pageId: pageNumCat
       }).$promise.then(function (res) {
         //console.log('Successfullly fetched category Recipes :' + JSON.stringify(res))
-        if (pageNum === 1)
-          $scope.totalItems = res.recipeCount;
+        pageNumCat++;
+        /*if (pageNum === 1)
+          $scope.totalItems = res.recipeCount;*/
         $scope.loading = false;
         res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName : "https://s3.amazonaws.com/NewRF/" + res.imageName;
         $scope.subCatRecipesObj = res;
@@ -2161,6 +2167,62 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
     });
   };
+
+
+  $scope.LoadMoreRecipes = function(){
+    //console.log('LoadMoreRecipes is called : ' );
+    var onScroll = {};
+
+
+    if ($stateParams.subCatId) {
+    SubCategoryRecipes.query({
+        subCatId: $stateParams.subCatId,
+        pageId: pageNumSubCat
+      }).$promise.then(function (res) {
+       // console.log('Successfullly fetched sub category Recipes on loadMore :' + JSON.stringify(res))
+        $scope.loading = false;
+        pageNumSubCat++;
+         onScroll = res.recipes;
+        if (res.recipes.length == 0) {
+          $scope.noMoreRecipesAvailable = true;
+        }
+        var oldRecipes = $scope.subCatRecipesObj.recipes;
+        $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+      }).catch(function (err) {
+        //console.log('Error happened : ' + JSON.stringify(err));
+        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+      });
+    }
+
+
+
+    if ($stateParams.CatIdForRecipes) {
+      CategoryRecipes.query({
+        subCatId: $stateParams.CatIdForRecipes,
+        pageId: pageNumCat
+      }).$promise.then(function (res) {
+        $scope.loading = false;
+        pageNumCat++;
+         onScroll = res.recipes;
+        if (res.recipes.length == 0) {
+          $scope.noMoreRecipesAvailable = true;
+          console.log('Recipes Fully fetched there is no more recipes')
+        }
+        var oldRecipes = $scope.subCatRecipesObj.recipes;
+        $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+      }).catch(function (err) {
+        //console.log('Error happened : ' + JSON.stringify(err));
+        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+      });
+    }
+
+
+  }
+
+
+
+
+
 }])
 
 
@@ -2236,7 +2298,7 @@ angular.module('recipes')
         favorite: '='
       },
       replace: true,
-      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px"></i>',
+      template: '<i ng-class="emptyIcon ? \'fa fa-heart-o\' : \'fa fa-heart animatedIcon bounceIn\'" style="font-size:20px;padding-left:18%"></i>',
       link: function (scope, elem, attrs) {
         elem.on('click', function () {
           console.log('Recipe favorite dir is called');
@@ -2446,6 +2508,25 @@ angular.module('recipes')
   };
 }])
 
+.directive('popover', ["$compile", function ($compile) {
+  return {
+    restrict: 'A',
+    link: function (scope, elem) {
+
+      var content = $("#popover-content").html();
+      var compileContent = $compile(content)(scope);
+      var title = $("#popover-head").html();
+      var options = {
+        content: compileContent,
+        html: true,
+        title: title,
+        'placement': 'top'
+      };
+
+      $(elem).popover(options);
+    }
+  }
+}])
 'use strict';
 
 // Recipes Filter
