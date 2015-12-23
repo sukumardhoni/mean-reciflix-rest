@@ -23,6 +23,7 @@ var ApplicationConfiguration = (function () {
     registerModule: registerModule
   };
 })();
+
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -91,6 +92,7 @@ angular.element(document).ready(function () {
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -544,6 +546,7 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
   $rootScope.$stateParams = $stateParams;
   $rootScope.location = $location;
 }]);
+
 'use strict';
 
 // Categories controller
@@ -1559,6 +1562,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
  }]);
+
 /**
  * INSPINIA - Responsive Admin Theme
  * Copyright 2014 Webapplayers.com
@@ -2094,13 +2098,21 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
   $scope.subCatId = $stateParams.subCatId;
   $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
 
-/*  $scope.vm = {
-    currentPage: 1
-  };
-  $scope.itemsPerPage = 6;
-  $scope.maxSize = 5;*/
-var pageNumSubCat = 0;
-var pageNumCat = 0;
+  $scope.socialUrl = function (recipesObj) {
+    if ($stateParams.subCatId) {
+      return 'http://www.reciflix.com/#!/category/' + $stateParams.catId + '/subcats/' + $stateParams.subCatId + '/' + recipesObj.recipeId;
+    } else if ($stateParams.CatIdForRecipes) {
+      return 'http://www.reciflix.com/#!/category/' + $stateParams.CatIdForRecipes + '/recipes/' + recipesObj.recipeId;
+    }
+  }
+
+  /*  $scope.vm = {
+      currentPage: 1
+    };
+    $scope.itemsPerPage = 6;
+    $scope.maxSize = 5;*/
+  var pageNumSubCat = 0;
+  var pageNumCat = 0;
 
   if ($stateParams.subCatId) {
 
@@ -2169,20 +2181,20 @@ var pageNumCat = 0;
   };
 
 
-  $scope.LoadMoreRecipes = function(){
+  $scope.LoadMoreRecipes = function () {
     //console.log('LoadMoreRecipes is called : ' );
     var onScroll = {};
 
 
     if ($stateParams.subCatId) {
-    SubCategoryRecipes.query({
+      SubCategoryRecipes.query({
         subCatId: $stateParams.subCatId,
         pageId: pageNumSubCat
       }).$promise.then(function (res) {
-       // console.log('Successfullly fetched sub category Recipes on loadMore :' + JSON.stringify(res))
+        // console.log('Successfullly fetched sub category Recipes on loadMore :' + JSON.stringify(res))
         $scope.loading = false;
         pageNumSubCat++;
-         onScroll = res.recipes;
+        onScroll = res.recipes;
         if (res.recipes.length == 0) {
           $scope.noMoreRecipesAvailable = true;
         }
@@ -2203,7 +2215,7 @@ var pageNumCat = 0;
       }).$promise.then(function (res) {
         $scope.loading = false;
         pageNumCat++;
-         onScroll = res.recipes;
+        onScroll = res.recipes;
         if (res.recipes.length == 0) {
           $scope.noMoreRecipesAvailable = true;
           console.log('Recipes Fully fetched there is no more recipes')
@@ -2262,11 +2274,6 @@ var pageNumCat = 0;
 
 
 }]);
-
-
-
-
-
 angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
   return {
     restrict: 'EA',
@@ -2285,7 +2292,6 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
-
 'use strict';
 
 //Directive used to set Favorite and Like button
@@ -2527,6 +2533,7 @@ angular.module('recipes')
     }
   }
 }])
+
 'use strict';
 
 // Recipes Filter
