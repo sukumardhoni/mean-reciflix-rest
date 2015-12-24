@@ -162,187 +162,189 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 })
 
 .controller('SubCatRecipesCtrl', function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state, Authentication) {
-  $scope.authentication = Authentication;
-  $scope.catId = $stateParams.catId;
-  $scope.subCatId = $stateParams.subCatId;
-  $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
+    $scope.authentication = Authentication;
+    $scope.catId = $stateParams.catId;
+    $scope.subCatId = $stateParams.subCatId;
+    $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
 
-  $scope.socialUrl = function (recipesObj) {
-    if ($stateParams.subCatId) {
-      return 'http://www.reciflix.com/#!/category/' + $stateParams.catId + '/subcats/' + $stateParams.subCatId + '/' + recipesObj.recipeId;
-    } else if ($stateParams.CatIdForRecipes) {
-      return 'http://www.reciflix.com/#!/category/' + $stateParams.CatIdForRecipes + '/recipes/' + recipesObj.recipeId;
-    }
-  }
-
-  /*  $scope.vm = {
-      currentPage: 1
-    };
-    $scope.itemsPerPage = 6;
-    $scope.maxSize = 5;*/
-  var pageNumSubCat = 0;
-  var pageNumCat = 0;
-
-  if ($stateParams.subCatId) {
-
-    $scope.recipesUnderSubCat = function () {
-      //console.log('recipesUnderSubCat is called ')
-      $scope.loading = true;
-      SubCategoryRecipes.query({
-        subCatId: $stateParams.subCatId,
-        pageId: pageNumSubCat
-      }).$promise.then(function (res) {
-        //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
-        $scope.loading = false;
-        pageNumSubCat++;
-        /*if (pageNum === 1)
-          $scope.totalItems = res.recipeCount;*/
-        res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRF/" + res.imageName : "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName;
-        $scope.subCatRecipesObj = res;
-      }).catch(function (err) {
-        //console.log('Error happened : ' + JSON.stringify(err));
-        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
-      });
-    };
-  }
-
-  $scope.pageChanged = function () {
-    //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
-    $scope.recipesUnderSubCat($scope.vm.currentPage);
-  }
-
-
-  if ($stateParams.CatIdForRecipes) {
-    $scope.recipesUnderSubCat = function () {
-      $scope.loading = true;
-      CategoryRecipes.query({
-        subCatId: $stateParams.CatIdForRecipes,
-        pageId: pageNumCat
-      }).$promise.then(function (res) {
-        //console.log('Successfullly fetched category Recipes :' + JSON.stringify(res))
-        pageNumCat++;
-        /*if (pageNum === 1)
-          $scope.totalItems = res.recipeCount;*/
-        $scope.loading = false;
-        res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName : "https://s3.amazonaws.com/NewRF/" + res.imageName;
-        $scope.subCatRecipesObj = res;
-      }).catch(function (err) {
-        //console.log('Error happened : ' + JSON.stringify(err));
-        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
-      });
+    $scope.socialUrl = function (recipesObj) {
+      if ($stateParams.subCatId) {
+        return 'http://www.reciflix.com/#!/category/' + $stateParams.catId + '/subcats/' + $stateParams.subCatId + '/' + recipesObj.recipeId;
+      } else if ($stateParams.CatIdForRecipes) {
+        return 'http://www.reciflix.com/#!/category/' + $stateParams.CatIdForRecipes + '/recipes/' + recipesObj.recipeId;
+      }
     }
 
-  }
-
-  $scope.getSingleRecipe = function () {
-    Recipe.get({
-      vrecipeId: $stateParams.recipeId
-    }).$promise.then(function (res) {
-      // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
-      $scope.singleRecipe = res;
-      $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&iv_load_policy=3&amp;controls=1&amp;showinfo=0");
-
-      //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
-    }).catch(function (err) {
-      //console.log('Error happened : ' + JSON.stringify(err));
-      alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
-    });
-  };
-
-
-  $scope.LoadMoreRecipes = function () {
-    //console.log('LoadMoreRecipes is called : ' );
-    var onScroll = {};
-
+    /*  $scope.vm = {
+        currentPage: 1
+      };
+      $scope.itemsPerPage = 6;
+      $scope.maxSize = 5;*/
+    var pageNumSubCat = 0;
+    var pageNumCat = 0;
 
     if ($stateParams.subCatId) {
-      SubCategoryRecipes.query({
-        subCatId: $stateParams.subCatId,
-        pageId: pageNumSubCat
-      }).$promise.then(function (res) {
-        // console.log('Successfullly fetched sub category Recipes on loadMore :' + JSON.stringify(res))
-        $scope.loading = false;
-        pageNumSubCat++;
-        onScroll = res.recipes;
-        if (res.recipes.length == 0) {
-          $scope.noMoreRecipesAvailable = true;
-        }
-        var oldRecipes = $scope.subCatRecipesObj.recipes;
-        $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
-      }).catch(function (err) {
-        //console.log('Error happened : ' + JSON.stringify(err));
-        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
-      });
+
+      $scope.recipesUnderSubCat = function () {
+        //console.log('recipesUnderSubCat is called ')
+        $scope.loading = true;
+        SubCategoryRecipes.query({
+          subCatId: $stateParams.subCatId,
+          pageId: pageNumSubCat
+        }).$promise.then(function (res) {
+          //console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+          $scope.loading = false;
+          pageNumSubCat++;
+          /*if (pageNum === 1)
+            $scope.totalItems = res.recipeCount;*/
+          res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRF/" + res.imageName : "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName;
+          $scope.subCatRecipesObj = res;
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
+      };
     }
 
+    $scope.pageChanged = function () {
+      //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
+      $scope.recipesUnderSubCat($scope.vm.currentPage);
+    }
 
 
     if ($stateParams.CatIdForRecipes) {
-      CategoryRecipes.query({
-        subCatId: $stateParams.CatIdForRecipes,
-        pageId: pageNumCat
+      $scope.recipesUnderSubCat = function () {
+        $scope.loading = true;
+        CategoryRecipes.query({
+          subCatId: $stateParams.CatIdForRecipes,
+          pageId: pageNumCat
+        }).$promise.then(function (res) {
+          //console.log('Successfullly fetched category Recipes :' + JSON.stringify(res))
+          pageNumCat++;
+          /*if (pageNum === 1)
+            $scope.totalItems = res.recipeCount;*/
+          $scope.loading = false;
+          res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName : "https://s3.amazonaws.com/NewRF/" + res.imageName;
+          $scope.subCatRecipesObj = res;
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
+      }
+
+    }
+
+    $scope.getSingleRecipe = function () {
+
+      Recipe.get({
+        vrecipeId: $stateParams.recipeId
       }).$promise.then(function (res) {
-        $scope.loading = false;
-        pageNumCat++;
-        onScroll = res.recipes;
-        if (res.recipes.length == 0) {
-          $scope.noMoreRecipesAvailable = true;
-          console.log('Recipes Fully fetched there is no more recipes')
-        }
-        var oldRecipes = $scope.subCatRecipesObj.recipes;
-        $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+        // console.log('Successfullly fetched Recipe :' + JSON.stringify(res))
+        $scope.singleRecipe = res;
+        $scope.youTubeRecipeURL = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + res.videoId + "?rel=0&iv_load_policy=3&amp;controls=1&amp;showinfo=0");
+
+        //https://www.youtube.com/embed/iJUdcbCoIcA?rel=0&amp;controls=1&amp;showinfo=0
       }).catch(function (err) {
         //console.log('Error happened : ' + JSON.stringify(err));
         alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
       });
+    };
+
+
+    $scope.LoadMoreRecipes = function () {
+
+      $scope.spinnerLoading = true;
+
+      //console.log('LoadMoreRecipes is called : ' );
+      var onScroll = {};
+
+
+      if ($stateParams.subCatId) {
+        SubCategoryRecipes.query({
+          subCatId: $stateParams.subCatId,
+          pageId: pageNumSubCat
+        }).$promise.then(function (res) {
+          // console.log('Successfullly fetched sub category Recipes on loadMore :' + JSON.stringify(res))
+          $scope.spinnerLoading = false;
+          pageNumSubCat++;
+          onScroll = res.recipes;
+          if (res.recipes.length == 0) {
+            $scope.noMoreRecipesAvailable = true;
+          }
+          var oldRecipes = $scope.subCatRecipesObj.recipes;
+          $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
+      }
+
+
+
+      if ($stateParams.CatIdForRecipes) {
+        CategoryRecipes.query({
+          subCatId: $stateParams.CatIdForRecipes,
+          pageId: pageNumCat
+        }).$promise.then(function (res) {
+          $scope.spinnerLoading = false;
+          pageNumCat++;
+          onScroll = res.recipes;
+          if (res.recipes.length == 0) {
+            $scope.noMoreRecipesAvailable = true;
+            console.log('Recipes Fully fetched there is no more recipes')
+          }
+          var oldRecipes = $scope.subCatRecipesObj.recipes;
+          $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
+      }
+
+
     }
 
 
-  }
 
 
 
+  })
+  .controller('SearchedRecipesCtrl', function ($scope, $stateParams, SearchedRecipes, Authentication) {
+    $scope.authentication = Authentication;
+    $scope.vm = {
+      currentPage: 1
+    };
+    $scope.itemsPerPage = 6;
+    $scope.maxSize = 5;
+    $scope.searchedQuery = $stateParams.query;
 
+    $scope.recipesUnderSearchQuery = function (pageNum) {
+      //console.log('Searched query is : ' + $stateParams.query);
 
-})
+      $scope.loading = true;
+      SearchedRecipes.query({
+        pageId: (pageNum - 1),
+        searchQuery: $stateParams.query
+      }, function (res) {
+        $scope.loading = false;
+        //console.log('REsponse of searched query is : ' + JSON.stringify(res));
+        if (pageNum === 1)
+          $scope.totalItems = res.count;
+        $scope.recipes = res.recipes;
+      }, function (err) {
+        $scope.loading = false;
+        $scope.recipes = [];
+      })
+    }
 
-
-.controller('SearchedRecipesCtrl', function ($scope, $stateParams, SearchedRecipes, Authentication) {
-  $scope.authentication = Authentication;
-  $scope.vm = {
-    currentPage: 1
-  };
-  $scope.itemsPerPage = 6;
-  $scope.maxSize = 5;
-  $scope.searchedQuery = $stateParams.query;
-
-  $scope.recipesUnderSearchQuery = function (pageNum) {
-    //console.log('Searched query is : ' + $stateParams.query);
-
-    $scope.loading = true;
-    SearchedRecipes.query({
-      pageId: (pageNum - 1),
-      searchQuery: $stateParams.query
-    }, function (res) {
-      $scope.loading = false;
-      //console.log('REsponse of searched query is : ' + JSON.stringify(res));
-      if (pageNum === 1)
-        $scope.totalItems = res.count;
-      $scope.recipes = res.recipes;
-    }, function (err) {
-      $scope.loading = false;
-      $scope.recipes = [];
-    })
-  }
-
-  $scope.pageChanged = function () {
-    //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
-    $scope.recipesUnderSearchQuery($scope.vm.currentPage);
-  }
+    $scope.pageChanged = function () {
+      //console.log('Page changed console and current page is : ' + $scope.vm.currentPage);
+      $scope.recipesUnderSearchQuery($scope.vm.currentPage);
+    }
 
 
 
-});
+  });
 angular.module('recipes').directive('myYoutube', function ($sce) {
   return {
     restrict: 'EA',

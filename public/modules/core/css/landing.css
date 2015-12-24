@@ -86,7 +86,7 @@ img {
   font-family: 'Open Sans', sans-serif !important;
   line-height: 1.1;
   color: #fff;
-  text-shadow: 1px 1px 1px #333;
+  text-shadow: 2px 2px 2px #333;
 }
 
 .about-h2:hover {
@@ -184,7 +184,7 @@ footer ul.icons a:hover {
   text-align: center !important;
 }
 
-footer ul.list-inline a{
+footer ul.list-inline a {
   color: #1ab394 !important;
 }
 

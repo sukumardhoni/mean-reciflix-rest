@@ -244,7 +244,7 @@ ul.list-inline a {
   box-sizing: content-box;
   -webkit-box-sizing: content-box;
   right: 18px;
-  bottom: 108px;
+  bottom: 5px;
   position: fixed;
   background: url('../../../modules/core/img/buttons/uparr-48-w.png') no-repeat center center #1ab394;
   border: 1px solid #fff;

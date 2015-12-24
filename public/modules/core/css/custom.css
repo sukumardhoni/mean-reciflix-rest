@@ -11,19 +11,19 @@
   word-break: break-word;
 }
 
-.signout-header{
-      float: right;
-    padding-top: 16px;
-    font-size: 20px;
-    color: dodgerblue !important;
-    padding-right: 15px;
+.signout-header {
+  float: right;
+  padding-top: 16px;
+  font-size: 20px;
+  color: dodgerblue !important;
+  padding-right: 15px;
 }
-
 
 .navbar-top-links li a {
-    padding: 16px 10px !important;
-    min-height: 50px;
+  padding: 16px 10px !important;
+  min-height: 50px;
 }
+
 .web-home-logo {
   display: inline-block;
 }
@@ -33,7 +33,7 @@
 }
 
 .bg-body {
-  background-image: url('../../../modules/core/img/brand/image4.png');
+  background-image: url('../../../modules/core/img/brand/Christmas-Store_bab.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -233,10 +233,9 @@
     cursor: auto;
     outline-color: transparent;
   }
-
   .top-search-bar {
-  padding-left: 0px !important;
-}
+    padding-left: 0px !important;
+  }
   /*#demo-b [placeholder]:focus::-webkit-input-placeholder {
   color: #808080;
 }
@@ -249,7 +248,7 @@
   color: transparent;
 }*/
   .bg-body {
-    background-image: url('../../../modules/core/img/brand/landing-mobile-min.jpg');
+    background-image: url('../../../modules/core/img/brand/Christmas-Store_bab.jpg');
   }
 }
 
@@ -368,6 +367,16 @@ body.mini-navbar .nav-header {
   background-color: transparent !important;
 }
 
-#side-menu hr{
+#side-menu hr {
   border-top: 1px solid #666 !important;
+}
+
+.termsandprivacy {
+  color: #aaa;
+}
+
+.termsandprivacy:hover,
+.termsandprivacy:focus {
+  color: #FFF;
+  cursor: pointer;
 }

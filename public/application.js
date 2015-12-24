@@ -9,7 +9,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
     $locationProvider.hashPrefix('!');
     //$locationProvider.html5Mode(true);
  }
-]).run(function ($rootScope, $state, $localStorage, $http) {
+]).run(function ($rootScope, $state, $localStorage, $http, $location) {
   var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
   var is_explorer = navigator.userAgent.indexOf('MSIE') > -1;
   var is_firefox = navigator.userAgent.indexOf('Firefox') > -1;
@@ -59,9 +59,14 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 
 //Then define the init function for starting up the application
 angular.element(document).ready(function () {
+
+  if (window.location.hash.indexOf('/') == 1) {
+    window.location.hash = '#!'
+  }
+
   //Fixing facebook bug with redirect
   if (window.location.hash === '#_=_') window.location.hash = '#!';
-  // if (window.location.hash === '#_=_') window.location.hash = '#';
+  //if (window.location.hash === '#_=_') window.location.hash = '!';
 
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
