@@ -33,7 +33,7 @@
 }
 
 .bg-body {
-  background-image: url('../../../modules/core/img/brand/Christmas-Store_bab.jpg');
+  background-image: url('../../../modules/core/img/brand/New-Year-Background.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -248,7 +248,7 @@
   color: transparent;
 }*/
   .bg-body {
-    background-image: url('../../../modules/core/img/brand/Christmas-Store_bab.jpg');
+    background-image: url('../../../modules/core/img/brand/New-Year-Background-mob.jpg');
   }
 }
 

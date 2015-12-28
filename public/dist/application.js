@@ -97,6 +97,7 @@ angular.element(document).ready(function () {
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -2298,6 +2299,7 @@ angular.module('recipes').directive('myYoutube', ["$sce", function ($sce) {
     }
   };
 }]);
+
 'use strict';
 
 //Directive used to set Favorite and Like button
