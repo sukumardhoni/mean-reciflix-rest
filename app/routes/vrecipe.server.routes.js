@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 var users = require('../../app/controllers/users.server.controller'),
-  vrecipes = require('../../app/controllers/vrecipes.server.controller');
+  vrecipes = require('../../app/controllers/vrecipes.server.controller'),
+  cache = require('express-redis-cache')();
 
 module.exports = function (app) {
   // Recipes Routes
@@ -100,7 +101,7 @@ module.exports = function (app) {
     .get(vrecipes.getRecipesByCats);
 
   app.route('/newRecipesForSubCatId/:subCatId/:pageId')
-    .get(vrecipes.getRecipesBySubCats);
+    .get(cache.route(), vrecipes.getRecipesBySubCats);
 
   app.route('/initialize')
     .post(vrecipes.postSampleJSONData);
