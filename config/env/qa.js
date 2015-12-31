@@ -1,6 +1,9 @@
 'use strict';
 
 module.exports = {
+  redis: {
+    uri: process.env.QA_REDIS_URL || 'redis://127.0.0.1:6379'
+  },
   db: {
     uri: process.env.ML_QA_MEAN_CODESHIP,
     options: {

@@ -5,7 +5,10 @@
  */
 var users = require('../../app/controllers/users.server.controller'),
   vrecipes = require('../../app/controllers/vrecipes.server.controller'),
-  cache = require('express-redis-cache')();
+  config = require('../../config/config'),
+  cache = require('express-redis-cache')({
+    client: require('redis').createClient(config.redis.uri)
+  });
 
 module.exports = function (app) {
   // Recipes Routes

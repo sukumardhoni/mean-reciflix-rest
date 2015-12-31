@@ -1,6 +1,9 @@
 'use strict';
 
 module.exports = {
+  redis: {
+    uri: process.env.REDIS_URL || 'redis://127.0.0.1:6379'
+  },
   db: {
     uri: process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/recflixdev',
     options: {

@@ -1,6 +1,9 @@
 'use strict';
 
 module.exports = {
+  redis: {
+    uri: process.env.TEST_REDIS_URL || 'redis://127.0.0.1:6379'
+  },
   db: {
     //uri: 'mongodb://meantest:meantest@ds059651.mongolab.com:59651/meantest',
     uri: 'mongodb://localhost/mean-test',
