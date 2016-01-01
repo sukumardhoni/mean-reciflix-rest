@@ -11,7 +11,7 @@ var users = require('../../app/controllers/users.server.controller'),
 module.exports = function (app) {
   // SubCats Routes
   app.route('/subCats/:newCatId/:pageId/:activeFilter')
-    .get(subcats.listOfSubCats)
+    .get(cache.route(), subcats.listOfSubCats)
     .post(users.ensureAuthenticated, multipartyMiddleware, subcats.subCatCreate);
 
   app.route('/singleSubCat/:subCatId')

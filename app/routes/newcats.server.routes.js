@@ -18,7 +18,7 @@ module.exports = function (app) {
   // Category Routes
 
   app.route('/newcats/page/:pageId/:activeFilter')
-    .get(categories.listOfCats);
+    .get(cache.route(), categories.listOfCats);
 
 
   app.route('/newCatAndSubCats/:rank')

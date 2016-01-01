@@ -87,10 +87,10 @@ module.exports = function (app) {
 
 
   app.route('/searchedVRecipesByIndex/:query/:pageId')
-    .get(vrecipes.getAllSearchedVRecipesByIndex);
+    .get(cache.route(), vrecipes.getAllSearchedVRecipesByIndex);
 
   app.route('/searchedVRecipesByIndexNew/:query/:pageId')
-    .get(vrecipes.getAllSearchedVRecipesByIndexNew);
+    .get(cache.route(), vrecipes.getAllSearchedVRecipesByIndexNew);
 
 
 
@@ -101,7 +101,7 @@ module.exports = function (app) {
   /*New Cats & sub cats routes for recipes*/
 
   app.route('/newRecipesForCatId/:newCatId/:pageId')
-    .get(vrecipes.getRecipesByCats);
+    .get(cache.route(), vrecipes.getRecipesByCats);
 
   app.route('/newRecipesForSubCatId/:subCatId/:pageId')
     .get(cache.route(), vrecipes.getRecipesBySubCats);
