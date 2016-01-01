@@ -380,3 +380,14 @@ body.mini-navbar .nav-header {
   color: #FFF;
   cursor: pointer;
 }
+
+
+#fixed-rf-bottom{
+   border-top-color: #1ab394;
+    border-top-style: solid;
+    border-top-width: 5px;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+}

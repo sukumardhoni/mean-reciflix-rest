@@ -113,7 +113,7 @@
               <center ng-hide="subCatRecipesObj.recipes.length==0">
                 <div><img ng-src="modules/core/img/loaders/spinner.GIF" ng-show="spinnerLoading"></div>
                 <br>
-                <button type="button" class="btn btn-w-m btn-primary" ng-click="LoadMoreRecipes()" ng-hide="noMoreRecipesAvailable || loading">Load more recipes</button>
+                <button type="button" class="btn btn-w-m btn-primary" ng-click="LoadMoreRecipes()" ng-hide="noMoreRecipesAvailable || spinnerLoading">Load more recipes</button>
                 <!--<strong ng-show="noMoreRecipesAvailable">There are no more recipes found.</strong>-->
               </center>
             </div>
