@@ -17,12 +17,7 @@ module.exports = function (app) {
   app.route('/ProspectiveEmails/count/:platform')
     .get(ProspectiveEmail.count);
 
-
-
   app.route('/gtm-contact-email')
     .post(ProspectiveEmail.gtmEmail);
-
-
-
 
 };
