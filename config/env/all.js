@@ -94,7 +94,7 @@ module.exports = {
     'public/lib/angular-ui-select/dist/select.min.js',
     'public/lib/select2/select2.min.js',
     'public/lib/angular-update-meta/dist/update-meta.min.js',
-    'public/lib/angularjs-socialshare/dist/angular-socialshare.min.js'
+    'public/lib/angular-socialshare/dist/angular-socialshare.min.js'
    ]
     },
     css: [
