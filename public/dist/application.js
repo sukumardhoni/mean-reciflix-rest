@@ -1,6 +1,10 @@
 'use strict';
 
 // Init the application configuration module for AngularJS application
+pageTitle.$inject = ["$rootScope", "$timeout"];
+sideNavigation.$inject = ["$timeout"];
+iboxTools.$inject = ["$timeout"];
+minimalizaSidebar.$inject = ["$timeout"];
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'reciflixApp';
@@ -1170,8 +1174,7 @@ function pageTitle($rootScope, $timeout) {
       $rootScope.$on('$stateChangeStart', listener);
     }
   }
-}
-pageTitle.$inject = ["$rootScope", "$timeout"];;
+};
 
 /**
  * sideNavigation - Directive for run metsiMenu on sidebar navigation
@@ -1186,8 +1189,7 @@ function sideNavigation($timeout) {
       });
     }
   };
-}
-sideNavigation.$inject = ["$timeout"];;
+};
 
 /**
  * iboxTools - Directive for iBox tools elements in right corner of ibox
@@ -1219,8 +1221,7 @@ function iboxTools($timeout) {
         }
     }]
   };
-}
-iboxTools.$inject = ["$timeout"];;
+};
 
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
@@ -1285,8 +1286,7 @@ function minimalizaSidebar($timeout) {
       }
     }]
   };
-}
-minimalizaSidebar.$inject = ["$timeout"];;
+};
 
 
 
