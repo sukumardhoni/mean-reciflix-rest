@@ -8,8 +8,11 @@ var StripePayments = require('../../app/controllers/stripePayments.server.contro
 
 module.exports = function (app) {
 
-  app.route('/api/StripeCharges/:StripeToken')
-    .post(StripePayments.paymentCharges);
+  app.route('/api/StripeCharges/newCard')
+    .post(StripePayments.newCardPaymentCharges);
+
+  app.route('/api/StripeCharges/savedCard')
+    .post(StripePayments.savedCardPaymentCharges);
 
 
 };
