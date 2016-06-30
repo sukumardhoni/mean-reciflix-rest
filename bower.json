@@ -32,10 +32,6 @@
   },
   "resolutions": {
     "angular": "~1.2.x",
-    "angular-update-meta": "~1.7.0",
-    "angular-socialshare": "^2.2.3"
-  },
-  "devDependencies": {
-    "angular-socialshare": "^1.4.5"
+    "angular-update-meta": "~1.7.0"
   }
 }
