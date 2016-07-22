@@ -42,22 +42,33 @@ exports.newCardPaymentCharges = function (req, res) {
         }
       };
 
-      firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid).orderByChild("Stripe_Cus_Id").equalTo(firebaseCustObj.Stripe_Cus_Id).once('value', function (snapshot) {
+      firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid).orderByChild("Stripe_Cus_Id").once('value', function (snapshot) {
         var cardExistsKey;
         var details = snapshot.val();
+        console.log(' Card stripe customer details is : ' + JSON.stringify(details));
+        //.equalTo(firebaseCustObj.Stripe_Cus_Id)
         for (var key in details) {
-          cardExistsKey = details[key];
+          console.log(' Key details is  : ' + JSON.stringify(details[key]));
+          if ((details[key].Card_details.Card_Num === firebaseCustObj.Card_details.Card_Num) && (details[key].Card_details.Card_Type === firebaseCustObj.Card_details.Card_Type)) {
+            cardExistsKey = key;
+          }
         }
-        if (!cardExistsKey) {
-          //      console.log('Saved Card details Key is : ' + cardExistsKey);
+
+        if (cardExistsKey) {
+          console.log('Already existing card details Update : ' + cardExistsKey);
+          firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid + '/' + cardExistsKey).update(firebaseCustObj);
+        } else {
+          console.log('Saving new card to same user  ');
           firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid).push(firebaseCustObj);
         }
+
+
+
+
       });
 
       firebase.database().ref('Orders/' + restId).orderByChild("orderId").equalTo(req.body.orderId).once('value', function (snapshot) {
-
           //    console.log('Order details : ', snapshot.val());
-
           var details = snapshot.val();
           for (var key in details) {
             //    console.log('in for loop');
