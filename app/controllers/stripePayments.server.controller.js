@@ -84,7 +84,11 @@ exports.newCardPaymentCharges = function (req, res) {
         //res.jsonp(customer);
     }).then(function (charge) {
       // YOUR CODE: Save the customer ID and other info in a database for later!
+      charge.statusCode = 200;
       res.jsonp(charge);
+    }, function (err) {
+      res.jsonp(err);
+      console.log('Error while creating the customer : ' + JSON.stringify(err));
     });
   } else {
 
@@ -105,8 +109,10 @@ exports.newCardPaymentCharges = function (req, res) {
             description: 'Customers for Affys'
           }, function (err, charge) {
             if (err && err.type === 'StripeCardError') {
-              console.log('err : ' + err);
+              console.log('err charging amount : ' + JSON.stringify(err));
+              res.jsonp(err);
             } else {
+              charge.statusCode = 200;
               res.jsonp(charge);
             }
           });
@@ -143,7 +149,11 @@ exports.savedCardPaymentCharges = function (req, res) {
           customer: req.body.custId // Previously stored, then retrieved
         }).then(function (charge) {
           // YOUR CODE: Save the customer ID and other info in a database for later!
+          charge.statusCode = 200;
           res.jsonp(charge);
+        }, function (err) {
+          console.log('Error while charging from saved card customer : ' + JSON.stringify(err));
+          res.jsonp(err);
         });
       }
     }
