@@ -15,4 +15,8 @@ module.exports = function (app) {
     .post(StripePayments.savedCardPaymentCharges);
 
 
+  app.route('/api/restaurantOrderEmail')
+    .post(StripePayments.sendOrderEmail);
+
+
 };

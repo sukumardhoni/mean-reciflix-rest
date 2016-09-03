@@ -23,7 +23,12 @@ exports.sendMail = function (mailData) {
       email: mailData.to,
       userData: mailData.userData,
       resetUrl: mailData.url,
-      appEnv: config.app.title
+      appEnv: mailData.appEnv ? mailData.appEnv : config.app.title,
+      orderId: mailData.orderId,
+      orderAmt: mailData.orderAmt,
+      customerName: mailData.customerName,
+      orderDetails: mailData.orderDetails,
+      orderService: mailData.orderService,
     },
     function (err, results) {
       if (err) {

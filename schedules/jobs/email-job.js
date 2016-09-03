@@ -65,6 +65,25 @@ exports.sendClientInfoToGTM = function (agenda) {
   })
 }
 
+exports.sendEmailToRestaurant = function (agenda) {
+  agenda.define('Order_Info_To_Restaurant', function (job, done) {
+    console.log('###user Order_Info_To_Restaurant to the app, email: ' + JSON.stringify(job.attrs.data));
+    var mailData = {};
+    mailData.templateName = 'emailtemplates/email-to-restaurant';
+    mailData.to = job.attrs.data.email;
+    mailData.subject = 'New Order';
+    mailData.orderId = job.attrs.data.orderId;
+    mailData.orderAmt = job.attrs.data.orderAmt;
+    mailData.customerName = job.attrs.data.customerName;
+    mailData.orderDetails = job.attrs.data.orderDetails;
+    mailData.orderService = job.attrs.data.orderService;
+    mailData.appEnv = 'AffysPremiumGrill';
+    console.log('Before sending to orderemail Order_Info_To_Restaurant mailData: ' + JSON.stringify(mailData));
+    reci_emailer.sendMail(mailData);
+    done();
+  })
+}
+
 
 exports.sendUserSignin = function (agenda) {
   agenda.define('User_Signedin', function (job, done) {

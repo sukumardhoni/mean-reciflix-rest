@@ -2,6 +2,7 @@
 
 var stripe = require("stripe")("sk_test_REPJYIniwrhDPWfwS8D6yUYv"),
   config = require('../../config/config'),
+  agenda = require('../../schedules/job-schedule.js')(config.db),
   firebase = require("firebase");
 
 
@@ -158,4 +159,35 @@ exports.savedCardPaymentCharges = function (req, res) {
       }
     }
   })
+};
+
+
+
+
+
+
+/* Email order status to restaurant owner*/
+
+
+exports.sendOrderEmail = function (req, res) {
+
+  //console.log('Email from sendOrderEmail');
+  //console.log('Email form details : ' + JSON.stringify(req.body));
+  var orderInfo = req.body;
+
+  var orderService;
+  if (req.body.pickup) {
+    orderService = 'PICKUP'
+  } else {
+    orderService = 'Table No:' + req.body.tableNum;
+  }
+  agenda.now('Order_Info_To_Restaurant', {
+    email: orderInfo.emailId,
+    orderId: orderInfo.orderId,
+    orderAmt: orderInfo.orderAmt,
+    customerName: orderInfo.customerName,
+    orderDetails: orderInfo.orderDetails,
+    orderService: orderService
+  });
+  res.json(req.body);
 };
