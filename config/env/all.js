@@ -111,14 +111,16 @@ module.exports = {
    'public/modules/*/tests/*.js'
   ]
   },
+  firebase_info: {
+    apiKey: "AIzaSyA7wvZYYH4_FKXXHMDJwy1GAAVTC8BjW3w",
+    authDomain: "affys-e8c22.firebaseapp.com",
+    databaseURL: "https://affys-e8c22.firebaseio.com",
+    storageBucket: "affys-e8c22.appspot.com",
+    messagingSenderId: "958499522167"
+  },
   stripe_info: {
     support_email: process.env.STRIPE_EMAILID || 'support@reciflix.com',
-    //firebase_serviceAccountCredentials_file_path: '../../app/assets/MenuBuddy-aba5feed8387.json',
-    firebase_databaseURL: 'https://project-6234769546084498557.firebaseio.com',
-    firebase_serviceAccount: {
-      "project_id": "project-6234769546084498557",
-      "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCmF6u9FgbWVo5F\nJAG01lh4+0DJ+xS3tEo+JMtJpaY5IWurkiAalgLjLNRBvmtJn3bGjX9VWQ285pL8\niDnarDDNzYifalICyqLHXN0CU70Koy6mtWAKycKu4vVt7qhov7n0XDQXIft54dff\nn41i7NyFSlzUn51PXiS0+4sQjay7Ekw8kxtqPgbyYBZdUBHo1jijuduAcbOpphhg\nOfonekDaF/Km6kbfmMgPfanGZFi599JVl/tEqLAUF9m16AteLsN75OfZWmBJWMFQ\novrzzNIP+5TWkSKTeZ3kmgS/zKJtS6KT644FleJdLbN7+FqJyhrpMOzQH0bVrY6q\nvgqzVDxHAgMBAAECggEBAKWbwI/fIJ4i2+SwzErF1p162NUMV1H8oHJqOZCLbLxW\nSIdgQkaAAQ0HK/UJquxT5hiACdDN5NbPiQvnwNf7DQaHw4xAdNl3turV+0BQwpOS\ntfdfrg3TsxyyDEm6x4z6bq3qKb5PEfIrcBX3fwB+cDsvNHSFWlNC6ZLTpYux1+MF\n9FZ17/ooH82iVYcSzJk9s4Q0+gE7hWfbHJqSYdpKbGrmvJIv1ae2BTuMYpTccVp0\nzyqELXYmz/Gs3408o/HGIu1DVo/sVjltjEhfGDV3yrZng2vuiZ9n9Dkp2VhtoA4l\nx0DksV8ihNZGb1lWx3Kfob4b9SgZWlMSla4bxrWMVSECgYEA5AoHVeQEKWILfnau\nsvOGmRCfBcP24uICkbeoVjXJ2HN1lG9qXgLbuelaXF/MstX2xOkL71max3MP3PA+\nDQA8t9fNK75BsKsruGCYoEjPTb6MtumU4NGiZRidmceCt8p7J/VurTBxLQTtw7Ha\nlnyreaxSEjDiOIh2SmLaCfmHO/8CgYEAunUu9DLF03sWsMuzDml9jOdW3BL5fCd0\nHwP2fF2kQKvSkIPoNm7Dwi4vqHDqSQIrRyQO5w9elmmF+QzKl2EYTVVzGheXL1s3\nkQsjFnHLELFr4eJ6f+YEfsTNA0cNZz2Fd4uI3XbQzxqS47tktes6ZXrHGboEa9g3\nhbfDk9eqH7kCgYADsRnfTRq4JMs01+0KHqEuNzOr3zlPAQOzojqKcsJ6y5u6tHcP\nYJJ4FwwMdMyWlJozI+a6kEPOONGn7QfEJB3XiBndPG5J0uuZR48RATzB8HTMvUlY\nvmwXoOdkRvOZ0CBgTDvnd+JNLUhAI8/7IbeQ97Y4bywqaCMqHyGSicSjtwKBgHzz\nNmny9FsKK2SCvRU1YCtig/SqyoGGtuxp7W3eGsoz2sF5g82mYIzqAonwUTBnwbTE\n1y/EPvCw+lSxW7oiGPUKBD5B/NCBYjVSr0rFKv2ex9rxuIGpFO4W2AQQQ00iDyTT\nXv56NufyuOjflVfLsLB8nJwC6h+TH3H+eZPDfIARAoGBANJgfR4Zbzep83hif8Fg\nPiLltWxAV4Z9p+x4NqAs/UY/kMXTTesQVka0KxFXZOn9Q/EvO09mHjBXfgo302Ok\nqyr3d9nQuwG5MsCsqKNmRtw+o+rvGMPbHyUopn8A8S65hkMQqa9/VLeCcsiJZ50E\nhuNTTKJfeL1Irxjo0OxLOucV\n-----END PRIVATE KEY-----\n",
-      "client_email": "menubuddy@project-6234769546084498557.iam.gserviceaccount.com"
-    }
+    affys_secret_key: process.env.STRIPE_AFFYS_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv',
+    dakshin_secret_key: process.env.STRIPE_DAKSHIN_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv'
   }
 };
