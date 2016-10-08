@@ -72,11 +72,12 @@ exports.sendEmailToRestaurant = function (agenda) {
     mailData.templateName = 'emailtemplates/email-to-restaurant';
     mailData.to = job.attrs.data.email;
     mailData.subject = 'New Order';
-    mailData.orderId = job.attrs.data.orderId;
-    mailData.orderAmt = job.attrs.data.orderAmt;
-    mailData.customerName = job.attrs.data.customerName;
+    mailData.orderData = job.attrs.data.orderData;
     mailData.orderDetails = job.attrs.data.orderDetails;
-    mailData.orderService = job.attrs.data.orderService;
+    mailData.subTotalPrice = job.attrs.data.subTotalPrice;
+    mailData.tipAmount = job.attrs.data.tipAmount;
+    mailData.foodTax = job.attrs.data.foodTax;
+    mailData.totalAmt = job.attrs.data.totalAmt;
     mailData.appEnv = 'AffysPremiumGrill';
     console.log('Before sending to orderemail Order_Info_To_Restaurant mailData: ' + JSON.stringify(mailData));
     reci_emailer.sendMail(mailData);

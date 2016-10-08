@@ -24,11 +24,12 @@ exports.sendMail = function (mailData) {
       userData: mailData.userData,
       resetUrl: mailData.url,
       appEnv: mailData.appEnv ? mailData.appEnv : config.app.title,
-      orderId: mailData.orderId,
-      orderAmt: mailData.orderAmt,
-      customerName: mailData.customerName,
+      orderData: mailData.orderData,
       orderDetails: mailData.orderDetails,
-      orderService: mailData.orderService,
+      tipAmount: mailData.tipAmount,
+      foodTax: mailData.foodTax,
+      subTotalPrice: mailData.subTotalPrice,
+      totalAmt: mailData.totalAmt
     },
     function (err, results) {
       if (err) {

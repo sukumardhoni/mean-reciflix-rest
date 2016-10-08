@@ -569,7 +569,7 @@
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templatePreheader">
                                         <tr>
                                             <td valign="top" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:20px;" mc:edit="preheader_content00">
-                                                Welcome to Global Tech Minds,                                            </td>
+                                                Welcome to Affy's Premium Grill,                                            </td>
                                         </tr>
                                     </table>
                                     <!-- // END PREHEADER -->
@@ -596,18 +596,67 @@
                                                 Hi, <br/><br/>
                                                 This is the notification mail of new Order is placed from Affys. <br/>
                                                 Order details are below: <br/>
-                                                Customer Name : {{customerName}}<br/>
-                                                OrderId : {{orderId}}<br/>
-                                                No.of Items : {{orderDetails.length}}<br/>
-                                                Order Service : {{orderService}}<br/>
-                                                Order Amount : {{orderAmt}}<br/>
+                                                Customer Name : {{orderData.customerName}}<br/>
+                                                OrderId : {{orderData.orderId}}<br/>
+                                                
+                                                 {% if orderData.pickup %}
+                                                
+                                                Order Service : PICKUP <br/>
+                                                {% else %}
+                                                 Order Service : Table# : {{orderData.tableNum}} <br/>
+                                                {% endif %}
                                                 
                                                 </td>
                                         </tr>
+                                        
+                                        
+                                        <tr>
+                                        <td>
+                                        
+                                        {% if orderDetails and orderDetails.length > 0 %}
+<table border="1">
+<tbody>
+ <tr>
+    <td>Qty</td><td>Name</td><td>Price</td><td>Choices</td>
+  </tr>
+  {% for item in orderDetails %}    
+  <tr>
+    <td>{{item.quantity}}</td><td>{{item.displayName}}</td><td>${{item.calculatedPrice}} </td><td>{% for ch in item.genChArray %}{{ch}}<br/>
+    {% endfor %}</td>
+  </tr> 
+  
+  {% endfor %}
+  
+  <tr><td></td><td colspan="2">Sub-total : $ {{subTotalPrice}}<br/></td></tr>
+                                        <tr><td></td><td colspan="2">Food Tax : ${{foodTax}}<br/></td></tr>
+                                        <tr><td></td><td colspan="2">Tip % : ${{tipAmount}}<br/></td></tr>
+                                        <tr><td></td><td colspan="2">Total Price : ${{totalAmt}}<br/></td></tr>
+  
+  
+  
+</tbody>
+</table>
+{% endif %}
+                                        
+                                        
+                                        
+                                        
+                                        </td>
+                                        
+                                        
+                                        
+                                        </tr>
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
 <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content03">
 Best regards,<br/>
-ReciFlix support
+Affy's support team.
 </td>
                                         </tr>                                         
                                      
