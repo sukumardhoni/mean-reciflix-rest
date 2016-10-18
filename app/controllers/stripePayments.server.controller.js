@@ -3,7 +3,8 @@
 var config = require('../../config/config'),
   stripe = require("stripe")(config.stripe_info.affys_secret_key),
   agenda = require('../../schedules/job-schedule.js')(config.db),
-  firebase = require("firebase");
+  firebase = require("firebase"),
+  _this = this;
 
 
 /*firebase.initializeApp({
@@ -80,7 +81,7 @@ exports.newCardPaymentCharges = function (req, res) {
           // YOUR CODE: Save the customer ID and other info in a database for later!
           console.log('charge is done')
           console.log(charge)
-
+          _this.sendOrderEmail(restId, details[key]);
           charge.statusCode = 200;
           res.jsonp(charge);
         }, function (err) {
@@ -110,6 +111,7 @@ exports.newCardPaymentCharges = function (req, res) {
               console.log('err charging amount : ' + JSON.stringify(err));
               res.jsonp(err);
             } else {
+              _this.sendOrderEmail(restId, details[key]);
               charge.statusCode = 200;
               res.jsonp(charge);
             }
@@ -128,17 +130,14 @@ exports.newCardPaymentCharges = function (req, res) {
  */
 exports.savedCardPaymentCharges = function (req, res) {
   //console.log('savedCardPaymentCharges function is called');
-  //console.log('Stripe Body details is : ' + JSON.stringify(req.body));
-  //var resAmt = (req.body.amount);
+
+
   var restId = req.body.restId;
   var chargeAmt = 0;
   firebase.database().ref('Orders/' + restId).orderByChild("orderId").equalTo(req.body.orderId).once('value', function (snapshot) {
-    //console.log('Order details : ', snapshot.val());
     var details = snapshot.val();
     for (var key in details) {
-      // console.log('in for loop');
       chargeAmt = details[key].orderAmt;
-      //console.log('Order chargeAmt is : ' + chargeAmt);
       if (chargeAmt) {
         console.log('Charge amount is available : ' + chargeAmt);
         stripe.charges.create({
@@ -146,136 +145,7 @@ exports.savedCardPaymentCharges = function (req, res) {
           currency: "usd",
           customer: req.body.custId // Previously stored, then retrieved
         }).then(function (charge) {
-
-          firebase.database().ref('Restaurants/' + restId + '/orderEmail').once('value', function (snapshot) {
-            var orderEmail = snapshot.val();
-
-            //            console.log('Order details is **************');
-            //            console.log((details[key].orderDetails));
-            //            console.log(JSON.stringify(details[key].orderDetails));
-            //            console.log(details[key].orderDetails.length);
-
-            var itemArrayObj = JSON.parse(details[key].orderDetails);
-
-            //            console.log('Order details after PARSE is **************');
-            //            console.log(testObj.length);
-
-
-            var subTotal = 0;
-
-
-            calculateSubTotal(itemArrayObj);
-
-
-            function generateChoicesArray(itemArrayObj) {
-              for (var a = 0; a < itemArrayObj.length; a++) {
-
-                itemArrayObj[a].calculatedPrice = Math.round(itemArrayObj[a].calculatedPrice * 100) / 100;
-
-                var chArray = [];
-                if (itemArrayObj[a].addOnChoices) {
-                  for (var b = 0; b < itemArrayObj[a].addOnChoices.choiceArray.length; b++) {
-                    if (itemArrayObj[a].addOnChoices.choiceArray[b].checked) {
-                      chArray.push(itemArrayObj[a].addOnChoices.choiceArray[b].name);
-                    }
-                  }
-                  // console.log('generated choices array is : ' + JSON.stringify(chArray));
-                }
-                if (itemArrayObj[a].itemAdditionalChoices) {
-                  //console.log('itemAdditionalChoices choices array is : ' + JSON.stringify(itemArrayObj[a].itemAdditionalChoices));
-                  for (var b in itemArrayObj[a].itemAdditionalChoices.choiceArray) {
-                    for (var c in itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices) {
-                      if (itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices[c].checked && itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices[c].name != 'None') {
-                        // console.log('checked choice is : ' + JSON.stringify(itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices[c]));
-                        chArray.push(itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices[c].name);
-                      }
-                    }
-                  }
-                }
-                if (itemArrayObj[a].menuAdditionalChoices) {
-                  //console.log('menuAdditionalChoices choices array is : ' + JSON.stringify(itemArrayObj[a].menuAdditionalChoices));
-                  for (var b in itemArrayObj[a].menuAdditionalChoices.choiceArray) {
-                    for (var c in itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices) {
-                      if (itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices[c].checked && itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices[c].name != 'None') {
-                        //console.log('checked choice is : ' + JSON.stringify(itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices[c]));
-                        chArray.push(itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices[c].name);
-                      }
-                    }
-                  }
-                }
-                itemArrayObj[a].genChArray = chArray;
-              }
-            }
-
-            generateChoicesArray(itemArrayObj);
-
-
-
-
-
-            console.log('Item array generated choices array obj is : ' + JSON.stringify(itemArrayObj));
-
-
-
-            var orderData = details[key];
-
-
-
-
-
-
-
-
-
-            function calculateSubTotal(details) {
-
-              var items = details;
-
-              if (items) {
-                for (var i = 0; i < items.length; i++) {
-                  var item = items[i];
-                  subTotal += (item.calculatedPrice * item.quantity);
-                  console.log('Subtotal price is : ***************** : i' + i);
-                }
-              }
-
-              console.log('Subtotal price is : ***************** : ' + subTotal);
-
-
-
-            }
-
-
-            if (subTotal != 0) {
-
-
-              console.log('Subtotal is  there $$$$$$$$$$  : ' + subTotal);
-              agenda.now('Order_Info_To_Restaurant', {
-                email: orderEmail,
-                orderDetails: itemArrayObj,
-                subTotalPrice: Math.round(subTotal * 100) / 100,
-                orderData: orderData,
-                tipAmount: Math.round(subTotal * orderData.orderTip * 100) / 100,
-                foodTax: subTotal * (orderData.restFoodTax / 100),
-                totalAmt: Math.round(orderData.orderAmt * 100) / 100
-
-              });
-            } else {
-              console.log('Subtotal is not there @@@');
-            }
-
-
-
-
-
-
-
-
-
-          })
-
-
-
+          _this.sendOrderEmail(restId, details[key]);
           // YOUR CODE: Save the customer ID and other info in a database for later!
           charge.statusCode = 200;
           res.jsonp(charge);
@@ -296,25 +166,74 @@ exports.savedCardPaymentCharges = function (req, res) {
 /* Email order status to restaurant owner*/
 
 
-exports.sendOrderEmail = function (req, res) {
+exports.sendOrderEmail = function (restId, details) {
 
-  //console.log('Email from sendOrderEmail');
-  //console.log('Email form details : ' + JSON.stringify(req.body));
-  var orderInfo = req.body;
+  console.log('Email from sendOrderEmail');
 
-  var orderService;
-  if (req.body.pickup) {
-    orderService = 'PICKUP'
-  } else {
-    orderService = 'Table No:' + req.body.tableNum;
-  }
-  agenda.now('Order_Info_To_Restaurant', {
-    email: orderInfo.emailId,
-    orderId: orderInfo.orderId,
-    orderAmt: orderInfo.orderAmt,
-    customerName: orderInfo.customerName,
-    orderDetails: orderInfo.orderDetails,
-    orderService: orderService
-  });
-  res.json(req.body);
+  firebase.database().ref('Restaurants/' + restId + '/orderEmail').once('value', function (snapshot) {
+    var orderEmail = snapshot.val();
+    var itemArrayObj = JSON.parse(details.orderDetails);
+    var subTotal = 0;
+    calculateSubTotal(itemArrayObj);
+
+    function generateChoicesArray(itemArrayObj) {
+      for (var a = 0; a < itemArrayObj.length; a++) {
+        itemArrayObj[a].calculatedPrice = Math.round(itemArrayObj[a].calculatedPrice * 100) / 100;
+        var chArray = [];
+        if (itemArrayObj[a].addOnChoices) {
+          for (var b = 0; b < itemArrayObj[a].addOnChoices.choiceArray.length; b++) {
+            if (itemArrayObj[a].addOnChoices.choiceArray[b].checked) {
+              chArray.push(itemArrayObj[a].addOnChoices.choiceArray[b].name);
+            }
+          }
+        }
+        if (itemArrayObj[a].itemAdditionalChoices) {
+          for (var b in itemArrayObj[a].itemAdditionalChoices.choiceArray) {
+            for (var c in itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices) {
+              if (itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices[c].checked && itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices[c].name != 'None') {
+                chArray.push(itemArrayObj[a].itemAdditionalChoices.choiceArray[b].choices[c].name);
+              }
+            }
+          }
+        }
+        if (itemArrayObj[a].menuAdditionalChoices) {
+          for (var b in itemArrayObj[a].menuAdditionalChoices.choiceArray) {
+            for (var c in itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices) {
+              if (itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices[c].checked && itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices[c].name != 'None') {
+                chArray.push(itemArrayObj[a].menuAdditionalChoices.choiceArray[b].choices[c].name);
+              }
+            }
+          }
+        }
+        itemArrayObj[a].genChArray = chArray;
+      }
+    }
+    generateChoicesArray(itemArrayObj);
+    var orderData = details;
+
+    function calculateSubTotal(details) {
+      var items = details;
+      if (items) {
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i];
+          subTotal += (item.calculatedPrice * item.quantity);
+        }
+      }
+    }
+    if (subTotal != 0) {
+      console.log('Subtotal is  there $$$$$$$$$$  : ' + subTotal);
+      agenda.now('Order_Info_To_Restaurant', {
+        email: orderEmail,
+        restId: restId,
+        orderDetails: itemArrayObj,
+        subTotalPrice: Math.round(subTotal * 100) / 100,
+        orderData: orderData,
+        tipAmount: Math.round(subTotal * orderData.orderTip * 100) / 100,
+        foodTax: subTotal * (orderData.restFoodTax / 100),
+        totalAmt: Math.round(orderData.orderAmt * 100) / 100
+      });
+    } else {
+      console.log('Subtotal is not there @@@');
+    }
+  })
 };

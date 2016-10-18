@@ -47,3 +47,42 @@ exports.sendMail = function (mailData) {
       });
     });
 }
+
+
+exports.sendRestaurantMail = function (mailData) {
+  console.log('An email is being generated for mailData:' + JSON.stringify(mailData));
+  console.log('Which restaurant :' + config.restaurant_mailer[mailData.restId].from);
+
+  var emailTemplate = new EmailTemplate(mailData.templateName);
+
+  var mailOptions = {
+    from: config.restaurant_mailer[mailData.restId].from, //'ReciFlix Support <support@reciflix.com>', // sender address
+    secureConnection: false,
+    to: mailData.to, // list of receivers
+    subject: mailData.subject // Subject line
+  };
+  emailTemplate.render({
+      email: mailData.to,
+      orderData: mailData.orderData,
+      orderDetails: mailData.orderDetails,
+      tipAmount: mailData.tipAmount,
+      foodTax: mailData.foodTax,
+      subTotalPrice: mailData.subTotalPrice,
+      totalAmt: mailData.totalAmt
+    },
+    function (err, results) {
+      if (err) {
+        console.log('Failure to send recovery email, err is: ' + err);
+      } else {
+        mailOptions.html = results.html;
+      }
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log('error in sending mail: ' + error);
+        } else {
+          console.log('Message sent: ' + info.response);
+        }
+
+      });
+    });
+}

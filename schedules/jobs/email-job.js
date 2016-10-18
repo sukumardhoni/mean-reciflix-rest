@@ -71,6 +71,7 @@ exports.sendEmailToRestaurant = function (agenda) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/email-to-restaurant';
     mailData.to = job.attrs.data.email;
+    mailData.restId = job.attrs.data.restId;
     mailData.subject = 'New Order';
     mailData.orderData = job.attrs.data.orderData;
     mailData.orderDetails = job.attrs.data.orderDetails;
@@ -78,9 +79,9 @@ exports.sendEmailToRestaurant = function (agenda) {
     mailData.tipAmount = job.attrs.data.tipAmount;
     mailData.foodTax = job.attrs.data.foodTax;
     mailData.totalAmt = job.attrs.data.totalAmt;
-    mailData.appEnv = 'AffysPremiumGrill';
+    //mailData.appEnv = 'AffysPremiumGrill';
     console.log('Before sending to orderemail Order_Info_To_Restaurant mailData: ' + JSON.stringify(mailData));
-    reci_emailer.sendMail(mailData);
+    reci_emailer.sendRestaurantMail(mailData);
     done();
   })
 }

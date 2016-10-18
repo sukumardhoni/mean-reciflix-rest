@@ -61,5 +61,35 @@ module.exports = {
         pass: 'gtmsupport123'
       }
     }
+  },
+  restaurant_mailer: {
+    affyspremiumgrill: {
+      from: process.env.MAILER_FROM || 'Affys Orders Dashboard <support@reciflix.com>',
+      options: {
+        host: 'reciflix.com',
+        port: 25,
+        tls: {
+          rejectUnauthorized: false
+        },
+        auth: {
+          user: 'support@reciflix.com',
+          pass: 'gtmsupport123'
+        }
+      }
+    },
+    dakshinexpress: {
+      from: process.env.MAILER_FROM || 'Dakshin Orders Dashboard <support@reciflix.com>',
+      options: {
+        host: 'reciflix.com',
+        port: 25,
+        tls: {
+          rejectUnauthorized: false
+        },
+        auth: {
+          user: 'support@reciflix.com',
+          pass: 'gtmsupport123'
+        }
+      }
+    }
   }
 };
