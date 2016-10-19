@@ -222,16 +222,25 @@ exports.sendOrderEmail = function (restId, details) {
     }
     if (subTotal != 0) {
       console.log('Subtotal is  there $$$$$$$$$$  : ' + subTotal);
-      agenda.now('Order_Info_To_Restaurant', {
-        email: orderEmail,
-        restId: restId,
-        orderDetails: itemArrayObj,
-        subTotalPrice: Math.round(subTotal * 100) / 100,
-        orderData: orderData,
-        tipAmount: Math.round(subTotal * orderData.orderTip * 100) / 100,
-        foodTax: subTotal * (orderData.restFoodTax / 100),
-        totalAmt: Math.round(orderData.orderAmt * 100) / 100
-      });
+
+      firebase.database().ref('Restaurants/' + restId + '/displayName').once('value', function (snapshot) {
+        var restaurantDisplayName = snapshot.val();
+        agenda.now('Order_Info_To_Restaurant', {
+          restDisplayName: restaurantDisplayName,
+          email: orderEmail,
+          restId: restId,
+          orderDetails: itemArrayObj,
+          subTotalPrice: Math.round(subTotal * 100) / 100,
+          orderData: orderData,
+          tipAmount: Math.round(subTotal * orderData.orderTip * 100) / 100,
+          foodTax: Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100,
+          totalAmt: Math.round(orderData.orderAmt * 100) / 100
+        });
+
+      })
+
+
+
     } else {
       console.log('Subtotal is not there @@@');
     }
