@@ -4,6 +4,7 @@ var config = require('../../config/config'),
   stripe = require("stripe")(config.stripe_info.affys_secret_key),
   agenda = require('../../schedules/job-schedule.js')(config.db),
   firebase = require("firebase"),
+  moment = require('moment'),
   _this = this;
 
 
@@ -226,6 +227,7 @@ exports.sendOrderEmail = function (restId, details) {
       firebase.database().ref('Restaurants/' + restId + '/displayName').once('value', function (snapshot) {
         var restaurantDisplayName = snapshot.val();
         agenda.now('Order_Info_To_Restaurant', {
+          formatedOrderTime: moment(orderData.orderTime).format('LLLL'),
           restDisplayName: restaurantDisplayName,
           email: orderEmail,
           restId: restId,

@@ -732,9 +732,9 @@
 				*/
       .bodyContent {
         /*@editable*/
-        font-size: 18px !important;
+        font-size: 14px !important;
         /*@editable*/
-        line-height: 125% !important;
+        line-height: 100% !important;
       }
       /* ======== Column Styles ======== */
       .templateColumnContainer {
@@ -795,13 +795,13 @@
     
         
     .item-recipe table, th, td {
-      border: 1px solid #ddd;
-    }
-    
-    
+      border: 1px solid #e6e6e6;
+      font-size:14px !important;
+    }   
     
     
   </style>
+  
 </head>
 
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
@@ -817,7 +817,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templatePreheader">
                   <tr>
                     <td valign="top" class="preheaderContent" style="padding-top:10px; padding-right:20px; padding-bottom:10px; padding-left:20px;" mc:edit="preheader_content00">
-                      Welcome to {{restDisplayName}}, </td>
+                      {{restDisplayName}} Order : {{orderData.orderId}} </td>
                   </tr>
                 </table>
                 <!-- // END PREHEADER -->
@@ -841,15 +841,13 @@
                 <table border="0" cellpadding="5" cellspacing="0" width="100%" id="templateBody">
                   <tr>
                     <td valign="top" class="bodyContent" mc:edit="body_content00">
-                      Hi {{restDisplayName}},
-                      <br/>
-                      <br/> A new order is placed from {{restDisplayName}} app.
-                      
+                       A new order is placed from {{restDisplayName}} app.                      
                       <br/> 
+                      <br/> Order Time : {{formatedOrderTime }}
                       <br/> Customer Name : {{orderData.customerName}}
-                      <br/> OrderId : {{orderData.orderId}}
+                      <br/> Order : {{orderData.orderId}}
                       <br/> {% if orderData.pickup %} Order type : PICKUP
-                      <br/> {% else %} Order type : Table# : {{orderData.tableNum}}
+                      <br/> {% else %} Order Type : Table# : {{orderData.tableNum}}
                       <br/> {% endif %}
                     </td>
                   </tr>
@@ -858,18 +856,18 @@
                     <td valign="top" class="bodyContent item-recipe" mc:edit="body_content00">
 
                       {% if orderDetails and orderDetails.length > 0 %}
-                      <table>
+                      <table cellpadding="5">
                         <tbody class="bodyContent">
                           <tr>
-                            <th>Qty</th>
-                            <th>Name</th>
-                            <th>Price</th>
+                            <th align="center">Qty</th>
+                            <th align="center">Name</th>
+                            <th align="center">Price</th>
                           </tr>
                           {% for item in orderDetails %}
                           <tr>
-                            <td>{{item.quantity}}</td>
+                            <td align="center">{{item.quantity}}</td>
                             <td>{{item.displayName}}</td>
-                            <td>$ {{item.calculatedPrice * item.quantity}} </td>
+                            <td align="right">$ {{item.calculatedPrice * item.quantity}} </td>
                             <!--<td>{% for ch in item.genChArray %}{{ch}}
                               <br/> {% endfor %}</td>-->
                           </tr>
@@ -887,25 +885,25 @@
                             <td></td>
                             <td align="right">Sub-total
                             </td>
-                            <td>$ {{subTotalPrice}}</td>
+                            <td align="right">$ {{subTotalPrice}}</td>
                           </tr>
                           <tr>
                             <td></td>
                             <td align="right">Food Tax ({{orderData.restFoodTax}}%)
                             </td>
-                            <td>$ {{foodTax}}</td>
+                            <td align="right">$ {{foodTax}}</td>
                           </tr>
                           <tr>
                             <td></td>
                             <td align="right">Tip ({{orderData.orderTip * 100}}%)
                             </td>
-                            <td>$ {{tipAmount}}</td>
+                            <td align="right">$ {{tipAmount}}</td>
                           </tr>
                           <tr>
                             <td></td>
                             <td align="right">Total 
                             </td>
-                            <td>$ {{totalAmt}}</td>
+                            <td align="right">$ {{totalAmt}}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -916,7 +914,7 @@
                   <tr>
                     <td valign="top" class="bodyContent" mc:edit="body_content03">
                       Best regards,
-                      <br/> {{restDisplayName}} support team.
+                      <br/> {{restDisplayName}} App Team.
                     </td>
                   </tr>
 
@@ -931,9 +929,8 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter">
                   <tr>
                     <td valign="top" class="footerContent" style="padding-top:0;" mc:edit="footer_content01">
-                      <em>Copyright &copy; 2016 Mahasoft,Inc, All rights reserved.</em>
-                      <br />
-                      
+                      <!-- add any info that needs to go in footer -->
+                                          
                     </td>
                   </tr>
 

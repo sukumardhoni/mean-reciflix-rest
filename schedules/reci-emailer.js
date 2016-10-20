@@ -64,6 +64,7 @@ exports.sendRestaurantMail = function (mailData) {
   emailTemplate.render({
       email: mailData.to,
       restDisplayName: mailData.restDisplayName,
+      formatedOrderTime: mailData.formatedOrderTime,
       orderData: mailData.orderData,
       orderDetails: mailData.orderDetails,
       tipAmount: mailData.tipAmount,

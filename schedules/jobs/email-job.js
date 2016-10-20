@@ -73,6 +73,7 @@ exports.sendEmailToRestaurant = function (agenda) {
     mailData.to = job.attrs.data.email;
     mailData.restId = job.attrs.data.restId;
     mailData.restDisplayName = job.attrs.data.restDisplayName;
+    mailData.formatedOrderTime = job.attrs.data.formatedOrderTime;
     mailData.subject = 'Order ' + job.attrs.data.orderData.orderId;
     mailData.orderData = job.attrs.data.orderData;
     mailData.orderDetails = job.attrs.data.orderDetails;
