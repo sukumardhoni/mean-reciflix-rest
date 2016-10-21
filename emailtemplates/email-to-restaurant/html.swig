@@ -865,19 +865,23 @@
                           </tr>
                           {% for item in orderDetails %}
                           <tr>
-                            <td align="center">{{item.quantity}}</td>
-                            <td>{{item.displayName}}</td>
-                            <td align="right">$ {{item.calculatedPrice * item.quantity}} </td>
+                            <td align="center" valign="top">{{item.quantity}}</td>
+                            <td valign="top">{{item.displayName}}
+                            <br/>
+                            {% for ch in item.genChArray %}<span style="font-size: 12px;padding-left: 5px;text-transform: lowercase;">-- {{ch}}</span>
+                              <br/> {% endfor %}
+                            </td>
+                            <td align="right" valign="top">$ {{item.calculatedPrice * item.quantity}} </td>
                             <!--<td>{% for ch in item.genChArray %}{{ch}}
                               <br/> {% endfor %}</td>-->
                           </tr>
 
-                          <tr>
+                         <!-- <tr>
                             <td></td>
                             <td>{% for ch in item.genChArray %}{{ch}}
                               <br/> {% endfor %}</td>
                             <td></td>
-                          </tr>
+                          </tr>-->
 
                           {% endfor %}
 

@@ -112,11 +112,20 @@ module.exports = {
   ]
   },
   firebase_info: {
-    apiKey: "AIzaSyA7wvZYYH4_FKXXHMDJwy1GAAVTC8BjW3w",
-    authDomain: "affys-e8c22.firebaseapp.com",
-    databaseURL: "https://affys-e8c22.firebaseio.com",
-    storageBucket: "affys-e8c22.appspot.com",
-    messagingSenderId: "958499522167"
+    affyspremiumgrill: {
+      apiKey: "AIzaSyA7wvZYYH4_FKXXHMDJwy1GAAVTC8BjW3w",
+      authDomain: "affys-e8c22.firebaseapp.com",
+      databaseURL: "https://affys-e8c22.firebaseio.com",
+      storageBucket: "affys-e8c22.appspot.com",
+      messagingSenderId: "958499522167"
+    },
+    dakshinexpress: {
+      apiKey: "AIzaSyBop4aV-qAfuGM1Nk46E0m5ZvDjMggR0f8",
+      authDomain: "ordersguru-536cc.firebaseapp.com",
+      databaseURL: "https://ordersguru-536cc.firebaseio.com",
+      storageBucket: "ordersguru-536cc.appspot.com",
+      messagingSenderId: "208278011341"
+    }
   },
   stripe_info: {
     support_email: process.env.STRIPE_EMAILID || 'support@reciflix.com',

@@ -13,7 +13,8 @@ var config = require('../../config/config'),
   databaseURL: config.stripe_info.firebase_databaseURL
 })*/
 
-firebase.initializeApp(config.firebase_info);
+var affysFirebase = firebase.initializeApp(config.firebase_info.affyspremiumgrill, 'Affys');
+var dakExpFirebase = firebase.initializeApp(config.firebase_info.affyspremiumgrill, 'DakshinExpress');
 
 
 
@@ -27,6 +28,14 @@ exports.newCardPaymentCharges = function (req, res) {
   //console.log('Stripe Body details is : ' + JSON.stringify(req.body));
   var restId = req.body.restId;
   //var resAmt = (req.body.amount);
+  var firebase;
+
+  if (req.body.restId === 'affyspremiumgrill') {
+    firebase = affysFirebase;
+  } else if (req.body.restId === 'dakshinexpress') {
+    firebase = dakExpFirebase;
+  }
+
   var chargeAmt = 0;
   var stripeToken = req.body.sToken;
 
@@ -134,6 +143,14 @@ exports.savedCardPaymentCharges = function (req, res) {
 
 
   var restId = req.body.restId;
+  var firebase;
+  if (req.body.restId === 'affyspremiumgrill') {
+    firebase = affysFirebase;
+  } else if (req.body.restId === 'dakshinexpress') {
+    firebase = dakExpFirebase;
+  }
+
+
   var chargeAmt = 0;
   firebase.database().ref('Orders/' + restId).orderByChild("orderId").equalTo(req.body.orderId).once('value', function (snapshot) {
     var details = snapshot.val();
@@ -171,8 +188,32 @@ exports.sendOrderEmail = function (restId, details) {
 
   console.log('Email from sendOrderEmail');
 
+
+  var firebase;
+  if (restId === 'affyspremiumgrill') {
+    firebase = affysFirebase;
+  } else if (restId === 'dakshinexpress') {
+    firebase = dakExpFirebase;
+  }
+
+
   firebase.database().ref('Restaurants/' + restId + '/orderEmail').once('value', function (snapshot) {
     var orderEmail = snapshot.val();
+
+
+
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@')
+    console.log('@@@@***********************')
+    console.log('Order emails are : ' + JSON.stringify(orderEmail));
+
+
+    var emailsArray = [];
+    for (var key in orderEmail) {
+      emailsArray.push(orderEmail[key].email);
+    }
+
+    console.log('Order emails are : ' + JSON.stringify(emailsArray));
+
     var itemArrayObj = JSON.parse(details.orderDetails);
     var subTotal = 0;
     calculateSubTotal(itemArrayObj);
@@ -229,7 +270,7 @@ exports.sendOrderEmail = function (restId, details) {
         agenda.now('Order_Info_To_Restaurant', {
           formatedOrderTime: moment(orderData.orderTime).format('LLLL'),
           restDisplayName: restaurantDisplayName,
-          email: orderEmail,
+          email: emailsArray,
           restId: restId,
           orderDetails: itemArrayObj,
           subTotalPrice: Math.round(subTotal * 100) / 100,
