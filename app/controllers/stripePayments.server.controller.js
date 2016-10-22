@@ -268,7 +268,7 @@ exports.sendOrderEmail = function (restId, details) {
       firebase.database().ref('Restaurants/' + restId + '/displayName').once('value', function (snapshot) {
         var restaurantDisplayName = snapshot.val();
         agenda.now('Order_Info_To_Restaurant', {
-          formatedOrderTime: moment(orderData.orderTime).format('LLLL'),
+          formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
           restDisplayName: restaurantDisplayName,
           email: emailsArray,
           restId: restId,

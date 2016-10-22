@@ -870,21 +870,19 @@
                             <br/>
                             {% for ch in item.genChArray %}<span style="font-size: 12px;padding-left: 5px;text-transform: lowercase;">-- {{ch}}</span>
                               <br/> {% endfor %}
+                             {% if item.specialInstructions %} 
+                              <span style="font-size: 12px;padding-left: 5px;text-transform: lowercase;">** {{item.specialInstructions}}</span>
+                              {% endif %}
                             </td>
                             <td align="right" valign="top">$ {{item.calculatedPrice * item.quantity}} </td>
-                            <!--<td>{% for ch in item.genChArray %}{{ch}}
-                              <br/> {% endfor %}</td>-->
-                          </tr>
-
-                         <!-- <tr>
-                            <td></td>
-                            <td>{% for ch in item.genChArray %}{{ch}}
-                              <br/> {% endfor %}</td>
-                            <td></td>
-                          </tr>-->
-
+                          </tr>                         
                           {% endfor %}
-
+                          
+                          <tr>
+                          <td></td>
+                          <td>Notes : ** {{orderData.orderNotes}} </td>
+                          </tr>
+                          
                           <tr>
                             <td></td>
                             <td align="right">Sub-total
