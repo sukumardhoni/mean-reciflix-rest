@@ -18,6 +18,21 @@ var dakExpFirebase = firebase.initializeApp(config.firebase_info.affyspremiumgri
 
 
 
+affysFirebase.database().ref('Orders/affyspremiumgrill').on('child_changed', function (snapshot) {
+  var orderDetails = snapshot.val();
+  if (orderDetails.paymentStatus === 'Direct Pay') {
+    _this.sendOrderEmail('affyspremiumgrill', orderDetails);
+  }
+})
+
+dakExpFirebase.database().ref('Orders/dakshinexpress').on('child_changed', function (snapshot) {
+  var orderDetails = snapshot.val();
+  if (orderDetails.paymentStatus === 'Direct Pay') {
+    _this.sendOrderEmail('affyspremiumgrill', orderDetails);
+  }
+})
+
+
 
 
 /**
@@ -213,7 +228,6 @@ exports.sendOrderEmail = function (restId, details) {
     }
 
     console.log('Order emails are : ' + JSON.stringify(emailsArray));
-
     var itemArrayObj = JSON.parse(details.orderDetails);
     var subTotal = 0;
     calculateSubTotal(itemArrayObj);
@@ -270,7 +284,8 @@ exports.sendOrderEmail = function (restId, details) {
         agenda.now('Order_Info_To_Restaurant', {
           formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
           restDisplayName: restaurantDisplayName,
-          email: emailsArray,
+          email: 'vinodhko@globaltechminds.com',
+          //email: emailsArray,
           restId: restId,
           orderDetails: itemArrayObj,
           subTotalPrice: Math.round(subTotal * 100) / 100,
