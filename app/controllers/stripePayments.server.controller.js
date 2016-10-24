@@ -284,8 +284,8 @@ exports.sendOrderEmail = function (restId, details) {
         agenda.now('Order_Info_To_Restaurant', {
           formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
           restDisplayName: restaurantDisplayName,
-          email: 'vinodhko@globaltechminds.com',
-          //email: emailsArray,
+          //email: 'vinodhko@globaltechminds.com',
+          email: emailsArray,
           restId: restId,
           orderDetails: itemArrayObj,
           subTotalPrice: Math.round(subTotal * 100) / 100,
