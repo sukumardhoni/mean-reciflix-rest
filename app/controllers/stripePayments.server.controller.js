@@ -14,7 +14,7 @@ var config = require('../../config/config'),
 })*/
 
 var affysFirebase = firebase.initializeApp(config.firebase_info.affyspremiumgrill, 'Affys');
-var dakExpFirebase = firebase.initializeApp(config.firebase_info.affyspremiumgrill, 'DakshinExpress');
+var dakExpFirebase = firebase.initializeApp(config.firebase_info.dakshinexpress, 'DakshinExpress');
 
 
 
@@ -48,8 +48,13 @@ exports.newCardPaymentCharges = function (req, res) {
   if (req.body.restId === 'affyspremiumgrill') {
     firebase = affysFirebase;
   } else if (req.body.restId === 'dakshinexpress') {
+
+    console.log('Its Dakshin restaurant : ' + restId);
     firebase = dakExpFirebase;
   }
+
+
+  console.log('Total body details are  : ' + JSON.stringify(req.body));
 
   var chargeAmt = 0;
   var stripeToken = req.body.sToken;
