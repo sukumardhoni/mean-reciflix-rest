@@ -874,7 +874,7 @@
                               <span style="font-size: 12px;padding-left: 5px;text-transform: lowercase;">** {{item.specialInstructions}}</span>
                               {% endif %}
                             </td>
-                            <td align="right" valign="top">$ {{item.calculatedPrice * item.quantity}} </td>
+                            <td align="right" valign="top">$ {{item.itemTotalPrice}} </td>
                           </tr>                         
                           {% endfor %}
                           

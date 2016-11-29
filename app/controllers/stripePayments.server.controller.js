@@ -239,7 +239,12 @@ exports.sendOrderEmail = function (restId, details) {
 
     function generateChoicesArray(itemArrayObj) {
       for (var a = 0; a < itemArrayObj.length; a++) {
-        itemArrayObj[a].calculatedPrice = Math.round(itemArrayObj[a].calculatedPrice * 100) / 100;
+        itemArrayObj[a].calculatedPrice = parseFloat(Math.round(itemArrayObj[a].calculatedPrice * 100) / 100).toFixed(2);
+
+        itemArrayObj[a].itemTotalPrice = parseFloat(itemArrayObj[a].calculatedPrice * itemArrayObj[a].quantity).toFixed(2);
+
+
+
         var chArray = [];
         if (itemArrayObj[a].addOnChoices) {
           for (var b = 0; b < itemArrayObj[a].addOnChoices.choiceArray.length; b++) {
@@ -293,11 +298,11 @@ exports.sendOrderEmail = function (restId, details) {
           email: emailsArray,
           restId: restId,
           orderDetails: itemArrayObj,
-          subTotalPrice: Math.round(subTotal * 100) / 100,
+          subTotalPrice: parseFloat(Math.round(subTotal * 100) / 100).toFixed(2),
           orderData: orderData,
-          tipAmount: Math.round(subTotal * orderData.orderTip * 100) / 100,
-          foodTax: Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100,
-          totalAmt: Math.round(orderData.orderAmt * 100) / 100
+          tipAmount: parseFloat(Math.round(subTotal * orderData.orderTip * 100) / 100).toFixed(2),
+          foodTax: parseFloat(Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100).toFixed(2),
+          totalAmt: parseFloat(Math.round(orderData.orderAmt * 100) / 100).toFixed(2)
         });
 
       })
