@@ -82,7 +82,10 @@ exports.newCardPaymentCharges = function (req, res) {
             ExpireDate: customer.sources.data[0].exp_month + '/' + customer.sources.data[0].exp_year
           }
         };
-        firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid).orderByChild("Stripe_Cus_Id").once('value', function (snapshot) {
+
+        var cardKey = firebaseCustObj.Card_details.Card_Type + firebaseCustObj.Card_details.Card_Num;
+
+        firebase.database().ref('Restaurants/' + restId + '/Users/' + firebaseCustObj.uuid + '/savedCards').child(cardKey).once('value', function (snapshot) {
           var cardExistsKey;
           var stripeDetails = snapshot.val();
           console.log(' Card stripe customer details is : ' + JSON.stringify(stripeDetails));
@@ -94,11 +97,14 @@ exports.newCardPaymentCharges = function (req, res) {
             }
           }
           if (cardExistsKey) {
+
             console.log('Already existing card details Update : ' + cardExistsKey);
-            firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid + '/' + cardExistsKey).update(firebaseCustObj);
+            firebase.database().ref('Restaurants/' + restId + '/Users/' + firebaseCustObj.uuid + '/savedCards/' + cardKey).set(firebaseCustObj);
           } else {
             console.log('Saving new card to same user  ');
-            firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid).push(firebaseCustObj);
+            //firebase.database().ref('StripeCustomers/' + restId + '/' + firebaseCustObj.uuid).push(firebaseCustObj);
+
+            firebase.database().ref('Restaurants/' + restId + '/Users/' + firebaseCustObj.uuid + '/savedCards/' + cardKey).set(firebaseCustObj);
           }
         });
         return stripe.charges.create({
