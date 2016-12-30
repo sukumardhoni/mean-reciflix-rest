@@ -33,6 +33,20 @@ exports.sendUserInfoToReciFlixTeam = function (agenda) {
   })
 }
 
+exports.sendNewUserHairMovement = function (agenda) {
+  agenda.define('New_User_Added', function (job, done) {
+    console.log('***********my user rest######' + JSON.stringify(job.attrs.data));
+    var mailData = {};
+    mailData.templateName = 'emailtemplates/new-user-hairmovement';
+    mailData.to = config.hairmovement_info.business_email;
+    mailData.subject = 'A New User Added to HairMovement';
+    mailData.user = job.attrs.data;
+    mailData.appEnv = config.hairmovement_info.title;
+    reci_emailer.sendSalonMail(mailData);
+    done();
+  })
+}
+
 
 exports.sendUserSuggestionInfoToReciFlixTeam = function (agenda) {
   agenda.define('User_Suggestion_Details', function (job, done) {

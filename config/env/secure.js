@@ -101,6 +101,15 @@ module.exports = {
       }
     }
   },
+  salon_mailer: {
+    hairmovement: {
+      service: 'gmail',
+      auth: {
+        user: 'The Hair Movement <hairmovementsalon@gmail.com>',
+        pass: 'hairmovement123'
+      }
+    }
+  },
   restaurant_mailer: {
     affyspremiumgrill: {
       service: 'gmail',

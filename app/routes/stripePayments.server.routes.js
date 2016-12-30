@@ -19,4 +19,9 @@ module.exports = function (app) {
     .post(StripePayments.sendOrderEmail);
 
 
+
+  app.route('/api/fcm-push-notifications')
+    .post(StripePayments.fcmNotifications);
+
+
 };

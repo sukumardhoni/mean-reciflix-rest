@@ -125,7 +125,18 @@ module.exports = {
       databaseURL: "https://ordersguru-536cc.firebaseio.com",
       storageBucket: "ordersguru-536cc.appspot.com",
       messagingSenderId: "208278011341"
+    },
+    hairmovement: {
+      apiKey: "AIzaSyAFgoZQBkWuApLO2CHEGYQ2KChgBZtdbIo",
+      authDomain: "hairmovement-cb2ce.firebaseapp.com",
+      databaseURL: "https://hairmovement-cb2ce.firebaseio.com",
+      storageBucket: "",
+      messagingSenderId: "517293528755"
     }
+  },
+  hairmovement_info: {
+    title: 'The Hair Movement',
+    business_email: process.env.HMS_BUSINESS_EMAILID || 'venkat@mahasoft.com'
   },
   stripe_info: {
     support_email: process.env.STRIPE_EMAILID || 'support@reciflix.com',

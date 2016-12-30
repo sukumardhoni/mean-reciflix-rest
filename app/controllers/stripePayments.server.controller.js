@@ -5,6 +5,7 @@ var config = require('../../config/config'),
   agenda = require('../../schedules/job-schedule.js')(config.db),
   firebase = require("firebase"),
   moment = require('moment'),
+  FCM = require('fcm-push'),
   _this = this;
 
 
@@ -15,6 +16,43 @@ var config = require('../../config/config'),
 
 var affysFirebase = firebase.initializeApp(config.firebase_info.affyspremiumgrill, 'Affys');
 var dakExpFirebase = firebase.initializeApp(config.firebase_info.dakshinexpress, 'DakshinExpress');
+
+
+
+var hairMovementFirebase = (firebase.initializeApp(config.firebase_info.hairmovement)).database().ref('salon/promo/w2017/');
+
+var newItems = false;
+
+
+hairMovementFirebase.once('value', function (messages) {
+  newItems = true;
+});
+
+
+
+hairMovementFirebase.on('child_added', function (snap) {
+  if (!newItems) {
+    return;
+  } else {
+    var userDetails = snap.val();
+    _this.sendUserDetails(userDetails);
+  }
+
+})
+hairMovementFirebase.on('child_changed', function (snap) {
+  if (!newItems) {
+    return;
+  } else {
+    var userDetails = snap.val();
+    _this.sendUserDetails(userDetails);
+  }
+})
+
+exports.sendUserDetails = function (userData) {
+  console.log('*******************hairmovent firebase is called ' + JSON.stringify(userData));
+  agenda.now('New_User_Added', userData);
+}
+
 
 
 
@@ -320,3 +358,59 @@ exports.sendOrderEmail = function (restId, details) {
     }
   })
 };
+
+
+
+
+
+
+
+
+/*Push Notification MSGS*/
+
+
+exports.fcmNotifications = function (req, res) {
+
+
+  console.log('fcmNotifications is called');
+  console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+
+
+  var serverKey = 'AAAAE8474Ys:APA91bFxcHsEKLs8OmDbcoogR62qO5xGf4xhjG1_X5MB1swLMxxAgO6lVKV8SVkjAWiFm67iV3gonaXh1PayrxM8Lzl-TGf6KlvcgpR1ljDeuHc9lDS3bgBcKNFmSpUp9B8NGM7Jr--686kj-HTu33xIt0yVXWZHnQ';
+  var fcm = new FCM(serverKey);
+
+  var message = {
+    //to: 'dsC6cgUNKq0:APA91bGzD0C1yQZdBigs-3BD3zLXDX5FwQer1T9cl-Bs311cIw6CVXd4F-FJsuMMLerR79PbK5cXm0-PzduU6pBgq9pzP_G41ZJLhfvZX1d6A5qHTYV0qg9ic4JJJj3dhc2JHHwy-aqn', // required fill with device token or topics
+    to: req.body.token,
+    collapse_key: 'TEST_DEMO',
+    data: {
+      your_custom_data_key: 'your_custom_data_value'
+    },
+    notification: {
+      title: 'Affys Premium Grill',
+      body: req.body.msg,
+      "sound": "default",
+      "icon": "myicon"
+    }
+  };
+
+  //callback style
+  /* fcm.send(message, function (err, response) {
+    if (err) {
+      console.log("Something has gone wrong!");
+    } else {
+      console.log("Successfully sent with response: ", response);
+    }
+  });*/
+
+  //promise style
+  fcm.send(message)
+    .then(function (response) {
+      console.log("Successfully sent with response: ", response);
+    })
+    .catch(function (err) {
+      console.log("Something has gone wrong!");
+      console.error("Error callback on fcm : " + JSON.stringify(err));
+    })
+
+}

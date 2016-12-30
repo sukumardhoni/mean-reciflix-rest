@@ -29,7 +29,8 @@ exports.sendMail = function (mailData) {
       tipAmount: mailData.tipAmount,
       foodTax: mailData.foodTax,
       subTotalPrice: mailData.subTotalPrice,
-      totalAmt: mailData.totalAmt
+      totalAmt: mailData.totalAmt,
+      userDetails: mailData.user
     },
     function (err, results) {
       if (err) {
@@ -47,6 +48,43 @@ exports.sendMail = function (mailData) {
       });
     });
 }
+
+
+
+exports.sendSalonMail = function (mailData) {
+  console.log('An email is being generated for mailData:' + JSON.stringify(mailData));
+
+  var emailTemplate = new EmailTemplate(mailData.templateName);
+
+  var mailOptions = {
+    from: config.salon_mailer.hairmovement.auth.user, //'ReciFlix Support <support@reciflix.com>', // sender address
+    secureConnection: false,
+    to: mailData.to, // list of receivers
+    subject: mailData.subject // Subject line
+  };
+  emailTemplate.render({
+      email: mailData.to,
+      userDetails: mailData.user
+    },
+    function (err, results) {
+      if (err) {
+        console.log('Failure to send recovery email, err is: ' + err);
+      } else {
+        mailOptions.html = results.html;
+      }
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log('error in sending mail: ' + error);
+        } else {
+          console.log('Message sent: ' + info.response);
+        }
+
+      });
+    });
+}
+
+
+
 
 
 exports.sendRestaurantMail = function (mailData) {

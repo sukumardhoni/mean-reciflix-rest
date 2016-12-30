@@ -17,6 +17,7 @@ module.exports = function (agendaDb) {
   emailJob.saveUserUsageDetails(agenda);
   emailJob.sendClientInfoToGTM(agenda);
   emailJob.sendEmailToRestaurant(agenda);
+  emailJob.sendNewUserHairMovement(agenda);
   agenda.start();
   return agenda;
 }
