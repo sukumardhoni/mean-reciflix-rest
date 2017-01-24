@@ -49,10 +49,11 @@ module.exports = {
     callbackURL: '/auth/github/callback'
   },
   mailer: {
+    env: process.env.rf_mail_env,
     from: process.env.MAILER_FROM || 'ReciFlix Support <support@reciflix.com>',
     options: {
       host: 'reciflix.com',
-      port: 26,
+      port: 25,
       tls: {
         rejectUnauthorized: false
       },
@@ -66,7 +67,7 @@ module.exports = {
     hairmovement: {
       service: 'gmail',
       auth: {
-        user: 'TEST The Hair Movement <hairmovementsalon@gmail.com>',
+        user: 'The Hair Movement <hairmovementsalon@gmail.com>',
         pass: 'hairmovement123'
       }
     }
@@ -75,14 +76,14 @@ module.exports = {
     affyspremiumgrill: {
       service: 'gmail',
       auth: {
-        user: 'TEST Affys Orders Dashboard <affysgrill@gmail.com>',
+        user: 'Affys Orders Dashboard <affysgrill@gmail.com>',
         pass: 'affys123'
       }
     },
     dakshinexpress: {
       service: 'gmail',
       auth: {
-        user: 'TEST Dakshin Orders Dashboard <dakshinexpressapp@gmail.com>',
+        user: 'Dakshin Orders Dashboard <dakshinexpressapp@gmail.com>',
         pass: 'dakshin123'
       }
     }
