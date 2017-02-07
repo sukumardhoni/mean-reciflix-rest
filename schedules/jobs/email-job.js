@@ -5,12 +5,15 @@ var _ = require('lodash'),
   config = require('../../config/config'),
   reci_emailer = require('../../schedules/reci-emailer.js');
 
+var mail_env = process.env.RF_MAIL_ENV || '';
+
+
 exports.sendNewUserWelcomeEmail = function (agenda) {
   agenda.define('New_User_Welcome', function (job, done) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/welcome-email';
     mailData.to = job.attrs.data.email;
-    mailData.subject = process.env.rf_mail_env + ' Welcome to ReciFlix';
+    mailData.subject = mail_env + 'Welcome to ReciFlix';
     mailData.displayName = job.attrs.data.displayName;
     mailData.appEnv = config.app.title;
     reci_emailer.sendMail(mailData);
@@ -24,7 +27,7 @@ exports.sendUserInfoToReciFlixTeam = function (agenda) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/email-to-reciflix';
     mailData.to = 'support@reciflix.com';
-    mailData.subject = process.env.rf_mail_env + ' New User To ReciFlix';
+    mailData.subject = mail_env + 'New User To ReciFlix';
     mailData.userData = job.attrs.data.userData;
     mailData.appEnv = config.app.title;
     console.log('Before sending to reciemail User_Info_To_ReciFlix_Team mailData: ' + JSON.stringify(mailData));
@@ -39,7 +42,7 @@ exports.sendNewUserHairMovement = function (agenda) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/new-user-hairmovement';
     mailData.to = config.hairmovement_info.business_email;
-    mailData.subject = process.env.rf_mail_env + ' A New User Added to HairMovement';
+    mailData.subject = mail_env + 'A New User Added to HairMovement';
     mailData.user = job.attrs.data;
     mailData.appEnv = config.hairmovement_info.title;
     reci_emailer.sendSalonMail(mailData);
@@ -54,7 +57,7 @@ exports.sendUserSuggestionInfoToReciFlixTeam = function (agenda) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/user-suggestion-email-to-reciflix-team';
     mailData.to = 'support@reciflix.com';
-    mailData.subject = process.env.rf_mail_env + ' User Suggestions To ReciFlix';
+    mailData.subject = mail_env + 'User Suggestions To ReciFlix';
     mailData.userData = job.attrs.data.userData;
     mailData.appEnv = config.app.title;
     console.log('Before sending to reciemail User_Info_To_ReciFlix_Team mailData: ' + JSON.stringify(mailData));
@@ -70,7 +73,7 @@ exports.sendClientInfoToGTM = function (agenda) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/email-to-gtm';
     mailData.to = 'info@globaltechminds.com';
-    mailData.subject = process.env.rf_mail_env + ' Client from GTM';
+    mailData.subject = mail_env + 'Client from GTM';
     mailData.userData = job.attrs.data.userData;
     mailData.appEnv = 'GTM';
     console.log('Before sending to reciemail Client_Info_To_GTM mailData: ' + JSON.stringify(mailData));
@@ -80,6 +83,10 @@ exports.sendClientInfoToGTM = function (agenda) {
 }
 
 exports.sendEmailToRestaurant = function (agenda) {
+
+
+
+
   agenda.define('Order_Info_To_Restaurant', function (job, done) {
     console.log('###user Order_Info_To_Restaurant to the app, email: ' + JSON.stringify(job.attrs.data));
     var mailData = {};
@@ -88,7 +95,30 @@ exports.sendEmailToRestaurant = function (agenda) {
     mailData.restId = job.attrs.data.restId;
     mailData.restDisplayName = job.attrs.data.restDisplayName;
     mailData.formatedOrderTime = job.attrs.data.formatedOrderTime;
-    mailData.subject = process.env.rf_mail_env + ' Order ' + job.attrs.data.orderData.orderId;
+    mailData.subject = mail_env + 'Order ' + job.attrs.data.orderData.orderId;
+    mailData.orderData = job.attrs.data.orderData;
+    mailData.orderDetails = job.attrs.data.orderDetails;
+    mailData.subTotalPrice = job.attrs.data.subTotalPrice;
+    mailData.tipAmount = job.attrs.data.tipAmount;
+    mailData.foodTax = job.attrs.data.foodTax;
+    mailData.totalAmt = job.attrs.data.totalAmt;
+    //mailData.appEnv = 'AffysPremiumGrill';
+    console.log('Before sending to orderemail Order_Info_To_Restaurant mailData: ' + JSON.stringify(mailData));
+    reci_emailer.sendRestaurantMail(mailData);
+    done();
+  })
+}
+
+exports.sendEmailToRestaurantQA = function (agenda) {
+  agenda.define('Order_Info_To_Restaurant_QA', function (job, done) {
+    console.log('###user Order_Info_To_Restaurant to the app, email: ' + JSON.stringify(job.attrs.data));
+    var mailData = {};
+    mailData.templateName = 'emailtemplates/email-to-restaurant';
+    mailData.to = job.attrs.data.email;
+    mailData.restId = job.attrs.data.restId;
+    mailData.restDisplayName = job.attrs.data.restDisplayName;
+    mailData.formatedOrderTime = job.attrs.data.formatedOrderTime;
+    mailData.subject = 'QA Order ' + job.attrs.data.orderData.orderId;
     mailData.orderData = job.attrs.data.orderData;
     mailData.orderDetails = job.attrs.data.orderDetails;
     mailData.subTotalPrice = job.attrs.data.subTotalPrice;
@@ -116,7 +146,7 @@ exports.sendRecoveryLinkEmail = function (agenda) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/recovery-email';
     mailData.to = job.attrs.data.email;
-    mailData.subject = process.env.rf_mail_env + ' ReciFlix Password Reset';
+    mailData.subject = mail_env + 'ReciFlix Password Reset';
     mailData.displayName = job.attrs.data.displayName;
     mailData.url = job.attrs.data.url;
     mailData.appEnv = config.app.title;
@@ -130,7 +160,7 @@ exports.sendPasswordChangedEmail = function (agenda) {
     var mailData = {};
     mailData.templateName = 'emailtemplates/password-changed-email';
     mailData.to = job.attrs.data.email;
-    mailData.subject = process.env.rf_mail_env + ' ReciFlix Password Successfully Changed';
+    mailData.subject = mail_env + 'ReciFlix Password Successfully Changed';
     mailData.displayName = job.attrs.data.displayName;
     mailData.appEnv = config.app.title;
     reci_emailer.sendMail(mailData);

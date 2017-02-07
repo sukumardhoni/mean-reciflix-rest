@@ -126,6 +126,20 @@ module.exports = {
       storageBucket: "ordersguru-536cc.appspot.com",
       messagingSenderId: "208278011341"
     },
+    affyspremiumgrill_qa: {
+      apiKey: "AIzaSyDGEByAIhogUgoqF6FeqNNw416PU431l1g",
+      authDomain: "affys-qa.firebaseapp.com",
+      databaseURL: "https://affys-qa.firebaseio.com",
+      storageBucket: "affys-qa.appspot.com",
+      messagingSenderId: "34692586352"
+    },
+    dakshinexpress_qa: {
+      apiKey: "AIzaSyBop4aV-qAfuGM1Nk46E0m5ZvDjMggR0f8",
+      authDomain: "ordersguru-536cc.firebaseapp.com",
+      databaseURL: "https://ordersguru-536cc.firebaseio.com",
+      storageBucket: "ordersguru-536cc.appspot.com",
+      messagingSenderId: "208278011341"
+    },
     hairmovement: {
       apiKey: "AIzaSyAFgoZQBkWuApLO2CHEGYQ2KChgBZtdbIo",
       authDomain: "hairmovement-cb2ce.firebaseapp.com",
@@ -141,6 +155,8 @@ module.exports = {
   stripe_info: {
     support_email: process.env.STRIPE_EMAILID || 'support@reciflix.com',
     affys_secret_key: process.env.STRIPE_AFFYS_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv',
-    dakshin_secret_key: process.env.STRIPE_DAKSHIN_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv'
+    dakshin_secret_key: process.env.STRIPE_DAKSHIN_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv',
+    affys_secret_key_qa: process.env.STRIPE_AFFYS_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv',
+    dakshin_secret_key_qa: process.env.STRIPE_DAKSHIN_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv'
   }
 };
