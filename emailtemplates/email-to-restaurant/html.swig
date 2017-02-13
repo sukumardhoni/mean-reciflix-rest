@@ -863,7 +863,7 @@
                             <th align="center">Name</th>
                             <th align="center">Price</th>
                           </tr>
-                          {% for item in orderDetails %}
+                          {% for indexVal,item in orderDetails %}   
                           <tr>
                             <td align="center" valign="top">{{item.quantity}}</td>
                             <td valign="top">{{item.displayName}}
@@ -875,13 +875,14 @@
                               {% endif %}
                             </td>
                             <td align="right" valign="top">$ {{item.itemTotalPrice}} </td>
-                          </tr>                         
-                          {% endfor %}
-                          
+                          </tr>
                           <tr>
                           <td></td>
-                          <td>Notes : ** {{orderData.orderNotes}} </td>
+                          <td>Notes : ** {{orderData.orderNotes[indexVal]}} </td>
                           </tr>
+                          {% endfor %}
+                          
+                          
                           
                           <tr>
                             <td></td>
