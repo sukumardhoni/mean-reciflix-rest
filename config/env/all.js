@@ -154,7 +154,7 @@ module.exports = {
   },
   stripe_info: {
     support_email: process.env.STRIPE_EMAILID || 'support@reciflix.com',
-    affys_secret_key: process.env.STRIPE_AFFYS_LIVE_SECRET_KEY || '     sk_test_rAsiVeVZcbUTzyqjX0bpogm0',
+    affys_secret_key: process.env.STRIPE_AFFYS_LIVE_SECRET_KEY || 'sk_test_rAsiVeVZcbUTzyqjX0bpogm0',
     dakshin_secret_key: process.env.STRIPE_DAKSHIN_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv',
     affys_secret_key_qa: process.env.STRIPE_AFFYS_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv',
     dakshin_secret_key_qa: process.env.STRIPE_DAKSHIN_LIVE_SECRET_KEY || 'sk_test_REPJYIniwrhDPWfwS8D6yUYv'
