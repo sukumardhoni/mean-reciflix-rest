@@ -190,25 +190,28 @@ exports.newCardPaymentChargesQA = function (req, res) {
       var details = snapshot.val();
       //for (var key in details) {
       console.log('in for loop');
-      chargeAmt = details.orderAmt;
-      console.log('Order chargeAmt is : ' + chargeAmt);
-      if (chargeAmt) {
-        console.log('Charge amount is available : ' + chargeAmt);
-        var charge = stripe.charges.create({
-          amount: Math.round(chargeAmt * 100), // amount in cents, again
-          currency: "usd",
-          source: stripeToken,
-          description: 'Customers for Affys'
-        }, function (err, charge) {
-          if (err && err.type === 'StripeCardError') {
-            console.log('err charging amount : ' + JSON.stringify(err));
-            res.jsonp(err);
-          } else {
-            _this.sendOrderEmailQA(restId, details);
-            charge.statusCode = 200;
-            res.jsonp(charge);
-          }
-        });
+
+      if (details) {
+        chargeAmt = details.orderAmt;
+        console.log('Order chargeAmt is : ' + chargeAmt);
+        if (chargeAmt) {
+          console.log('Charge amount is available : ' + chargeAmt);
+          var charge = stripe.charges.create({
+            amount: Math.round(chargeAmt * 100), // amount in cents, again
+            currency: "usd",
+            source: stripeToken,
+            description: 'Customers for Affys'
+          }, function (err, charge) {
+            if (err && err.type === 'StripeCardError') {
+              console.log('err charging amount : ' + JSON.stringify(err));
+              res.jsonp(err);
+            } else {
+              _this.sendOrderEmailQA(restId, details);
+              charge.statusCode = 200;
+              res.jsonp(charge);
+            }
+          });
+        }
       }
       //}
     })
