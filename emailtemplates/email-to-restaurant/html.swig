@@ -878,7 +878,7 @@
                           </tr>
                           <tr>
                           <td></td>
-                          <td>Notes : ** {{orderData.orderNotes[indexVal]}} </td>
+                          <td>Notes : ** {{orderData.orderNotes[indexVal] || 'None' }} </td>
                           </tr>
                           {% endfor %}
                           
