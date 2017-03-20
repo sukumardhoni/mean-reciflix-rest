@@ -865,7 +865,8 @@
                           </tr>
                           {% for indexVal,item in orderDetails %}   
                           <tr>
-                            <td align="center" valign="top">{{item.quantity}}</td>
+                            {% if item.quantity - item.voidQty > 0 %}<td align="center" valign="top">{{item.quantity - item.voidQty}}</td>
+                            {% endif %}
                             <td valign="top">{{item.displayName}}
                             <br/>
                             {% for ch in item.genChArray %}<span style="font-size: 12px;padding-left: 5px;text-transform: lowercase;">-- {{ch}}</span>

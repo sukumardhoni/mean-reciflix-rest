@@ -96,8 +96,8 @@ dakExpFirebase_qa.database().ref('Restaurants/dakshinexpress/Orders').on('child_
  * Create a newCardPaymentCharges
  */
 exports.newCardPaymentChargesQA = function (req, res) {
-  //console.log('newCardPaymentCharges function is called');
-  //console.log('Stripe Body details is : ' + JSON.stringify(req.body));
+  console.log('newCardPaymentCharges function is called');
+  console.log('Stripe Body details is : ' + JSON.stringify(req.body));
   var restId = req.body.restId;
   //var resAmt = (req.body.amount);
   var firebase;
@@ -206,9 +206,16 @@ exports.newCardPaymentChargesQA = function (req, res) {
               console.log('err charging amount : ' + JSON.stringify(err));
               res.jsonp(err);
             } else {
+              console.log('$$$$$$$$ charge details is : ' + JSON.stringify(charge));
               _this.sendOrderEmailQA(restId, details);
-              charge.statusCode = 200;
-              res.jsonp(charge);
+              if (charge == null) {
+                charge = {};
+                charge.statusCode = 200;
+                res.jsonp(charge);
+              } else {
+                charge.statusCode = 200;
+                res.jsonp(charge);
+              }
             }
           });
         }
@@ -464,7 +471,7 @@ exports.sendOrderEmailQA = function (restId, details) {
       for (var a = 0; a < itemArrayObj.length; a++) {
         itemArrayObj[a].calculatedPrice = parseFloat(Math.round(itemArrayObj[a].calculatedPrice * 100) / 100).toFixed(2);
 
-        itemArrayObj[a].itemTotalPrice = parseFloat(itemArrayObj[a].calculatedPrice * itemArrayObj[a].quantity).toFixed(2);
+        itemArrayObj[a].itemTotalPrice = parseFloat(itemArrayObj[a].calculatedPrice * (itemArrayObj[a].quantity - itemArrayObj[a].voidQty)).toFixed(2);
 
 
 
@@ -505,7 +512,7 @@ exports.sendOrderEmailQA = function (restId, details) {
       if (items) {
         for (var i = 0; i < items.length; i++) {
           var item = items[i];
-          subTotal += (item.calculatedPrice * item.quantity);
+          subTotal += (item.calculatedPrice * (item.quantity - item.voidQty));
         }
       }
     }
@@ -663,6 +670,8 @@ exports.fcmNotificationsQA = function (req, res) {
 
   console.log('fcmNotifications is called QA');
   console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+
+  console.log('Body details : ' + JSON.stringify(req.body));
 
 
   var serverKey = 'AAAAE8474Ys:APA91bFxcHsEKLs8OmDbcoogR62qO5xGf4xhjG1_X5MB1swLMxxAgO6lVKV8SVkjAWiFm67iV3gonaXh1PayrxM8Lzl-TGf6KlvcgpR1ljDeuHc9lDS3bgBcKNFmSpUp9B8NGM7Jr--686kj-HTu33xIt0yVXWZHnQ';
