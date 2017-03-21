@@ -863,10 +863,11 @@
                             <th align="center">Name</th>
                             <th align="center">Price</th>
                           </tr>
-                          {% for indexVal,item in orderDetails %}   
+                          {% for indexVal,item in orderDetails %}  
+                          {% if item.quantity - item.voidQty > 0 %}
                           <tr>
-                            {% if item.quantity - item.voidQty > 0 %}<td align="center" valign="top">{{item.quantity - item.voidQty}}</td>
-                            {% endif %}
+                            <td align="center" valign="top">{{item.quantity - item.voidQty}}</td>
+                            
                             <td valign="top">{{item.displayName}}
                             <br/>
                             {% for ch in item.genChArray %}<span style="font-size: 12px;padding-left: 5px;text-transform: lowercase;">-- {{ch}}</span>
@@ -880,7 +881,9 @@
                           <tr>
                           <td></td>
                           <td>Notes : ** {{orderData.orderNotes[indexVal] || 'None' }} </td>
+                          
                           </tr>
+                          {% endif %}
                           {% endfor %}
                           
                           
