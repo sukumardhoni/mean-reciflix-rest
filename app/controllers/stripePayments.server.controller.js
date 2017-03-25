@@ -96,7 +96,7 @@ dakExpFirebase_qa.database().ref('Restaurants/dakshinexpress/Orders').on('child_
  * Create a newCardPaymentCharges
  */
 exports.newCardPaymentChargesQA = function (req, res) {
-  console.log('newCardPaymentCharges function is called');
+  console.log('newCardPaymentChargesQA function is called');
   console.log('Stripe Body details is : ' + JSON.stringify(req.body));
   var restId = req.body.restId;
   //var resAmt = (req.body.amount);
@@ -126,7 +126,7 @@ exports.newCardPaymentChargesQA = function (req, res) {
       console.log('Order chargeAmt is : ' + chargeAmt);
       stripe.customers.create({
         source: req.body.sToken,
-        description: 'Customers for Affys',
+        description: 'Customers for :' + restId,
         email: req.body.email
       }).then(function (customer) {
         console.log('successfully created customer : ' + JSON.stringify(customer));
@@ -174,7 +174,7 @@ exports.newCardPaymentChargesQA = function (req, res) {
         // YOUR CODE: Save the customer ID and other info in a database for later!
         console.log('charge is done')
         console.log(charge)
-        _this.sendOrderEmailQA(restId, details);
+        _this.sendOrderEmail(restId, details);
         charge.statusCode = 200;
         res.jsonp(charge);
       }, function (err) {
@@ -190,35 +190,25 @@ exports.newCardPaymentChargesQA = function (req, res) {
       var details = snapshot.val();
       //for (var key in details) {
       console.log('in for loop');
-
-      if (details) {
-        chargeAmt = details.orderAmt;
-        console.log('Order chargeAmt is : ' + chargeAmt);
-        if (chargeAmt) {
-          console.log('Charge amount is available : ' + chargeAmt);
-          var charge = stripe.charges.create({
-            amount: Math.round(chargeAmt * 100), // amount in cents, again
-            currency: "usd",
-            source: stripeToken,
-            description: 'Customers for Affys'
-          }, function (err, charge) {
-            if (err && err.type === 'StripeCardError') {
-              console.log('err charging amount : ' + JSON.stringify(err));
-              res.jsonp(err);
-            } else {
-              console.log('$$$$$$$$ charge details is : ' + JSON.stringify(charge));
-              _this.sendOrderEmailQA(restId, details);
-              if (charge == null) {
-                charge = {};
-                charge.statusCode = 200;
-                res.jsonp(charge);
-              } else {
-                charge.statusCode = 200;
-                res.jsonp(charge);
-              }
-            }
-          });
-        }
+      chargeAmt = details.orderAmt;
+      console.log('Order chargeAmt is : ' + chargeAmt);
+      if (chargeAmt) {
+        console.log('Charge amount is available : ' + chargeAmt);
+        var charge = stripe.charges.create({
+          amount: Math.round(chargeAmt * 100), // amount in cents, again
+          currency: "usd",
+          source: stripeToken,
+          description: 'Customers for Affys'
+        }, function (err, charge) {
+          if (err && err.type === 'StripeCardError') {
+            console.log('err charging amount : ' + JSON.stringify(err));
+            res.jsonp(err);
+          } else {
+            _this.sendOrderEmail(restId, details);
+            charge.statusCode = 200;
+            res.jsonp(charge);
+          }
+        });
       }
       //}
     })
