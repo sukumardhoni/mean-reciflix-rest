@@ -2,6 +2,7 @@
 
 var config = require('../../config/config'),
   stripe = require("stripe")(config.stripe_info.affys_secret_key),
+  stripe_qa = require("stripe")(config.stripe_info.affys_secret_key_qa),
   agenda = require('../../schedules/job-schedule.js')(config.db),
   firebase = require("firebase"),
   moment = require('moment'),
@@ -124,7 +125,7 @@ exports.newCardPaymentChargesQA = function (req, res) {
       //    console.log('in for loop');
       chargeAmt = details.orderAmt;
       console.log('Order chargeAmt is : ' + chargeAmt);
-      stripe.customers.create({
+      stripe_qa.customers.create({
         source: req.body.sToken,
         description: 'Customers for :' + restId,
         email: req.body.email
@@ -164,7 +165,7 @@ exports.newCardPaymentChargesQA = function (req, res) {
             firebase.database().ref('Restaurants/' + restId + '/Users/' + firebaseCustObj.uuid + '/savedCards/' + cardKey).set(firebaseCustObj);
           }
         });
-        return stripe.charges.create({
+        return stripe_qa.charges.create({
           amount: Math.round(chargeAmt * 100), // amount in cents, again
           currency: "usd",
           customer: customer.id
@@ -194,7 +195,7 @@ exports.newCardPaymentChargesQA = function (req, res) {
       console.log('Order chargeAmt is : ' + chargeAmt);
       if (chargeAmt) {
         console.log('Charge amount is available : ' + chargeAmt);
-        var charge = stripe.charges.create({
+        var charge = stripe_qa.charges.create({
           amount: Math.round(chargeAmt * 100), // amount in cents, again
           currency: "usd",
           source: stripeToken,
@@ -360,7 +361,7 @@ exports.savedCardPaymentChargesQA = function (req, res) {
     chargeAmt = details.orderAmt;
     if (chargeAmt) {
       console.log('Charge amount is available : ' + chargeAmt);
-      stripe.charges.create({
+      stripe_qa.charges.create({
         amount: Math.round(chargeAmt * 100), // amount in cents, again
         currency: "usd",
         customer: req.body.custId // Previously stored, then retrieved
