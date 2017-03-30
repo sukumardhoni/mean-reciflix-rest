@@ -631,7 +631,7 @@ exports.sendOrderEmail = function (restId, details) {
           orderDetails: itemArrayObj,
           subTotalPrice: parseFloat(Math.round(subTotal * 100) / 100).toFixed(2),
           orderData: orderData,
-          tipAmount: parseFloat(Math.round(subTotal * orderData.orderTip * 100) / 100).toFixed(2),
+          tipAmount: parseFloat(Math.round(subTotal * orderData.orderTip) / 100).toFixed(2),
           foodTax: parseFloat(Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100).toFixed(2),
           totalAmt: parseFloat(Math.round(orderData.orderAmt * 100) / 100).toFixed(2)
         });

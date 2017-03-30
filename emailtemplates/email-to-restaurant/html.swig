@@ -902,7 +902,7 @@
                           </tr>
                           <tr>
                             <td></td>
-                            <td align="right">Tip ({{orderData.orderTip * 100}}%)
+                            <td align="right">Tip ({{orderData.orderTip}}%)
                             </td>
                             <td align="right">$ {{tipAmount}}</td>
                           </tr>
