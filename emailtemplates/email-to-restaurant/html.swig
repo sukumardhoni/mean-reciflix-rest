@@ -900,12 +900,27 @@
                             </td>
                             <td align="right">$ {{foodTax}}</td>
                           </tr>
+                          {% if orderData.orderTip === 'customTip' %}
+                          <tr>
+                            <td></td>
+                            <td align="right">Tip Amount 
+                            </td>
+                            <td align="right">$ {{tipAmount}}</td>
+                          </tr>
+                          {% endif %}
+                          
+                          {% if orderData.orderTip !== 'customTip' %}
                           <tr>
                             <td></td>
                             <td align="right">Tip ({{orderData.orderTip}}%)
                             </td>
                             <td align="right">$ {{tipAmount}}</td>
                           </tr>
+                          
+                          {% endif %}
+                          
+                          
+                          
                           <tr>
                             <td></td>
                             <td align="right">Total 

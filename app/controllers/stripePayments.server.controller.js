@@ -175,7 +175,7 @@ exports.newCardPaymentChargesQA = function (req, res) {
         // YOUR CODE: Save the customer ID and other info in a database for later!
         console.log('charge is done')
         console.log(charge)
-        _this.sendOrderEmail(restId, details);
+        _this.sendOrderEmailQA(restId, details);
         charge.statusCode = 200;
         res.jsonp(charge);
       }, function (err) {
@@ -205,7 +205,7 @@ exports.newCardPaymentChargesQA = function (req, res) {
             console.log('err charging amount : ' + JSON.stringify(err));
             res.jsonp(err);
           } else {
-            _this.sendOrderEmail(restId, details);
+            _this.sendOrderEmailQA(restId, details);
             charge.statusCode = 200;
             res.jsonp(charge);
           }
@@ -496,10 +496,12 @@ exports.sendOrderEmailQA = function (restId, details) {
       }
     }
     generateChoicesArray(itemArrayObj);
+
+
     var orderData = details;
 
-    function calculateSubTotal(details) {
-      var items = details;
+    function calculateSubTotal(itemDetails) {
+      var items = itemDetails;
       if (items) {
         for (var i = 0; i < items.length; i++) {
           var item = items[i];
@@ -508,10 +510,37 @@ exports.sendOrderEmailQA = function (restId, details) {
       }
     }
     if (subTotal != 0) {
-      console.log('Subtotal is  there $$$$$$$$$$  : ' + subTotal);
+      console.log('Subtotal is  there $$$$$$$$$$ QAAAA  : ' + subTotal);
 
       firebase.database().ref('Restaurants/' + restId + '/info/displayName').once('value', function (snapshot) {
         var restaurantDisplayName = snapshot.val();
+
+        var tipAmount;
+
+
+        console.log(' ORDER DATA IS : ' + JSON.stringify(orderData));
+
+
+
+        if (orderData.orderTip == 'customTip') {
+          tipAmount = parseFloat(orderData.tipAmt);
+
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+
+
+        } else {
+          tipAmount = parseFloat(Math.round(subTotal * orderData.orderTip) / 100).toFixed(2);
+          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
+
+
+        }
+
+
         agenda.now('Order_Info_To_Restaurant_QA', {
           formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
           restDisplayName: restaurantDisplayName,
@@ -521,7 +550,7 @@ exports.sendOrderEmailQA = function (restId, details) {
           orderDetails: itemArrayObj,
           subTotalPrice: parseFloat(Math.round(subTotal * 100) / 100).toFixed(2),
           orderData: orderData,
-          tipAmount: parseFloat(Math.round(subTotal * orderData.orderTip * 100) / 100).toFixed(2),
+          tipAmount: tipAmount,
           foodTax: parseFloat(Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100).toFixed(2),
           totalAmt: parseFloat(Math.round(orderData.orderAmt * 100) / 100).toFixed(2)
         });
@@ -608,8 +637,8 @@ exports.sendOrderEmail = function (restId, details) {
     generateChoicesArray(itemArrayObj);
     var orderData = details;
 
-    function calculateSubTotal(details) {
-      var items = details;
+    function calculateSubTotal(itemDetails) {
+      var items = itemDetails;
       if (items) {
         for (var i = 0; i < items.length; i++) {
           var item = items[i];
@@ -618,11 +647,38 @@ exports.sendOrderEmail = function (restId, details) {
       }
     }
     if (subTotal != 0) {
-      console.log('Subtotal is  there $$$$$$$$$$  : ' + subTotal);
+      console.log('Subtotal is  there $$$$$$$$$$ QAAAA  : ' + subTotal);
 
       firebase.database().ref('Restaurants/' + restId + '/info/displayName').once('value', function (snapshot) {
         var restaurantDisplayName = snapshot.val();
-        agenda.now('Order_Info_To_Restaurant', {
+
+        var tipAmount;
+
+
+        console.log(' ORDER DATA IS : ' + JSON.stringify(orderData));
+
+
+
+        if (orderData.orderTip == 'customTip') {
+          tipAmount = parseFloat(orderData.tipAmt);
+
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+
+
+        } else {
+          tipAmount = parseFloat(Math.round(subTotal * orderData.orderTip) / 100).toFixed(2);
+          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
+          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
+
+
+        }
+
+
+        agenda.now('Order_Info_To_Restaurant_QA', {
           formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
           restDisplayName: restaurantDisplayName,
           //email: 'vinodhko@globaltechminds.com',
@@ -631,7 +687,7 @@ exports.sendOrderEmail = function (restId, details) {
           orderDetails: itemArrayObj,
           subTotalPrice: parseFloat(Math.round(subTotal * 100) / 100).toFixed(2),
           orderData: orderData,
-          tipAmount: parseFloat(Math.round(subTotal * orderData.orderTip) / 100).toFixed(2),
+          tipAmount: tipAmount,
           foodTax: parseFloat(Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100).toFixed(2),
           totalAmt: parseFloat(Math.round(orderData.orderAmt * 100) / 100).toFixed(2)
         });
