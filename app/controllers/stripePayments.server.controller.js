@@ -525,35 +525,70 @@ exports.sendOrderEmailQA = function (restId, details) {
         if (orderData.orderTip == 'customTip') {
           tipAmount = parseFloat(orderData.tipAmt);
 
-          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
-          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
-          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
-          console.log('tipAmount  $$$$$$$$$$  : ' + tipAmount);
+
 
 
         } else {
           tipAmount = parseFloat(Math.round(subTotal * orderData.orderTip) / 100).toFixed(2);
-          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
-          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
-          console.log('ELSE ELSE ELSE tipAmount  $$$$$$$$$$  : ' + tipAmount);
+
 
 
         }
 
 
-        agenda.now('Order_Info_To_Restaurant_QA', {
-          formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
-          restDisplayName: restaurantDisplayName,
-          //email: 'vinodhko@globaltechminds.com',
-          email: emailsArray,
-          restId: restId,
-          orderDetails: itemArrayObj,
-          subTotalPrice: parseFloat(Math.round(subTotal * 100) / 100).toFixed(2),
-          orderData: orderData,
-          tipAmount: tipAmount,
-          foodTax: parseFloat(Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100).toFixed(2),
-          totalAmt: parseFloat(Math.round(orderData.orderAmt * 100) / 100).toFixed(2)
-        });
+        if (orderData.discountPercentage) {
+
+          console.log('orderData.discountAmount : ' + orderData.discountAmount);
+
+          console.log('Discount  tipAmount  $$$$$$$$$$  : ');
+          console.log('Discount   $$$$$$$$$$  : ');
+          console.log('Discount  tipAmount  $$$$$$$$$$  : ');
+
+
+
+          agenda.now('Order_Info_To_Restaurant_QA', {
+            formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
+            restDisplayName: restaurantDisplayName,
+            //email: 'vinodhko@globaltechminds.com',
+            email: emailsArray,
+            discountAmount: parseFloat(orderData.discountAmount).toFixed(2),
+            discountPercentage: orderData.discountPercentage,
+            restId: restId,
+            orderDetails: itemArrayObj,
+            subTotalPrice: parseFloat(Math.round(subTotal * 100) / 100).toFixed(2),
+            orderData: orderData,
+            tipAmount: tipAmount,
+            foodTax: parseFloat(Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100).toFixed(2),
+            totalAmt: parseFloat(Math.round(orderData.orderAmt * 100) / 100).toFixed(2)
+          });
+
+
+
+
+        } else {
+
+
+          console.log('Without Discount tipAmount  $$$$$$$$$$  : ');
+          console.log('Without Discount tipAmount  $$$$$$$$$$  : ');
+          console.log('Without Discount tipAmount  $$$$$$$$$$  : ');
+          console.log('Without Discount tipAmount  $$$$$$$$$$  : ');
+
+          agenda.now('Order_Info_To_Restaurant_QA', {
+            formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
+            restDisplayName: restaurantDisplayName,
+            //email: 'vinodhko@globaltechminds.com',
+            email: emailsArray,
+            restId: restId,
+            orderDetails: itemArrayObj,
+            subTotalPrice: parseFloat(Math.round(subTotal * 100) / 100).toFixed(2),
+            orderData: orderData,
+            tipAmount: tipAmount,
+            foodTax: parseFloat(Math.round((subTotal * (orderData.restFoodTax / 100)) * 100) / 100).toFixed(2),
+            totalAmt: parseFloat(Math.round(orderData.orderAmt * 100) / 100).toFixed(2)
+          });
+        }
+
+
 
       })
 

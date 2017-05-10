@@ -894,6 +894,14 @@
                             </td>
                             <td align="right">$ {{subTotalPrice}}</td>
                           </tr>
+                          {% if orderData.discountPercentage != 0 %}
+                          <tr>
+                            <td></td>
+                            <td align="right">Discount ({{discountPercentage}}%)
+                            </td>
+                            <td align="right">- ${{discountAmount}}</td>
+                          </tr>
+                          {% endif %}
                           <tr>
                             <td></td>
                             <td align="right">Food Tax ({{orderData.restFoodTax}}%)

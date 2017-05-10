@@ -109,6 +109,8 @@ exports.sendRestaurantMail = function (mailData) {
       tipAmount: mailData.tipAmount,
       foodTax: mailData.foodTax,
       subTotalPrice: mailData.subTotalPrice,
+      discountAmount: mailData.discountAmount,
+      discountPercentage: mailData.discountPercentage,
       totalAmt: mailData.totalAmt
     },
     function (err, results) {
