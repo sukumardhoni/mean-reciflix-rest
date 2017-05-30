@@ -49,7 +49,7 @@ exports.forgot = function (req, res, next) {
 							agenda.now('Recovery_Link_Email', {
 								email: user.email,
 								displayName: user.displayName,
-								url: 'http://' + req.headers.host + '/password/reset/' + token
+								url: 'http://' + req.headers.host + '/#!/password/reset/' + token
 							});
 							res.send({
 								message: 'An email has been sent to ' + user.email + ' with further instructions.'
