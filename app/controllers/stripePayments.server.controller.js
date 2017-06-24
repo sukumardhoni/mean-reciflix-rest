@@ -6,6 +6,7 @@ var config = require('../../config/config'),
 	agenda = require('../../schedules/job-schedule.js')(config.db),
 	firebase = require("firebase"),
 	moment = require('moment'),
+	moment_tz = require('moment-timezone'),
 	FCM = require('fcm-push'),
 	_this = this;
 
@@ -872,7 +873,7 @@ exports.printerStatusProd = function (req, res) {
 
 	var printerObj = {
 		printerId: req.params.printerId,
-		time: new Date().toLocaleString(),
+		time: moment(Date.now()).tz("America/New_York").format('l, h:mm:ss a'),
 		live: parseInt(req.params.statusCode)
 	}
 	res.jsonp(_this.printerStatus('prod', printerObj));
@@ -880,7 +881,7 @@ exports.printerStatusProd = function (req, res) {
 exports.printerStatusQA = function (req, res) {
 	var printerObj = {
 		printerId: req.params.printerId,
-		time: new Date().toLocaleString(),
+		time: moment(Date.now()).tz("America/New_York").format('l, h:mm:ss a'),
 		live: parseInt(req.params.statusCode)
 	}
 	res.jsonp(_this.printerStatus('qa', printerObj));
