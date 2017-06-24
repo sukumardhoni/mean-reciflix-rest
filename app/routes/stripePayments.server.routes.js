@@ -23,8 +23,18 @@ module.exports = function (app) {
 
 
 
+	app.route('/printerstatus/:printerId/:statusCode')
+		.post(StripePayments.printerStatusProd);
+
+
+
+
+
+
 
 	/*qa routes*/
+
+
 
 
 	app.route('/qa/api/StripeCharges/newCard')
@@ -39,6 +49,7 @@ module.exports = function (app) {
 	app.route('/qa/api/fcm-push-notifications')
 		.post(StripePayments.fcmNotificationsQA);
 
-
+	app.route('/qa/printerstatus/:printerId/:statusCode')
+		.post(StripePayments.printerStatusQA);
 
 };

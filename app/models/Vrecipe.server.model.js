@@ -67,7 +67,6 @@ var VrecipeSchema = new Schema({
 		hq: String,
 		sd: String
 	}
-
 });
 
 mongoose.model('Vrecipe', VrecipeSchema);
