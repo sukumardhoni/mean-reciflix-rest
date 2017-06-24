@@ -24,7 +24,7 @@ module.exports = function (app) {
 
 
 	app.route('/printerstatus/:printerId/:statusCode')
-		.post(StripePayments.printerStatusProd);
+		.get(StripePayments.printerStatusProd);
 
 
 
@@ -50,6 +50,6 @@ module.exports = function (app) {
 		.post(StripePayments.fcmNotificationsQA);
 
 	app.route('/qa/printerstatus/:printerId/:statusCode')
-		.post(StripePayments.printerStatusQA);
+		.get(StripePayments.printerStatusQA);
 
 };
