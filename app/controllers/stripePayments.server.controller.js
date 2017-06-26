@@ -714,7 +714,7 @@ exports.sendOrderEmail = function (restId, details) {
 				}
 
 
-				agenda.now('Order_Info_To_Restaurant_QA', {
+				agenda.now('Order_Info_To_Restaurant', {
 					formatedOrderTime: moment(orderData.orderTime).format('MMM Do YYYY, h:mm a'),
 					restDisplayName: restaurantDisplayName,
 					//email: 'vinodhko@globaltechminds.com',
