@@ -788,10 +788,13 @@ exports.fcmNotificationsQA = function (req, res) {
 	fcm.send(message)
 		.then(function (response) {
 			console.log("Successfully sent with response: ", response);
+			res.jsonp(response);
+
 		})
 		.catch(function (err) {
 			console.log("Something has gone wrong!");
 			console.error("Error callback on fcm : " + JSON.stringify(err));
+			res.jsonp(err);
 		})
 
 }
@@ -836,10 +839,14 @@ exports.fcmNotifications = function (req, res) {
 	fcm.send(message)
 		.then(function (response) {
 			console.log("Successfully sent with response: ", response);
+			res.jsonp(response);
 		})
 		.catch(function (err) {
+
 			console.log("Something has gone wrong!");
 			console.error("Error callback on fcm : " + JSON.stringify(err));
+
+			res.jsonp(err);
 		})
 
 }
@@ -859,9 +866,9 @@ exports.printerStatus = function (env, printerObj) {
 	}
 
 	var restId = 'affyspremiumgrill';
-	var logKey = printerObj.time.replace(/[^A-Z0-9]+/ig, "_");
+	//var logKey = printerObj.time.replace(/[^A-Z0-9]+/ig, "_");
 
-	firebase.database().ref('Restaurants/' + restId + '/PrinterStats/' + printerObj.printerId + '/' + logKey).set(printerObj);
+	firebase.database().ref('Restaurants/' + restId + '/PrinterStats/' + printerObj.printerId).set(printerObj);
 	return 'successfully saved printer status';
 }
 
