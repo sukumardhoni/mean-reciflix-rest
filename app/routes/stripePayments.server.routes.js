@@ -52,4 +52,17 @@ module.exports = function (app) {
 	app.route('/qa/printerstatus/:printerId/:statusCode')
 		.get(StripePayments.printerStatusQA);
 
+
+		app.route('/qa/api/fcm-subscribe')
+		.post(StripePayments.fcmSubscribeQA);
+		
+		
+		app.route('/qa/api/fcm-sendNotificationsToTopic')
+		.post(StripePayments.sendNotificationsToTopic);
+
+
+
+
+
+
 };

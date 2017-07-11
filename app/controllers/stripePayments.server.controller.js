@@ -8,13 +8,21 @@ var config = require('../../config/config'),
 	moment = require('moment'),
 	moment_tz = require('moment-timezone'),
 	FCM = require('fcm-push'),
+	FCM_Node = require('fcm-node'),
+	admin = require("firebase-admin"),
 	_this = this;
 
 
-/*firebase.initializeApp({
-  serviceAccount: config.stripe_info.firebase_serviceAccount,
-  databaseURL: config.stripe_info.firebase_databaseURL
-})*/
+var serviceAccount = require("../assets/affys-e8c22-firebase-adminsdk-rqitq-adcc083de1.json");
+
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: "https://affys-e8c22.firebaseio.com"
+})
+
+
+
 
 var affysFirebase = firebase.initializeApp(config.firebase_info.affyspremiumgrill, 'Affys');
 var dakExpFirebase = firebase.initializeApp(config.firebase_info.dakshinexpress, 'DakshinExpress');
@@ -757,7 +765,7 @@ exports.fcmNotificationsQA = function (req, res) {
 	console.log('Body details : ' + JSON.stringify(req.body));
 
 
-	var serverKey = 'AAAAE8474Ys:APA91bFxcHsEKLs8OmDbcoogR62qO5xGf4xhjG1_X5MB1swLMxxAgO6lVKV8SVkjAWiFm67iV3gonaXh1PayrxM8Lzl-TGf6KlvcgpR1ljDeuHc9lDS3bgBcKNFmSpUp9B8NGM7Jr--686kj-HTu33xIt0yVXWZHnQ';
+	var serverKey = 'AAAA3ysGBnc:APA91bHvUAgNOrTlErBix9LMkudFTl4rGxjtVRD-o6-Zn7QVqXRp78NPv7ccQX47ZQTSec1XoIe202-etXKzgrZiyPjfHhfoERYwOvoY6cBthzqI1UBmKs59-VJCtrnjdK53qnoef9WBGoDUin6co11kmtR4WERGGw';
 	var fcm = new FCM(serverKey);
 
 	var message = {
@@ -808,7 +816,7 @@ exports.fcmNotifications = function (req, res) {
 	console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
 
 
-	var serverKey = 'AAAAE8474Ys:APA91bFxcHsEKLs8OmDbcoogR62qO5xGf4xhjG1_X5MB1swLMxxAgO6lVKV8SVkjAWiFm67iV3gonaXh1PayrxM8Lzl-TGf6KlvcgpR1ljDeuHc9lDS3bgBcKNFmSpUp9B8NGM7Jr--686kj-HTu33xIt0yVXWZHnQ';
+	var serverKey = 'AAAA3ysGBnc:APA91bHvUAgNOrTlErBix9LMkudFTl4rGxjtVRD-o6-Zn7QVqXRp78NPv7ccQX47ZQTSec1XoIe202-etXKzgrZiyPjfHhfoERYwOvoY6cBthzqI1UBmKs59-VJCtrnjdK53qnoef9WBGoDUin6co11kmtR4WERGGw';
 	var fcm = new FCM(serverKey);
 
 	var message = {
@@ -826,16 +834,6 @@ exports.fcmNotifications = function (req, res) {
 		}
 	};
 
-	//callback style
-	/* fcm.send(message, function (err, response) {
-	  if (err) {
-	    console.log("Something has gone wrong!");
-	  } else {
-	    console.log("Successfully sent with response: ", response);
-	  }
-	});*/
-
-	//promise style
 	fcm.send(message)
 		.then(function (response) {
 			console.log("Successfully sent with response: ", response);
@@ -849,6 +847,97 @@ exports.fcmNotifications = function (req, res) {
 			res.jsonp(err);
 		})
 
+}
+
+
+exports.fcmSubscribeQA = function (req, res) {
+
+
+	var serverKey = 'AAAAE8474Ys:APA91bFxcHsEKLs8OmDbcoogR62qO5xGf4xhjG1_X5MB1swLMxxAgO6lVKV8SVkjAWiFm67iV3gonaXh1PayrxM8Lzl-TGf6KlvcgpR1ljDeuHc9lDS3bgBcKNFmSpUp9B8NGM7Jr--686kj-HTu33xIt0yVXWZHnQ';
+	var fcm = new FCM_Node(serverKey);
+
+	var tokenId = req.body.tokenId;
+	var topicName = req.body.topicName;
+
+
+
+	/*fcm.subscribeToTopic([ deviceToken ], topic, (err, result) => {
+    //assert.ifError(err);
+	console.log('errrrrrrrrrrrrrrrrrr : ' + JSON.stringify(err));
+	console.log('Success from subscribe is : ' + JSON.stringify(result))
+    //assert.ok(result);
+    //done();
+});*/
+
+
+	console.log('DEvice Id and topic name is : ' + req.body.tokenId + ' , Name : ' + req.body.topicName);
+
+
+
+	/*"project_id": "affys-e8c22",
+	  "private_key_id": "adcc083de1f7be66f03fcecaa44d7850f5133904",
+	  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC28IijV+GO0K3/\nFmyzMwnJWRU2LVboJTglviY3fQMKf06alhbGGYFSZBuo0PrkroDSjx0adh4wLtJK\nG9wFO1BJY0SCi9Ba6VYS4IYFUGicf6oxqnUlTOZvaTjqh6PlgsDK/eIIt3oG06i2\nHpf0NTe/TVt1BSQjHj0EEBXxcWiPFj8imbJxH4ifS1mpgPbQuG0WcsL7Fs/qyodd\ngxutFDbuIQENRrxn8lhdukkFxKs0ca0ITL+I0P2FSRYhwisnvaqWNHxhhRN5JTOD\nCtX06sudfeLqEfFbK3Ru9hC3q0+ajhUbhcA/U0sDGdJMUuAISxSgH2TmVPYBfIi8\nufIGzDVdAgMBAAECggEAGfH/wwDX/+AHSV4WEQ08Rlbwy/P+tyJuNeYjt+tuNrsq\n/AAs3zAnV/bUOGtZJf08zoAXHdViPy2oy/NrDz/kCWB/iy9Gn9onh7pZr5/Bkm6F\nxhD5l85yARuQg6y0mTyj2LZMrDVPZG/45cltfihdDW/seGp//04O08hvQES4ElDV\nRL5hMiPjYQZM2YEiw4tRzgxuBUbaEGv9w0TROpzL8i8YV6pE4RynrGnFxEplBoww\nvPkDQYKYCv4ah9SiSBfTwnQWZDpA4/Y0R5a7mMpfbdmnUEaaGZx3axtX9bdhKExn\nk0LAvBgmLXjtRL5yik8Xgh7EUdEH0SjMnR5KBpi/qQKBgQDabAgzgPQHkD2ooq90\nXiblzu5LVROGRVpgEeSKGp1uPkTJPkz1kruNEwPQtkwh/rrY4QXpwIgLNFYy+8mj\nPnYVZCd1GXan2OyqGLlHpMJPFAy+7sw6SO3N7oMCPuBCZCGirJZqbUC5J6zeyuNN\nrpAghmyh+ZLptvC3ONxYFIrOeQKBgQDWab+YvrAJq/Gp5gXMYVagT+sWrDvrVx6i\n966AgvM0iywuCZxGmwCOIcsIReGysnt5Sxh5kdZzgiuBy2ZfuHiwKKDzB3OZ5eoT\nVTT7f1+kGjIgN5Cl0SK0yZE/gm45LBt2Q5oEC2C0/3gHx23Qnev032Pouz2nnk5u\nvkrtU8hVBQKBgHy3hPNLpYuQC/T3d7G9dP5xatVu7agUf6ctcE5/Jfdl7MbwIOdz\n8k16VwpcnRooJi5iRosTWVr0dmfEJ31j0+8g8frGIF902KXDWkATTrPyodh/5/M7\n4zVcBEhK+KhQHniRjY2VdoiCpA3O0X1wuHEp8GuIYx+6SraD7CULDbsZAoGAXqor\nzH2MbYi71t5W+wiS3Y7LZaQ/hEVfomYmZljqle1IYT8e/1FaKmajJJDt+B6zQzcz\npCEOhMsY+GJcXbCtoGEfxo0ore8DrOt2y/9Ns79ZGD5QH9W5NAa2mUq17YoaydlI\n+7YmSWNtlEmpo2zGC8RBcTSSIRpU2LItlKDkFx0CgYEAk8g2UTDfD8AXHp/SDA9T\nOiidlwV37+vYJy6HlJ/M4nNUiPWAGkUbtHNmvS9YXoHbeTEa7IgIjIEelfE5GZ8C\nHjv0R16ig0Xsg9ND8i59LHU9N2Ly2CbQVxJTK8ws7Gp4waY05TtKXpaBYzc4OxsE\n3dFZiz/rbiLx5u5nFyK3ixo=\n-----END PRIVATE KEY-----\n",
+	  "client_email": "firebase-adminsdk-rqitq@affys-e8c22.iam.gserviceaccount.com",*/
+
+
+
+	admin.messaging().subscribeToTopic(tokenId, topicName)
+		.then(function (response) {
+			// See the MessagingTopicManagementResponse reference documentation
+			// for the contents of response.
+			console.log("Successfully subscribed to topic:" + JSON.stringify(response));
+			res.send(response);
+		})
+		.catch(function (error) {
+			console.log("Error subscribing to topic:" + JSON.stringify(error));
+			res.send(error);
+		});
+
+
+
+
+
+
+
+};
+
+
+
+
+exports.sendNotificationsToTopic = function (req, res) {
+	// The topic name can be optionally prefixed with "/topics/".
+	var topic = req.body.topicName;
+
+	// See the "Defining the message payload" section below for details
+	// on how to define a message payload.
+	var payload = {
+		notification: {
+			body: "great match!",
+			title: "Portugal vs. Denmark",
+			icon: "myicon",
+			sound : "mySound"
+		},
+		data: {
+			score: "850",
+			time: "17:28"
+		}
+	};
+
+
+
+
+	// Send a message to devices subscribed to the provided topic.
+	admin.messaging().sendToTopic(topic, payload)
+		.then(function (response) {
+			// See the MessagingTopicResponse reference documentation for the
+			// contents of response.
+			console.log("Successfully sent message:", response);
+			res.send(response);
+		})
+		.catch(function (error) {
+			console.log("Error sending message:", error);
+			res.send(error);
+		});
 }
 
 
@@ -868,7 +957,7 @@ exports.printerStatus = function (env, printerObj) {
 	var restId = 'affyspremiumgrill';
 	//var logKey = printerObj.time.replace(/[^A-Z0-9]+/ig, "_");
 
-	firebase.database().ref('Restaurants/' + restId + '/PrinterStats/' + printerObj.printerId).set(printerObj);
+	firebase.database().ref('Restaurants/' + restId + '/info/PrinterStatus/' + printerObj.printerId).set(printerObj);
 	return 'successfully saved printer status';
 }
 
