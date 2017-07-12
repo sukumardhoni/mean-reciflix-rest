@@ -945,7 +945,7 @@ exports.sendNotificationsToTopic = function (req, res) {
 exports.printerStatus = function (env, printerObj) {
 	console.log('printerStatus is called : ' + JSON.stringify(printerObj));
 
-	console.log('Env is : ' + env);
+	//console.log('Env is : ' + env);
 
 	var firebase;
 	if (env === 'prod') {
