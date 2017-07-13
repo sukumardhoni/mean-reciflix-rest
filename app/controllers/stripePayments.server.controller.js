@@ -1039,7 +1039,7 @@ exports.awsRegistrationToken = function (req, res) {
 
 	console.log('\nRegistering user with deviceToken: ' + deviceToken);
 
-	/*// Add the user to SNS
+	// Add the user to SNS
 	androidApp.addUser(deviceToken, null, function (err, endpointArn) {
 		// SNS returned an error
 		if (err) {
@@ -1049,29 +1049,51 @@ exports.awsRegistrationToken = function (req, res) {
 			});
 		}
 		// Tell the user everything's ok
-		res.status(200).json({
+
+
+
+		console.log('endpointArn is : ' + endpointArn);
+
+		/*res.status(200).json({
 			status: 'ok'
-		});
-	});*/
+		});*/
+
+		androidApp.createTopic('veg', function (err, data) {
+			if (err) console.log(err, err.stack); // an error occurred
+			else {
+				console.log(data); // successful response
+				var topicEndArn = data;
+				androidApp.subscribe(endpointArn, topicEndArn,function (err, result) { 
+					console.log('subscribe topic : ' + JSON.stringify(result));
+				})
+			}
+		})
+
+
+
+
+
+	});
 
 	/*androidApp.getTopics(function (err, topics) {
 		console.log('getTopics : ' + JSON.stringify(topics))
 	})*/
 
-	androidApp.getUser('arn:aws:sns:us-west-2:895858856986:endpoint/GCM/Affys/3060e8a9-9898-3735-8653-2ab1ebc998f9', function (result) {
+	/*androidApp.getUser('arn:aws:sns:us-west-2:895858856986:endpoint/GCM/Affys/3060e8a9-9898-3735-8653-2ab1ebc998f9', function (result) {
 
 		console.log('getUser  : ' + JSON.stringify(result));
 
-	})
+	})*/
 
 
-	androidApp.createTopic('Non_veg', function (result) {
 
-		console.log('creating topic : ' + JSON.stringify(result));
 
-	})
 
-	androidApp.subscribe('arn:aws:sns:us-west-2:895858856986:endpoint/GCM/Affys/3060e8a9-9898-3735-8653-2ab1ebc998f9', 'arn:aws:sns:us-west-2:895858856986:Non_veg', function (result) {
-		console.log('subscribe topic : ' + JSON.stringify(result));
-	})
+
+
+
+
+
+
+
 };
