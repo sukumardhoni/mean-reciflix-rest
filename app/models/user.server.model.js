@@ -66,6 +66,7 @@ var UserSchema = new Schema({
     type: String
   },
   favorites: [],
+  subscription: [],
   likes: [],
   salt: {
     type: String

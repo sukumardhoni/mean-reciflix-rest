@@ -53,16 +53,16 @@ module.exports = function (app) {
 		.get(StripePayments.printerStatusQA);
 
 
-		app.route('/qa/api/fcm-subscribe')
+	app.route('/qa/api/fcm-subscribe')
 		.post(StripePayments.fcmSubscribeQA);
-		
-		
-		app.route('/qa/api/fcm-sendNotificationsToTopic')
+
+	app.route('/qa/api/fcm-unsubscribe')
+		.post(StripePayments.fcmUnSubscribeQA);
+
+	app.route('/qa/api/fcm-sendNotificationsToTopic')
 		.post(StripePayments.sendNotificationsToTopic);
 
-
-
-
-
+	app.route('/api/aws-register-deviceToken')
+		.post(StripePayments.awsRegistrationToken);
 
 };
