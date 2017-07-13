@@ -853,13 +853,10 @@ exports.fcmNotifications = function (req, res) {
 			res.jsonp(response);
 		})
 		.catch(function (err) {
-
 			console.log("Something has gone wrong!");
 			console.error("Error callback on fcm : " + JSON.stringify(err));
-
 			res.jsonp(err);
 		})
-
 }
 
 
