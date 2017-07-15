@@ -33,4 +33,10 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 ]).run(function ($rootScope, $state, $stateParams) {
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
+setTimeout(function(){
+	Notification.requestPermission(function(permission){
+		console.log("request premission : "+JSON.stringify(permission))
+	})
+},1000)
+
 });

@@ -28,7 +28,9 @@
     "angular-ui-select": "latest",
     "select2": "~3.4.8",
     "angular-socialshare": "angularjs-socialshare#^2.2.3",
-    "angular-update-meta": "^1.9.0"
+    "angular-update-meta": "^1.9.0",
+    "angular-web-notification": "^1.2.23",
+    "simple-web-notification": "^1.0.20"
   },
   "resolutions": {
     "angular": "~1.2.x"

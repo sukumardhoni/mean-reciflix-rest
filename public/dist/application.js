@@ -8,7 +8,7 @@ minimalizaSidebar.$inject = ["$timeout"];
 var ApplicationConfiguration = (function () {
   // Init module configuration options
   var applicationModuleName = 'reciflixApp';
-  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage', 'ngFileUpload', 'ui.select', 'updateMeta', '720kb.socialshare'];
+  var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngStorage', 'ngFileUpload', 'ui.select', 'updateMeta', '720kb.socialshare','angular-web-notification'];
 
   //['ngResource', 'ui.router', 'ui.bootstrap', 'ui.select', 'ui.utils', 'ngStorage']
 
@@ -1451,6 +1451,12 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 ]).run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
+setTimeout(function(){
+	Notification.requestPermission(function(permission){
+		console.log("request premission : "+JSON.stringify(permission))
+	})
+},1000)
+
 }]);
 
 'use strict';
@@ -1571,7 +1577,36 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.cancel = function () {
       $scope.modalInstance.dismiss('cancel');
     };
- }]);
+ }]).directive('showButton', ['webNotification', function (webNotification) {
+return {
+  restrict:'C',  
+    link: function (scope, element) {
+      console.log("coming to directive notifications")
+        element.on('click', function onClick() {
+            console.log("coming to directive notifications click")
+            webNotification.showNotification('Example Notification', {
+                body: 'Notification Text...',
+                icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
+                onClick: function onNotificationClicked() {
+                    console.log('Notification clicked.');
+                },
+                autoClose: 4000 //auto close the notification after 4 seconds (you can manually close it via hide function)
+            }, function onShow(error, hide) {
+                if (error) {
+                    window.alert('Unable to show notification: ' + error.message);
+                } else {
+                    console.log('Notification Shown.');
+
+                    setTimeout(function hideNotification() {
+                        console.log('Hiding notification....');
+                        hide(); //manually close the notification (you can skip this if you use the autoClose option)
+                    }, 5000);
+                }
+            });
+        });
+    }
+};
+}]);
 
 /**
  * INSPINIA - Responsive Admin Theme

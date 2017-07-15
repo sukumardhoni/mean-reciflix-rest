@@ -64,5 +64,17 @@ module.exports = function (app) {
 
 	app.route('/api/aws-register-deviceToken')
 		.post(StripePayments.awsRegistrationToken);
+	
+	app.route('/api/reciflix-aws-notifications-subscribe')
+		.post(StripePayments.reciflixAwsNotificationsSubscribe);
+	
+	
+	app.route('/api/aws-send-message')
+		.post(StripePayments.awsSendMessage);
+
+
+
+
+
 
 };

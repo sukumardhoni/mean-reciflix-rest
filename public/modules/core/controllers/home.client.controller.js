@@ -44,4 +44,33 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.cancel = function () {
       $scope.modalInstance.dismiss('cancel');
     };
- }]);
+ }]).directive('showButton', ['webNotification', function (webNotification) {
+return {
+  restrict:'C',  
+    link: function (scope, element) {
+      console.log("coming to directive notifications")
+        element.on('click', function onClick() {
+            console.log("coming to directive notifications click")
+            webNotification.showNotification('Example Notification', {
+                body: 'Notification Text...',
+                icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
+                onClick: function onNotificationClicked() {
+                    console.log('Notification clicked.');
+                },
+                autoClose: 4000 //auto close the notification after 4 seconds (you can manually close it via hide function)
+            }, function onShow(error, hide) {
+                if (error) {
+                    window.alert('Unable to show notification: ' + error.message);
+                } else {
+                    console.log('Notification Shown.');
+
+                    setTimeout(function hideNotification() {
+                        console.log('Hiding notification....');
+                        hide(); //manually close the notification (you can skip this if you use the autoClose option)
+                    }, 5000);
+                }
+            });
+        });
+    }
+};
+}]);

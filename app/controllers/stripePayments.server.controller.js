@@ -12,9 +12,6 @@ var config = require('../../config/config'),
 	admin = require("firebase-admin"),
 	SNS = require('sns-mobile'),
 	EVENTS = SNS.EVENTS,
-	SNS_KEY_ID = config.aws_sns.credentails.Access_key_ID,
-	SNS_ACCESS_KEY = config.aws_sns.credentails.Secret_access_key,
-	ANDROID_ARN = config.aws_sns.ARNS.ANDROID_ARN,
 	_this = this;
 
 
@@ -1020,15 +1017,173 @@ exports.awsRegistrationToken = function (req, res) {
 
 	console.log('awsRegistrationToken is called');
 
-	var androidApp = new SNS({
-		platform: 'android',
-		region: 'us-west-2',
-		apiVersion: '2010-03-31',
-		accessKeyId: SNS_KEY_ID,
-		secretAccessKey: SNS_ACCESS_KEY,
-		platformApplicationArn: ANDROID_ARN,
-		//sandbox: true (This is required for targetting (iOS) APNS_SANDBOX only) 
+
+
+
+
+
+
+
+
+	var SNS_KEY_ID = config.aws_sns.affys_prod.credentails.Access_key_ID,
+		SNS_ACCESS_KEY = config.aws_sns.affys_prod.credentails.Secret_access_key,
+		ANDROID_ARN = config.aws_sns.affys_prod.ARNS.ANDROID_ARN,
+		IOS_ARN = config.aws_sns.affys_prod.ARNS.IOS_ARN;
+
+
+
+
+
+	var AWS_SNS_App;
+
+	var platform = req.body.platform;
+	var deviceToken = req.body.deviceToken;
+
+	if (platform === 'android' || platform === 'Android') {
+		AWS_SNS_App = new SNS({
+			platform: 'android',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: ANDROID_ARN
+		});
+	} else if (platform === 'ios') {
+		AWS_SNS_App = new SNS({
+			platform: 'ios',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: IOS_ARN,
+			sandbox: true
+		});
+	}
+
+
+
+
+
+
+	console.log('\nRegistering user with deviceToken: ' + deviceToken);
+
+	// Add the user to SNS
+	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
+		// SNS returned an error
+		if (err) {
+			console.log(err);
+			return res.status(500).json({
+				status: 'not ok'
+			});
+		}
+		res.status(200).json({
+			status: endpointArn
+		});
 	});
+};
+
+
+exports.awsSendMessage = function (req, res) {
+	console.log('awsSendMessage is called');
+
+	
+	var SNS_KEY_ID = config.aws_sns.affys_prod.credentails.Access_key_ID,
+		SNS_ACCESS_KEY = config.aws_sns.affys_prod.credentails.Secret_access_key,
+		ANDROID_ARN = config.aws_sns.affys_prod.ARNS.ANDROID_ARN,
+		IOS_ARN = config.aws_sns.affys_prod.ARNS.IOS_ARN;
+
+	var AWS_SNS_App;
+
+	var platform = req.body.platform;
+
+	if (platform === 'android' || platform === 'Android') {
+		AWS_SNS_App = new SNS({
+			platform: SNS.SUPPORTED_PLATFORMS.ANDROID,
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: ANDROID_ARN
+		});
+	} else if (platform === 'ios') {
+		AWS_SNS_App = new SNS({
+			platform: SNS.SUPPORTED_PLATFORMS.IOS,
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: IOS_ARN,
+			sandbox: true
+		});
+	}
+
+
+
+
+
+
+
+	var endpointArn = req.body.endpointArn;
+
+	// Message to send
+	var message = req.body.msg;
+
+	AWS_SNS_App.sendMessage(endpointArn, message, function (err, messageId) {
+		if (err) {
+			console.log('An error occured sending message to device %s');
+			console.log(err);
+		} else {
+			console.log('Successfully sent a message to device %s. MessageID was %s',  messageId);
+		}
+	});
+
+
+
+
+
+}
+
+
+
+exports.reciflixAwsNotificationsSubscribe = function (req, res) {
+
+	var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
+		SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
+		ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
+		IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
+
+
+
+
+	var AWS_SNS_App;
+
+	var platform = req.body.platform;
+	var topicName = req.body.topicName;
+
+	if (platform === 'android' || platform === 'Android') {
+		AWS_SNS_App = new SNS({
+			platform: 'android',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: config.aws_sns.reciflix_prod.credentails.Access_key_ID,
+			secretAccessKey: config.aws_sns.reciflix_prod.credentails.Secret_access_key,
+			platformApplicationArn: config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
+			//sandbox: true (This is required for targetting (iOS) APNS_SANDBOX only) 
+		});
+	} else if (platform === 'ios') {
+		AWS_SNS_App = new SNS({
+			platform: 'ios',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: IOS_ARN,
+			//sandbox: true (This is required for targetting (iOS) APNS_SANDBOX only) 
+		});
+	}
+
+
+	console.log('reciflixAwsNotificationsSubscribe is called');
 
 
 
@@ -1037,7 +1192,7 @@ exports.awsRegistrationToken = function (req, res) {
 	console.log('\nRegistering user with deviceToken: ' + deviceToken);
 
 	// Add the user to SNS
-	androidApp.addUser(deviceToken, null, function (err, endpointArn) {
+	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
 		// SNS returned an error
 		if (err) {
 			console.log(err);
@@ -1045,52 +1200,27 @@ exports.awsRegistrationToken = function (req, res) {
 				status: 'not ok'
 			});
 		}
-		// Tell the user everything's ok
-
-
-
 		console.log('endpointArn is : ' + endpointArn);
 
-		/*res.status(200).json({
-			status: 'ok'
-		});*/
+		var params = {
+			Name: topicName,
+			/* required */
 
-		androidApp.createTopic('veg', function (err, data) {
+
+		}
+
+
+
+		AWS_SNS_App.createTopic(topicName, function (err, data) {
 			if (err) console.log(err, err.stack); // an error occurred
 			else {
 				console.log(data); // successful response
 				var topicEndArn = data;
-				androidApp.subscribe(endpointArn, topicEndArn,function (err, result) { 
+				AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
 					console.log('subscribe topic : ' + JSON.stringify(result));
+					res.send('Successfully Subscribed');
 				})
 			}
 		})
-
-
-
-
-
 	});
-
-	/*androidApp.getTopics(function (err, topics) {
-		console.log('getTopics : ' + JSON.stringify(topics))
-	})*/
-
-	/*androidApp.getUser('arn:aws:sns:us-west-2:895858856986:endpoint/GCM/Affys/3060e8a9-9898-3735-8653-2ab1ebc998f9', function (result) {
-
-		console.log('getUser  : ' + JSON.stringify(result));
-
-	})*/
-
-
-
-
-
-
-
-
-
-
-
-
 };

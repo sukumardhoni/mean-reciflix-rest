@@ -94,7 +94,10 @@ module.exports = {
 				'public/lib/angular-ui-select/dist/select.min.js',
 				'public/lib/select2/select2.min.js',
 				'public/lib/angular-update-meta/dist/update-meta.min.js',
-				'public/lib/angular-socialshare/dist/angular-socialshare.min.js'
+				'public/lib/angular-socialshare/dist/angular-socialshare.min.js',
+				'public/lib/simple-web-notification/web-notification.js',
+				'public/lib/angular-web-notification/angular-web-notification.js'
+				
 			]
 		},
 		css: [
@@ -157,13 +160,25 @@ module.exports = {
 		}
 	},
 	aws_sns: {
-		credentails: {
-			Access_key_ID: process.env.Access_key_ID || 'AKIAISEDQDGM5TLZ4WTQ',
-			Secret_access_key: process.env.Secret_access_key || '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'
+		affys_prod: {
+			credentails: {
+				Access_key_ID: process.env.Access_key_ID || 'AKIAISEDQDGM5TLZ4WTQ',
+				Secret_access_key: process.env.Secret_access_key || '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'
+			},
+			ARNS: {
+				ANDROID_ARN: process.env.ANDROID_ARN || 'arn:aws:sns:us-west-2:895858856986:app/GCM/Affys',
+				IOS_ARN: process.env.IOS_ARN || 'arn:aws:sns:us-west-2:895858856986:app/APNS/AFFYS_IOS',
+			}
 		},
-		ARNS: {
-			ANDROID_ARN: process.env.ANDROID_ARN || 'arn:aws:sns:us-west-2:895858856986:app/GCM/Affys',
-			IOS_ARN: process.env.IOS_ARN || '',
+		reciflix_prod: {
+			credentails: {
+				Access_key_ID: process.env.Access_key_ID || 'AKIAJGBZO3IUYSYEF54Q',
+				Secret_access_key: process.env.Secret_access_key || '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'
+			},
+			ARNS: {
+				ANDROID_ARN: process.env.ANDROID_ARN || 'arn:aws:sns:us-west-2:895858856986:app/GCM/ReciFlix_Android_App',
+				IOS_ARN: process.env.IOS_ARN || '',
+			}
 		}
 	},
 	hairmovement_info: {
