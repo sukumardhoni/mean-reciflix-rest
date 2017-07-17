@@ -1086,7 +1086,7 @@ exports.awsRegistrationToken = function (req, res) {
 exports.awsSendMessage = function (req, res) {
 	console.log('awsSendMessage is called');
 
-	
+
 	var SNS_KEY_ID = config.aws_sns.affys_prod.credentails.Access_key_ID,
 		SNS_ACCESS_KEY = config.aws_sns.affys_prod.credentails.Secret_access_key,
 		ANDROID_ARN = config.aws_sns.affys_prod.ARNS.ANDROID_ARN,
@@ -1132,8 +1132,10 @@ exports.awsSendMessage = function (req, res) {
 		if (err) {
 			console.log('An error occured sending message to device %s');
 			console.log(err);
+			res.send(err);
 		} else {
-			console.log('Successfully sent a message to device %s. MessageID was %s',  messageId);
+			console.log('Successfully sent a message to device %s. MessageID was %s', messageId);
+			res.send('Successfully sent a message to device , MessageID was : ' + messageId);
 		}
 	});
 
