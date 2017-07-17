@@ -56,7 +56,9 @@ module.exports = {
     'public/lib/angular-ui-select/dist/select.min.js',
     'public/lib/select2/select2.min.js',
     'public/lib/angular-update-meta/dist/update-meta.min.js',
-    'public/lib/angular-socialshare/dist/angular-socialshare.min.js'
+    'public/lib/angular-socialshare/dist/angular-socialshare.min.js',
+		'public/lib/simple-web-notification/web-notification.js',
+		'public/lib/angular-web-notification/angular-web-notification.js'
    ]
     },
     css: 'public/dist/application.min.css',
