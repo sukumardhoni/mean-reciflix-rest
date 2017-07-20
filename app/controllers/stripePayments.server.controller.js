@@ -1200,6 +1200,8 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 					AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
 						console.log('subscribe topic : ' + JSON.stringify(result));
 
+						result.topicName = topicName
+
 						subscribeArnArray.push(result);
 						if (subscribeArnArray.length == req.body.topicArr.length) {
 							res.send(subscribeArnArray);

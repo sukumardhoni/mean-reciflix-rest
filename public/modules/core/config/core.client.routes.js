@@ -15,6 +15,11 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 					bodyClass: 'bg-body'
 				}
 			})
+			 .state('reciflix.sendWebNotifications', {
+        url: 'send-notifications',
+        templateUrl: 'modules/core/views/sendNotifications.html',
+        controller: 'HomeController'
+      })
 			/*
 			      .state('terms', {
 			        url: '/terms',

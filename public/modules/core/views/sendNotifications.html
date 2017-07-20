@@ -1,0 +1,63 @@
+<div>
+  <div class="  ibox-content">
+    <div class="container">
+      <div class="container">
+        <div class="row">
+          <h2 class="text-center">Send Notifications</h2>
+          <form>
+            <div class="form-group">
+              <label for="title">Title:</label>
+              <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title" ng-model="title">
+            </div>
+            <div class="form-group">
+              <label for="msg">Message:</label>
+              <input type="text" class="form-control" id="msg" placeholder="Enter Message" name="msg" ng-model="msg">
+            </div>
+            <div class="form-group">
+              <label for="url">Url:</label>
+              <input type="text" class="form-control" id="url" placeholder="Enter Url to redirect to page" name="url" ng-model="url">
+            </div>
+            <div class="row text-center">
+              <button type="submit" class="btn btn-default show-button" notification-title="title" notification-msg="msg" notification-url="url">Send</button>
+            </div>
+
+          </form>
+        </div>
+
+        <div class="row" style="padding-top: 50px;">
+          <h2 class="text-center " style="padding-bottom: 25px;">Send Push Notifications</h2>
+          <form name="pushnotificationFrom" ng-submit="pushnotification(pushnotificationFrom.$valid)">
+            <div class="row form-group">
+              <div class="col-md-2 col-md-offset-2">
+                <b> Platform <span style="float:right"> : </span></b>
+              </div>
+              <div class="col-md-2">
+                <label class="radio-inline">
+      <input type="radio"  ng-model="pushNotification.platform" value="adroid">Android
+    </label>
+              </div>
+              <div class="col-md-2">
+                <label class="radio-inline">
+      <input type="radio"  ng-model="pushNotification.platform" value="ios">Ios
+    </label>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-md-2 col-md-offset-2">
+                <b>  Message <span style="float:right"> : </span></b>
+              </div>
+              <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Enter Message" name="msg" ng-model="pushNotification.msg">
+              </div>
+            </div>
+            <div class="row text-center">
+              <button type="submit" class="btn btn-default ">Submit</button>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
