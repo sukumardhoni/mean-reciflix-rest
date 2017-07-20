@@ -86,7 +86,7 @@ exports.jwtSignup = function (req, res, next) {
             if (err.code === 11000) {
               errData = 'User already exists with email : ' + userModel.email
             } else {
-              errData = err.errors.email.message;
+             // errData = err.errors.email.message;
             }
             /*
             return res.status(400).send({
