@@ -3231,7 +3231,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
       hello('facebook').login().then(function (fbRes) {
         $http({
             method: "GET",
-            url: 'https://graph.facebook.com/me?access_token=' + fbRes.authResponse.access_token,
+            url: 'https://graph.facebook.com/me?fields=email,first_name,gender,id,last_name&access_token=' + fbRes.authResponse.access_token,
             data: null,
             dataType: 'json',
           })
