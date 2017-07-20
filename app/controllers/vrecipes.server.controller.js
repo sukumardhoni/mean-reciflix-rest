@@ -28,6 +28,7 @@ exports.create = function (req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
+			_this.deleteExpressRedis();
 			res.json(vrecipe);
 		}
 	});

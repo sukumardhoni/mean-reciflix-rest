@@ -7,7 +7,7 @@
     <span style="padding-left:50px">
 
       <label>Select Sub Category :</label>
-      <select ng-model="subCatSelected" ng-options="subCat as subCat.displayName for subCat in subCats" ng-change="getSubCatRecipes(1)">
+      <select ng-model="subCatSelected" ng-options="subCat as subCat.displayName for subCat in subCats" ng-change="getSubCatRecipes()">
         <option value="">Select Sub Category</option>
       </select>
     </span>

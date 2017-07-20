@@ -34,6 +34,12 @@ angular.module('categories').config(['$stateProvider', '$urlRouterProvider',
         },
         module: 'private'
       })
+      .state('reciflix.addrecipes', {
+        url: "addrecipes",
+        templateUrl: "modules/categories/views/addRecipes.html",
+        controller: 'RecipesUpdateCtrl',
+        module: 'private'
+      })
 }])
 
 .run(function ($rootScope, $state, $stateParams, $location) {

@@ -23,3 +23,9 @@
   width: 200px;
   z-index: 1000;
 }
+.rf-spinner {
+      position: absolute;
+    margin-left: 8%;
+    margin-top: 4px;
+    z-index: 1;
+}

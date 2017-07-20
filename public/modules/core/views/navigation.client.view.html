@@ -51,11 +51,13 @@
 				<!--<a ui-sref="signin"> Log In</a>-->
 				<a ng-click="OpenSignIn()"> Log In</a>
 			</li>
-			<li  data-ng-show="authentication.user.roles.indexOf('admin') > -1">
-				<!--<a ui-sref="signin"> Log In</a>-->
-				<a class="show-button"> Notifications</a>
+			<li data-ng-show="authentication.user.roles.indexOf('admin') > -1">
+				<a class="show-button" title="Send Notifications"><i class="fa fa-bell"></i> <span class="nav-label">Send Notifications</span></a>
 			</li>
-			
+			<li ui-sref-active="active" ng-click="minimalize()" data-ng-show="authentication.user.roles.indexOf('admin') > -1">
+				<a ui-sref="reciflix.addrecipes" title="Add Recipes"><i class="fa fa-cutlery"></i> <span class="nav-label">Add Recipes</span></a>
+			</li>
+
 			<li data-ng-show="authentication.user" ng-click="minimalize()">
 				<a ng-click="signout()" title="Logout"><i class="fa fa-sign-out"></i> <span class="nav-label">Log Out</span></a>
 			</li>

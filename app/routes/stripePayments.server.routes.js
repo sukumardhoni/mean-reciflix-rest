@@ -68,9 +68,14 @@ module.exports = function (app) {
 	app.route('/api/reciflix-aws-notifications-subscribe')
 		.post(StripePayments.reciflixAwsNotificationsSubscribe);
 	
+	app.route('/api/reciflix-aws-notifications-unsubscribe')
+		.post(StripePayments.reciflixAwsNotificationsUnSubscribe);
 	
 	app.route('/api/aws-send-message')
-		.post(StripePayments.awsSendMessage);
+		.post(StripePayments.awsSendMessage);	
+	
+	app.route('/api/aws-send-message-to-all-devices')
+		.post(StripePayments.sendToAllDevices);
 
 
 

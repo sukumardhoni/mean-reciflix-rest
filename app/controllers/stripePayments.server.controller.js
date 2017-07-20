@@ -80,31 +80,58 @@ exports.sendUserDetails = function (userData) {
 
 
 
-affysFirebase.database().ref('Restaurants/affyspremiumgrill/Orders').on('child_changed', function (snapshot) {
+
+affysFirebase.database().ref('Restaurants/affyspremiumgrill/Orders').orderByChild("status").off("child_changed");
+affysFirebase.database().ref('Restaurants/affyspremiumgrill/Orders').orderByChild("status").on('child_changed', function (snapshot) {
 	var orderDetails = snapshot.val();
-	if (orderDetails.paymentStatus === 'Direct Pay') {
-		_this.sendOrderEmail('affyspremiumgrill', orderDetails);
+	if (!orderDetails.userEmailSent) {
+		if ((orderDetails.paymentStatus === 'CASH') || (orderDetails.paymentStatus === 'CARD SWIPED')) {
+			_this.sendOrderEmail('affyspremiumgrill', orderDetails);
+			orderDetails.userEmailSent = true;
+			affysFirebase.database().ref('Restaurants/affyspremiumgrill/Orders/' + orderDetails.orderId).update(orderDetails);
+		}
+	}
+	var msgObj = {
+		platform: orderDetails.platform,
+		endpointArn: orderDetails.endPointArn,
+		msg: "OrderId " + orderDetails.orderId + " Status is changed to " + orderDetails.status
+	}
+	if ((orderDetails.status !== 'Ordering...')) {
+		_this.awsSendMessage(msgObj);
 	}
 })
 
 
-affysFirebase_qa.database().ref('Restaurants/affyspremiumgrill/Orders').on('child_changed', function (snapshot) {
+affysFirebase_qa.database().ref('Restaurants/affyspremiumgrill/Orders').orderByChild("status").off("child_changed");
+affysFirebase_qa.database().ref('Restaurants/affyspremiumgrill/Orders').orderByChild("status").on('child_changed', function (snapshot) {
 	var orderDetails = snapshot.val();
-	if (orderDetails.paymentStatus === 'Direct Pay') {
-		_this.sendOrderEmailQA('affyspremiumgrill', orderDetails);
+	if (!orderDetails.userEmailSent) {
+		if ((orderDetails.paymentStatus === 'CASH') || (orderDetails.paymentStatus === 'CARD SWIPED')) {
+			_this.sendOrderEmailQA('affyspremiumgrill', orderDetails);
+			orderDetails.userEmailSent = true;
+			affysFirebase_qa.database().ref('Restaurants/affyspremiumgrill/Orders/' + orderDetails.orderId).update(orderDetails);
+		}
+	}
+	var msgObj = {
+		platform: orderDetails.platform,
+		endpointArn: orderDetails.endPointArn,
+		msg: "OrderId " + orderDetails.orderId + " Status is changed to " + orderDetails.status
+	}
+	if ((orderDetails.status !== 'Ordering...')) {
+		_this.awsSendMessage(msgObj);
 	}
 })
 
 dakExpFirebase.database().ref('Restaurants/dakshinexpress/Orders').on('child_changed', function (snapshot) {
 	var orderDetails = snapshot.val();
-	if (orderDetails.paymentStatus === 'Direct Pay') {
+	if ((orderDetails.paymentStatus === 'CASH') || (orderDetails.paymentStatus === 'CARD SWIPED')) {
 		_this.sendOrderEmail('dakshinexpress', orderDetails);
 	}
 })
 
 dakExpFirebase_qa.database().ref('Restaurants/dakshinexpress/Orders').on('child_changed', function (snapshot) {
 	var orderDetails = snapshot.val();
-	if (orderDetails.paymentStatus === 'Direct Pay') {
+	if ((orderDetails.paymentStatus === 'CASH') || (orderDetails.paymentStatus === 'CARD SWIPED')) {
 		_this.sendOrderEmailQA('dakshinexpress', orderDetails);
 	}
 })
@@ -1017,22 +1044,10 @@ exports.awsRegistrationToken = function (req, res) {
 
 	console.log('awsRegistrationToken is called');
 
-
-
-
-
-
-
-
-
 	var SNS_KEY_ID = config.aws_sns.affys_prod.credentails.Access_key_ID,
 		SNS_ACCESS_KEY = config.aws_sns.affys_prod.credentails.Secret_access_key,
 		ANDROID_ARN = config.aws_sns.affys_prod.ARNS.ANDROID_ARN,
 		IOS_ARN = config.aws_sns.affys_prod.ARNS.IOS_ARN;
-
-
-
-
 
 	var AWS_SNS_App;
 
@@ -1059,12 +1074,6 @@ exports.awsRegistrationToken = function (req, res) {
 			sandbox: true
 		});
 	}
-
-
-
-
-
-
 	console.log('\nRegistering user with deviceToken: ' + deviceToken);
 
 	// Add the user to SNS
@@ -1083,9 +1092,9 @@ exports.awsRegistrationToken = function (req, res) {
 };
 
 
-exports.awsSendMessage = function (req, res) {
+exports.awsSendMessage = function (msgObj) {
 	console.log('awsSendMessage is called');
-
+	console.log('Req.body for sending Msg is :  ' + JSON.stringify(msgObj));
 
 	var SNS_KEY_ID = config.aws_sns.affys_prod.credentails.Access_key_ID,
 		SNS_ACCESS_KEY = config.aws_sns.affys_prod.credentails.Secret_access_key,
@@ -1094,7 +1103,209 @@ exports.awsSendMessage = function (req, res) {
 
 	var AWS_SNS_App;
 
+	var platform = msgObj.platform;
+
+	if (platform === 'android' || platform === 'Android') {
+		AWS_SNS_App = new SNS({
+			platform: SNS.SUPPORTED_PLATFORMS.ANDROID,
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: ANDROID_ARN
+		});
+	} else if (platform === 'ios') {
+		AWS_SNS_App = new SNS({
+			platform: SNS.SUPPORTED_PLATFORMS.IOS,
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: IOS_ARN,
+			sandbox: true
+		});
+	}
+	var endpointArn = msgObj.endpointArn;
+	// Message to send
+	var message = msgObj.msg;
+	AWS_SNS_App.sendMessage(endpointArn, message, function (err, messageId) {
+		if (err) {
+			console.log('An error occured sending message to device %s');
+			console.log(err);
+			//res.send(err);
+		} else {
+			console.log('Successfully sent a message to device %s. MessageID was %s', messageId);
+			//res.send('Successfully sent a message to device , MessageID was : ' + messageId);
+		}
+	});
+}
+
+exports.reciflixAwsNotificationsSubscribe = function (req, res) {
+	var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
+		SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
+		ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
+		IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
+
+	var AWS_SNS_App;
+
 	var platform = req.body.platform;
+	//var topicName = req.body.topicName;
+	var deviceToken = req.body.deviceToken;
+
+	if (platform === 'android' || platform === 'Android') {
+		AWS_SNS_App = new SNS({
+			platform: 'android',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: ANDROID_ARN
+		});
+	} else if (platform === 'ios') {
+		AWS_SNS_App = new SNS({
+			platform: 'ios',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: IOS_ARN,
+			sandbox: true //(This is required for targetting (iOS) APNS_SANDBOX only) 
+		});
+	}
+	console.log('reciflixAwsNotificationsSubscribe is called');
+	console.log('\nRegistering user with deviceToken: ' + deviceToken);
+	// Add the user to SNS
+	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
+		// SNS returned an error
+		if (err) {
+			console.log(err);
+			return res.status(500).json({
+				status: 'not ok'
+			});
+		}
+		console.log('endpointArn is : ' + endpointArn);
+		var subscribeArnArray = [];
+		for (var i = 0; i < req.body.topicArr.length; i++) {
+			var topicName = req.body.topicArr[i];
+			
+			AWS_SNS_App.createTopic(topicName, function (err, data) {
+				if (err) {
+					if (count == req.body.topicArr.length) {
+						console.log(err, err.stack); // an error occurred
+						res.send(err);
+					}
+				} else {
+					console.log(data); // successful response
+					var topicEndArn = data;
+					AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
+						console.log('subscribe topic : ' + JSON.stringify(result));
+
+						subscribeArnArray.push(result);
+						if (subscribeArnArray.length == req.body.topicArr.length) {
+							res.send(subscribeArnArray);
+						}
+					})
+				}
+			})
+		}
+	});
+};
+
+
+
+exports.reciflixAwsNotificationsUnSubscribe = function (req, res) {
+	var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
+		SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
+		ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
+		IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
+
+	var AWS_SNS_App;
+
+	var platform = req.body.platform;
+	//var topicName = req.body.topicName;
+	var deviceToken = req.body.deviceToken;
+
+	if (platform === 'android' || platform === 'Android') {
+		AWS_SNS_App = new SNS({
+			platform: 'android',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: ANDROID_ARN
+		});
+	} else if (platform === 'ios') {
+		AWS_SNS_App = new SNS({
+			platform: 'ios',
+			region: 'us-west-2',
+			apiVersion: '2010-03-31',
+			accessKeyId: SNS_KEY_ID,
+			secretAccessKey: SNS_ACCESS_KEY,
+			platformApplicationArn: IOS_ARN,
+			sandbox: true //(This is required for targetting (iOS) APNS_SANDBOX only) 
+		});
+	}
+
+	var topicEndArn = 'arn:aws:sns:us-west-2:895858856986:veg';
+
+	AWS_SNS_App.getSubscriptions(topicEndArn, function (err, result) {
+		console.log('Getting all subscribers is : ' + JSON.stringify(result));
+	})
+
+
+
+	/*console.log('reciflixAwsNotificationsSubscribe is called');
+	console.log('\nRegistering user with deviceToken: ' + deviceToken);
+	// Add the user to SNS
+	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
+		// SNS returned an error
+		if (err) {
+			console.log(err);
+			return res.status(500).json({
+				status: 'not ok'
+			});
+		}
+		console.log('endpointArn is : ' + endpointArn);
+		for (var i = 0; i < req.body.topicArr.length; i++) {
+			var topicName = req.body.topicArr[i];
+			var count = i;
+			AWS_SNS_App.createTopic(topicName, function (err, data) {
+				if (err) {
+					if (count == req.body.topicArr.length) {
+						console.log(err, err.stack); // an error occurred
+						res.send(err);
+					}
+				} else {
+					console.log(data); // successful response
+					var topicEndArn = data;
+AWS_SNS_App.getSubscriptions(topicEndArn, function (err, result) {
+
+})
+
+
+					AWS_SNS_App.unsubscribe(endpointArn, topicEndArn, function (err, result) {
+						console.log('subscribe topic : ' + JSON.stringify(result));
+						if (count == req.body.topicArr.length) {
+							res.send('Successfully Subscribed');
+						}
+					})
+				}
+			})
+		}
+	});*/
+};
+
+exports.sendToAllDevices = function (req, res) {
+	console.log('sendToAllDevices is called');
+	var SNS_KEY_ID = config.aws_sns.affys_prod.credentails.Access_key_ID,
+		SNS_ACCESS_KEY = config.aws_sns.affys_prod.credentails.Secret_access_key,
+		ANDROID_ARN = config.aws_sns.affys_prod.ARNS.ANDROID_ARN,
+		IOS_ARN = config.aws_sns.affys_prod.ARNS.IOS_ARN;
+
+	var AWS_SNS_App;
+
+	var platform = req.body.platform;
+	var message = req.body.msg;
 
 	if (platform === 'android' || platform === 'Android') {
 		AWS_SNS_App = new SNS({
@@ -1117,112 +1328,34 @@ exports.awsSendMessage = function (req, res) {
 		});
 	}
 
-
-
-
-
-
-
-	var endpointArn = req.body.endpointArn;
-
-	// Message to send
-	var message = req.body.msg;
-
-	AWS_SNS_App.sendMessage(endpointArn, message, function (err, messageId) {
+	AWS_SNS_App.getUsers(function (err, allDevices) {
 		if (err) {
-			console.log('An error occured sending message to device %s');
-			console.log(err);
-			res.send(err);
+			console.log(err, err.stack); // an error occurred
 		} else {
-			console.log('Successfully sent a message to device %s. MessageID was %s', messageId);
-			res.send('Successfully sent a message to device , MessageID was : ' + messageId);
+			console.log('Total registered Devices from android : ' + JSON.stringify(allDevices));
+			if (allDevices.length != 0) {
+				var totalDevices = 0;
+				for (var i = 0; i < allDevices.length; i++) {
+					totalDevices = totalDevices + 1;
+					AWS_SNS_App.sendMessage(allDevices[i].EndpointArn, message, function (err, messageId) {
+						if (err) {
+							console.log('An error occured sending message to device %s');
+							console.log(err);
+							//res.send(err);
+						} else {
+							console.log('Successfully sent a message to device %s. MessageID was %s', messageId);
+							//res.send('Successfully sent a message to device , MessageID was : ' + messageId);
+						}
+					});
+				}
+				if (totalDevices === allDevices.length) {
+					res.send('Successfully sent a message to all devices');
+				}
+			}
 		}
 	});
-
 
 
 
 
 }
-
-
-
-exports.reciflixAwsNotificationsSubscribe = function (req, res) {
-
-	var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
-		SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
-		ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
-		IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
-
-
-
-
-	var AWS_SNS_App;
-
-	var platform = req.body.platform;
-	var topicName = req.body.topicName;
-
-	if (platform === 'android' || platform === 'Android') {
-		AWS_SNS_App = new SNS({
-			platform: 'android',
-			region: 'us-west-2',
-			apiVersion: '2010-03-31',
-			accessKeyId: config.aws_sns.reciflix_prod.credentails.Access_key_ID,
-			secretAccessKey: config.aws_sns.reciflix_prod.credentails.Secret_access_key,
-			platformApplicationArn: config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
-			//sandbox: true (This is required for targetting (iOS) APNS_SANDBOX only) 
-		});
-	} else if (platform === 'ios') {
-		AWS_SNS_App = new SNS({
-			platform: 'ios',
-			region: 'us-west-2',
-			apiVersion: '2010-03-31',
-			accessKeyId: SNS_KEY_ID,
-			secretAccessKey: SNS_ACCESS_KEY,
-			platformApplicationArn: IOS_ARN,
-			//sandbox: true (This is required for targetting (iOS) APNS_SANDBOX only) 
-		});
-	}
-
-
-	console.log('reciflixAwsNotificationsSubscribe is called');
-
-
-
-	var deviceToken = req.body.deviceToken;
-
-	console.log('\nRegistering user with deviceToken: ' + deviceToken);
-
-	// Add the user to SNS
-	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
-		// SNS returned an error
-		if (err) {
-			console.log(err);
-			return res.status(500).json({
-				status: 'not ok'
-			});
-		}
-		console.log('endpointArn is : ' + endpointArn);
-
-		var params = {
-			Name: topicName,
-			/* required */
-
-
-		}
-
-
-
-		AWS_SNS_App.createTopic(topicName, function (err, data) {
-			if (err) console.log(err, err.stack); // an error occurred
-			else {
-				console.log(data); // successful response
-				var topicEndArn = data;
-				AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
-					console.log('subscribe topic : ' + JSON.stringify(result));
-					res.send('Successfully Subscribed');
-				})
-			}
-		})
-	});
-};

@@ -112,3 +112,11 @@ angular.module('categories')
     }
   };
 })
+
+.factory('RecipesService', function ($resource, ConfigService) {
+  return $resource(ConfigService.API_URL + '/nVRecipes', {}, {
+    'save': {
+      method: 'POST'
+    }
+  });
+})
