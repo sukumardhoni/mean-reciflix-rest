@@ -1633,14 +1633,79 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 				}
 			});
  }
-]).run(["$rootScope", "$state", "$stateParams", function ($rootScope, $state, $stateParams) {
+]).run(["$rootScope", "$state", "$stateParams", "WebNotificationSubscription", function ($rootScope, $state, $stateParams,WebNotificationSubscription) {
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
-setTimeout(function(){
+/*setTimeout(function(){
 	Notification.requestPermission(function(permission){
 		console.log("request premission : "+JSON.stringify(permission))
 	})
-},1000)
+},1000)*/
+
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+    console.log('Service Worker and Push is supported');
+
+    Notification.requestPermission(function (permission) {
+      console.log("request premission : " + JSON.stringify(permission))
+
+      if (Notification.permission === 'granted') {
+
+        var applicationServerPublicKey = 'BIA7gT2hX51RX7-ZWGBHsfd0egwvGTQP2Etd_s_a4GXdxRughLZcNcqoa3Q5j_cR73GrI1gDznk0cOqh6JjDUZU';
+
+        navigator.serviceWorker.register('sw.js').then(function (reg) {
+            console.log('Service Worker is registered', reg);
+
+            navigator.serviceWorker.ready.then(function (register) {
+              register.pushManager.getSubscription().then(function (userSubscription) {
+
+                function urlB64ToUint8Array(base64String) {
+                  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                  const base64 = (base64String + padding)
+                    .replace(/\-/g, '+')
+                    .replace(/_/g, '/');
+
+                  const rawData = window.atob(base64);
+                  const outputArray = new Uint8Array(rawData.length);
+
+                  for (let i = 0; i < rawData.length; ++i) {
+                    outputArray[i] = rawData.charCodeAt(i);
+                  }
+                  return outputArray;
+                }
+                console.log("subscription obj : " + userSubscription)
+                if ((userSubscription == undefined) || (userSubscription == null)) {
+                  console.log("@@user not subscribed")
+                  var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+                  register.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: applicationServerKey
+                  }).then(function (subscription) {
+                    console.log("user now subscribed to push messages : " + JSON.stringify(subscription))
+
+                    WebNotificationSubscription.send(subscription, function sucessCalBck(res) {
+                      console.log("@##$$$%% Coming to successfull calback : " + JSON.stringify(res))
+                    }, function errCalBck(err) {
+                      console.log("@##$$$%% Coming to error calback : " + JSON.stringify(err))
+                    })
+
+                  }).catch(function (error) {
+                    console.error('error while subscribing', error);
+                  });
+
+                } else {
+                  console.log("@@user subscribed")
+                }
+              })
+            })
+          })
+          .catch(function (error) {
+            console.error('Service Worker Error', error);
+          });
+      }
+    })
+  } else {
+    console.warn('Push messaging is not supported');
+  }
 
 }]);
 
@@ -1719,8 +1784,8 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage',
- function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage','sendNotificationsService','SendAwsMsg',
+ function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage,sendNotificationsService,SendAwsMsg) {
 
 
     if (!$localStorage.reciflix_visited) {
@@ -1762,6 +1827,40 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.cancel = function () {
       $scope.modalInstance.dismiss('cancel');
     };
+
+       $scope.pushNotification = {
+      platform: false
+    }
+    $scope.pushnotification = function () {
+      console.log("PUSH NOTIFICATIONS :" + JSON.stringify($scope.pushNotification))
+
+      SendAwsMsg.send($scope.pushNotification, function (res) {
+        console.log("Succesfully send aws message : " + JSON.stringify(res))
+      }, function (err) {
+        console.log("Error on send aws message")
+      })
+
+
+    }
+
+ $scope.sendNotifications = function (webNotification) {
+      console.log("VVBB@@@ : " + JSON.stringify(webNotification))
+      var notificationObj = {
+        title: webNotification.title,
+        message: webNotification.msg,
+        icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
+        url: webNotification.url
+      }
+
+      sendNotificationsService.send(notificationObj, function sucsCalBck(res) {
+        console.log("successfull calback : " + JSON.stringify(res))
+        $scope.webNotification = {};
+      }, function errCalBck(err) {
+        console.log("error of sending notification : " + JSON.stringify(err))
+      })
+    }
+
+
  }]).directive('showButton', ['webNotification', function (webNotification) {
 return {
     restrict: 'C',
@@ -2033,7 +2132,6 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
         }
       }),
 
-
       emailGet: $resource('/ProspectiveEmails/count/:platform', {
         platform: '@platform'
       }, {
@@ -2045,6 +2143,36 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
     };
   }
 
+])
+
+.factory('WebNotificationSubscription', ['$resource', 'ConfigService',
+	function ($resource, ConfigService) {
+      return $resource(ConfigService.API_URL + '/add-dataTo-subscriptionDb', {}, {
+        send: {
+          method: 'POST'
+        }
+      });
+	}
+])
+
+  .factory('sendNotificationsService', ['$resource', 'ConfigService',
+	function ($resource, ConfigService) {
+      return $resource(ConfigService.API_URL + '/send-notificationTo-users', {}, {
+        send: {
+          method: 'POST'
+        }
+      });
+	}
+])
+
+ .factory('SendAwsMsg', ['$resource',
+	function ($resource) {
+      return $resource('api/aws-send-message-to-all-devices', {}, {
+        send: {
+          method: 'POST'
+        }
+      });
+	}
 ]);
 
 'use strict';
