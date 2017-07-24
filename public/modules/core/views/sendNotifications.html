@@ -7,18 +7,18 @@
           <form>
             <div class="form-group">
               <label for="title">Title:</label>
-              <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title" ng-model="title">
+              <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title" ng-model="webNotification.title">
             </div>
             <div class="form-group">
               <label for="msg">Message:</label>
-              <input type="text" class="form-control" id="msg" placeholder="Enter Message" name="msg" ng-model="msg">
+              <input type="text" class="form-control" id="msg" placeholder="Enter Message" name="msg" ng-model="webNotification.msg">
             </div>
             <div class="form-group">
               <label for="url">Url:</label>
-              <input type="text" class="form-control" id="url" placeholder="Enter Url to redirect to page" name="url" ng-model="url">
+              <input type="text" class="form-control" id="url" placeholder="Enter Url to redirect to page" name="url" ng-model="webNotification.url">
             </div>
             <div class="row text-center">
-              <button type="submit" class="btn btn-default show-button" notification-title="title" notification-msg="msg" notification-url="url">Send</button>
+              <button type="submit" ng-click="sendNotifications(webNotification)" class="btn btn-default " >Send</button>
             </div>
 
           </form>
