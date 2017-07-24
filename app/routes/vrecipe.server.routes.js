@@ -114,6 +114,8 @@ module.exports = function (app) {
 
   app.route('/initialize')
     .post(vrecipes.postSampleJSONData);
+
+    
   /*app.route('/VRecipesByViews/:maxViews/:minViews')
 		.get(vrecipes.getVIdRecipesByViews);*/
 
