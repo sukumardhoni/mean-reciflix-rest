@@ -12,7 +12,9 @@ var _ = require('lodash'),
 	config = require('../../config/config'),
 	agenda = require('../../schedules/job-schedule.js')(config.db),
 	sampleJSON = require('../assets/vidsample.json'),
-	_this = this;
+	 Subscription = mongoose.model('NotificationSubscriptions'),
+	_this = this,
+	 webpush = require('web-push');
 
 
 /**
@@ -33,6 +35,126 @@ exports.create = function (req, res) {
 		}
 	});
 };
+
+
+
+exports.addDataToSubscriptionDb = function (req, res) {
+  console.log("@@@ COMING TO ADD DATA TO SUB DB : " + JSON.stringify(req.body))
+  var subscription = new Subscription(req.body);
+
+  subscription.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      console.log("@@@ COMING TO ADD DATA TO SUB DB : " + JSON.stringify(subscription))
+      res.json(subscription);
+    }
+  });
+
+};
+
+exports.sendWebNotifications = function (req, res) {
+  console.log("@@@ COMING TO sendWebNotifications : " + JSON.stringify(req.body))
+  var dataToSend = req.body;
+  Subscription.find().exec(function (err, subscribers) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      console.log("subscribers data : " + JSON.stringify(subscribers))
+
+      for (var k = 0; k < subscribers.length; k++) {
+        console.log("FOR LOOP : " + JSON.stringify(subscribers[k]))
+
+        var subscriberEndPointObj = {
+          "endpoint": subscribers[k].endpoint,
+          "keys": {
+            "p256dh": subscribers[k].keys.p256dh,
+            "auth": subscribers[k].keys.auth
+          }
+        }
+
+        /*    var subscriberEndPointObj = {
+              "endpoint": "https://fcm.googleapis.com/fcm/send/dVHBzcBsNIU:APA91bETboA6n1JSNc_iBBj9hoQahsxoXdwWmgCkvr9AJSmdDqz4Bz4Sz4UQ1SahVg4Ey3JxJS5s94DHOH732IihHNw9Q8AtezqlHksDQ_O-Lh5aZTH4h2IYCf55POkVl1NvI3m7UYGs",
+              "keys": {
+                "p256dh": "BKhRcAvM8Q6mL_GbRTf7TUc1Bsa0WiDQ4pH8Wg1_EcXPUTRZaua7hH2OrORgyklZU2uIFpYT9hJZO66yKmcXKwY=",
+                "auth": "PhAhZuLS9dZ8JJ-JspWckw=="
+              }
+            };*/
+
+
+        // var promiseChain = Promise.resolve();
+        console.log("FULL OBJ : " + JSON.stringify(subscriberEndPointObj))
+        var vapidKeys = {
+          publicKey: 'BIA7gT2hX51RX7-ZWGBHsfd0egwvGTQP2Etd_s_a4GXdxRughLZcNcqoa3Q5j_cR73GrI1gDznk0cOqh6JjDUZU',
+          privateKey: '_H4HeU927IDdXPdg7xSy8-Nmwv2DRLfTCBjw7pcqZq8'
+        };
+
+
+        /* var vapidKeys = {
+           publicKey: 'BNS2w5ryA3qFLSVzjGf8p8jga8bqRsCETOj6nYzgJDdJX1tBjPqFHnt3zvTAN0XOlY8DUB9etwnE3w0P-0X8SPA',
+           privateKey: 'QZDLWr_Ym3gpHtdxA1Dfv0jQbI4H98D-J_p_sqbWwh0'
+         };*/
+        // var vapidKeys = vapidKeys = webpush.generateVAPIDKeys();
+
+        console.log("@@@#########", vapidKeys.publicKey, vapidKeys.privateKey);
+
+        //  webpush.setGCMAPIKey('AIzaSyAWuIxHwOEG9d-iO1FczAItmZJRW5zmiJ0');
+
+        webpush.setVapidDetails(
+          'mailto:midhunsai@globaltechminds.com',
+          vapidKeys.publicKey,
+          vapidKeys.privateKey
+        );
+
+        var data = JSON.stringify(dataToSend);
+        console.log("$$$$$$$$ : " + data)
+        webpush.sendNotification(subscriberEndPointObj, data, {
+            TTL: 600
+          }).then(function (res) {
+            console.log("$$$$$$$ : ", res)
+          })
+          .catch((err) => {
+            if (err.statusCode === 410) {
+              // return deleteSubscriptionFromDatabase(subscription._id);
+
+              console.log('Subscription is  valid: ');
+            } else {
+              console.log('Subscription is no longer valid: ', err);
+            }
+          });
+
+        /*  promiseChain = promiseChain.then(() => {
+            //  return _this.triggerPushMsg(subscriberEndPointObj, dataToSend);
+            webpush.setGCMAPIKey('276065406531');
+
+            return webpush.sendNotification(subscriberEndPointObj, 'Testing')
+              .catch((err) => {
+                if (err.statusCode === 410) {
+                  // return deleteSubscriptionFromDatabase(subscription._id);
+
+                  console.log('Subscription is  valid: ');
+                } else {
+                  console.log('Subscription is no longer valid: ', err);
+                }
+              });
+          });*/
+
+      }
+      res.json({
+        message: "succesfully got subscribers data"
+      });
+      // return promiseChain
+
+
+
+    }
+  });
+
+}
 
 
 /**

@@ -10,7 +10,6 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
         }
       }),
 
-
       emailGet: $resource('/ProspectiveEmails/count/:platform', {
         platform: '@platform'
       }, {
@@ -22,4 +21,34 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
     };
   }
 
+])
+
+.factory('WebNotificationSubscription', ['$resource', 'ConfigService',
+	function ($resource, ConfigService) {
+      return $resource(ConfigService.API_URL + '/add-dataTo-subscriptionDb', {}, {
+        send: {
+          method: 'POST'
+        }
+      });
+	}
+])
+
+  .factory('sendNotificationsService', ['$resource', 'ConfigService',
+	function ($resource, ConfigService) {
+      return $resource(ConfigService.API_URL + '/send-notificationTo-users', {}, {
+        send: {
+          method: 'POST'
+        }
+      });
+	}
+])
+
+ .factory('SendAwsMsg', ['$resource',
+	function ($resource) {
+      return $resource('api/aws-send-message-to-all-devices', {}, {
+        send: {
+          method: 'POST'
+        }
+      });
+	}
 ]);

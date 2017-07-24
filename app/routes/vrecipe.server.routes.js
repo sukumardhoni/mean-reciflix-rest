@@ -106,6 +106,12 @@ module.exports = function (app) {
   app.route('/newRecipesForSubCatId/:subCatId/:pageId')
     .get(cache.route(), vrecipes.getRecipesBySubCats);
 
+    app.route('/add-dataTo-subscriptionDb')
+    .post(vrecipes.addDataToSubscriptionDb);
+
+  app.route('/send-notificationTo-users')
+    .post(vrecipes.sendWebNotifications);
+
   app.route('/initialize')
     .post(vrecipes.postSampleJSONData);
   /*app.route('/VRecipesByViews/:maxViews/:minViews')

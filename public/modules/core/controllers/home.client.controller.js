@@ -1,8 +1,8 @@
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage',
- function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage','sendNotificationsService','SendAwsMsg',
+ function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage,sendNotificationsService,SendAwsMsg) {
 
 
     if (!$localStorage.reciflix_visited) {
@@ -44,6 +44,40 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     $scope.cancel = function () {
       $scope.modalInstance.dismiss('cancel');
     };
+
+       $scope.pushNotification = {
+      platform: false
+    }
+    $scope.pushnotification = function () {
+      console.log("PUSH NOTIFICATIONS :" + JSON.stringify($scope.pushNotification))
+
+      SendAwsMsg.send($scope.pushNotification, function (res) {
+        console.log("Succesfully send aws message : " + JSON.stringify(res))
+      }, function (err) {
+        console.log("Error on send aws message")
+      })
+
+
+    }
+
+ $scope.sendNotifications = function (webNotification) {
+      console.log("VVBB@@@ : " + JSON.stringify(webNotification))
+      var notificationObj = {
+        title: webNotification.title,
+        message: webNotification.msg,
+        icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
+        url: webNotification.url
+      }
+
+      sendNotificationsService.send(notificationObj, function sucsCalBck(res) {
+        console.log("successfull calback : " + JSON.stringify(res))
+        $scope.webNotification = {};
+      }, function errCalBck(err) {
+        console.log("error of sending notification : " + JSON.stringify(err))
+      })
+    }
+
+
  }]).directive('showButton', ['webNotification', function (webNotification) {
 return {
     restrict: 'C',
