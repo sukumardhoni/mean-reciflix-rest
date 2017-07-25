@@ -7,10 +7,10 @@ var users = require('../../app/controllers/users.server.controller'),
   categories = require('../../app/controllers/newcats.server.controller'),
   multiparty = require('connect-multiparty'),
   multipartyMiddleware = multiparty(),
-  config = require('../../config/config'),
+  config = require('../../config/config');
   /*cache = require('express-redis-cache')({
     client: require('redis').createClient(config.redis.uri)
-  })*/;
+  })*/
 
 module.exports = function (app) {
 
