@@ -95,7 +95,7 @@ exports.sendWebNotifications = function (req, res) {
 					}).then(function (res) {
 						console.log("$$$$$$$ : ", res)
 					})
-					.catch((err) => {
+					.catch(function (err) {
 						if (err.statusCode === 410) {
 							// return deleteSubscriptionFromDatabase(subscription._id);
 
