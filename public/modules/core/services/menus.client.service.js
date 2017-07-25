@@ -22,7 +22,7 @@ angular.module('core').service('Menus', [
                 return true;
               }
             }
-          }
+          } 
         }
       } else {
         return this.isPublic;
