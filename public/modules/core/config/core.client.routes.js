@@ -38,12 +38,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 ]).run(function ($rootScope, $state, $stateParams,WebNotificationSubscription) {
 	$rootScope.$state = $state;
 	$rootScope.$stateParams = $stateParams;
-/*setTimeout(function(){
-	Notification.requestPermission(function(permission){
-		console.log("request premission : "+JSON.stringify(permission))
-	})
-},1000)*/
-
+  
 if ('serviceWorker' in navigator && 'PushManager' in window) {
     console.log('Service Worker and Push is supported');
 
