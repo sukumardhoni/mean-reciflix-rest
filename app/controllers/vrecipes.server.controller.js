@@ -16,7 +16,7 @@ var _ = require('lodash'),
 	_this = this,
 	webpush = require('web-push');
 
-
+   
 /**
  * Create a vrecipe
  */
@@ -41,7 +41,6 @@ exports.create = function (req, res) {
 exports.addDataToSubscriptionDb = function (req, res) {
 	console.log("@@@ COMING TO ADD DATA TO SUB DB : " + JSON.stringify(req.body))
 	var subscription = new Subscription(req.body);
-
 	subscription.save(function (err) {
 		if (err) {
 			return res.status(400).send({
@@ -52,7 +51,6 @@ exports.addDataToSubscriptionDb = function (req, res) {
 			res.json(subscription);
 		}
 	});
-
 };
 
 exports.sendWebNotifications = function (req, res) {
@@ -65,10 +63,8 @@ exports.sendWebNotifications = function (req, res) {
 			});
 		} else {
 			console.log("subscribers data : " + JSON.stringify(subscribers))
-
 			for (var k = 0; k < subscribers.length; k++) {
 				console.log("FOR LOOP : " + JSON.stringify(subscribers[k]))
-
 				var subscriberEndPointObj = {
 					"endpoint": subscribers[k].endpoint,
 					"keys": {
@@ -109,12 +105,8 @@ exports.sendWebNotifications = function (req, res) {
 				message: "succesfully got subscribers data"
 			});
 			// return promiseChain
-
-
-
 		}
 	});
-
 }
 
 
