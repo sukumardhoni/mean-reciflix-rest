@@ -7,10 +7,10 @@ var users = require('../../app/controllers/users.server.controller'),
   categories = require('../../app/controllers/newcats.server.controller'),
   multiparty = require('connect-multiparty'),
   multipartyMiddleware = multiparty(),
-  config = require('../../config/config');
-  /*cache = require('express-redis-cache')({
+  config = require('../../config/config'),
+  cache = require('express-redis-cache')({
     client: require('redis').createClient(config.redis.uri)
-  })*/
+  });
 
 module.exports = function (app) {
 
@@ -22,8 +22,7 @@ module.exports = function (app) {
   // Category Routes
 
   app.route('/newcats/page/:pageId/:activeFilter')
-    .get( categories.listOfCats);
-    /*.get(cache.route(), categories.listOfCats);*/
+    .get(cache.route(), categories.listOfCats);
 
 
   app.route('/newCatAndSubCats/:rank')

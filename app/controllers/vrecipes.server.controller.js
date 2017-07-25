@@ -13,8 +13,8 @@ var _ = require('lodash'),
 	agenda = require('../../schedules/job-schedule.js')(config.db),
 	sampleJSON = require('../assets/vidsample.json'),
 	Subscription = mongoose.model('NotificationSubscriptions'),
-	_this = this,
-	webpush = require('web-push');
+	_this = this;
+/*	webpush = require('web-push');*/
 
 
 /**
@@ -40,7 +40,7 @@ exports.create = function (req, res) {
 
 exports.addDataToSubscriptionDb = function (req, res) {
 	console.log("@@@ COMING TO ADD DATA TO SUB DB : " + JSON.stringify(req.body))
-	var subscription = new Subscription(req.body);
+	/*var subscription = new Subscription(req.body);
 
 	subscription.save(function (err) {
 		if (err) {
@@ -51,13 +51,13 @@ exports.addDataToSubscriptionDb = function (req, res) {
 			console.log("@@@ COMING TO ADD DATA TO SUB DB : " + JSON.stringify(subscription))
 			res.json(subscription);
 		}
-	});
+	});*/
 
 };
 
 exports.sendWebNotifications = function (req, res) {
 	console.log("@@@ COMING TO sendWebNotifications : " + JSON.stringify(req.body))
-	var dataToSend = req.body;
+	/*var dataToSend = req.body;
 	Subscription.find().exec(function (err, subscribers) {
 		if (err) {
 			return res.status(400).send({
@@ -113,7 +113,7 @@ exports.sendWebNotifications = function (req, res) {
 
 
 		}
-	});
+	});*/
 
 }
 

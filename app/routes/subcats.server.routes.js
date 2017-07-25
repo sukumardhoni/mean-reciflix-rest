@@ -7,16 +7,15 @@ var users = require('../../app/controllers/users.server.controller'),
   subcats = require('../../app/controllers/subcats.server.controller'),
   multiparty = require('connect-multiparty'),
   multipartyMiddleware = multiparty(),
-  config = require('../../config/config');
-  /*cache = require('express-redis-cache')({
+  config = require('../../config/config'),
+  cache = require('express-redis-cache')({
     client: require('redis').createClient(config.redis.uri)
-  })*/
+  });
 
 module.exports = function (app) {
   // SubCats Routes
   app.route('/subCats/:newCatId/:pageId/:activeFilter')
-    /*.get(cache.route(), subcats.listOfSubCats)*/
-    .get(subcats.listOfSubCats)
+    .get(cache.route(), subcats.listOfSubCats)    
     .post(users.ensureAuthenticated, multipartyMiddleware, subcats.subCatCreate);
 
   app.route('/singleSubCat/:subCatId')
