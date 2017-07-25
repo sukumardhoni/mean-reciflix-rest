@@ -8,9 +8,9 @@ var users = require('../../app/controllers/users.server.controller'),
   multiparty = require('connect-multiparty'),
   multipartyMiddleware = multiparty(),
   config = require('../../config/config'),
-  cache = require('express-redis-cache')({
+  /*cache = require('express-redis-cache')({
     client: require('redis').createClient(config.redis.uri)
-  });
+  })*/;
 
 module.exports = function (app) {
 
@@ -22,7 +22,8 @@ module.exports = function (app) {
   // Category Routes
 
   app.route('/newcats/page/:pageId/:activeFilter')
-    .get(cache.route(), categories.listOfCats);
+    .get( categories.listOfCats);
+    /*.get(cache.route(), categories.listOfCats);*/
 
 
   app.route('/newCatAndSubCats/:rank')

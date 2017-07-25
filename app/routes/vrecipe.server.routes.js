@@ -6,9 +6,9 @@
 var users = require('../../app/controllers/users.server.controller'),
   vrecipes = require('../../app/controllers/vrecipes.server.controller'),
   config = require('../../config/config'),
-  cache = require('express-redis-cache')({
+  /*cache = require('express-redis-cache')({
     client: require('redis').createClient(config.redis.uri)
-  });
+  })*/;
 
 module.exports = function (app) {
   // Recipes Routes
@@ -87,10 +87,15 @@ module.exports = function (app) {
 
 
   app.route('/searchedVRecipesByIndex/:query/:pageId')
+    .get(vrecipes.getAllSearchedVRecipesByIndex);
+
+  app.route('/searchedVRecipesByIndexNew/:query/:pageId')
+    .get(vrecipes.getAllSearchedVRecipesByIndexNew);
+/*  app.route('/searchedVRecipesByIndex/:query/:pageId')
     .get(cache.route(), vrecipes.getAllSearchedVRecipesByIndex);
 
   app.route('/searchedVRecipesByIndexNew/:query/:pageId')
-    .get(cache.route(), vrecipes.getAllSearchedVRecipesByIndexNew);
+    .get(cache.route(), vrecipes.getAllSearchedVRecipesByIndexNew);*/
 
 
 
@@ -101,10 +106,15 @@ module.exports = function (app) {
   /*New Cats & sub cats routes for recipes*/
 
   app.route('/newRecipesForCatId/:newCatId/:pageId')
+    .get(vrecipes.getRecipesByCats);
+
+  app.route('/newRecipesForSubCatId/:subCatId/:pageId')
+    .get( vrecipes.getRecipesBySubCats);
+/*  app.route('/newRecipesForCatId/:newCatId/:pageId')
     .get(cache.route(), vrecipes.getRecipesByCats);
 
   app.route('/newRecipesForSubCatId/:subCatId/:pageId')
-    .get(cache.route(), vrecipes.getRecipesBySubCats);
+    .get(cache.route(), vrecipes.getRecipesBySubCats);*/
 
     app.route('/add-dataTo-subscriptionDb')
     .post(vrecipes.addDataToSubscriptionDb);
