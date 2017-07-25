@@ -9,7 +9,6 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
           method: 'POST'
         }
       }),
-
       emailGet: $resource('/ProspectiveEmails/count/:platform', {
         platform: '@platform'
       }, {
@@ -17,7 +16,6 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
           method: 'GET'
         }
       })
-
     };
   }
 
