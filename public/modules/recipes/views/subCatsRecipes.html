@@ -42,7 +42,8 @@
               </div>
               <hr class="hidden-lg hidden-md">
               <div class="col-md-6">
-                <h1 class="page-header text-capitalize text-center">{{subCatRecipesObj.displayName}}</small></h1>
+                <h1 class="page-header text-capitalize text-center">{{subCatRecipesObj.displayName}}</small>
+                </h1>
                 <table class="table">
                   <tbody>
                     <tr>
@@ -62,6 +63,11 @@
             <!--<center ng-hide="subCatRecipesObj.recipes.length==0">
               <pagination boundary-links="true" total-items="totalItems" ng-model="vm.currentPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" class="pagination-sm" max-size="maxSize" items-per-page="itemsPerPage"></pagination>
             </center>-->
+
+            <div class="row">
+              <span style="float:right;padding: 10px;padding-right: 20px;"> <select style="padding: 6px;padding-right: 20px;outline: none;cursor: pointer;" ng-model="filterByLatestSubCats.List1" ng-options="template.value as template.name for template in filterByLatestSubCats.lists1" ng-change="recipesFilterByLatest(filterByLatestSubCats.List1)">
+          </select></span>
+            </div>
             <div class="row">
               <center>
                 <img ng-src="modules/core/img/loaders/recipes-loader.GIF" ng-show="loading">
@@ -93,7 +99,7 @@
                     <div id="popover-content" class="hide">
                       <center class="box-one">
                         <span class="fa fa-facebook-square fbShare" socialshare socialshare-provider="facebook" socialshare-text="ReciFlix {{subCatRecipesObj.displayName}} Recipes" socialshare-url="{{socialUrl(recipe)}}"></span>
-                        <span class="fa fa-google-plus gPlusShare" socialshare socialshare-provider="google+" socialshare-text="ReciFlix {{subCatRecipesObj.displayName}} Recipes" socialshare-url="{{socialUrl(recipe)}}"></span>
+                        <span class="fa fa-google-plus gPlusShare" socialshare socialshare-provider="google" socialshare-text="ReciFlix {{subCatRecipesObj.displayName}} Recipes" socialshare-url="{{socialUrl(recipe)}}"></span>
                         <!--<span class="fa fa-twitter twShare" socialshare socialshare-provider="twitter" socialshare-text="ReciFlix {{subCatRecipesObj.displayName}} Recipes" socialshare-url="{{location.path}}/{{recipe.title}}"></span>-->
                       </center>
                     </div>
@@ -113,7 +119,13 @@
               <center ng-hide="subCatRecipesObj.recipes.length==0">
                 <div><img ng-src="modules/core/img/loaders/spinner.GIF" ng-show="spinnerLoading"></div>
                 <br>
-                <button type="button" class="btn btn-w-m btn-primary" ng-click="LoadMoreRecipes()" ng-hide="noMoreRecipesAvailable || spinnerLoading">Load more recipes</button>
+                <div ng-hide="showFilterLoadMoreBtn">
+                  <button type="button" class="btn btn-w-m btn-primary" ng-click="LoadMoreRecipes()" ng-hide="noMoreRecipesAvailable || spinnerLoading">Load more recipes</button>
+                </div>
+
+                <div ng-show="showFilterLoadMoreBtn">
+                  <button type="button" class="btn btn-w-m btn-primary" ng-click="LoadMoreRecipesFromFilterBased()" ng-hide="noMoreRecipesAvailable || spinnerLoading">Load more recipes</button>
+                </div>
                 <!--<strong ng-show="noMoreRecipesAvailable">There are no more recipes found.</strong>-->
               </center>
             </div>
@@ -125,8 +137,8 @@
 </div>
 <a id='backTop'>Back To Top</a>
 <script>
-  $(document).ready(function () {
-    $(window).scroll(function () {
+  $(document).ready(function() {
+    $(window).scroll(function() {
       if ($(this).scrollTop() > 100) {
         $("#backTop").fadeIn();
       } else {
@@ -135,11 +147,12 @@
     });
 
     // scroll body to 0px on click
-    $("#backTop").click(function () {
+    $("#backTop").click(function() {
       $("html, body").animate({
         scrollTop: 0
       }, 800);
       return false;
     })
   });
+
 </script>

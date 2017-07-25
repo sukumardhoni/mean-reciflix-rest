@@ -1,8 +1,8 @@
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage','sendNotificationsService','SendAwsMsg',
- function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage,sendNotificationsService,SendAwsMsg) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage', 'sendNotificationsService', 'SendAwsMsg',
+ function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage, sendNotificationsService, SendAwsMsg) {
 
 
     if (!$localStorage.reciflix_visited) {
@@ -45,7 +45,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
 
-       $scope.pushNotification = {
+    $scope.pushNotification = {
       platform: false
     }
     $scope.pushnotification = function () {
@@ -60,24 +60,90 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
     }
 
- $scope.sendNotifications = function (webNotification) {
+    $scope.sendNotifications = function (webNotification) {
       console.log("VVBB@@@ : " + JSON.stringify(webNotification))
-      if(webNotification.url){
-      var notificationObj = {
-        title: webNotification.title,
-        message: webNotification.msg,
-        icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
-        url: webNotification.url
+      if (webNotification.url) {
+        var notificationObj = {
+          title: webNotification.title,
+          message: webNotification.msg,
+          icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
+          url: webNotification.url
+        }
+
+        sendNotificationsService.send(notificationObj, function sucsCalBck(res) {
+          console.log("successfull calback : " + JSON.stringify(res))
+          $scope.webNotification = {};
+        }, function errCalBck(err) {
+          console.log("error of sending notification : " + JSON.stringify(err))
+        })
       }
 
-      sendNotificationsService.send(notificationObj, function sucsCalBck(res) {
-        console.log("successfull calback : " + JSON.stringify(res))
-        $scope.webNotification = {};
-      }, function errCalBck(err) {
-        console.log("error of sending notification : " + JSON.stringify(err))
+    }
+
+
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      console.log('Service Worker and Push is supported');
+
+      Notification.requestPermission(function (permission) {
+        console.log("request premission : " + JSON.stringify(permission))
+
+        if (Notification.permission === 'granted') {
+
+          var applicationServerPublicKey = 'BCZLs69d4JA_FD9LyXugozgVdBCL1vHwKEBVlaW1M46fLIJ64tC2DWZ33xxr3t5uO8jEPrJCND4Q8LEOFQnxo0g';
+
+          navigator.serviceWorker.register('sw.js').then(function (reg) {
+              console.log('Service Worker is registered', reg);
+
+              navigator.serviceWorker.ready.then(function (register) {
+                register.pushManager.getSubscription().then(function (userSubscription) {
+
+                  function urlB64ToUint8Array(base64String) {
+                    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                    const base64 = (base64String + padding)
+                      .replace(/\-/g, '+')
+                      .replace(/_/g, '/');
+
+                    const rawData = window.atob(base64);
+                    const outputArray = new Uint8Array(rawData.length);
+
+                    for (var f = 0; f < rawData.length; ++f) {
+                      outputArray[f] = rawData.charCodeAt(f);
+                    }
+                    return outputArray;
+                  }
+                  console.log("subscription obj : " + userSubscription)
+                  if ((userSubscription == undefined) || (userSubscription == null)) {
+                    console.log("@@user not subscribed")
+                    var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+                    register.pushManager.subscribe({
+                      userVisibleOnly: true,
+                      applicationServerKey: applicationServerKey
+                    }).then(function (subscription) {
+                      console.log("user now subscribed to push messages : " + JSON.stringify(subscription))
+
+                      WebNotificationSubscription.send(subscription, function sucessCalBck(res) {
+                        console.log("@##$$$%% Coming to successfull calback : " + JSON.stringify(res))
+                      }, function errCalBck(err) {
+                        console.log("@##$$$%% Coming to error calback : " + JSON.stringify(err))
+                      })
+
+                    }).catch(function (error) {
+                      console.error('error while subscribing', error);
+                    });
+
+                  } else {
+                    console.log("@@user subscribed")
+                  }
+                })
+              })
+            })
+            .catch(function (error) {
+              console.error('Service Worker Error', error);
+            });
+        }
       })
-      }
-    
- }
+    } else {
+      console.warn('Push messaging is not supported');
+    }
 
  }]);

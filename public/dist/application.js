@@ -1601,106 +1601,43 @@ angular.module('categories')
 // Setting up route
 angular.module('core').config(['$stateProvider', '$urlRouterProvider',
  function ($stateProvider, $urlRouterProvider) {
-		// Redirect to home view when route not found
-		$urlRouterProvider.otherwise('/home');
+    // Redirect to home view when route not found
+    $urlRouterProvider.otherwise('/home');
 
-		// Home state routing
-		$stateProvider
-			.state('home', {
-				url: '/home',
-				templateUrl: 'modules/core/views/home.client.view.html',
-				data: {
-					bodyClass: 'bg-body'
-				}
-			})
-			 .state('reciflix.sendWebNotifications', {
+    // Home state routing
+    $stateProvider
+      .state('home', {
+        url: '/home',
+        templateUrl: 'modules/core/views/home.client.view.html',
+        data: {
+          bodyClass: 'bg-body'
+        }
+      })
+      .state('reciflix.sendWebNotifications', {
         url: 'send-notifications',
         templateUrl: 'modules/core/views/sendNotifications.html',
         controller: 'HomeController'
       })
-			/*
-			      .state('terms', {
-			        url: '/terms',
-			        templateUrl: 'modules/core/views/terms.client.view.html',
-			        module: 'public'
-			      })*/
-			.state('privacy', {
-				url: '/privacy',
-				templateUrl: 'modules/core/views/privacy.client.view.html',
-				module: 'public',
-				data: {
-					bodyClass: ''
-				}
-			});
+      /*
+            .state('terms', {
+              url: '/terms',
+              templateUrl: 'modules/core/views/terms.client.view.html',
+              module: 'public'
+            })*/
+      .state('privacy', {
+        url: '/privacy',
+        templateUrl: 'modules/core/views/privacy.client.view.html',
+        module: 'public',
+        data: {
+          bodyClass: ''
+        }
+      });
  }
-]).run(["$rootScope", "$state", "$stateParams", "WebNotificationSubscription", function ($rootScope, $state, $stateParams,WebNotificationSubscription) {
-	$rootScope.$state = $state;
-	$rootScope.$stateParams = $stateParams;
-  
-if ('serviceWorker' in navigator && 'PushManager' in window) {
-    console.log('Service Worker and Push is supported');
+]).run(["$rootScope", "$state", "$stateParams", "WebNotificationSubscription", function ($rootScope, $state, $stateParams, WebNotificationSubscription) {
+  $rootScope.$state = $state;
+  $rootScope.$stateParams = $stateParams;
 
-    Notification.requestPermission(function (permission) {
-      console.log("request premission : " + JSON.stringify(permission))
 
-      if (Notification.permission === 'granted') {
-
-        var applicationServerPublicKey = 'BIA7gT2hX51RX7-ZWGBHsfd0egwvGTQP2Etd_s_a4GXdxRughLZcNcqoa3Q5j_cR73GrI1gDznk0cOqh6JjDUZU';
-
-        navigator.serviceWorker.register('sw.js').then(function (reg) {
-            console.log('Service Worker is registered', reg); 
-
-            navigator.serviceWorker.ready.then(function (register) {
-              register.pushManager.getSubscription().then(function (userSubscription) {
-
-                function urlB64ToUint8Array(base64String) {
-                  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-                  const base64 = (base64String + padding)
-                    .replace(/\-/g, '+')
-                    .replace(/_/g, '/');
-
-                  const rawData = window.atob(base64);
-                  const outputArray = new Uint8Array(rawData.length);
-
-                  for (let i = 0; i < rawData.length; ++i) {
-                    outputArray[i] = rawData.charCodeAt(i);
-                  }
-                  return outputArray;
-                }
-                console.log("subscription obj : " + userSubscription)
-                if ((userSubscription == undefined) || (userSubscription == null)) {
-                  console.log("@@user not subscribed")
-                  var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-                  register.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: applicationServerKey
-                  }).then(function (subscription) {
-                    console.log("user now subscribed to push messages : " + JSON.stringify(subscription))
-
-                    WebNotificationSubscription.send(subscription, function sucessCalBck(res) {
-                      console.log("@##$$$%% Coming to successfull calback : " + JSON.stringify(res))
-                    }, function errCalBck(err) {
-                      console.log("@##$$$%% Coming to error calback : " + JSON.stringify(err))
-                    })
-
-                  }).catch(function (error) {
-                    console.error('error while subscribing', error);
-                  });
-
-                } else {
-                  console.log("@@user subscribed")
-                }
-              })
-            })
-          })
-          .catch(function (error) {
-            console.error('Service Worker Error', error);
-          });
-      }
-    })
-  } else {
-    console.warn('Push messaging is not supported');
-  }
 
 }]);
 
@@ -1779,8 +1716,8 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage','sendNotificationsService','SendAwsMsg',
- function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage,sendNotificationsService,SendAwsMsg) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', '$modal', '$timeout', 'NotificationFactory', '$localStorage', 'sendNotificationsService', 'SendAwsMsg',
+ function ($scope, Authentication, $modal, $timeout, NotificationFactory, $localStorage, sendNotificationsService, SendAwsMsg) {
 
 
     if (!$localStorage.reciflix_visited) {
@@ -1823,7 +1760,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       $scope.modalInstance.dismiss('cancel');
     };
 
-       $scope.pushNotification = {
+    $scope.pushNotification = {
       platform: false
     }
     $scope.pushnotification = function () {
@@ -1838,25 +1775,91 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
     }
 
- $scope.sendNotifications = function (webNotification) {
+    $scope.sendNotifications = function (webNotification) {
       console.log("VVBB@@@ : " + JSON.stringify(webNotification))
-      if(webNotification.url){
-      var notificationObj = {
-        title: webNotification.title,
-        message: webNotification.msg,
-        icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
-        url: webNotification.url
+      if (webNotification.url) {
+        var notificationObj = {
+          title: webNotification.title,
+          message: webNotification.msg,
+          icon: 'https://lh3.googleusercontent.com/BCOE0vqCfr8aqpIKEF7QEt-qa7p8I7KDg58Juz6M6_YGb4l7phrO2vMvi_SDy10ucQ=w300',
+          url: webNotification.url
+        }
+
+        sendNotificationsService.send(notificationObj, function sucsCalBck(res) {
+          console.log("successfull calback : " + JSON.stringify(res))
+          $scope.webNotification = {};
+        }, function errCalBck(err) {
+          console.log("error of sending notification : " + JSON.stringify(err))
+        })
       }
 
-      sendNotificationsService.send(notificationObj, function sucsCalBck(res) {
-        console.log("successfull calback : " + JSON.stringify(res))
-        $scope.webNotification = {};
-      }, function errCalBck(err) {
-        console.log("error of sending notification : " + JSON.stringify(err))
+    }
+
+
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      console.log('Service Worker and Push is supported');
+
+      Notification.requestPermission(function (permission) {
+        console.log("request premission : " + JSON.stringify(permission))
+
+        if (Notification.permission === 'granted') {
+
+          var applicationServerPublicKey = 'BCZLs69d4JA_FD9LyXugozgVdBCL1vHwKEBVlaW1M46fLIJ64tC2DWZ33xxr3t5uO8jEPrJCND4Q8LEOFQnxo0g';
+
+          navigator.serviceWorker.register('sw.js').then(function (reg) {
+              console.log('Service Worker is registered', reg);
+
+              navigator.serviceWorker.ready.then(function (register) {
+                register.pushManager.getSubscription().then(function (userSubscription) {
+
+                  function urlB64ToUint8Array(base64String) {
+                    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                    const base64 = (base64String + padding)
+                      .replace(/\-/g, '+')
+                      .replace(/_/g, '/');
+
+                    const rawData = window.atob(base64);
+                    const outputArray = new Uint8Array(rawData.length);
+
+                    for (var f = 0; f < rawData.length; ++f) {
+                      outputArray[f] = rawData.charCodeAt(f);
+                    }
+                    return outputArray;
+                  }
+                  console.log("subscription obj : " + userSubscription)
+                  if ((userSubscription == undefined) || (userSubscription == null)) {
+                    console.log("@@user not subscribed")
+                    var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+                    register.pushManager.subscribe({
+                      userVisibleOnly: true,
+                      applicationServerKey: applicationServerKey
+                    }).then(function (subscription) {
+                      console.log("user now subscribed to push messages : " + JSON.stringify(subscription))
+
+                      WebNotificationSubscription.send(subscription, function sucessCalBck(res) {
+                        console.log("@##$$$%% Coming to successfull calback : " + JSON.stringify(res))
+                      }, function errCalBck(err) {
+                        console.log("@##$$$%% Coming to error calback : " + JSON.stringify(err))
+                      })
+
+                    }).catch(function (error) {
+                      console.error('error while subscribing', error);
+                    });
+
+                  } else {
+                    console.log("@@user subscribed")
+                  }
+                })
+              })
+            })
+            .catch(function (error) {
+              console.error('Service Worker Error', error);
+            });
+        }
       })
-      }
-    
- }
+    } else {
+      console.warn('Push messaging is not supported');
+    }
 
  }]);
 
@@ -2257,169 +2260,182 @@ angular.module('recipes')
 // Recipes controller
 angular.module('recipes').controller('RecipesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Vrecipes', '$localStorage', '$http',
  function ($scope, $stateParams, $location, Authentication, Vrecipes, $localStorage, $http) {
-    $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
-    $scope.authentication = Authentication;
-    $scope.categories = function () {
-      Vrecipes.getcategory.query({}, function (res) {
-        $scope.categories = res;
-      });
-    };
-
-    $scope.createcategories = function () {
-      $scope.newcat = function () {
-        var categorie = {
-          'catId': this.categorie.catId,
-          'displayName': this.categorie.displayName,
-          'imageName': this.categorie.imageName,
-
-        };
-        Vrecipes.savecategory.save(categorie, function (result) {
-          $scope.categorie = '';
+      $http.defaults.headers.common['Authorization'] = 'Basic ' + $localStorage.token;
+      $scope.authentication = Authentication;
+      $scope.categories = function () {
+        Vrecipes.getcategory.query({}, function (res) {
+          $scope.categories = res;
         });
       };
-    };
 
-    $scope.availableTags = ['Chicken', 'Mutton', 'Veg', 'Non-veg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Indo chineese', 'South Indian Recipes', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'SandWhich', 'Fruit', 'Special', 'Hot Drinks', 'Soft Drinks', 'Lunch', 'Break Fast', 'Pasta', 'Ice-Creams', 'Chat', 'Pickle', 'North-Indian', 'Spreads', 'Rice', 'Cashews Special', 'Paratha', 'Chineese', 'Rajasthani', 'Naan', 'Roti', 'Milk', 'Biriyani', 'Pulao', 'Cookies', 'Kitchen Requirements', 'Mushroom', 'Pizza', 'Bakery', 'Chocolates'];
+      $scope.createcategories = function () {
+        $scope.newcat = function () {
+          var categorie = {
+            'catId': this.categorie.catId,
+            'displayName': this.categorie.displayName,
+            'imageName': this.categorie.imageName,
 
-
-    $scope.availableCats = ['Chicken', 'Mutton', 'Veg', 'nonveg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Indo chineese', 'South Indian Recipes', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'SandWhich', 'Fruit', 'Special', 'Hot Drinks', 'Soft Drinks', 'Lunch', 'Break Fast', 'Pasta', 'Ice-Creams', 'Chat', 'Pickle', 'North-Indian', 'Spreads', 'Rice', 'Cashews Special', 'Paratha', 'Chineese', 'Rajasthani', 'Naan', 'Roti', 'Milk', 'Biriyani', 'Pulao', 'Cookies', 'Kitchen Requirements', 'Mushroom', 'Pizza', 'Bakery', 'Chocolates'];
-
-
-
-    $scope.selected = function () {
-
-      //console.log('selected item' + this.categoriesname);
-
-      Vrecipes.getrecipes.query({
-        CategoryName: this.categoriesname
-      }, function (res) {
-        $scope.recipes = res;
-        $scope.totalItems = $scope.recipes.length;
-        $scope.itemsPerPage = 1;
-        $scope.currentPage = 1;
-        $scope.maxSize = 5;
-        $scope.pageCount = function () {
-          return Math.ceil($scope.recipes.length / $scope.itemsPerPage);
+          };
+          Vrecipes.savecategory.save(categorie, function (result) {
+            $scope.categorie = '';
+          });
         };
-        $scope.$watch('currentPage + itemsPerPage', function () {
-          var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
-            end = begin + $scope.itemsPerPage;
-          $scope.filteredrecipe = $scope.recipes.slice(begin, end);
+      };
+
+      $scope.availableTags = ['Chicken', 'Mutton', 'Veg', 'Non-veg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Indo chineese', 'South Indian Recipes', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'SandWhich', 'Fruit', 'Special', 'Hot Drinks', 'Soft Drinks', 'Lunch', 'Break Fast', 'Pasta', 'Ice-Creams', 'Chat', 'Pickle', 'North-Indian', 'Spreads', 'Rice', 'Cashews Special', 'Paratha', 'Chineese', 'Rajasthani', 'Naan', 'Roti', 'Milk', 'Biriyani', 'Pulao', 'Cookies', 'Kitchen Requirements', 'Mushroom', 'Pizza', 'Bakery', 'Chocolates'];
+
+
+      $scope.availableCats = ['Chicken', 'Mutton', 'Veg', 'nonveg', 'Curry', 'Gravy', 'Salads', 'Desserts', 'Cake', 'Sweets', 'Snacks', 'Appetizers', 'Breads', 'Dipping Sides', 'Kids', 'Festival', 'Diwali', 'Ganesh Festival', 'Sankranthi', 'Rakhi', 'Dushera', 'Healthy', 'Indo chineese', 'South Indian Recipes', 'Soup', 'Chutney', 'Indian Pickels', 'Pregnancy Diet', 'Egg Less', 'SandWhich', 'Fruit', 'Special', 'Hot Drinks', 'Soft Drinks', 'Lunch', 'Break Fast', 'Pasta', 'Ice-Creams', 'Chat', 'Pickle', 'North-Indian', 'Spreads', 'Rice', 'Cashews Special', 'Paratha', 'Chineese', 'Rajasthani', 'Naan', 'Roti', 'Milk', 'Biriyani', 'Pulao', 'Cookies', 'Kitchen Requirements', 'Mushroom', 'Pizza', 'Bakery', 'Chocolates'];
+
+
+
+      $scope.selected = function () {
+
+        //console.log('selected item' + this.categoriesname);
+
+        Vrecipes.getrecipes.query({
+          CategoryName: this.categoriesname
+        }, function (res) {
+          $scope.recipes = res;
+          $scope.totalItems = $scope.recipes.length;
+          $scope.itemsPerPage = 1;
+          $scope.currentPage = 1;
+          $scope.maxSize = 5;
+          $scope.pageCount = function () {
+            return Math.ceil($scope.recipes.length / $scope.itemsPerPage);
+          };
+          $scope.$watch('currentPage + itemsPerPage', function () {
+            var begin = (($scope.currentPage - 1) * $scope.itemsPerPage),
+              end = begin + $scope.itemsPerPage;
+            $scope.filteredrecipe = $scope.recipes.slice(begin, end);
+          });
         });
+      };
+
+      $scope.updaterecipes = function (recipe) {
+        var updatedRecipe = recipe;
+        updatedRecipe.submitted.by = 'reciflix_admin';
+        updatedRecipe.state = 123;
+        Vrecipes.updaterecipes.update({
+          vrecipeId: updatedRecipe._id
+        }, updatedRecipe, function (result) {}, function (err) {
+          //console.log('Update recipe error : ' + JSON.stringify(err));
+        });
+      };
+
+      $scope.removeRecipes = function (recipe) {
+        //console.log('inside removeRecipes');
+        var updatedRecipe = recipe;
+        updatedRecipe.submitted.by = 'reciflix_admin';
+        updatedRecipe.state = 333;
+        Vrecipes.updaterecipes.update({
+          vrecipeId: updatedRecipe._id
+        }, updatedRecipe, function (result) {
+          //console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
+        }, function (err) {
+          //console.log('Update recipe error : ' + JSON.stringify(err));
+        });
+      };
+}])
+
+  .controller('RecipesCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "UserSuggestion", "Authentication", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion, Authentication) {
+    $scope.authentication = Authentication;
+    $scope.categoryFun = function () {
+      if ($state.current.name === 'reciflix.recipes') {
+        //console.log('Category function in parent controller');
+        $scope.loading = true;
+        Categories.query({
+          pageId: 999,
+          activeFilter: 1 // get only active cats
+        }).$promise.then(function (res) {
+          $scope.loading = false;
+          $scope.categories = res;
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
+      }
+
+    };
+
+
+    $scope.OpenCreateSuggest = function () {
+      //console.log('Successfullly fetched Open Model');
+
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'modules/categories/views/modals/create-suggestion-modal.html',
+        controller: 'RecipesCtrl',
+        scope: $scope
       });
     };
 
-    $scope.updaterecipes = function (recipe) {
-      var updatedRecipe = recipe;
-      updatedRecipe.submitted.by = 'reciflix_admin';
-      updatedRecipe.state = 123;
-      Vrecipes.updaterecipes.update({
-        vrecipeId: updatedRecipe._id
-      }, updatedRecipe, function (result) {}, function (err) {
-        //console.log('Update recipe error : ' + JSON.stringify(err));
-      });
+    $scope.cancel = function () {
+      $scope.modalInstance.dismiss('cancel');
     };
 
-    $scope.removeRecipes = function (recipe) {
-      //console.log('inside removeRecipes');
-      var updatedRecipe = recipe;
-      updatedRecipe.submitted.by = 'reciflix_admin';
-      updatedRecipe.state = 333;
-      Vrecipes.updaterecipes.update({
-        vrecipeId: updatedRecipe._id
-      }, updatedRecipe, function (result) {
-        //console.log('Remove Recipe details Successfully   ' + JSON.stringify(result));
+
+    $scope.createSuggest = function () {
+      UserSuggestion.save({
+        pageId: 0
+      }, $scope.suggest, function (res) {
+        //$scope.categories.push(res);
+        $scope.modalInstance.close();
+        //console.log('Successfullly Saved suggestion ' + JSON.stringify(res));
       }, function (err) {
-        //console.log('Update recipe error : ' + JSON.stringify(err));
+        console.log('Error occured while creating suggestion, Error details are : ' + JSON.stringify(err));
       });
     };
-}])
 
-.controller('RecipesCtrl', ["$scope", "$localStorage", "$state", "Categories", "$modal", "SingleCat", "NotificationFactory", "UserSuggestion", "Authentication", function ($scope, $localStorage, $state, Categories, $modal, SingleCat, NotificationFactory, UserSuggestion, Authentication) {
-  $scope.authentication = Authentication;
-  $scope.categoryFun = function () {
-    if ($state.current.name === 'reciflix.recipes') {
-      //console.log('Category function in parent controller');
-      $scope.loading = true;
-      Categories.query({
-        pageId: 999,
-        activeFilter: 1 // get only active cats
-      }).$promise.then(function (res) {
-        $scope.loading = false;
-        $scope.categories = res;
-      }).catch(function (err) {
-        //console.log('Error happened : ' + JSON.stringify(err));
-        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
-      });
-    }
-
-  };
+  }])
 
 
-  $scope.OpenCreateSuggest = function () {
-    //console.log('Successfullly fetched Open Model');
+  .controller('SubCategoriesCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "$localStorage", "$state", "Authentication", function ($scope, $stateParams, SubCategories, $modal, $localStorage, $state, Authentication) {
+    $scope.authentication = Authentication;
+    //$scope.catName = $stateParams.catName;
+    $scope.catId = $stateParams.catId;
+    //$scope.SubCatName = $stateParams.SubCatName;
+    $scope.subCatFun = function () {
 
-    $scope.modalInstance = $modal.open({
-      templateUrl: 'modules/categories/views/modals/create-suggestion-modal.html',
-      controller: 'RecipesCtrl',
-      scope: $scope
-    });
-  };
+      if ($stateParams.catId && $state.current.name === 'reciflix.recipes.subcats') {
+        //console.log('$stateParams.catId is called : ' + $stateParams.catId);
+        $scope.loading = true;
+        SubCategories.query({
+          catId: $stateParams.catId,
+          pageId: 999,
+          activeFilter: 1 // get only active sub cats
+        }).$promise.then(function (res) {
+          //console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
+          $scope.loading = false;
+          $scope.CatObjWithSubCats = res;
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
 
-  $scope.cancel = function () {
-    $scope.modalInstance.dismiss('cancel');
-  };
-
-
-  $scope.createSuggest = function () {
-    UserSuggestion.save({
-      pageId: 0
-    }, $scope.suggest, function (res) {
-      //$scope.categories.push(res);
-      $scope.modalInstance.close();
-      //console.log('Successfullly Saved suggestion ' + JSON.stringify(res));
-    }, function (err) {
-      console.log('Error occured while creating suggestion, Error details are : ' + JSON.stringify(err));
-    });
-  };
-
-}])
+      }
 
 
-.controller('SubCategoriesCtrl', ["$scope", "$stateParams", "SubCategories", "$modal", "$localStorage", "$state", "Authentication", function ($scope, $stateParams, SubCategories, $modal, $localStorage, $state, Authentication) {
-  $scope.authentication = Authentication;
-  //$scope.catName = $stateParams.catName;
-  $scope.catId = $stateParams.catId;
-  //$scope.SubCatName = $stateParams.SubCatName;
-  $scope.subCatFun = function () {
+    };
+  }])
 
-    if ($stateParams.catId && $state.current.name === 'reciflix.recipes.subcats') {
-      //console.log('$stateParams.catId is called : ' + $stateParams.catId);
-      $scope.loading = true;
-      SubCategories.query({
-        catId: $stateParams.catId,
-        pageId: 999,
-        activeFilter: 1 // get only active sub cats
-      }).$promise.then(function (res) {
-        //console.log('Successfullly fetched sub categories11111 :' + JSON.stringify(res))
-        $scope.loading = false;
-        $scope.CatObjWithSubCats = res;
-      }).catch(function (err) {
-        //console.log('Error happened : ' + JSON.stringify(err));
-        alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
-      });
-
-    }
-
-
-  };
-}])
-
-.controller('SubCatRecipesCtrl', ["$scope", "$stateParams", "SubCategoryRecipes", "$rootScope", "Recipe", "$sce", "CategoryRecipes", "$state", "Authentication", function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state, Authentication) {
+  .controller('SubCatRecipesCtrl', ["$scope", "$stateParams", "SubCategoryRecipes", "$rootScope", "Recipe", "$sce", "CategoryRecipes", "$state", "Authentication", "FilterBySubCats", "FilterByCatRecipes", function ($scope, $stateParams, SubCategoryRecipes, $rootScope, Recipe, $sce, CategoryRecipes, $state, Authentication, FilterBySubCats, FilterByCatRecipes) {
     $scope.authentication = Authentication;
     $scope.catId = $stateParams.catId;
     $scope.subCatId = $stateParams.subCatId;
     $scope.CatIdForRecipes = $stateParams.CatIdForRecipes;
+
+
+    $scope.filterByLatestSubCats = {}
+    $scope.filterByLatestSubCats.lists1 = [{
+        'name': 'Sort by Latest',
+        'value': 'published'
+        },
+      {
+        'name': 'Sort by Popular',
+        'value': 'none'
+        }]
+    $scope.filterByLatestSubCats.List1 = $scope.filterByLatestSubCats.lists1[1].value;
+
 
     $scope.socialUrl = function (recipesObj) {
       if ($stateParams.subCatId) {
@@ -2427,6 +2443,64 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
       } else if ($stateParams.CatIdForRecipes) {
         return 'http://www.reciflix.com/#!/category/' + $stateParams.CatIdForRecipes + '/recipes/' + recipesObj.recipeId;
       }
+    }
+
+    var pageNumForFilterSubCats = 0;
+    var pageNumForFilterCat = 0;
+
+    $scope.recipesFilterByLatest = function (changeValue) {
+      if ($stateParams.subCatId) {
+        console.log('recipesUnderSubCat is called : ' + changeValue)
+        if (changeValue == "published") {
+          $scope.showFilterLoadMoreBtn = true;
+          // console.log('recipesUnderSubCat is called : ' + changeValue)
+
+          // console.log('$stateParams.subCatId is called : ' + $stateParams.subCatId)
+          FilterBySubCats.query({
+            subCatId: $stateParams.subCatId,
+            pageId: pageNumForFilterSubCats
+          }).$promise.then(function (res) {
+            // console.log('Successfullly fetched sub category Recipes :' + JSON.stringify(res))
+            $scope.loading = false;
+            pageNumForFilterSubCats++;
+            /*if (pageNum === 1)
+              $scope.totalItems = res.recipeCount;*/
+            res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRF/" + res.imageName : "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName;
+            $scope.subCatRecipesObj = res;
+          }).catch(function (err) {
+            //console.log('Error happened : ' + JSON.stringify(err));
+            alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+          });
+
+        } else if (changeValue == "none") {
+          $scope.recipesUnderSubCat();
+        }
+
+      } else if ($stateParams.CatIdForRecipes) {
+        // console.log('recipesUnderSubCat is called : ' + changeValue)
+        // console.log('$stateParams.CatIdForRecipes is called : ' + $stateParams.CatIdForRecipes)
+        if (changeValue == "published") {
+          $scope.showFilterLoadMoreBtn = true;
+          $scope.loading = true;
+          FilterByCatRecipes.query({
+            subCatId: $stateParams.CatIdForRecipes,
+            pageId: pageNumForFilterCat
+          }).$promise.then(function (res) {
+            //console.log('Successfullly fetched category Recipes :' + JSON.stringify(res))
+            pageNumForFilterCat++;
+            $scope.loading = false;
+            res.catImageUrl = res.subCatsExist ? "https://s3.amazonaws.com/NewRFSubCats/" + res.imageName : "https://s3.amazonaws.com/NewRF/" + res.imageName;
+            $scope.subCatRecipesObj = res;
+          }).catch(function (err) {
+            //console.log('Error happened : ' + JSON.stringify(err));
+            alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+          });
+        } else if (changeValue == "none") {
+          $scope.recipesUnderSubCat();
+        }
+
+      }
+
     }
 
     /*  $scope.vm = {
@@ -2441,6 +2515,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
       $scope.recipesUnderSubCat = function () {
         //console.log('recipesUnderSubCat is called ')
+        $scope.showFilterLoadMoreBtn = false;
         $scope.loading = true;
         SubCategoryRecipes.query({
           subCatId: $stateParams.subCatId,
@@ -2468,6 +2543,7 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
     if ($stateParams.CatIdForRecipes) {
       $scope.recipesUnderSubCat = function () {
+        $scope.showFilterLoadMoreBtn = false;
         $scope.loading = true;
         CategoryRecipes.query({
           subCatId: $stateParams.CatIdForRecipes,
@@ -2558,7 +2634,60 @@ angular.module('recipes').controller('RecipesController', ['$scope', '$statePara
 
     }
 
+    $scope.LoadMoreRecipesFromFilterBased = function () {
 
+      console.log("@@#### FILTER FROM LOAD: ")
+
+      $scope.spinnerLoading = true;
+
+      //console.log('LoadMoreRecipes is called : ' );
+      var onScroll = {};
+
+
+      if ($stateParams.subCatId) {
+        FilterBySubCats.query({
+          subCatId: $stateParams.subCatId,
+          pageId: pageNumForFilterSubCats
+        }).$promise.then(function (res) {
+          // console.log('Successfullly fetched sub category Recipes on loadMore :' + JSON.stringify(res))
+          $scope.spinnerLoading = false;
+          pageNumForFilterSubCats++;
+          onScroll = res.recipes;
+          if (res.recipes.length == 0) {
+            $scope.noMoreRecipesAvailable = true;
+          }
+          var oldRecipes = $scope.subCatRecipesObj.recipes;
+          $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
+      }
+
+
+
+      if ($stateParams.CatIdForRecipes) {
+        FilterByCatRecipes.query({
+          subCatId: $stateParams.CatIdForRecipes,
+          pageId: pageNumForFilterCat
+        }).$promise.then(function (res) {
+          $scope.spinnerLoading = false;
+          pageNumForFilterCat++;
+          onScroll = res.recipes;
+          if (res.recipes.length == 0) {
+            $scope.noMoreRecipesAvailable = true;
+            console.log('Recipes Fully fetched there is no more recipes')
+          }
+          var oldRecipes = $scope.subCatRecipesObj.recipes;
+          $scope.subCatRecipesObj.recipes = oldRecipes.concat(onScroll);
+        }).catch(function (err) {
+          //console.log('Error happened : ' + JSON.stringify(err));
+          alert('Looks like there is an issue with your connectivity, Please check your network connection or Please try after sometime!');
+        });
+      }
+
+
+    }
 
 
 
@@ -2894,185 +3023,210 @@ angular.module('recipes')
 //Articles service used for communicating with the articles REST endpoints
 angular.module('recipes')
 
-//.constant('API_HOST', 'http://192.168.1.248:3000')
-//.constant('API_HOST', 'http://localhost:3000')
-//.constant('API_HOST', 'http://www.reciflix.com')
+  //.constant('API_HOST', 'http://192.168.1.248:3000')
+  //.constant('API_HOST', 'http://localhost:3000')
+  //.constant('API_HOST', 'http://www.reciflix.com')
 
 
-.factory('Vrecipes', ['$resource',
+  .factory('Vrecipes', ['$resource',
  function ($resource) {
 
-    return {
+      return {
 
-      getrecipes: $resource('/VRecipesByCategoriesForAdmin/:CategoryName', {
-        CategoryName: '@CategoryName'
-      }, {
-        'query': {
-          method: 'GET',
-          isArray: true
-        }
-      }),
-
-
-      updaterecipes: $resource('/vrecipes/:vrecipeId', {
-        vrecipeId: '@vrecipeId'
-      }, {
-        'update': {
-          method: 'PUT'
-        }
-      }),
+        getrecipes: $resource('/VRecipesByCategoriesForAdmin/:CategoryName', {
+          CategoryName: '@CategoryName'
+        }, {
+          'query': {
+            method: 'GET',
+            isArray: true
+          }
+        }),
 
 
-      getcategory: $resource('/categories/admincats', {}, {
-        'query': {
-          method: 'GET',
-          isArray: true
-        }
-      }),
+        updaterecipes: $resource('/vrecipes/:vrecipeId', {
+          vrecipeId: '@vrecipeId'
+        }, {
+          'update': {
+            method: 'PUT'
+          }
+        }),
 
-      savecategory: $resource('/newcategories', {}, {
-        'save': {
-          method: 'POST'
-        },
-      }),
 
-    };
+        getcategory: $resource('/categories/admincats', {}, {
+          'query': {
+            method: 'GET',
+            isArray: true
+          }
+        }),
+
+        savecategory: $resource('/newcategories', {}, {
+          'save': {
+            method: 'POST'
+          },
+        }),
+
+      };
 
 
  }
 ])
 
-.factory('CategoryRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/newRecipesForCatId/:subCatId/:pageId', {
-    subCatId: '@subCatId',
-    pageId: '@pageId'
-  }, {
-    'query': {
-      method: 'GET',
-      //isArray: true,
-      timeout: 20000
-    }
-  });
-}])
+  .factory('CategoryRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/newRecipesForCatId/:subCatId/:pageId', {
+      subCatId: '@subCatId',
+      pageId: '@pageId'
+    }, {
+      'query': {
+        method: 'GET',
+        //isArray: true,
+        timeout: 20000
+      }
+    });
+  }])
+
+  .factory('FilterByCatRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/newRecipesForFilterCatId/:subCatId/:pageId', {
+      subCatId: '@subCatId',
+      pageId: '@pageId'
+    }, {
+      'query': {
+        method: 'GET',
+        //isArray: true,
+        timeout: 20000
+      }
+    });
+  }])
+
+  .factory('SubCategoryRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/newRecipesForSubCatId/:subCatId/:pageId', {
+      subCatId: '@subCatId',
+      pageId: '@pageId'
+    }, {
+      'query': {
+        method: 'GET',
+        //isArray: true,
+        timeout: 20000
+      }
+    });
+  }])
+
+  .factory('FilterBySubCats', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/newRecipesForFilterSubCatId/:subCatId/:pageId', {
+      subCatId: '@subCatId',
+      pageId: '@pageId'
+    }, {
+      'query': {
+        method: 'GET',
+        //isArray: true,
+        timeout: 20000
+      }
+    });
+  }])
 
 
-.factory('SubCategoryRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/newRecipesForSubCatId/:subCatId/:pageId', {
-    subCatId: '@subCatId',
-    pageId: '@pageId'
-  }, {
-    'query': {
-      method: 'GET',
-      //isArray: true,
-      timeout: 20000
-    }
-  });
-}])
 
-
-
-.factory('SearchedRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/searchedVRecipesByIndexNew/:searchQuery/:pageId', {
-    searchQuery: '@searchQuery',
-    pageId: '@pageId'
-  }, {
-    'query': {
-      method: 'GET',
-      timeout: 20000
+  .factory('SearchedRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/searchedVRecipesByIndexNew/:searchQuery/:pageId', {
+      searchQuery: '@searchQuery',
+      pageId: '@pageId'
+    }, {
+      'query': {
+        method: 'GET',
+        timeout: 20000
         //isArray: true
-    }
-  });
-}])
+      }
+    });
+  }])
 
 
-.factory('Recipe', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/nVRecipes/:vrecipeId', {
-    vrecipeId: '@vrecipeId'
-  }, {
-    'get': {
-      method: 'GET',
-      timeout: 20000
-    },
-    'save': {
-      method: 'POST'
-    },
-    'update': {
-      method: 'PUT'
-    },
-    'query': {
-      method: 'GET',
-      isArray: true
-    },
-    'remove': {
-      method: 'DELETE'
-    },
-    'delete': {
-      method: 'DELETE'
-    }
-  });
-}])
-
-
-
-.factory('RecipesFavCount', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/recipesFavCount/:recipeId', {
-    recipeId: '@_id'
-  }, {
-    'update': {
-      method: 'PUT'
-    }
-  });
-}])
-
-
-.factory('UserFavorites', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/userFavorites/:userId', {
-    userId: '@_id'
-  }, {
-    'update': {
-      method: 'PUT'
-    }
-  });
-}])
-
-.factory('MyFavRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/WebFavRecipes/:uId/:pageId', {
-    uId: '@uId',
-    pageId: '@pageId'
-  }, {
-    'query': {
-      method: 'GET'
-    }
-  });
-}])
+  .factory('Recipe', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/nVRecipes/:vrecipeId', {
+      vrecipeId: '@vrecipeId'
+    }, {
+      'get': {
+        method: 'GET',
+        timeout: 20000
+      },
+      'save': {
+        method: 'POST'
+      },
+      'update': {
+        method: 'PUT'
+      },
+      'query': {
+        method: 'GET',
+        isArray: true
+      },
+      'remove': {
+        method: 'DELETE'
+      },
+      'delete': {
+        method: 'DELETE'
+      }
+    });
+  }])
 
 
 
-.factory('UserSuggestion', ["$resource", "ConfigService", function ($resource, ConfigService) {
-  return $resource(ConfigService.API_URL + '/users/suggestions/:pageId', {
-    pageId: '@pageId'
-  }, {
-    'get': {
-      method: 'GET'
-    },
-    'save': {
-      method: 'POST'
-    },
-    'update': {
-      method: 'PUT'
-    },
-    'query': {
-      method: 'GET',
-      isArray: true
-    },
-    'remove': {
-      method: 'DELETE'
-    },
-    'delete': {
-      method: 'DELETE'
-    }
-  });
-}]);
+  .factory('RecipesFavCount', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/recipesFavCount/:recipeId', {
+      recipeId: '@_id'
+    }, {
+      'update': {
+        method: 'PUT'
+      }
+    });
+  }])
+
+
+  .factory('UserFavorites', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/userFavorites/:userId', {
+      userId: '@_id'
+    }, {
+      'update': {
+        method: 'PUT'
+      }
+    });
+  }])
+
+  .factory('MyFavRecipes', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/WebFavRecipes/:uId/:pageId', {
+      uId: '@uId',
+      pageId: '@pageId'
+    }, {
+      'query': {
+        method: 'GET'
+      }
+    });
+  }])
+
+
+
+  .factory('UserSuggestion', ["$resource", "ConfigService", function ($resource, ConfigService) {
+    return $resource(ConfigService.API_URL + '/users/suggestions/:pageId', {
+      pageId: '@pageId'
+    }, {
+      'get': {
+        method: 'GET'
+      },
+      'save': {
+        method: 'POST'
+      },
+      'update': {
+        method: 'PUT'
+      },
+      'query': {
+        method: 'GET',
+        isArray: true
+      },
+      'remove': {
+        method: 'DELETE'
+      },
+      'delete': {
+        method: 'DELETE'
+      }
+    });
+  }]);
 
 'use strict';
 
