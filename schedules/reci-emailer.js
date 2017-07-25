@@ -31,7 +31,7 @@ exports.sendMail = function (mailData) {
       subTotalPrice: mailData.subTotalPrice,
       totalAmt: mailData.totalAmt,
       userDetails: mailData.user
-    },
+    }, 
     function (err, results) {
       if (err) {
         console.log('Failure to send recovery email, err is: ' + err);

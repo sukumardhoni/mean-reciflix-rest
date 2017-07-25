@@ -1931,7 +1931,6 @@ angular.module('core').service('Menus', [
       } else {
         return this.isPublic;
       }
-
       return false;
     };
 
