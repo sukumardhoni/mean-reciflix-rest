@@ -1947,7 +1947,7 @@ angular.module('core').service('Menus', [
       }
 
       return false;
-    };
+    }; 
 
     // Get the menu object by menu id
     this.getMenu = function (menuId) {
