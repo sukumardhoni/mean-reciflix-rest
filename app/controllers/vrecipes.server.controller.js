@@ -13,8 +13,8 @@ var _ = require('lodash'),
 	agenda = require('../../schedules/job-schedule.js')(config.db),
 	sampleJSON = require('../assets/vidsample.json'),
 	Subscription = mongoose.model('NotificationSubscriptions'),
-	_this = this;
-/*	webpush = require('web-push');*/
+	_this = this,
+	webpush = require('web-push');
 
 
 /**
