@@ -1653,7 +1653,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
         var applicationServerPublicKey = 'BIA7gT2hX51RX7-ZWGBHsfd0egwvGTQP2Etd_s_a4GXdxRughLZcNcqoa3Q5j_cR73GrI1gDznk0cOqh6JjDUZU';
 
         navigator.serviceWorker.register('sw.js').then(function (reg) {
-            console.log('Service Worker is registered', reg);
+            console.log('Service Worker is registered', reg); 
 
             navigator.serviceWorker.ready.then(function (register) {
               register.pushManager.getSubscription().then(function (userSubscription) {
