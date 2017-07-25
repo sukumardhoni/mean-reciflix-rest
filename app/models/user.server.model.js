@@ -100,7 +100,7 @@ var UserSchema = new Schema({
   token: {
     type: String
   }
-});
+}); 
 
 /**
  * Hook a pre save method to hash the password
