@@ -33,7 +33,7 @@ exports.create = function (req, res) {
 			_this.deleteExpressRedis();
 			res.json(vrecipe);
 		}
-	});
+	}); 
 };
 
 
