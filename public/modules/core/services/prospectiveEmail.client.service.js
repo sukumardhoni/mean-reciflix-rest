@@ -43,7 +43,17 @@ angular.module('core').factory('ProspectiveEmail', ['$resource',
 
  .factory('SendAwsMsg', ['$resource',
 	function ($resource) {
-      return $resource('api/aws-send-message-to-all-devices', {}, {
+      return $resource('/api/aws-send-message-to-all-devices-reiflix', {}, {
+        send: {
+          method: 'POST'
+        }
+      });
+	}
+])
+
+.factory('sendSingleTopicService', ['$resource',
+	function ($resource) {
+      return $resource('/api/aws-send-message-to-one-device', {}, {
         send: {
           method: 'POST'
         }

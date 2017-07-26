@@ -64,19 +64,27 @@ module.exports = function (app) {
 
 	app.route('/api/aws-register-deviceToken')
 		.post(StripePayments.awsRegistrationToken);
-	
+
 	app.route('/api/reciflix-aws-notifications-subscribe')
 		.post(StripePayments.reciflixAwsNotificationsSubscribe);
-	
+
 	app.route('/api/reciflix-aws-notifications-unsubscribe')
 		.post(StripePayments.reciflixAwsNotificationsUnSubscribe);
-	
+
 	app.route('/api/aws-send-message')
-		.post(StripePayments.awsSendMessage);	
-	
+		.post(StripePayments.awsSendMessage);
+
 	app.route('/api/aws-send-message-to-all-devices')
 		.post(StripePayments.sendToAllDevices);
 
+	app.route('/api/aws-send-message-to-all-devices-reiflix')
+		.post(StripePayments.sendToAllDevicesReciflix);
+
+	app.route('/aws-get-all-topics')
+		.post(StripePayments.getAllTopics);
+
+	app.route('/api/aws-send-message-to-one-device')
+		.post(StripePayments.sendToEachDevices);
 
 
 

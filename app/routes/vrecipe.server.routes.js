@@ -29,7 +29,7 @@ module.exports = function (app) {
     .delete(vrecipes.deleteRecipe);
 
 
-  app.route('/nVRecipes')
+  app.route('api/nVRecipes')
     .get(vrecipes.list)
     //		.post(users.requiresLogin, articles.create);
     .post(vrecipes.create);
