@@ -1248,8 +1248,8 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 			sandbox: true //(This is required for targetting (iOS) APNS_SANDBOX only)
 		});
 	}
-	console.log('reciflixAwsNotificationsSubscribe is called' + JSON.stringify(req.body));
-	console.log('\nRegistering user with deviceToken: ' + deviceToken);
+	// console.log('reciflixAwsNotificationsSubscribe is called' + JSON.stringify(req.body));
+	// console.log('\nRegistering user with deviceToken: ' + deviceToken);
 	// Add the user to SNS
 	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
 		// SNS returned an error
@@ -1259,7 +1259,7 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 				status: 'not ok'
 			});
 		}
-		console.log('endpointArn is : ' + endpointArn);
+		//console.log('endpointArn is : ' + endpointArn);
 		var subscribeArnArray = [];
 		var totalArrayCount = 0;
 		var formedObjectCount = 0;
@@ -1270,8 +1270,15 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 			//topicName = topicName.split(' ').join('_')
 			var count = i;
 			totalArrayCount = totalArrayCount + 1;
-			console.log("$$$$ totalArrayCount OBJ CONT : " + totalArrayCount)
-			AWS_SNS_App.createTopic(topicName, function (err, data) {
+			//console.log("$$$$ totalArrayCount OBJ CONT : " + totalArrayCount)
+			//var resStr = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
+			console.log('TopicName '+topicName);
+
+			var resTopicName =  topicName.replace(/[^A-Z0-9]/ig, "_");
+			resTopicName = 'RF_' + resTopicName;
+			console.log('resTopicName '+resTopicName);
+			
+			 AWS_SNS_App.createTopic(resTopicName, function (err, data) {
 				if (err) {
 					if (count == req.body.topicArr.length) {
 						console.log(err, err.stack); // an error occurred
@@ -1291,13 +1298,17 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 					})
 
 				}
-			})
+			}) 
 
 		}
 
 		function createEndPointFun(topicEndArn, AWS_SNS_App, endpointArn) {
 			var resTopicName = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
-			AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
+			/* var resTopicName =  resStr.replace(/[^A-Z0-9]/ig, "_");
+			resTopicName = 'RF_' + resTopicName;
+			console.log('resTopicName '+resTopicName); */
+
+			 AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
 				if (err) {
 					console.log(' an error occurred, ', err); // an error occurred
 				} else {
@@ -1315,7 +1326,7 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 						res.send(subscribeArnArray);
 					}
 				}
-			})
+			}) 
 		}
 
 
@@ -1415,7 +1426,7 @@ exports.reciflixAwsNotificationsUnSubscribe = function (req, res) {
 		var subscribeTopicArn = req.body.topicArr[i].subscribeTopicArn;
 		//var subscribeTopicArn = req.body.topicArr.subscribeTopicArn;
 		console.log('count ' + i)
-		var count = i;
+		var count = req.body.topicArr.length;
 		/*AWS_SNS_App.unsubscribe(subscribeTopicArn, function (err, result) {
 			//console.log('subscribe topic : ' + JSON.stringify(result));
 			if (count == req.body.topicArr.length) {
@@ -1433,6 +1444,7 @@ exports.reciflixAwsNotificationsUnSubscribe = function (req, res) {
 				}
 				console.log(err); // an error occurred
 			} else {
+
 				resultantCount = resultantCount + 1;
 				console.log('successful response' + data + 'count ' + count + 'topicArr len ' + req.body.topicArr.length); // successful response
 				if (count == resultantCount) {

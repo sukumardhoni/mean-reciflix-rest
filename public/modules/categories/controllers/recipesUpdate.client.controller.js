@@ -160,21 +160,23 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 
 
 	$scope.recipe = {};
+	$scope.savedVideoId = [];
 	$scope.addRecipe = function () {
 		$scope.showSpinner = true;
-		console.log('viedeo id : ' + JSON.stringify($scope.recipe.recipeVedioIds));
+		//console.log('fectch all cats '+JSON.stringify(this.cats))
+		// console.log('viedeo id : ' + JSON.stringify($scope.recipe.recipeVedioIds));
 		 //var videoString = $scope.recipe.recipeVedioIds;
 		var regEx = /([^,]+)/g;
 		var result = $scope.recipe.recipeVedioIds.match(regEx);
 		console.log('result : ' + JSON.stringify(result));
 		for (var i = 0; i < result.length; i++) {
 			$scope.youtubeApi(result[i])
-			console.log('result Single obj: ' + JSON.stringify(result[i]));
+		//	console.log('result Single obj: ' + JSON.stringify(result[i]));
 		}
 
 		$scope.showSpinner = false;
 	
-		$scope.recipe.recipeVedioIds = "";
+		$scope.recipe.recipeVedioIds = ""; 
 	}
 	$scope.errVideos = []
 	$scope.youtubeApi = function (videoId) {
@@ -184,7 +186,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 			var apiKey = "AIzaSyA4LdL9Gbg1ww3vtOm-_nkofFXE1uxZpXk";
 			var gUrl = "https://www.googleapis.com/youtube/v3/videos?id=" + videoId + "&key=" + apiKey + "&part=snippet,statistics,contentDetails";
 			$.get(gUrl, function (data) {
-					console.log('sucess call.' + JSON.stringify(data.items));
+					//console.log('sucess call.' + JSON.stringify(data.items));
 					if (data.items.length === 0) {
 						console.log('item  empty array')
 						$scope.errVideos.push(videoId)
@@ -194,7 +196,7 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 						});
 					} else {
 						$scope.formObject(data);
-						console.log('item non  empty array')
+						//console.log('item non  empty array')
 					}
 				})
 				.error(function (data, status, headers, config) {
@@ -205,11 +207,12 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 		}
 	}
 
+$scope.youtubeArr = [];
 
 	$scope.formObject = function (data) {
-		console.log('catSelected' + JSON.stringify($scope.catSelected))
+		/* console.log('catSelected' + JSON.stringify($scope.catSelected))
 		console.log('subCatSelected' + JSON.stringify($scope.subCatSelected))
-		console.log('local user ' + JSON.stringify($localStorage.user))
+		console.log('local user ' + JSON.stringify($localStorage.user)) */
 		$scope.mvObjt = {};
 		$scope.mvObjt.submitted = {};
 		$scope.mvObjt.subcats = [];
@@ -262,18 +265,29 @@ angular.module('categories').controller('RecipesUpdateCtrl', function ($scope, $
 			sd: sddfltImg,
 			maxres: maxresdfltImg
 		};
-		console.log('form object data ' + JSON.stringify($scope.mvObjt))
+		//console.log('form object data ' + JSON.stringify($scope.mvObjt))
 
-
+		//push every youtube video obj in to an array
+		$scope.youtubeArr.push($scope.mvObjt)
+		console.log('youtube array'+JSON.stringify($scope.youtubeArr.length))
 		//save recipes to server 
-		RecipesService.save($scope.mvObjt, function (res) {
-			NotificationFactory.success('New recipes Added sucessfully');
+		/* RecipesService.save($scope.mvObjt, function (res) {
+			
 			console.log('Successfully updated Recipe' + JSON.stringify(res));
+			if(res.msg){
+				$scope.savedVideoId.push(res.alreadySavedVideoId)
+				console.log('saved video Id '+JSON.stringify($scope.savedVideoId))
+				$scope.error = res.msg
+			}else{
+				console.log('New video saved')
+			NotificationFactory.success('New recipes Added sucessfully');
+			}
 		}, function (errorResponse) {
 			console.log('errorResponse ' + JSON.stringify(errorResponse));
 			$scope.error = errorResponse.data.message;
-		});
+		}); */
 	}
+	
 
 	function convert_time(duration) {
 		var a = duration.match(/\d+/g);

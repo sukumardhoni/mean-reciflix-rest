@@ -58,6 +58,14 @@
 								</li>
 							</div>
 						</div>
+						<div class="form-group" ng-show="error">
+							<div class="alert alert-danger">
+								<b>{{error}}</b> <br> 
+								<li ng-repeat="Id in savedVideoId">
+									<strong >{{Id}}</strong>
+								</li>
+							</div>
+						</div>
 					</div>
 
 				</div>
