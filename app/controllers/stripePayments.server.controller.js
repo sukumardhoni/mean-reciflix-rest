@@ -1274,7 +1274,7 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 			//var resStr = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
 			console.log('TopicName '+topicName);
 
-			var resTopicName =  topicName.replace(/[^A-Z0-9]/ig, "_");
+			var resTopicName =  topicName.replace(/'/ig, "_");
 			resTopicName = 'RF_' + resTopicName;
 			console.log('resTopicName '+resTopicName);
 			
@@ -1307,12 +1307,13 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 			/* var resTopicName =  resStr.replace(/[^A-Z0-9]/ig, "_");
 			resTopicName = 'RF_' + resTopicName;
 			console.log('resTopicName '+resTopicName); */
-
+			var resDisplayName = resTopicName.substring(resTopicName.lastIndexOf("RF_") + 3);
 			 AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
 				if (err) {
 					console.log(' an error occurred, ', err); // an error occurred
 				} else {
 					var Obj = {
+						displayName :resDisplayName,
 						topicName: resTopicName,
 						subscribeTopicArn: result
 					}
