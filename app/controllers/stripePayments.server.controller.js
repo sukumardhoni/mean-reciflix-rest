@@ -1140,201 +1140,265 @@ exports.awsSendMessage = function (msgObj) {
 	});
 }
 
-/*exports.reciflixAwsNotificationsSubscribe = function (req, res) {
-	var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
-		SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
-		ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
-		IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
-
-	var AWS_SNS_App;
-
-	var platform = req.body.platform;
-	//var topicName = req.body.topicName;
-	var deviceToken = req.body.deviceToken;
-
-	if (platform === 'android' || platform === 'Android') {
-		AWS_SNS_App = new SNS({
-			platform: 'android',
-			region: 'us-west-2',
-			apiVersion: '2010-03-31',
-			accessKeyId: SNS_KEY_ID,
-			secretAccessKey: SNS_ACCESS_KEY,
-			platformApplicationArn: ANDROID_ARN
-		});
-	} else if (platform === 'ios') {
-		AWS_SNS_App = new SNS({
-			platform: 'ios',
-			region: 'us-west-2',
-			apiVersion: '2010-03-31',
-			accessKeyId: SNS_KEY_ID,
-			secretAccessKey: SNS_ACCESS_KEY,
-			platformApplicationArn: IOS_ARN,
-			sandbox: true //(This is required for targetting (iOS) APNS_SANDBOX only) 
-		});
-	}
-	console.log('reciflixAwsNotificationsSubscribe is called');
-	console.log('\nRegistering user with deviceToken: ' + deviceToken);
-	// Add the user to SNS
-	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
-		// SNS returned an error
-		if (err) {
-			console.log(err);
-			return res.status(500).json({
-				status: 'not ok'
-			});
-		}
-		console.log('endpointArn is : ' + endpointArn);
-		var subscribeArnArray = [];
-		for (var i = 0; i < req.body.topicArr.length; i++) {
-			var topicName = req.body.topicArr[i];
-
-			AWS_SNS_App.createTopic(topicName, function (err, data) {
-				if (err) {
-					if (count == req.body.topicArr.length) {
-						console.log(err, err.stack); // an error occurred
-						res.send(err);
-					}
-				} else {
-					console.log(data); // successful response
-					var topicEndArn = data;
-					var resTopicName = topicEndArn.substring(data.lastIndexOf(":") + 1);
-					AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
-						console.log('subscribe topic : ' + JSON.stringify(result));
-						var resObj = {
-							topicName: resTopicName,
-							subscribeTopicArn: result
-						}
-						subscribeArnArray.push(resObj);
-						if (subscribeArnArray.length === req.body.topicArr.length) {
-							res.send(subscribeArnArray);
-						}
-					})
-				}
-			})
-		}
-	});
-};*/
-
 exports.reciflixAwsNotificationsSubscribe = function (req, res) {
+  var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
+    SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
+    ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
+    IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
 
-	var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
-		SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
-		ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
-		IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
+  var AWS_SNS_App;
 
-	var AWS_SNS_App;
+  var platform = req.body.platform;
+  var deviceToken = req.body.deviceToken;
 
-	var platform = req.body.platform;
-	//var topicName = req.body.topicName;
-	var deviceToken = req.body.deviceToken;
+  if (platform === 'android' || platform === 'Android') {
+    AWS_SNS_App = new SNS({
+      platform: 'android',
+      region: 'us-west-2',
+      apiVersion: '2010-03-31',
+      accessKeyId: SNS_KEY_ID,
+      secretAccessKey: SNS_ACCESS_KEY,
+      platformApplicationArn: ANDROID_ARN
+    });
+  } else if (platform === 'ios') {
+    AWS_SNS_App = new SNS({
+      platform: 'ios',
+      region: 'us-west-2',
+      apiVersion: '2010-03-31',
+      accessKeyId: SNS_KEY_ID,
+      secretAccessKey: SNS_ACCESS_KEY,
+      platformApplicationArn: IOS_ARN,
+      sandbox: true //(This is required for targetting (iOS) APNS_SANDBOX only)
+    });
+  }
+  console.log('exampleTest is called' + JSON.stringify(req.body));
+  AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'not ok'
+      });
+    } else {
+      console.log('@@@@@@ endpointArn : ' + endpointArn);
+      var subscribeArnArray = [];
+      var topicArrayCount = 0;
+      var forloopcreatetopicCount = 0;
+      var forloopForcreatEndPointCount = 0;
+      var subscribeArnArrCount = 0;
+      var createTipicArr = [];
 
-	if (platform === 'android' || platform === 'Android') {
-		AWS_SNS_App = new SNS({
-			platform: 'android',
-			region: 'us-west-2',
-			apiVersion: '2010-03-31',
-			accessKeyId: SNS_KEY_ID,
-			secretAccessKey: SNS_ACCESS_KEY,
-			platformApplicationArn: ANDROID_ARN
-		});
-	} else if (platform === 'ios') {
-		AWS_SNS_App = new SNS({
-			platform: 'ios',
-			region: 'us-west-2',
-			apiVersion: '2010-03-31',
-			accessKeyId: SNS_KEY_ID,
-			secretAccessKey: SNS_ACCESS_KEY,
-			platformApplicationArn: IOS_ARN,
-			sandbox: true //(This is required for targetting (iOS) APNS_SANDBOX only)
-		});
-	}
-	// console.log('reciflixAwsNotificationsSubscribe is called' + JSON.stringify(req.body));
-	// console.log('\nRegistering user with deviceToken: ' + deviceToken);
-	// Add the user to SNS
-	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
-		// SNS returned an error
-		if (err) {
-			console.log(err);
-			return res.status(500).json({
-				status: 'not ok'
-			});
-		}
-		//console.log('endpointArn is : ' + endpointArn);
-		var subscribeArnArray = [];
-		var totalArrayCount = 0;
-		var formedObjectCount = 0;
-		var errorCountInTopicArray = 0;
-		for (var i = 0; i < req.body.topicArr.length; i++) {
-			var promiseChain = Promise.resolve();
-			var topicName = req.body.topicArr[i].name;
-			//topicName = topicName.split(' ').join('_')
-			var count = i;
-			totalArrayCount = totalArrayCount + 1;
-			//console.log("$$$$ totalArrayCount OBJ CONT : " + totalArrayCount)
-			//var resStr = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
-			console.log('TopicName '+topicName);
+      for (var i = 0; i < req.body.topicArr.length; i++) {
+        var topicName = req.body.topicArr[i].name;
+        var count = i;
+        forloopcreatetopicCount = forloopcreatetopicCount + 1;
+        console.log("$$ forloopcreatetopicCount COunt :", forloopcreatetopicCount);
+        console.log('TopicName ' + topicName);
+        var resTopicName = topicName.replace(/[^A-Z0-9]+/ig, "_");
+        resTopicName = 'RF_' + resTopicName;
+        console.log('resTopicName ' + resTopicName);
+        console.log('DispName ' + req.body.topicArr[i].dispName);
+        createTopicFun(req.body.topicArr[i].dispName, resTopicName, AWS_SNS_App, endpointArn)
+      }
 
-			var resTopicName =  topicName.replace(/[^A-Z0-9]+/ig, "_");
-			resTopicName = 'RF_' + resTopicName;
-			console.log('resTopicName '+resTopicName);
+      /*---------------------- FUNCTIONS -----------------------------------------------*/
+      function createTopicFun(dispName, resTopicName, AWS_SNS_App, endpointArn) {
+        console.log("### IN Function CREATE Topic NAme : " + JSON.stringify(resTopicName))
+        console.log("### IN Function CREATE Topic Display Name : " + JSON.stringify(dispName))
+        AWS_SNS_App.createTopic(resTopicName, function (err, data) {
+          if (err) {
+            console.log("$$ ERORR in create topic :", err);
+            var obj = {
+              IncreateTopicArn: "error in create topic",
+              name: dispName
+            }
+            createTipicArr.push(obj)
+            topicArrayCount = topicArrayCount + 1;
+            console.log("$$ ERORR in create topic COunt :", topicArrayCount);
+          } else {
+            console.log("$$ SUccess in create topic :" + JSON.stringify(data));
+            var obj = {
+              IncreateTopicArn: data,
+              name: dispName
+            }
+            createTipicArr.push(obj)
+            topicArrayCount = topicArrayCount + 1;
+            console.log("$$ SUCCESS in create topic COunt :", topicArrayCount);
+          }
+          if (forloopcreatetopicCount == topicArrayCount) {
+            console.log("FINAL RESULT : " + JSON.stringify(createTipicArr))
+
+            for (var t = 0; t < createTipicArr.length; t++) {
+              forloopForcreatEndPointCount = forloopForcreatEndPointCount + 1;
+              console.log("@@## forloopForcreatEndPointCount COUNT :" + JSON.stringify(forloopForcreatEndPointCount))
+              if (createTipicArr[t].IncreateTopicArn != "error in create topic") {
+                createEndPointFun(createTipicArr[t].IncreateTopicArn, createTipicArr[t].name, AWS_SNS_App, endpointArn)
+              } else {
+                return res.status(500).json({
+                  status: 'not ok'
+                });
+              }
+
+            }
+          }
+        })
+      }
+
+      function createEndPointFun(fullTopicArn, fullTopicArnDispName, AWS_SNS_App, endpointArn) {
+        console.log("ARRAY OF TOPICS WITH fullTopicArn  :" + JSON.stringify(fullTopicArn))
+        console.log("ARRAY OF TOPICS WITH fullTopicArnDispName  :" + JSON.stringify(fullTopicArnDispName))
+        console.log("## endpointArn  :" + JSON.stringify(endpointArn))
+        var resultantTopicName = fullTopicArn.substring(fullTopicArn.lastIndexOf(":") + 1);
+        console.log("## resultantTopicName  :" + JSON.stringify(resultantTopicName))
+        AWS_SNS_App.subscribe(endpointArn, fullTopicArn, function (err, result) {
+          if (err) {
+            console.log(' an error occurred, ', err); // an error occurred
+          } else {
+            var totalObj = {
+              displayName: fullTopicArnDispName,
+              topicName: resultantTopicName,
+              subscribeTopicArn: result
+            }
+            subscribeArnArray.push(totalObj)
+            console.log("@@## FINAL ##### :" + JSON.stringify(totalObj))
+            subscribeArnArrCount = subscribeArnArrCount + 1;
+            console.log("@@## subscribeArnArrCount COUNT :" + JSON.stringify(subscribeArnArrCount))
+            if (forloopForcreatEndPointCount == subscribeArnArrCount) {
+              console.log("@@## FINAL ARRAY #####@@@ :" + JSON.stringify(subscribeArnArray))
+              res.send(subscribeArnArray);
+            }
+          }
+
+        })
+
+
+      }
+      /*---------------------------------------------------------------------*/
+    }
+  })
+
+}
+
+
+// exports.reciflixAwsNotificationsSubscribe = function (req, res) {
+
+// 	var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
+// 		SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
+// 		ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
+// 		IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
+
+// 	var AWS_SNS_App;
+
+// 	var platform = req.body.platform;
+// 	//var topicName = req.body.topicName;
+// 	var deviceToken = req.body.deviceToken;
+
+// 	if (platform === 'android' || platform === 'Android') {
+// 		AWS_SNS_App = new SNS({
+// 			platform: 'android',
+// 			region: 'us-west-2',
+// 			apiVersion: '2010-03-31',
+// 			accessKeyId: SNS_KEY_ID,
+// 			secretAccessKey: SNS_ACCESS_KEY,
+// 			platformApplicationArn: ANDROID_ARN
+// 		});
+// 	} else if (platform === 'ios') {
+// 		AWS_SNS_App = new SNS({
+// 			platform: 'ios',
+// 			region: 'us-west-2',
+// 			apiVersion: '2010-03-31',
+// 			accessKeyId: SNS_KEY_ID,
+// 			secretAccessKey: SNS_ACCESS_KEY,
+// 			platformApplicationArn: IOS_ARN,
+// 			sandbox: true //(This is required for targetting (iOS) APNS_SANDBOX only)
+// 		});
+// 	}
+// 	// console.log('reciflixAwsNotificationsSubscribe is called' + JSON.stringify(req.body));
+// 	// console.log('\nRegistering user with deviceToken: ' + deviceToken);
+// 	// Add the user to SNS
+// 	AWS_SNS_App.addUser(deviceToken, null, function (err, endpointArn) {
+// 		// SNS returned an error
+// 		if (err) {
+// 			console.log(err);
+// 			return res.status(500).json({
+// 				status: 'not ok'
+// 			});
+// 		}
+// 		//console.log('endpointArn is : ' + endpointArn);
+// 		var subscribeArnArray = [];
+// 		var totalArrayCount = 0;
+// 		var formedObjectCount = 0;
+// 		var errorCountInTopicArray = 0;
+// 		for (var i = 0; i < req.body.topicArr.length; i++) {
+// 			var promiseChain = Promise.resolve();
+// 			var topicName = req.body.topicArr[i].name;
+// 			//topicName = topicName.split(' ').join('_')
+// 			var count = i;
+// 			totalArrayCount = totalArrayCount + 1;
+// 			//console.log("$$$$ totalArrayCount OBJ CONT : " + totalArrayCount)
+// 			//var resStr = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
+// 			console.log('TopicName '+topicName);
+
+// 			var resTopicName =  topicName.replace(/[^A-Z0-9]+/ig, "_");
+// 			resTopicName = 'RF_' + resTopicName;
+// 			console.log('resTopicName '+resTopicName);
 			
-			 AWS_SNS_App.createTopic(resTopicName, function (err, data) {
-				if (err) {
-					if (count == req.body.topicArr.length) {
-						console.log(err, err.stack); // an error occurred
-						res.send(err);
-					}
-					errorCountInTopicArray = errorCountInTopicArray + 1;
-					console.log("$$$$ errorCountInTopicArray OBJ CONT : " + errorCountInTopicArray)
-					console.log(err);
-				} else {
-					// var sucessRes;
-					console.log('---sucess' + data); // successful response
-					promiseChain = promiseChain.then(() => {
+// 			 AWS_SNS_App.createTopic(resTopicName, function (err, data) {
+// 				if (err) {
+// 					if (count == req.body.topicArr.length) {
+// 						console.log(err, err.stack); // an error occurred
+// 						res.send(err);
+// 					}
+// 					errorCountInTopicArray = errorCountInTopicArray + 1;
+// 					console.log("$$$$ errorCountInTopicArray OBJ CONT : " + errorCountInTopicArray)
+// 					console.log(err);
+// 				} else {
+// 					// var sucessRes;
+// 					console.log('---sucess' + data); // successful response
+// 					promiseChain = promiseChain.then(() => {
 
-						//console.log('return sucess1'+JSON.stringify( _this.createEndPointFun(data,AWS_SNS_App,endpointArn)))
-						createEndPointFun(data, AWS_SNS_App, endpointArn);
-						//console.log('sucessRes --> '+JSON.stringify(sucessRes))
-					})
+// 						//console.log('return sucess1'+JSON.stringify( _this.createEndPointFun(data,AWS_SNS_App,endpointArn)))
+// 						createEndPointFun(data, AWS_SNS_App, endpointArn);
+// 						//console.log('sucessRes --> '+JSON.stringify(sucessRes))
+// 					})
 
-				}
-			}) 
+// 				}
+// 			}) 
 
-		}
+// 		}
 
-		function createEndPointFun(topicEndArn, AWS_SNS_App, endpointArn) {
-			var resTopicName = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
-			/* var resTopicName =  resStr.replace(/[^A-Z0-9]/ig, "_");
-			resTopicName = 'RF_' + resTopicName;
-			console.log('resTopicName '+resTopicName); */
-			var resDisplayName = resTopicName.substring(resTopicName.lastIndexOf("RF_") + 3);
-			 AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
-				if (err) {
-					console.log(' an error occurred, ', err); // an error occurred
-				} else {
-					var Obj = {
-						displayName :resDisplayName,
-						topicName: resTopicName,
-						subscribeTopicArn: result
-					}
-					console.log('subscribe topic : ' + JSON.stringify(Obj));
-					formedObjectCount = formedObjectCount + 1;
-					console.log("$$$$ FORMED OBJ CONT : " + formedObjectCount)
-					console.log("@@### TOTAL ARRAY : " + parseInt(formedObjectCount + errorCountInTopicArray))
-					subscribeArnArray.push(Obj)
-					if (totalArrayCount == parseInt(formedObjectCount + errorCountInTopicArray)) {
-						console.log("@@### TOTAL ARRAY : " + JSON.stringify(subscribeArnArray))
-						res.send(subscribeArnArray);
-					}
-				}
-			}) 
-		}
-
-
+// 		function createEndPointFun(topicEndArn, AWS_SNS_App, endpointArn) {
+// 			var resTopicName = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
+// 			/* var resTopicName =  resStr.replace(/[^A-Z0-9]/ig, "_");
+// 			resTopicName = 'RF_' + resTopicName;
+// 			console.log('resTopicName '+resTopicName); */
+// 			var resDisplayName = resTopicName.substring(resTopicName.lastIndexOf("RF_") + 3);
+// 			 AWS_SNS_App.subscribe(endpointArn, topicEndArn, function (err, result) {
+// 				if (err) {
+// 					console.log(' an error occurred, ', err); // an error occurred
+// 				} else {
+// 					var Obj = {
+// 						displayName :resDisplayName,
+// 						topicName: resTopicName,
+// 						subscribeTopicArn: result
+// 					}
+// 					console.log('subscribe topic : ' + JSON.stringify(Obj));
+// 					formedObjectCount = formedObjectCount + 1;
+// 					console.log("$$$$ FORMED OBJ CONT : " + formedObjectCount)
+// 					console.log("@@### TOTAL ARRAY : " + parseInt(formedObjectCount + errorCountInTopicArray))
+// 					subscribeArnArray.push(Obj)
+// 					if (totalArrayCount == parseInt(formedObjectCount + errorCountInTopicArray)) {
+// 						console.log("@@### TOTAL ARRAY : " + JSON.stringify(subscribeArnArray))
+// 						res.send(subscribeArnArray);
+// 					}
+// 				}
+// 			}) 
+// 		}
 
 
-	});
-};
+
+
+// 	});
+// };
 
 
 
@@ -1584,7 +1648,7 @@ exports.sendToAllDevicesReciflix = function (req, res) {
 
 	var platform = req.body.platform;
 	var message = req.body.msg;
-
+	var imgUrl = "http://www.seriouseats.com/images/2015/09/20150914-pressure-cooker-recipes-roundup-09.jpg"
 	if (platform === 'android' || platform === 'Android') {
 		AWS_SNS_App = new SNS({
 			platform: SNS.SUPPORTED_PLATFORMS.ANDROID,
@@ -1615,7 +1679,7 @@ exports.sendToAllDevicesReciflix = function (req, res) {
 				var totalDevices = 0;
 				for (var i = 0; i < allDevices.length; i++) {
 					totalDevices = totalDevices + 1;
-					AWS_SNS_App.sendMessage(allDevices[i].EndpointArn, message, function (err, messageId) {
+					AWS_SNS_App.sendMessage(allDevices[i].EndpointArn, imgUrl, function (err, messageId) {
 						if (err) {
 							console.log('An error occured sending message to device %s');
 							console.log(err);

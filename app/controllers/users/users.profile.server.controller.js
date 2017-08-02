@@ -206,13 +206,15 @@ exports.update = function (req, res) {
   // Init Variables
   var user = req.user;
   var message = null;
-
+  console.log('req.user '+JSON.stringify(req.user))
+  console.log('req.body -- '+JSON.stringify(req.body))
   // For security measurement we remove the roles from the req.body object
   delete req.body.roles;
 
   if (user) {
     // Merge existing user
     user = _.extend(user, req.body);
+    console.log('final user obj -- '+JSON.stringify(user))
     user.updated = Date.now();
     user.displayName = user.firstName + ' ' + user.lastName;
 
