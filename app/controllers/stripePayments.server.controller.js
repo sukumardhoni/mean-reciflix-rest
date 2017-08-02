@@ -1274,7 +1274,7 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
 			//var resStr = topicEndArn.substring(topicEndArn.lastIndexOf(":") + 1);
 			console.log('TopicName '+topicName);
 
-			var resTopicName =  topicName.replace(/'/ig, "_");
+			var resTopicName =  topicName.replace(/[^A-Z0-9]+/ig, "_");
 			resTopicName = 'RF_' + resTopicName;
 			console.log('resTopicName '+resTopicName);
 			
