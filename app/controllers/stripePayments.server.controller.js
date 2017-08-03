@@ -1141,7 +1141,7 @@ exports.awsSendMessage = function (msgObj) {
 }
 
 exports.reciflixAwsNotificationsSubscribe = function (req, res) {
-  var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
+var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
     SNS_ACCESS_KEY = config.aws_sns.reciflix_prod.credentails.Secret_access_key,
     ANDROID_ARN = config.aws_sns.reciflix_prod.ARNS.ANDROID_ARN,
     IOS_ARN = config.aws_sns.reciflix_prod.ARNS.IOS_ARN;
@@ -1188,7 +1188,7 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
       var createTipicArr = [];
 
       for (var i = 0; i < req.body.topicArr.length; i++) {
-        var topicName = req.body.topicArr[i].name;
+        var topicName = req.body.topicArr[i].topicId;
         var count = i;
         forloopcreatetopicCount = forloopcreatetopicCount + 1;
         console.log("$$ forloopcreatetopicCount COunt :", forloopcreatetopicCount);
@@ -1196,20 +1196,45 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
         var resTopicName = topicName.replace(/[^A-Z0-9]+/ig, "_");
         resTopicName = 'RF_' + resTopicName;
         console.log('resTopicName ' + resTopicName);
-        console.log('DispName ' + req.body.topicArr[i].dispName);
-        createTopicFun(req.body.topicArr[i].dispName, resTopicName, AWS_SNS_App, endpointArn)
+        console.log('categoryId ::' + req.body.topicArr[i].categoryId);
+        console.log('categoryName ::' + req.body.topicArr[i].categoryName);
+        console.log('subCatsCount ::' + req.body.topicArr[i].subCatsCount);
+        console.log('subcategoryId ::' + req.body.topicArr[i].subcategoryId);
+        console.log('subcategoryName ::' + req.body.topicArr[i].subcategoryName);
+        console.log('individualSubCatSubscription ::' + req.body.topicArr[i].individualSubCatSubscription);
+
+
+        var catId = req.body.topicArr[i].categoryId;
+        var catName = req.body.topicArr[i].categoryName ? req.body.topicArr[i].categoryName : 'null';
+        var subCatCount = req.body.topicArr[i].subCatsCount ? req.body.topicArr[i].subCatsCount : 'null';
+        var subcatId = req.body.topicArr[i].subcategoryId ? req.body.topicArr[i].subcategoryId : 'null';
+        var subcatName = req.body.topicArr[i].subcategoryName ? req.body.topicArr[i].subcategoryName : 'null';
+        var individualSubCatSubscription = req.body.topicArr[i].individualSubCatSubscription ? req.body.topicArr[i].individualSubCatSubscription : 'null';
+
+        createTopicFun(catId, catName, subCatCount, subcatId, subcatName, individualSubCatSubscription, resTopicName, AWS_SNS_App, endpointArn)
       }
 
       /*---------------------- FUNCTIONS -----------------------------------------------*/
-      function createTopicFun(dispName, resTopicName, AWS_SNS_App, endpointArn) {
-        console.log("### IN Function CREATE Topic NAme : " + JSON.stringify(resTopicName))
-        console.log("### IN Function CREATE Topic Display Name : " + JSON.stringify(dispName))
+      function createTopicFun(categoryId, categoryName, subCatsCount, subcategoryId, subcategoryName, individualSubCatSubscription, resTopicName, AWS_SNS_App, endpointArn) {
+        console.log("### IN Function CREATE Topic categoryId : " + JSON.stringify(categoryId))
+        console.log("### IN Function CREATE Topic categoryName : " + JSON.stringify(categoryName))
+        console.log("### IN Function CREATE Topic subCatsCount : " + JSON.stringify(subCatsCount))
+        console.log("### IN Function CREATE Topic subcategoryId : " + JSON.stringify(subcategoryId))
+        console.log("### IN Function CREATE Topic subcategoryName : " + JSON.stringify(subcategoryName))
+        console.log("### IN Function CREATE Topic individualSubCatSubscription : " + JSON.stringify(individualSubCatSubscription))
+        console.log("###@@@ IN Function CREATE Topic NAme : " + JSON.stringify(resTopicName))
+        console.log("###@@@ IN Function CREATE Topic endpointArn : " + JSON.stringify(endpointArn))
         AWS_SNS_App.createTopic(resTopicName, function (err, data) {
           if (err) {
             console.log("$$ ERORR in create topic :", err);
             var obj = {
               IncreateTopicArn: "error in create topic",
-              name: dispName
+              categoryId: categoryId,
+              categoryName: categoryName,
+              subCatsCount: subCatsCount,
+              subcategoryId: subcategoryId,
+              subcategoryName: subcategoryName,
+              individualSubCatSubscription: individualSubCatSubscription
             }
             createTipicArr.push(obj)
             topicArrayCount = topicArrayCount + 1;
@@ -1218,7 +1243,12 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
             console.log("$$ SUccess in create topic :" + JSON.stringify(data));
             var obj = {
               IncreateTopicArn: data,
-              name: dispName
+              categoryId: categoryId,
+              categoryName: categoryName,
+              subCatsCount: subCatsCount,
+              subcategoryId: subcategoryId,
+              subcategoryName: subcategoryName,
+              individualSubCatSubscription: individualSubCatSubscription
             }
             createTipicArr.push(obj)
             topicArrayCount = topicArrayCount + 1;
@@ -1231,7 +1261,7 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
               forloopForcreatEndPointCount = forloopForcreatEndPointCount + 1;
               console.log("@@## forloopForcreatEndPointCount COUNT :" + JSON.stringify(forloopForcreatEndPointCount))
               if (createTipicArr[t].IncreateTopicArn != "error in create topic") {
-                createEndPointFun(createTipicArr[t].IncreateTopicArn, createTipicArr[t].name, AWS_SNS_App, endpointArn)
+                createEndPointFun(createTipicArr[t].IncreateTopicArn, createTipicArr[t].categoryId, createTipicArr[t].categoryName, createTipicArr[t].subCatsCount, createTipicArr[t].subcategoryId, createTipicArr[t].subcategoryName, createTipicArr[t].individualSubCatSubscription, AWS_SNS_App, endpointArn)
               } else {
                 return res.status(500).json({
                   status: 'not ok'
@@ -1243,9 +1273,14 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
         })
       }
 
-      function createEndPointFun(fullTopicArn, fullTopicArnDispName, AWS_SNS_App, endpointArn) {
+      function createEndPointFun(fullTopicArn, fullTopicArnCategoryId, fullTopicArnCategoryName, fullTopicArnSubCatsCount, fullTopicArnSubcategoryId, fullTopicArnSubcategoryName, fullTopicArnIndividualSubCatSubscription, AWS_SNS_App, endpointArn) {
         console.log("ARRAY OF TOPICS WITH fullTopicArn  :" + JSON.stringify(fullTopicArn))
-        console.log("ARRAY OF TOPICS WITH fullTopicArnDispName  :" + JSON.stringify(fullTopicArnDispName))
+        console.log("ARRAY OF TOPICS WITH fullTopicArnCategoryId  :" + JSON.stringify(fullTopicArnCategoryId))
+        console.log("ARRAY OF TOPICS WITH fullTopicArnCategoryName  :" + JSON.stringify(fullTopicArnCategoryName))
+        console.log("ARRAY OF TOPICS WITH fullTopicArnSubCatsCount  :" + JSON.stringify(fullTopicArnSubCatsCount))
+        console.log("ARRAY OF TOPICS WITH fullTopicArnSubcategoryId  :" + JSON.stringify(fullTopicArnSubcategoryId))
+        console.log("ARRAY OF TOPICS WITH fullTopicArnSubcategoryName  :" + JSON.stringify(fullTopicArnSubcategoryName))
+        console.log("ARRAY OF TOPICS WITH fullTopicArnIndividualSubCatSubscription  :" + JSON.stringify(fullTopicArnIndividualSubCatSubscription))
         console.log("## endpointArn  :" + JSON.stringify(endpointArn))
         var resultantTopicName = fullTopicArn.substring(fullTopicArn.lastIndexOf(":") + 1);
         console.log("## resultantTopicName  :" + JSON.stringify(resultantTopicName))
@@ -1254,7 +1289,12 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
             console.log(' an error occurred, ', err); // an error occurred
           } else {
             var totalObj = {
-              displayName: fullTopicArnDispName,
+              categoryId: fullTopicArnCategoryId,
+              categoryName: fullTopicArnCategoryName,
+              subCatsCount: fullTopicArnSubCatsCount,
+              subcategoryId: fullTopicArnSubcategoryId,
+              subcategoryName: fullTopicArnSubcategoryName,
+              individualSubCatSubscription: fullTopicArnIndividualSubCatSubscription,
               topicName: resultantTopicName,
               subscribeTopicArn: result
             }
@@ -1275,7 +1315,6 @@ exports.reciflixAwsNotificationsSubscribe = function (req, res) {
       /*---------------------------------------------------------------------*/
     }
   })
-
 }
 
 
