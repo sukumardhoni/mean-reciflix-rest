@@ -1200,7 +1200,7 @@ var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
         console.log('categoryName ::' + req.body.topicArr[i].categoryName);
         console.log('subCatsCount ::' + req.body.topicArr[i].subCatsCount);
         console.log('subcategoryId ::' + req.body.topicArr[i].subcategoryId);
-        console.log('subcategoryName ::' + req.body.topicArr[i].subcategoryName);
+        console.log('subcategoryName ::' + req.body.topicArr[i].subCategoryName);
         console.log('individualSubCatSubscription ::' + req.body.topicArr[i].individualSubCatSubscription);
 
 
@@ -1208,7 +1208,7 @@ var SNS_KEY_ID = config.aws_sns.reciflix_prod.credentails.Access_key_ID,
         var catName = req.body.topicArr[i].categoryName ? req.body.topicArr[i].categoryName : 'null';
         var subCatCount = req.body.topicArr[i].subCatsCount ? req.body.topicArr[i].subCatsCount : 'null';
         var subcatId = req.body.topicArr[i].subcategoryId ? req.body.topicArr[i].subcategoryId : 'null';
-        var subcatName = req.body.topicArr[i].subcategoryName ? req.body.topicArr[i].subcategoryName : 'null';
+        var subcatName = req.body.topicArr[i].subCategoryName ? req.body.topicArr[i].subCategoryName : 'null';
         var individualSubCatSubscription = req.body.topicArr[i].individualSubCatSubscription ? req.body.topicArr[i].individualSubCatSubscription : 'null';
 
         createTopicFun(catId, catName, subCatCount, subcatId, subcatName, individualSubCatSubscription, resTopicName, AWS_SNS_App, endpointArn)
