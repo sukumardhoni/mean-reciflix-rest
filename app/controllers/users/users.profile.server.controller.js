@@ -210,7 +210,7 @@ exports.update = function (req, res) {
   console.log('req.body -- '+JSON.stringify(req.body))
   // For security measurement we remove the roles from the req.body object
   delete req.body.roles;
-
+delete req.body.__v;
   if (user) {
     // Merge existing user
     user = _.extend(user, req.body);
