@@ -1930,21 +1930,24 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			console.log("PUSH NOTIFICATIONS :" + JSON.stringify($scope.pushNotification))
 
 			if ($scope.pushNotification.chooseMethod == 'allDevices') {
-        console.log('alldevices')
-			 	SendAwsMsg.send($scope.pushNotification, function (res) {
-          console.log("Succesfully send aws message : " + JSON.stringify(res))
-          $scope.pushNotification.msg = ''
+				console.log('alldevices')
+				SendAwsMsg.send($scope.pushNotification, function (res) {
+					console.log("Succesfully send aws message : " + JSON.stringify(res))
+					$scope.pushNotification.msg = ''
+					NotificationFactory.success('notification sended sucessfully');
 				}, function (err) {
 					console.log("Error on send aws message")
-				}) 
+				})
 			} else {
-        console.log('each topic')
-			 	sendSingleTopicService.send($scope.pushNotification, function (res) {
-          console.log("Succesfully send aws message : " + JSON.stringify(res))
-          $scope.pushNotification.msg = " ";
+				console.log('each topic')
+				sendSingleTopicService.send($scope.pushNotification, function (res) {
+					console.log("Succesfully send aws message : " + JSON.stringify(res))
+					$scope.pushNotification.msg = '';
+					NotificationFactory.success('notification sended sucessfully');
 				}, function (err) {
 					console.log("Error on send aws message")
-				}) 
+					$scope.pushNotification.msg = '';
+				})
 			}
 
 
