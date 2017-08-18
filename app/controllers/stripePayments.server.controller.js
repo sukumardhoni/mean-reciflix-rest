@@ -1648,29 +1648,31 @@ exports.sendToEachDevices = function (req, res) {
  	AWS_SNS_App.publishToTopic(topicArn,msgObj,function (err,sucess) {
 		if(err){
 			console.log('err occured'+JSON.stringify(err))
+			res.send(err);
 		}else{
 		console.log('sucesss : ' + JSON.stringify(sucess));
+		res.send('Successfully sent a message to device , MessageID was : ');
 		}
 			
-			/* if (allDevices.length != 0) {
-				var totalDevices = 0;
-				for (var i = 0; i < allDevices.length; i++) {
-					totalDevices = totalDevices + 1;
-					AWS_SNS_App.sendMessage(allDevices[i].EndpointArn, message, function (err, messageId) {
-						if (err) {
-							console.log('An error occured sending message to device %s');
-							console.log(err);
-							//res.send(err);
-						} else {
-							console.log('Successfully sent a message to device %s. MessageID was %s', messageId);
-							//res.send('Successfully sent a message to device , MessageID was : ' + messageId);
-						}
-					});
-				}
-				if (totalDevices === allDevices.length) {
-					res.send('Successfully sent a message to all devices');
-				}
-			} */
+			//  if (allDevices.length != 0) {
+			// 	var totalDevices = 0;
+			// 	for (var i = 0; i < allDevices.length; i++) {
+			// 		totalDevices = totalDevices + 1;
+			// 		AWS_SNS_App.sendMessage(allDevices[i].EndpointArn, message, function (err, messageId) {
+			// 			if (err) {
+			// 				console.log('An error occured sending message to device %s');
+			// 				console.log(err);
+			// 				//res.send(err);
+			// 			} else {
+			// 				console.log('Successfully sent a message to device %s. MessageID was %s', messageId);
+			// 				//res.send('Successfully sent a message to device , MessageID was : ' + messageId);
+			// 			}
+			// 		});
+			// 	}
+			// 	if (totalDevices === allDevices.length) {
+			// 		res.send('Successfully sent a message to all devices');
+			// 	}
+			// } 
 		})
 	
 	
@@ -1687,7 +1689,7 @@ exports.sendToAllDevicesReciflix = function (req, res) {
 
 	var platform = req.body.platform;
 	var message = req.body.msg;
-	var imgUrl = "http://www.seriouseats.com/images/2015/09/20150914-pressure-cooker-recipes-roundup-09.jpg"
+	
 	if (platform === 'android' || platform === 'Android') {
 		AWS_SNS_App = new SNS({
 			platform: SNS.SUPPORTED_PLATFORMS.ANDROID,
@@ -1718,10 +1720,10 @@ exports.sendToAllDevicesReciflix = function (req, res) {
 				var totalDevices = 0;
 				for (var i = 0; i < allDevices.length; i++) {
 					totalDevices = totalDevices + 1;
-					AWS_SNS_App.sendMessage(allDevices[i].EndpointArn, imgUrl, function (err, messageId) {
+					AWS_SNS_App.sendMessage(allDevices[i].EndpointArn, message, function (err, messageId) {
 						if (err) {
-							console.log('An error occured sending message to device %s');
-							console.log(err);
+							// console.log('An error occured sending message to device %s');
+							// console.log(err);
 							//res.send(err);
 						} else {
 							console.log('Successfully sent a message to device %s. MessageID was %s', messageId);
