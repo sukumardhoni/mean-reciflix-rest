@@ -120,70 +120,70 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 		}
 
 
-		if ('serviceWorker' in navigator && 'PushManager' in window) {
-			console.log('Service Worker and Push is supported');
+		// if ('serviceWorker' in navigator && 'PushManager' in window) {
+		// 	console.log('Service Worker and Push is supported');
 
-			Notification.requestPermission(function (permission) {
-				console.log("request premission : " + JSON.stringify(permission))
+		// 	Notification.requestPermission(function (permission) {
+		// 		console.log("request premission : " + JSON.stringify(permission))
 
-				if (Notification.permission === 'granted') {
+		// 		if (Notification.permission === 'granted') {
 
-					var applicationServerPublicKey = 'BCZLs69d4JA_FD9LyXugozgVdBCL1vHwKEBVlaW1M46fLIJ64tC2DWZ33xxr3t5uO8jEPrJCND4Q8LEOFQnxo0g';
+		// 			var applicationServerPublicKey = 'BCZLs69d4JA_FD9LyXugozgVdBCL1vHwKEBVlaW1M46fLIJ64tC2DWZ33xxr3t5uO8jEPrJCND4Q8LEOFQnxo0g';
 
-					navigator.serviceWorker.register('sw.js').then(function (reg) {
-							console.log('Service Worker is registered', reg);
+		// 			navigator.serviceWorker.register('sw.js').then(function (reg) {
+		// 					console.log('Service Worker is registered', reg);
 
-							navigator.serviceWorker.ready.then(function (register) {
-								register.pushManager.getSubscription().then(function (userSubscription) {
+		// 					navigator.serviceWorker.ready.then(function (register) {
+		// 						register.pushManager.getSubscription().then(function (userSubscription) {
 
-									function urlB64ToUint8Array(base64String) {
-										const padding = '='.repeat((4 - base64String.length % 4) % 4);
-										const base64 = (base64String + padding)
-											.replace(/\-/g, '+')
-											.replace(/_/g, '/');
+		// 							function urlB64ToUint8Array(base64String) {
+		// 								const padding = '='.repeat((4 - base64String.length % 4) % 4);
+		// 								const base64 = (base64String + padding)
+		// 									.replace(/\-/g, '+')
+		// 									.replace(/_/g, '/');
 
-										const rawData = window.atob(base64);
-										const outputArray = new Uint8Array(rawData.length);
+		// 								const rawData = window.atob(base64);
+		// 								const outputArray = new Uint8Array(rawData.length);
 
-										for (var f = 0; f < rawData.length; ++f) {
-											outputArray[f] = rawData.charCodeAt(f);
-										}
-										return outputArray;
-									}
-									console.log("subscription obj : " + userSubscription)
-									if ((userSubscription == undefined) || (userSubscription == null)) {
-										console.log("@@user not subscribed")
-										var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-										register.pushManager.subscribe({
-											userVisibleOnly: true,
-											applicationServerKey: applicationServerKey
-										}).then(function (subscription) {
-											console.log("user now subscribed to push messages : " + JSON.stringify(subscription))
+		// 								for (var f = 0; f < rawData.length; ++f) {
+		// 									outputArray[f] = rawData.charCodeAt(f);
+		// 								}
+		// 								return outputArray;
+		// 							}
+		// 							console.log("subscription obj : " + userSubscription)
+		// 							if ((userSubscription == undefined) || (userSubscription == null)) {
+		// 								console.log("@@user not subscribed")
+		// 								var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+		// 								register.pushManager.subscribe({
+		// 									userVisibleOnly: true,
+		// 									applicationServerKey: applicationServerKey
+		// 								}).then(function (subscription) {
+		// 									console.log("user now subscribed to push messages : " + JSON.stringify(subscription))
 
-											WebNotificationSubscription.send(subscription, function sucessCalBck(res) {
-												console.log("@##$$$%% Coming to successfull calback : " + JSON.stringify(res))
-											}, function errCalBck(err) {
-												console.log("@##$$$%% Coming to error calback : " + JSON.stringify(err))
-											})
+		// 									WebNotificationSubscription.send(subscription, function sucessCalBck(res) {
+		// 										console.log("@##$$$%% Coming to successfull calback : " + JSON.stringify(res))
+		// 									}, function errCalBck(err) {
+		// 										console.log("@##$$$%% Coming to error calback : " + JSON.stringify(err))
+		// 									})
 
-										}).catch(function (error) {
-											console.error('error while subscribing', error);
-										});
+		// 								}).catch(function (error) {
+		// 									console.error('error while subscribing', error);
+		// 								});
 
-									} else {
-										console.log("@@user subscribed")
-									}
-								})
-							})
-						})
-						.catch(function (error) {
-							console.error('Service Worker Error', error);
-						});
-				}
-			})
-		} else {
-			console.warn('Push messaging is not supported');
-		}
+		// 							} else {
+		// 								console.log("@@user subscribed")
+		// 							}
+		// 						})
+		// 					})
+		// 				})
+		// 				.catch(function (error) {
+		// 					console.error('Service Worker Error', error);
+		// 				});
+		// 		}
+		// 	})
+		// } else {
+		// 	console.warn('Push messaging is not supported');
+		// }
 
 	}
 ]);
