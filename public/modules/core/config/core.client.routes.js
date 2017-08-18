@@ -35,7 +35,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
         }
       });
  }
-]).run(function ($rootScope, $state, $stateParams, WebNotificationSubscription) {
+]).run(function ($rootScope, $state, $stateParams) {
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
 
